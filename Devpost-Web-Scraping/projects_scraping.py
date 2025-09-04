@@ -5,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import time
 
-df = pd.read_csv("all-hackathons.csv")
+df = pd.read_csv("Devpost-Hackathons-API/all-hackathons.csv")
 
 # Filter: more than 100 participants and years 2024 or 2025
 df = df[
@@ -14,7 +14,7 @@ df = df[
 ]
 
 # limit the hachathons number to 5 only
-df = df.head(5)
+df = df.head(2)
 
 print(f"Selected {len(df)} hackathons after filtering.")
 
