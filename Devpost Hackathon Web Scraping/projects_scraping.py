@@ -4,7 +4,9 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import time
+import re
 
+# Read hackathons file
 df = pd.read_csv("all-hackathons.csv")
 
 # Filter: more than 100 participants and years 2024 or 2025
@@ -13,8 +15,8 @@ df = df[
     (df["Submission Period"].str.contains("2024|2025", na=False))
 ]
 
-# limit the hachathons number to 5 only
-df = df.head(5)
+# Limit hackathons number to 10 (for testing)
+df = df.head(10)
 
 print(f"Selected {len(df)} hackathons after filtering.")
 
@@ -25,72 +27,101 @@ driver = webdriver.Chrome(service=service)
 all_projects = []
 
 for i, row in df.iterrows():
-  
     gallery_url = row["Projects Gallery"]
     if pd.isna(gallery_url):
         continue
 
     print(f"Scraping hackathon {i+1}/{len(df)}: {gallery_url}")
-    driver.get(gallery_url)
-    time.sleep(5)
 
-    projects = driver.find_elements(By.CLASS_NAME, "gallery-item")
-    print(f"  Found {len(projects)} projects.")
+    page_number = 1
+    while True:
+        paged_url = f"{gallery_url}?page={page_number}"
+        driver.get(paged_url)
 
-    for p in projects:
-        # Title
-        try:
-            title = p.find_element(By.TAG_NAME, "h5").text
-        except:
-            title = ""
+        # wait for page to load
+        time.sleep(5)
 
-        # Link
-        try:
-            link = p.find_element(By.TAG_NAME, "a").get_attribute("href")
-        except:
-            link = ""
+        projects = driver.find_elements(By.CLASS_NAME, "gallery-item")
+        if not projects:
+            break
 
-        # Description
-        try:
-            desc = p.find_element(By.CLASS_NAME, "tagline").text
-        except:
-            desc = ""
+        print(f"  Page {page_number}: Found {len(projects)} projects.")
 
-        # Participants Count
-        try:
-            members = p.find_elements(By.CSS_SELECTOR, ".members ")
-            participants = len(members)
-        except:
-            participants = 0
+        for p in projects:
+            # Title
+            try:
+                title = p.find_element(By.TAG_NAME, "h5").text
+            except:
+                title = ""
 
-        # Likes
-        try:
-            likes = p.find_element(By.CSS_SELECTOR, ".like-count").text
-        except:
-            likes = "0"
+            # Link
+            try:
+                link = p.find_element(By.TAG_NAME, "a").get_attribute("href")
+            except:
+                link = ""
 
-        # Comments
-        try:
-            comments = p.find_element(By.CSS_SELECTOR, ".comment-count").text
-        except:
-            comments = "0"
+            # Description
+            try:
+                desc = p.find_element(By.CLASS_NAME, "tagline").text
+            except:
+                desc = ""
 
-        all_projects.append({
-            "Hackathon": row["Title"],
-            "Hackathon Slug": row["Hackathon Slug"],
-            "Project Title": title,
-            "Project Description": desc,
-            "Project Link": link,
-            "Participants Count": participants,
-            "Likes": likes,
-            "Comments": comments,
-            "Gallery URL": gallery_url
-        })
+            # Participants Count (including overflow ones)
+            try:
+                members_div = p.find_element(By.CLASS_NAME, "members")
+
+                # Count visible member images
+                members = members_div.find_elements(
+                    By.CSS_SELECTOR, "span.user-profile-link img.user-photo")
+                participants = sum(
+                    1 for m in members if m.get_attribute("src"))
+
+                # Add any '+N' numbers inside the div text
+                div_text = members_div.text
+
+                # Search by regular expression (regex) library for any number after +
+                matches = re.findall(r"\+\s*(\d+)", div_text)
+                if matches:
+                    participants += sum(int(m) for m in matches)
+
+            except:
+                participants = 0
+
+            # Likes
+            try:
+                likes = p.find_element(By.CSS_SELECTOR, ".like-count").text
+            except:
+                likes = "0"
+
+            # Comments
+            try:
+                comments = p.find_element(
+                    By.CSS_SELECTOR, ".comment-count").text
+            except:
+                comments = "0"
+
+            all_projects.append({
+                # Added Hackathon ID Column
+                "Hackathon ID": row["id"],
+                "Hackathon": row["Title"],
+                "Hackathon Slug": row["Hackathon Slug"],
+                "Project Title": title,
+                "Project Description": desc,
+                "Project Link": link,
+                "Participants Count": participants,
+                "Likes": likes,
+                "Comments": comments,
+                "Gallery URL": paged_url
+            })
+
+        page_number += 1
+        time.sleep(2)
 
     time.sleep(3)
 
+# Save results
 projects_df = pd.DataFrame(all_projects)
 projects_df.to_csv("hackathon-projects.csv", index=False, encoding="utf-8-sig")
 
 driver.quit()
-print("Scraping done, saved to filtered-hackathon-projects.csv")
+print("Scraping done, saved to hackathon-projects.csv")
