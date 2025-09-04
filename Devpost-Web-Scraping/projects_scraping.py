@@ -14,7 +14,7 @@ df = df[
 ]
 
 # limit the hachathons number to 5 only
-df = df.head(2)
+df = df.head(3)
 
 print(f"Selected {len(df)} hackathons after filtering.")
 
