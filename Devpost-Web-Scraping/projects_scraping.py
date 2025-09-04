@@ -6,7 +6,6 @@ import pandas as pd
 import time
 import re
 
-# Read hackathons file
 df = pd.read_csv("all-hackathons.csv")
 
 # Filter: more than 100 participants and years 2024 or 2025
@@ -20,7 +19,7 @@ df = df.head(10)
 
 print(f"Selected {len(df)} hackathons after filtering.")
 
-# Open browser
+# Open browser to be controlled by the code
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
 
@@ -119,7 +118,6 @@ for i, row in df.iterrows():
 
     time.sleep(3)
 
-# Save results
 projects_df = pd.DataFrame(all_projects)
 projects_df.to_csv("hackathon-projects.csv", index=False, encoding="utf-8-sig")
 
