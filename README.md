@@ -3,9 +3,8 @@
 To keep dependencies organized and avoid conflicts, we use a Python virtual environment.  
 Follow these steps after cloning the project:
 
-### Create and Activate the Virtual Environment
+### Create the Virtual Environment
 ```
-# Create a virtual environment
 python3 -m venv venv
 ```
 
