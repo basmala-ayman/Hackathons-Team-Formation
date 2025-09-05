@@ -6,7 +6,7 @@ import pandas as pd
 import time
 import re
 
-df = pd.read_csv("all-hackathons.csv")
+df = pd.read_csv("Devpost-Hackathons-API/all-hackathons.csv")
 
 # Filter: more than 100 participants and years 2024 or 2025
 df = df[
@@ -71,7 +71,7 @@ for i, row in df.iterrows():
 
                 # Count visible member images
                 members = members_div.find_elements(
-                    By.CSS_SELECTOR, "span.user-profile-link img.user-photo")
+                    By.CSS_SELECTOR, "img.user-photo")
                 participants = sum(
                     1 for m in members if m.get_attribute("src"))
 
@@ -102,7 +102,6 @@ for i, row in df.iterrows():
             all_projects.append({
                 # Added Hackathon ID Column
                 "Hackathon ID": row["id"],
-                "Hackathon": row["Title"],
                 "Hackathon Slug": row["Hackathon Slug"],
                 "Project Title": title,
                 "Project Description": desc,
@@ -110,7 +109,6 @@ for i, row in df.iterrows():
                 "Participants Count": participants,
                 "Likes": likes,
                 "Comments": comments,
-                "Gallery URL": paged_url
             })
 
         page_number += 1
