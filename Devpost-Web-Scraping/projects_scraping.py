@@ -117,7 +117,7 @@ for i, row in df.iterrows():
     time.sleep(3)
 
 projects_df = pd.DataFrame(all_projects)
-projects_df.to_csv("Devpost-Web-Scraping/hackathon-projects.csv", index=False, encoding="utf-8-sig")
+projects_df.to_csv("Devpost-Datasets/hackathon-projects.csv", index=False, encoding="utf-8-sig")
 
 driver.quit()
 print("Scraping done, saved to hackathon-projects.csv")

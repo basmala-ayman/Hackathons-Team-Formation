@@ -73,10 +73,10 @@ for i in range(len(df)):
     })
 
 team_members_df = pd.DataFrame(team_members)
-team_members_df.to_csv("Devpost-Web-Scraping/team_members.csv", index=False, encoding="utf-8-sig")
+team_members_df.to_csv("Devpost-Datasets/team_members.csv", index=False, encoding="utf-8-sig")
 
 teams_df = pd.DataFrame(teams)
-teams_df.to_csv("Devpost-Web-Scraping/teams.csv", index=False, encoding="utf-8-sig")
+teams_df.to_csv("Devpost-Datasets/teams.csv", index=False, encoding="utf-8-sig")
 
 driver.quit()
 print("Scraping done, saved to teams.csv")

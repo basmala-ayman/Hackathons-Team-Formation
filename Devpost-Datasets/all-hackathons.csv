@@ -1,4 +1,4 @@
-Count,id,Hackathon Slug,Title,,URL,Submission Period,Themes,Prize Amount,Registrations Count,Organization,Winners Announced,Projects Gallery
+Count,id,Hackathon Slug,Title,Status,URL,Submission Period,Themes,Prize Amount,Registrations Count,Organization,Winners Announced,Projects Gallery
 1,17851,bpt-hackathon,University of Bridgeport Hackathon,ended,https://bpt-hackathon.devpost.com/,"Apr 14 - 16, 2023","['E-commerce/Retail', 'Enterprise', 'Web']",2700,23,University of Bridgeport,TRUE,https://bpt-hackathon.devpost.com/project-gallery
 2,17217,hackenosia,HACKENOSIA,ended,https://hackenosia.devpost.com/,"Mar 25 - 26, 2023","['Beginner Friendly', 'Web', 'Mobile']",45000,23,"DeVerse Club, VGI",FALSE,https://hackenosia.devpost.com/project-gallery
 3,17853,hacktrix1,Hacktrix_1.0,ended,https://hacktrix1.devpost.com/,"Mar 17 - 23, 2023","['Blockchain', 'Health', 'Productivity']",1211,23,Sri Krishna College of Technology,FALSE,https://hacktrix1.devpost.com/project-gallery

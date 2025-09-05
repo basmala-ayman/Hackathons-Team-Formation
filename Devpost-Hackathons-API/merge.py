@@ -26,6 +26,6 @@ for i, file in enumerate(csv_files):
 merged_df = pd.concat(dfs, ignore_index=True)
 
 # Save merged file
-merged_df.to_csv(os.path.join(folder_path, "all-hackathons.csv"), index=False)
+merged_df.to_csv(os.path.join(folder_path, "Devpost-Datasets/all-hackathons.csv"), index=False)
 
 print("All CSV files merged successfully into 'merged.csv'")
