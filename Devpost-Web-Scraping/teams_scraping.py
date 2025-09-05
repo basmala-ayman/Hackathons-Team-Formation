@@ -8,12 +8,14 @@ import time
 df = pd.read_csv("Devpost-Web-Scraping/hackathon-projects.csv")
 df = df["Project Link"]
 df = df.head(15)
-# print(df)
+
 # Open browser
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
 
 teams = []
+team_members = []
+
 for i in range(len(df)):
     driver.get(df.iloc[i])
     time.sleep(2)
@@ -31,7 +33,7 @@ for i in range(len(df)):
         members_usernames.append(username)
         try:
             member_bubble = driver.find_element(By.XPATH, f'//*[@id="app-team"]/ul/li[{index}]/div[@class = "bubble"]').text
-            members_desc.append(f'{username}: {member_bubble}')
+            members_desc.append(member_bubble)
         except:
             member_bubble = ""
             members_desc.append("")
@@ -52,20 +54,29 @@ for i in range(len(df)):
 
     project_desc = driver.find_element(By.XPATH, '//*[@id="app-details-left"]/div[2]').text
 
+    # members info
     for i in range(len(members_url)):
-        teams.append({
+        team_members.append({
             "Project Slug": project_slug,
             "Member Username": members_usernames[i],
             "Member URL": members_url[i],
             "Member Description": members_desc[i] ,
-            "Is Winner": isWinner,
-            "Winners Description": ", ".join(winners_desc),
-            "Tags": tags,
-            "Project Description": project_desc
         })
 
+    # team info
+    teams.append({
+        "Project Slug": project_slug,
+        "Is Winner": isWinner,
+        "Winners Description": ", ".join(winners_desc),
+        "Project Tags": tags,
+        "Project Description": project_desc
+    })
+
+team_members_df = pd.DataFrame(team_members)
+team_members_df.to_csv("Devpost-Web-Scraping/team_members.csv", index=False, encoding="utf-8-sig")
+
 teams_df = pd.DataFrame(teams)
-teams_df.to_csv("teams.csv", index=False, encoding="utf-8-sig")
+teams_df.to_csv("Devpost-Web-Scraping/teams.csv", index=False, encoding="utf-8-sig")
 
 driver.quit()
 print("Scraping done, saved to teams.csv")

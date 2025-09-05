@@ -1,0 +1,333 @@
+﻿Project Slug,Is Winner,Winners Description,Project Tags,Project Description
+pulsar-digital-funhouse,True,"Best Overall Project, Best Design, Impact for Good","['gemini', 'github', 'nextjs', 'supabase', 'tailwindcss', 'typescript', 'vercel']","Inspiration
+Our inspiration came from the wildly popular and brilliantly simple neal.fun, a site that turns boredom into delight with quirky, easy-to-play games. We wanted to build on this concept by combining classic, addictive gameplay with modern AI technology to create an experience that’s both nostalgic and fresh. Pulsar Funhouse aims to bring users a joyful, interactive escape that sparks curiosity and fun anytime, anywhere. By blending traditional games with innovative AI-driven content, we hoped to push the boundaries of what casual web games can offer.
+What it does
+Pulsar Funhouse is a vibrant collection of mini-games designed to entertain and challenge players of all ages. It features classic favorites like Tic Tac Toe, Flappy Bird, and Rock Paper Scissors, alongside unique AI-powered games such as “Am I Talking to a Human or an AI?” that test your wits. Every day, players get fresh AI-generated puzzles, riddles, and fascinating facts, keeping the experience exciting and new. User accounts let players track their progress and achievements across games. The entire app is mobile-friendly and enhanced by a mesmerizing, dynamic particle background that creates a playful atmosphere and keeps users engaged for longer sessions.
+How we built it
+We built Pulsar Funhouse using Next.js and React, enabling a fast, responsive frontend experience with seamless navigation between games. Tailwind CSS powered the sleek and modern styling, making it visually appealing across devices. Supabase was our backend choice, handling authentication, database management, and storage, which allowed us to focus on the app’s features without reinventing the wheel. For the AI elements, we integrated Google’s Gemini API to generate dynamic puzzles and power interactive AI games. The entire project was deployed on Vercel, ensuring smooth and reliable hosting with instant updates. This tech stack allowed us to combine speed, flexibility, and AI innovation in one cohesive app.
+Challenges we ran into
+One of the biggest challenges was the sheer scale of the project relative to our tight hackathon timeline. Developing a multi-game platform with AI integration meant managing a wide range of game mechanics, UI designs, and backend requirements, all while ensuring a seamless user experience. Balancing this complexity within the limited time forced us to prioritize features and iterate rapidly. Integrating AI features like Google Gemini in real-time was also a steep learning curve, especially ensuring the AI-powered games ran smoothly without slowing down the app. Additionally, optimizing the mobile experience was tricky, particularly for games that traditionally require keyboard input or more precise controls. Finally, syncing user profiles and progress across games involved intricate backend logic that demanded careful testing and refinement.
+Accomplishments that we're proud of
+We’re proud to have successfully merged classic and AI-powered gameplay in one platform, creating a unique playground that feels both familiar and innovative. Our “Truth or Tech” AI game and daily AI-generated puzzles showcase our ability to harness cutting-edge technology creatively. The smooth, responsive UI with a captivating particle background elevates the experience beyond typical mini-game collections. Implementing a robust user account system that tracks progress across multiple games adds meaningful depth and replayability, encouraging users to come back daily. Despite the complexity and time constraints, we delivered a polished, fully functional web app that runs flawlessly on both desktop and mobile devices.
+What we learned
+This project taught us invaluable lessons about balancing ambition with scope, especially in a hackathon setting. We gained hands-on experience integrating advanced AI via Google Gemini, which pushed us to rethink how interactive content can be personalized and refreshed dynamically. Managing multiple game states, real-time AI responses, and user authentication within one app honed our skills in scalable architecture and state management. We also learned the importance of mobile-first design and accessibility, ensuring that fun isn’t limited to desktop users. Finally, the project strengthened our ability to collaborate efficiently under pressure and iterate quickly without sacrificing quality.
+What's next for Pulsar Funhouse
+Looking forward, we’re committed to completing all in-progress games, like the Math Duel and Karaoke features, and polishing the user experience across the board. We plan to expand mobile support so every game is fully playable on phones and tablets, breaking down accessibility barriers. Our vision is to continuously add fresh, creative, and quirky games and experiences, driven by AI and community feedback. Ultimately, we want Pulsar Funhouse to become the definitive online destination for quick, engaging entertainment that anyone can enjoy to beat boredom — a place where innovation meets playfulness in perfect harmony."
+hacktone-website,True,Most Innovative,"['cloud3.5', 'css', 'cursor', 'gpt', 'html', 'javascript', 'youtube']","MoodFlix: Bridging Generations Through Film
+1. Inspiration
+Our journey began when we noticed:
+Family movie nights became debates between generations
+Local Ethiopian films were disappearing from digital platforms
+No service combined mood-based discovery with cultural preservation
+2. What It Does
+Instant mood matching through emoji selection (😊/😢/🎭)
+Dual catalog: Curated local classics + international favorites
+Preserves cultural heritage while satisfying modern tastes
+3. How We Built It
+Frontend: HTML/CSS + JavaScript for dynamic filtering
+Content Pipeline: Currently fetching local films from YouTube
+Teamwork: Divided roles among coding, design, and content research
+Adaptation: Rebuilt features three times as we learned
+4. Challenges we ran into
+Team Turbulence
+Last-minute dropouts forced us to learn new skills overnight
+The Film Fragmentation Problem
+We discovered Ethiopia's movie heritage exists in pieces:
+Some films only available on old VHS tapes
+Others scattered across obscure YouTube channels
+No central archive exists (yet)
+Our Temporary Approach:
+Manually compiling YouTube links as placeholder
+Documenting missing films for future preservation
+Reaching out to local filmmakers about collaborations
+Hard Truth: We haven't solved this yet - but we've created the blueprint. MoodFlix is step one in proving these films deserve a proper home.
+5. Accomplishments that we're proud of
+Our greatest accomplishment wasn't technical - it was our perseverance:
+When teammates left, we redistributed the work and continued
+Through technical hurdles and time constraints, we never quit
+Created the first platform that truly serves all generations
+Proved that young developers can tackle cultural preservation
+6. What We Learned
+Ideas evolve through execution (our final product changed completely)
+Cultural preservation requires digital solutions
+Team dynamics matter more than individual skills
+Success
+=
+Passion
+×
+Persistence
+7. What's Next for MoodFlix
+Phase 1 (Current): YouTube-based local film catalog
+Phase 2 (Next): Building our own server to properly archive films
+Future Goals:
+Partner with local filmmakers for exclusive content
+Implement mood-based recommendation algorithms
+Expand to other African film industries"
+parlo,True,Most Innovative,"['css3', 'flask', 'html5', 'javascript', 'python', 'sqlite', 'tailwind']","Inspiration
+We created Parlo to make quick, no-strings-attached conversations possible. Too often, chat platforms require sign-ups, personal data, or store messages forever. We wanted something different — a fast, minimal, and temporary chat space where friends can connect instantly, share what they need, and leave without a digital footprint. The idea came from real-life moments when you just need to coordinate, plan, or brainstorm without the burden of creating accounts or worrying about privacy.
+What it does
+Parlo allows users to create temporary group chats that vanish after a set time. No registration, no personal data collection, and no permanent message storage — just straightforward, real-time communication.
+How we built it
+Backend: Built with Flask and WebSocket support for instant, two-way communication.
+Frontend: Designed with Tailwind CSS for a clean, responsive interface.
+Database: Messages stored in a sqlite database file.
+Deployment: Hosted on Render.com for global accessibility and smooth performance.
+Challenges we ran into
+Handling session expiry without disrupting active conversations.
+Scaling to handle multiple users in different chat rooms simultaneously.
+Making sure the design looked and worked equally well across devices.
+Overcoming initial Git merge conflicts during collaborative development.
+Accomplishments that we're proud of
+Building a fully functional real-time chat platform in a short timeframe.
+Achieving zero sign-up access while maintaining security.
+Designing a minimal interface that’s both fast and user-friendly.
+Deploying successfully and making Parlo accessible to anyone, anywhere.
+What we learned
+Practical use of Flask with WebSocket for live communication.
+Effective frontend–backend integration with modern tools.
+Importance of UI responsiveness for different devices.
+How to work efficiently as a team using Git branching and merging.
+What's next for Parlo
+Adding optional end-to-end encryption for extra security.
+Expanding the platform with temporary file sharing."
+comet-mncd36,True,"Beginner Breakthrough, Community Choice","['flask', 'html', 'javascript', 'python']","Inspiration
+Comet was born out of a realization that many people struggle to find music that matches how they feel in the moment. We noticed that music streaming services often focus on genres and playlists, but not on emotions. During lockdown, many of our friends said music helped them cope with stress, anxiety, and loneliness. We wanted to build something that could bridge the gap between emotional wellness and personalized playlists. The idea came from journaling apps that let you log your mood, and we thought why not connect that to music? We also wanted to make it quick: just one mood selection and instantly get songs that fit. The name “Comet” symbolizes fast, bright, and impactful just like finding the perfect song. We looked into how mood detection could be both manual and AI-driven for future updates. Our team aimed to combine empathy with technology, not just make another music app. That’s how the seed of comet was planted.
+What it does
+Comet lets users select their current mood from a simple, colorful interface. Once a mood is chosen happy, sad, relaxed, energetic, and more the app instantly generates a custom playlist. It uses a mix of preset curated playlists and API-driven search for matching tracks. Users can save their favorite moods and playlists for quick future access. It also offers mood history so you can see patterns in your listening habits. The app syncs with Spotify and YouTube for immediate playback. We designed it for speed: no extra steps, just mood → music. It works both online and offline, with cached playlists. The UI adapts its theme colors to the mood chosen for an immersive feel. Overall, it’s a personal DJ that understands how you feel.
+How we built it
+We developed the backend with Node.js and Express for fast API handling. The frontend was built using React Native, allowing cross-platform mobile support. We integrated Spotify and YouTube APIs for music fetching and playback. The database uses Firebase Fire store for real-time data sync. We also used Mood Detection Logic based on user selection and basic sentiment keywords. UI/UX design was done in Figma, focusing on minimal taps and colorful mood palettes. For authentication, we used Firebase Auth with Google/Spotify sign-in. Testing was done on both Android and iOS simulators, plus physical devices. We had a GitHub repo with branches for backend, frontend, and integration. Weekly sprints helped us break tasks down and meet milestones.
+Challenges we ran into
+Finding a reliable free music API with mood-based search was harder than expected. Spotify’s API doesn’t directly sort songs by mood, so we had to use indirect filters like energy, valence, and tempo. Integrating two different platforms (Spotify + YouTube) without breaking the flow was tricky. Offline playlist caching initially caused huge storage usage. Making the UI both visually appealing and fast loading took several iterations. We faced delays because of API authentication token refresh issues. Our initial mood detection model was too slow for mobile use, so we simplified it. Handling cross-platform differences in audio playback caused bugs. Testing on lower-end devices revealed performance bottlenecks. Despite these, we kept adapting and found creative workarounds.
+Accomplishments that we're proud of
+We created a fully functional mood-based music app in a short time frame. The UI design got positive feedback for being both fun and easy to use. Integration with two major music platforms worked smoothly by launch. We optimized offline caching to reduce storage by 70%. Our database structure made mood history and stats possible without lag. We made the app accessible for both Android and iOS without separate builds. We built a “Quick Mood” button feature that users loved for instant playlists. We kept user onboarding under 30 seconds from install to first song. Team communication was strong, with no major conflicts. We saw real users smile when Comet matched their mood perfectly.
+What we learned
+APIs can be powerful but also very limiting if they lack direct mood parameters. Performance optimization on mobile is as important as features. User testing early in the process saves a lot of time later. A simple interface often beats a complex but “cool” design. We learned to balance technical ambition with realistic timelines. Integrating multiple platforms is easier if you plan the API flow early. Music can have a huge emotional impact when paired correctly with mood. We understood how emotional UX can deepen user connection to an app. Managing token authentication across services requires careful planning. Team collaboration and sprint discipline were key to finishing Comet.
+What's next for comet
+Comet’s future plans revolve around making AI development even faster and more collaborative.
+The team is focusing on real time collaboration features so multiple users can work on experiments together.
+There’s an ongoing push to improve integration with more machine learning frameworks beyond TensorFlow and PyTorch.
+Comet plans to deepen its cloud support, allowing for seamless deployment and tracking across AWS, GCP, and Azure.
+Advanced MLOps tools will be introduced to help enterprises manage AI projects at scale.
+The platform will add stronger model explainability tools to help understand how AI makes decisions.
+There’s an effort to expand auto logging and smart experiment suggestions powered by AI.
+More security and compliance features are being built for industries with strict regulations.
+Comet is also exploring marketplace-style model sharing, where teams can publish and reuse models.
+The ultimate goal is to make Comet the go-to ecosystem for every stage of an AI project from idea to deployment."
+vibes-tgrxf0,True,Beginner Breakthrough,['react'],"We wanted to create a fun way for people to discover their true music genre by swiping through songs. Vibes lets users swipe right or left to find their unique music vibe, and we built it using React. One challenge we faced was syncing audio smoothly during fast swipes. Along the way, we improved our skills in UI design and audio handling. Next, we plan to add custom playlists, including Habesha music."
+game-night-hub,False,,"['css', 'html5', 'javascript']","Built With
+css
+html5
+javascript"
+image-gussing-game,False,,['python'],"Built With
+python"
+funhub,False,,"['flask', 'python']","Built With
+flask
+python"
+shebaquest,False,,"['css', 'html', 'javascript']","Built With
+css
+html
+javascript"
+swyf-see-what-you-fit-f7wyrj,False,,"['ar-foundation', 'blender', 'colormath', 'fastapi', 'firebase', 'flask', 'huggingface', 'node.js', 'numpy', 'opencv', 'pytorch', 'react-native', 'tensorflow', 'three.js', 'unity']","SWYF — See What You Fit
+An AR + AI platform that reimagines online fashion shopping by providing personalized, privacy-first virtual try-ons to reduce returns, increase conversions, and improve sustainability.
+What inspired the project
+SWYF was born from clear, recurring problems in fashion e-commerce:
+High return rates. Roughly (25%) of online orders are returned — about 32.9 million orders daily — costing roughly $1.48 billion per day in logistics and restocking. Average cost per returned item: $45.
+Abandoned carts. Around (70%) cart abandonment (~307 million daily) due to hesitation, hidden costs, or friction at checkout.
+Lack of personalization & decision fatigue. Shoppers struggle to know whether an item will fit or suit them.
+Sustainability concerns. Returns cause extra shipping, emissions, and waste.
+Safety & privacy in physical trial rooms. Issues like hidden cameras increase demand for private virtual alternatives.
+These issues motivated a privacy-first, AI-driven virtual fitting solution to improve buyer confidence, reduce returns, and lower environmental impact.
+What we learned
+Key insights from research, prototypes, and industry examples:
+AR + AI materially improves outcomes. Case studies show AR/AI can reduce returns (often by up to ~40%) and significantly increase conversion.
+Personalization matters. Recommendations tuned to body shape, measurements, and skin tone increase confidence and loyalty.
+Omnichannel integration is powerful. Linking online try-ons with in-store experiences creates seamless customer journeys.
+Privacy must be built in. On-device processing and strong cryptographic controls earn user trust.
+Sustainability is both ethical and commercial. Fewer returns = lower carbon footprint and cost savings for retailers.
+How we built it
+Core idea: an AI-powered virtual fitting room that provides realistic AR overlays, accurate sizing, and personalized style recommendations while keeping sensitive data private.
+Key features
+Real-time Virtual Try-On (AR overlay): Camera/webcam or in-store smart mirrors show garments on the user in real time.
+AI Personalization: Models build user profiles from measurements, preferences, and skin-tone analysis.
+Accurate Fit & Sizing: Per-product sizing recommendations to minimize size mismatches.
+Privacy & Security: On-device processing for sensitive inputs (selfies, body metrics). Optional encrypted storage via IPFS + blockchain for consented use.
+Omnichannel Experience: Web, mobile, and retail mirror support with consistent recommendations.
+Tokenized Rewards: Users earn tokens for engagement, referrals, and purchases (redeemable for discounts/perks).
+User journey
+Upload a selfie or use live camera (processed locally).
+AI extracts body proportions and skin tone.
+Platform suggests sizes, colors, and outfits.
+User tries items virtually with AR overlays and adjusts fit parameters.
+Checkout via secure payment; users can track orders and returns.
+Tech stack (representative)
+Frontend: React + TypeScript, Vite, TailwindCSS, Radix/Shadcn UI, React Router, TanStack Query, React Hook Form, Zod.
+Backend / Services: Flask or FastAPI (Python), OpenCV, NumPy, TensorFlow / PyTorch models, Colormath for color analytics.
+3D & AR: Three.js, Unity (AR Foundation), Blender for assets.
+Data & infra: Firebase / PostgreSQL / MongoDB, cloud training pipelines for models.
+Security: AES encryption, OAuth2, HTTPS/TLS.
+Blockchain (optional): Hybrid PoS + PoA for token ledger and tamper-evident records; IPFS for user-consented media storage.
+Challenges faced
+AI & AR realism: Realistic cloth simulation and accurate fit across body types is computation-heavy and data-intensive.
+Privacy compliance: Ensuring true on-device processing and transparent consent flows.
+Integration complexity: Building flexible APIs and plugins to work with varied e-commerce platforms and catalog formats.
+Performance: Delivering low-latency AR on low-end devices while keeping model size and battery use reasonable.
+Continuous training & data quality: Maintaining high-quality labeled data and scalable pipelines for model updates.
+Partner adoption: Convincing brands to adopt new UX and to provide accurate product metadata (measurements, material behavior).
+Impact model (math)
+Define:
+N = daily orders
+r = baseline return rate (fraction)
+Δr = relative reduction in return rate due to SWYF (fraction)
+C = average cost per return (USD)
+Then daily savings:
+Daily Savings = N × (r × Δr) × C
+Example:
+N = 1,000,000
+r = 0.25
+Δr = 0.40
+C = 45
+Daily Savings = 1,000,000 × (0.25 × 0.40) × 45
+= 1,000,000 × 0.10 × 45
+= 4,500,000
+So: $4,500,000 saved per day
+Conclusion
+SWYF combines AI, AR, and privacy-first design to reduce returns, increase conversions, and promote sustainable shopping. With strong brand partnerships and continued model improvement, it can materially lower costs for retailers while improving customer experience and reducing environmental impact."
+laughlink-multiplayer-meme-battle,False,,"['battle', 'css', 'flask', 'game', 'git', 'github', 'html', 'javascript', 'meme', 'python', 'sqlite']","Problem: Online games are fun, but most lack quick humor and instant audience engagement. Solution: LaughLink brings players together to battle with memes in real time, scoring points for creativity and laughs.
+Features:
+Real-time meme submissions and voting
+Mobile & desktop friendly design
+Timer-based rounds for fast-paced fun
+Simple login for instant play
+Inspiration
+We wanted to create something fun, fast, and interactive that brings people together through humor. Memes are a universal language, and multiplayer meme battles sounded like the perfect way to combine creativity, competition, and laughter. Our inspiration came from online party games like Jackbox but with a focus on meme culture and quick engagement.
+What it does
+LaughLink is an online multiplayer game where players join a lobby, receive random meme templates, and compete to create the funniest captions.
+Host or join meme battle rooms.
+Get random meme templates.
+Add captions directly in the game.
+Vote for your favorite memes.
+See real-time leaderboard updates.
+How we built it
+Backend: Python (Flask/Django) to handle game rooms, player connections, and voting logic.
+Frontend: HTML, CSS, and JavaScript for responsive gameplay on both desktop and mobile.
+Real-time updates: WebSockets for instant meme submissions and voting results.
+Database: SQLite/PostgreSQL for storing rooms, player data, and meme submissions.
+Design: Mobile-first, with a clean, fun interface for meme creation.
+Challenges we ran into
+Implementing real-time WebSocket communication without delays.
+Ensuring the mobile UI worked smoothly without breaking the desktop layout.
+Handling simultaneous player submissions without conflicts.
+Finding a good balance between speed and creativity in each round.
+Accomplishments that we're proud of
+Built a working multiplayer game in a short hackathon timeframe.
+Achieved smooth real-time gameplay with minimal latency.
+Designed an intuitive UI that works well on both phones and desktops.
+Created something that consistently makes people laugh during playtests.
+What we learned
+How to manage real-time multiplayer experiences with Python and WebSockets.
+Designing for both desktop and mobile from the start is crucial.
+User testing is important—even for a fun project—because it helps balance gameplay speed and creativity.
+What's next for LaughLink - Multiplayer Meme Battle
+Adding a global leaderboard for top meme creators.
+Integrating AI-generated meme suggestions for inspiration.
+Adding private friend-only lobbies with custom templates.
+Supporting GIF memes and video memes.
+Hosting weekly meme tournaments."
+personality-aware-entertainment,False,,"['css3', 'gemini', 'html5', 'javascript', 'json']","Personality-Aware Entertainment: Our Building Journey
+Inspiration
+It all began in our first team meeting after the hackathon theme was announced. Instead of jumping straight into coding, we opened up about the real issues we faced in our own entertainment lives.
+Ahmed shared: ""I have a perfectionism issue—I can’t start a new book or movie until I finish the previous one. But if the one I’m stuck on is terrible, it kills my motivation to explore anything new.""
+Abdelrahman added: ""For me, it’s worse. My OCD pushes me to complete movies in one sitting, no matter how bad they are. I’ve wasted countless nights on content I didn’t even enjoy.""
+Ammar confessed: ""I spend hours watching reviews just to decide if a movie is worth my time. Sometimes I never even watch it afterward.""
+We realized this isn’t just our problem—millions of people feel overwhelmed by entertainment choices, yet unsatisfied with the recommendations offered by algorithms that only consider genres or popularity.
+WE ASKED OURSELVES:
+-What if recommendations weren’t just about ratings or trending content?
+-What if they were about who you are and how you feel right now?
+This was the spark that led us to combine AI with personality insights and design a smarter way to connect people to entertainment.
+What It Does
+Personality-Aware Entertainment is a Chrome extension and AI-powered system that personalizes recommendations based on:
+Your MBTI personality type (e.g., INFP, ESTP, INTJ).
+Your preferred genres (action, fantasy, comedy…).
+Topics you dislike.
+Your mood at the moment (Do you want to relax, laugh, think deeply, or just pass time?).
+Your exclusions (Don’t like a specific actor, author, or studio? The AI will avoid suggesting their work).
+And how much time you spend on entertainment websites—we even developed a timer that tracks your browsing habits to fine-tune suggestions dynamically.
+For creators, our tool analyzes their content and predicts which audience segments will connect with it best, helping them target promotions and improve engagement.
+We’ve also added a “Fit Checker” feature that appears next to each website or search result. This shows:
+The entertainment type (e.g., drama, comedy, thriller).
+The best-fit personality types for the content.
+Whether it aligns with your preferences or not.
+How We Built It
+1. Designed a lightweight Chrome extension using HTML/CSS/JS.
+2. Connected it to Gemini AI Studio for deep personality-based content analysis.
+3. Built a re-sorting system that annotates search results with genre and personality tags.
+4. Developed a browsing timer to measure how long users spend on different platforms, enhancing our AI’s understanding of their real preferences.
+5. Focused on an onboarding flow to make the experience interactive and insightful from the start.
+Challenges We Ran Into
+1. Oversimplification of personality types: At first, our AI relied too heavily on MBTI categories. But people are more complex than 16 personality boxes. We solved this by layering in preferences, moods, and content filters.
+2. Mismatched recommendations: Sometimes the AI perfectly matched a personality and genre, but testers still disliked the content. Why? Because the style of storytelling also mattered (e.g., fast-paced vs. slow, dialogue-heavy vs. visual). We added five targeted questions about narrative preferences to fix this.
+3. Mood variability: People don’t always want the same content. Comedy fans might crave deep drama when reflecting. So we integrated a mood selector to make recommendations dynamic.
+4. Personal exclusions: Some users didn’t want suggestions from certain directors, studios, or authors. A blacklist feature was developed to honor these preferences.
+Accomplishments We’re Proud Of
+Building our first AI-integrated Chrome extension.
+Creating a truly personalized entertainment experience.
+Designing tools for both consumers and creators.
+Developing an innovative timer feature to make recommendations even smarter.
+What We Learned
+AI models aren’t magic—they require careful prompting and human insight to deliver real value.
+Frontend UX matters as much as backend intelligence.
+User feedback (even from family members during testing!) is crucial to refining the system.
+What’s Next for Personality-Aware Entertainment
+Expanding to mobile apps for on-the-go recommendations.
+Allowing creators to test-market content with personality-matched beta audiences.
+Generating AI-powered trailers and summaries tailored to individual users.
+Training a self-learning ML model for even sharper recommendations."
+helping-hand-pwkoi6,True,First Place,"['pygame', 'python']","Inspiration
+As a teen, being independent is hard. Skills such as cooking, tying knots, and sewing clothes are crucial to avoid reliance on others, but they aren’t always something you learn by watching a youtube video or two.
+Muscle memory skills like these need to be trained through doing, not listening, and teens need more than verbal instructions: they need Helping Hand.
+What it does
+High Fidelity Computer Vision Analysis: Marking keypoints on the hand such as fingertips, knuckles and wrist.
+Hand Position Detection: When the position of the user's hand matches up with the desired position, move onto the next position or end the map.
+Map Format: Custom map format for simple and organized map storage.
+Built In Map Creation: For scalability and user enjoyment.
+How we built it
+Graphics: PyGame and Open Computer Vision
+Challenges we ran into
+Accomplishments that we're proud of
+Setting up a fast, precise computer vision model in a short time and making a fun and scalable game/tool; not all projects need to be money managers or AI resume builders...
+Making a cool UI for the main menu with Delaunay Triangulation
+What we learned
+How to build a fun, interactive project with computer vision
+What's next for Helping Hand
+Large scale deployment as a IOS/Android application"
+teenthrive,True,Second Place,"['css3', 'framer-motion', 'google-gemini-api', 'html5', 'javascript', 'lucide-react', 'react', 'react-hook-form', 'react-query', 'react-router', 'tailwind-css', 'typescript', 'vite']","Inspiration
+Watching teens struggle with critical independence skills like budgeting and decision-making, aware they need beneficial direction but hate old apps with clunky signups.
+What it does
+Artificial intelligence-powered independence coach that teaches teens practical skills in the form of fun challenges, simulations, and guided mentorship - all instantly available without accounts.
+How we built it
+React + TypeScript frontend with Google Gemini AI integration, advanced teen psychology-prompt engineering, and session-based architecture for effortless access.
+Challenges we faced
+Balancing AI-produced responses for teen-level advice, creating interesting skill simulations without storing data and sustaining personalized coaching performance with privacy intact.
+Achievements we're proud of
+Zero-friction experience that really challenges teens, sophisticated AI coaching with adolescent development in mind, and complex simulations session-based.
+What we learned
+Teenagers prefer real-time personalization, AI guidance can actually be useful for acquiring life skills, and session-based apps may be more entertaining than ongoing platforms.
+What's next for TeenThrive
+Implementing real-time anonymous peer chat assistance, voice-controlled AI guidance for interactive hands-free experiences, and partnering with schools for classroom autonomy training."
+studium-k0sfw7,True,Third Place,"['figma', 'javascript', 'node.js', 'react-native', 'visual-studio-code']","Inspiration ✨
+Oftentimes, studying feels like a boring and strenuous task. It is something that many high school students struggle with, including us, even though it is essential to getting good grades. That's where we came up with Studium: a mobile app that offers a solution to make studying more fun and rewarding!
+What it does 🎮
+Studium offers a gamefied and easy way to study by including features like leveling up your own avatar, a built-in pomodoro timer in the study mode feature to make studying efficient, and a study tracker to ensure you're meeting your study goals.
+How we built it 🛠️
+We built Studium using React Native with Expo. The user interface was first designed in Figma, where we created a homepage and supporting pages, and then converted those designs into React Native components.
+Challenges we ran into 🚧
+Our team had difficulties implementing a user log-in system, as there were many errors involved, and we are very new to designing apps. There were also many other small debugging issues that consumed a lot of time. It was also challenging to use react-native and add all the dependencies required to get our app running.
+Accomplishments that we're proud of 🏆
+Our team is proud of making an app that is functional through learning how to use react-native and Node.js. We are also proud of making something that can help other teenagers with a real struggle that most of us have, which is the whole purpose of this project.
+What we learned 📚
+As we are pretty new to app development, we have heavily learned about the process and stages of building an app, including UI, frontend, and navigating through a sea of problems that we encountered.
+What's next for Studium 🔮
+Adding a unique virtual pet that users can grow and level up the more frequently they study (generate a personalized visual goal for the user).
+More customizable features for people who learn differently to cater to more people's needs.
+Connect to in-school assignments to track people's progress on them
+Be able to add friends to hold each other accountable"
