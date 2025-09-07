@@ -6,7 +6,7 @@ import pandas as pd
 import time
 import re
 
-df = pd.read_csv("Devpost-Hackathons-API/all-hackathons.csv")
+df = pd.read_csv("Devpost-Datasets/all-hackathons.csv")
 
 # Filter: more than 100 participants and years 2024 or 2025
 df = df[
