@@ -5,7 +5,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import time
 
-df = pd.read_csv("Devpost-Web-Scraping/hackathon-projects.csv")
+df = pd.read_csv("Devpost-Datasets/hackathon-projects.csv")
+hackathons_ID = df["Hackathon ID"]
+# projects_slug = df["Project Slug"]
 df = df["Project Link"]
 df = df.head(15)
 
@@ -19,8 +21,10 @@ team_members = []
 for i in range(len(df)):
     driver.get(df.iloc[i])
     time.sleep(2)
-    project_slug = df[i].split("/")[-1]
     
+    project_slug = df[i].split("/")[-1]
+    hackathon_ID = hackathons_ID.iloc[i]
+
     members_container = driver.find_elements(By.XPATH, '//li/div/div/figure/a[@class="user-profile-link"]')
     members_url = []
     members_usernames = []
@@ -65,6 +69,7 @@ for i in range(len(df)):
 
     # team info
     teams.append({
+        "Hackathon ID": hackathon_ID,
         "Project Slug": project_slug,
         "Is Winner": isWinner,
         "Winners Description": ", ".join(winners_desc),

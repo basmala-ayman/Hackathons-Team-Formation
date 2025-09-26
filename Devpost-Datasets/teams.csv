@@ -1,5 +1,5 @@
-﻿Project Slug,Is Winner,Winners Description,Project Tags,Project Description
-pulsar-digital-funhouse,True,"Best Overall Project, Best Design, Impact for Good","['gemini', 'github', 'nextjs', 'supabase', 'tailwindcss', 'typescript', 'vercel']","Inspiration
+﻿Hackathon ID,Project Slug,Is Winner,Winners Description,Project Tags,Project Description
+25761,pulsar-digital-funhouse,True,"Best Overall Project, Best Design, Impact for Good","['gemini', 'github', 'nextjs', 'supabase', 'tailwindcss', 'typescript', 'vercel']","Inspiration
 Our inspiration came from the wildly popular and brilliantly simple neal.fun, a site that turns boredom into delight with quirky, easy-to-play games. We wanted to build on this concept by combining classic, addictive gameplay with modern AI technology to create an experience that’s both nostalgic and fresh. Pulsar Funhouse aims to bring users a joyful, interactive escape that sparks curiosity and fun anytime, anywhere. By blending traditional games with innovative AI-driven content, we hoped to push the boundaries of what casual web games can offer.
 What it does
 Pulsar Funhouse is a vibrant collection of mini-games designed to entertain and challenge players of all ages. It features classic favorites like Tic Tac Toe, Flappy Bird, and Rock Paper Scissors, alongside unique AI-powered games such as “Am I Talking to a Human or an AI?” that test your wits. Every day, players get fresh AI-generated puzzles, riddles, and fascinating facts, keeping the experience exciting and new. User accounts let players track their progress and achievements across games. The entire app is mobile-friendly and enhanced by a mesmerizing, dynamic particle background that creates a playful atmosphere and keeps users engaged for longer sessions.
@@ -13,7 +13,7 @@ What we learned
 This project taught us invaluable lessons about balancing ambition with scope, especially in a hackathon setting. We gained hands-on experience integrating advanced AI via Google Gemini, which pushed us to rethink how interactive content can be personalized and refreshed dynamically. Managing multiple game states, real-time AI responses, and user authentication within one app honed our skills in scalable architecture and state management. We also learned the importance of mobile-first design and accessibility, ensuring that fun isn’t limited to desktop users. Finally, the project strengthened our ability to collaborate efficiently under pressure and iterate quickly without sacrificing quality.
 What's next for Pulsar Funhouse
 Looking forward, we’re committed to completing all in-progress games, like the Math Duel and Karaoke features, and polishing the user experience across the board. We plan to expand mobile support so every game is fully playable on phones and tablets, breaking down accessibility barriers. Our vision is to continuously add fresh, creative, and quirky games and experiences, driven by AI and community feedback. Ultimately, we want Pulsar Funhouse to become the definitive online destination for quick, engaging entertainment that anyone can enjoy to beat boredom — a place where innovation meets playfulness in perfect harmony."
-hacktone-website,True,Most Innovative,"['cloud3.5', 'css', 'cursor', 'gpt', 'html', 'javascript', 'youtube']","MoodFlix: Bridging Generations Through Film
+25761,hacktone-website,True,Most Innovative,"['cloud3.5', 'css', 'cursor', 'gpt', 'html', 'javascript', 'youtube']","MoodFlix: Bridging Generations Through Film
 1. Inspiration
 Our journey began when we noticed:
 Family movie nights became debates between generations
@@ -63,7 +63,7 @@ Future Goals:
 Partner with local filmmakers for exclusive content
 Implement mood-based recommendation algorithms
 Expand to other African film industries"
-parlo,True,Most Innovative,"['css3', 'flask', 'html5', 'javascript', 'python', 'sqlite', 'tailwind']","Inspiration
+25761,parlo,True,Most Innovative,"['css3', 'flask', 'html5', 'javascript', 'python', 'sqlite', 'tailwind']","Inspiration
 We created Parlo to make quick, no-strings-attached conversations possible. Too often, chat platforms require sign-ups, personal data, or store messages forever. We wanted something different — a fast, minimal, and temporary chat space where friends can connect instantly, share what they need, and leave without a digital footprint. The idea came from real-life moments when you just need to coordinate, plan, or brainstorm without the burden of creating accounts or worrying about privacy.
 What it does
 Parlo allows users to create temporary group chats that vanish after a set time. No registration, no personal data collection, and no permanent message storage — just straightforward, real-time communication.
@@ -90,7 +90,7 @@ How to work efficiently as a team using Git branching and merging.
 What's next for Parlo
 Adding optional end-to-end encryption for extra security.
 Expanding the platform with temporary file sharing."
-comet-mncd36,True,"Beginner Breakthrough, Community Choice","['flask', 'html', 'javascript', 'python']","Inspiration
+25761,comet-mncd36,True,"Beginner Breakthrough, Community Choice","['flask', 'html', 'javascript', 'python']","Inspiration
 Comet was born out of a realization that many people struggle to find music that matches how they feel in the moment. We noticed that music streaming services often focus on genres and playlists, but not on emotions. During lockdown, many of our friends said music helped them cope with stress, anxiety, and loneliness. We wanted to build something that could bridge the gap between emotional wellness and personalized playlists. The idea came from journaling apps that let you log your mood, and we thought why not connect that to music? We also wanted to make it quick: just one mood selection and instantly get songs that fit. The name “Comet” symbolizes fast, bright, and impactful just like finding the perfect song. We looked into how mood detection could be both manual and AI-driven for future updates. Our team aimed to combine empathy with technology, not just make another music app. That’s how the seed of comet was planted.
 What it does
 Comet lets users select their current mood from a simple, colorful interface. Once a mood is chosen happy, sad, relaxed, energetic, and more the app instantly generates a custom playlist. It uses a mix of preset curated playlists and API-driven search for matching tracks. Users can save their favorite moods and playlists for quick future access. It also offers mood history so you can see patterns in your listening habits. The app syncs with Spotify and YouTube for immediate playback. We designed it for speed: no extra steps, just mood → music. It works both online and offline, with cached playlists. The UI adapts its theme colors to the mood chosen for an immersive feel. Overall, it’s a personal DJ that understands how you feel.
@@ -113,21 +113,21 @@ There’s an effort to expand auto logging and smart experiment suggestions powe
 More security and compliance features are being built for industries with strict regulations.
 Comet is also exploring marketplace-style model sharing, where teams can publish and reuse models.
 The ultimate goal is to make Comet the go-to ecosystem for every stage of an AI project from idea to deployment."
-vibes-tgrxf0,True,Beginner Breakthrough,['react'],"We wanted to create a fun way for people to discover their true music genre by swiping through songs. Vibes lets users swipe right or left to find their unique music vibe, and we built it using React. One challenge we faced was syncing audio smoothly during fast swipes. Along the way, we improved our skills in UI design and audio handling. Next, we plan to add custom playlists, including Habesha music."
-game-night-hub,False,,"['css', 'html5', 'javascript']","Built With
+25761,vibes-tgrxf0,True,Beginner Breakthrough,['react'],"We wanted to create a fun way for people to discover their true music genre by swiping through songs. Vibes lets users swipe right or left to find their unique music vibe, and we built it using React. One challenge we faced was syncing audio smoothly during fast swipes. Along the way, we improved our skills in UI design and audio handling. Next, we plan to add custom playlists, including Habesha music."
+25761,game-night-hub,False,,"['css', 'html5', 'javascript']","Built With
 css
 html5
 javascript"
-image-gussing-game,False,,['python'],"Built With
+25761,image-gussing-game,False,,['python'],"Built With
 python"
-funhub,False,,"['flask', 'python']","Built With
+25761,funhub,False,,"['flask', 'python']","Built With
 flask
 python"
-shebaquest,False,,"['css', 'html', 'javascript']","Built With
+25761,shebaquest,False,,"['css', 'html', 'javascript']","Built With
 css
 html
 javascript"
-swyf-see-what-you-fit-f7wyrj,False,,"['ar-foundation', 'blender', 'colormath', 'fastapi', 'firebase', 'flask', 'huggingface', 'node.js', 'numpy', 'opencv', 'pytorch', 'react-native', 'tensorflow', 'three.js', 'unity']","SWYF — See What You Fit
+25761,swyf-see-what-you-fit-f7wyrj,True,Best Team Award,"['ar-foundation', 'blender', 'colormath', 'fastapi', 'firebase', 'flask', 'huggingface', 'node.js', 'numpy', 'opencv', 'pytorch', 'react-native', 'tensorflow', 'three.js', 'unity']","SWYF — See What You Fit
 An AR + AI platform that reimagines online fashion shopping by providing personalized, privacy-first virtual try-ons to reduce returns, increase conversions, and improve sustainability.
 What inspired the project
 SWYF was born from clear, recurring problems in fashion e-commerce:
@@ -192,7 +192,7 @@ Daily Savings = 1,000,000 × (0.25 × 0.40) × 45
 So: $4,500,000 saved per day
 Conclusion
 SWYF combines AI, AR, and privacy-first design to reduce returns, increase conversions, and promote sustainable shopping. With strong brand partnerships and continued model improvement, it can materially lower costs for retailers while improving customer experience and reducing environmental impact."
-laughlink-multiplayer-meme-battle,False,,"['battle', 'css', 'flask', 'game', 'git', 'github', 'html', 'javascript', 'meme', 'python', 'sqlite']","Problem: Online games are fun, but most lack quick humor and instant audience engagement. Solution: LaughLink brings players together to battle with memes in real time, scoring points for creativity and laughs.
+25761,laughlink-multiplayer-meme-battle,False,,"['battle', 'css', 'flask', 'game', 'git', 'github', 'html', 'javascript', 'meme', 'python', 'sqlite']","Problem: Online games are fun, but most lack quick humor and instant audience engagement. Solution: LaughLink brings players together to battle with memes in real time, scoring points for creativity and laughs.
 Features:
 Real-time meme submissions and voting
 Mobile & desktop friendly design
@@ -233,7 +233,7 @@ Integrating AI-generated meme suggestions for inspiration.
 Adding private friend-only lobbies with custom templates.
 Supporting GIF memes and video memes.
 Hosting weekly meme tournaments."
-personality-aware-entertainment,False,,"['css3', 'gemini', 'html5', 'javascript', 'json']","Personality-Aware Entertainment: Our Building Journey
+25761,personality-aware-entertainment,False,,"['css3', 'gemini', 'html5', 'javascript', 'json']","Personality-Aware Entertainment: Our Building Journey
 Inspiration
 It all began in our first team meeting after the hackathon theme was announced. Instead of jumping straight into coding, we opened up about the real issues we faced in our own entertainment lives.
 Ahmed shared: ""I have a perfectionism issue—I can’t start a new book or movie until I finish the previous one. But if the one I’m stuck on is terrible, it kills my motivation to explore anything new.""
@@ -282,52 +282,43 @@ Expanding to mobile apps for on-the-go recommendations.
 Allowing creators to test-market content with personality-matched beta audiences.
 Generating AI-powered trailers and summaries tailored to individual users.
 Training a self-learning ML model for even sharper recommendations."
-helping-hand-pwkoi6,True,First Place,"['pygame', 'python']","Inspiration
-As a teen, being independent is hard. Skills such as cooking, tying knots, and sewing clothes are crucial to avoid reliance on others, but they aren’t always something you learn by watching a youtube video or two.
-Muscle memory skills like these need to be trained through doing, not listening, and teens need more than verbal instructions: they need Helping Hand.
+24504,peer-1qfn2p,True,"TRACK A: Justice, Equity & Awareness","['css', 'flask', 'gpt4o', 'html', 'javascript', 'kaggle', 'numpy', 'openai', 'pandas', 'python', 'yolo']","Inspiration
+We were inspired in our 9th grade ethnic studies class, which was a class that we learn about marginalized communities. When we learned about healthcare inequalities, it touched our hearts. So, we decided to create Peer+, to ensure that no more marginalized communities feel the inequity of healthcare inequality ever again.
 What it does
-High Fidelity Computer Vision Analysis: Marking keypoints on the hand such as fingertips, knuckles and wrist.
-Hand Position Detection: When the position of the user's hand matches up with the desired position, move onto the next position or end the map.
-Map Format: Custom map format for simple and organized map storage.
-Built In Map Creation: For scalability and user enjoyment.
+It analyzes a person's symptoms for a certain disease, and then detects the type of disease, and a potential treatment plan for the disease. This can save a trip to the doctor, and eventually hundreds of dollars, especially for minorities (e.g. Black, Hispanic) who are significantly more likely to be uninsured than their white counterparts.
 How we built it
-Graphics: PyGame and Open Computer Vision
+We used multiple types of coding languages, such as HTML, Javascript and Python for a combination of the front end and backend. It analyzes user symptoms via a chat interface, references a Kaggle disease-symptom dataset, and returns likely conditions with treatment plans—supporting English and Spanish. Designed to improve access for uninsured and minority populations.
 Challenges we ran into
+The two main challenges that we ran into were the integration of the back end and the front end, as well as properly using Open AI's API keys. The time spent analyzing all of the images, trying to provide annotated notes, regarding each one of them (in our data collection). Overall, this hindered the time we spent on other areas, such as the front end, cleaning up the back end, and making it more aesthetically pleasing.
 Accomplishments that we're proud of
-Setting up a fast, precise computer vision model in a short time and making a fun and scalable game/tool; not all projects need to be money managers or AI resume builders...
-Making a cool UI for the main menu with Delaunay Triangulation
+We're extremely proud of the fact that our model worked, and that it is able to communicate in multiple languages. We are really proud of connecting the user's input with a Kaggle dataset, while also providing the user with a result that is almost perfectly accurate with almost no flaws.
 What we learned
-How to build a fun, interactive project with computer vision
-What's next for Helping Hand
-Large scale deployment as a IOS/Android application"
-teenthrive,True,Second Place,"['css3', 'framer-motion', 'google-gemini-api', 'html5', 'javascript', 'lucide-react', 'react', 'react-hook-form', 'react-query', 'react-router', 'tailwind-css', 'typescript', 'vite']","Inspiration
-Watching teens struggle with critical independence skills like budgeting and decision-making, aware they need beneficial direction but hate old apps with clunky signups.
+We learnt how to effectively connect the back end to the front end, even though we were restricted on time and could not fulfill it. We also learned the skills of effective time management, and the importance of productivity in the workplace. It is really important to leave extra time for testing. There were many instances where in the last moments of time, errors occurred. Our poor time allocation led to there being no time to fix these errors, and therefore, we had to go forward.
+What's next for Peer+
+We wish to make our website more aesthetically pleasing, as well as getting it cross-analyzed with real doctors, to make the models more accurate. If given more time, we would additionally try to think of new features to add."
+24504,kit-create,True,"TRACK B: Safety & Emergency Tech, 1st Place","['adobe-illustrate', 'apis', 'css', 'flask', 'gemini', 'html', 'open-ai', 'python', 'react.js']","Inspiration
+Aware of the heightened risk of disasters occurring due to climate change in the US and the disturbingly low number of people who have adequate emergency kits, we decided to take matters into our own hands and innovate a website to assist people.
 What it does
-Artificial intelligence-powered independence coach that teaches teens practical skills in the form of fun challenges, simulations, and guided mentorship - all instantly available without accounts.
+KitCreate has a host of features, such as the Kit List, which creates a checklist of items that are typically used in a disaster emergency kit; links to obtain supplies you might not currently have; reminders for when certain supplies expire; and a map of local disaster shelters, in the event of a true natural disaster!
 How we built it
-React + TypeScript frontend with Google Gemini AI integration, advanced teen psychology-prompt engineering, and session-based architecture for effortless access.
-Challenges we faced
-Balancing AI-produced responses for teen-level advice, creating interesting skill simulations without storing data and sustaining personalized coaching performance with privacy intact.
-Achievements we're proud of
-Zero-friction experience that really challenges teens, sophisticated AI coaching with adolescent development in mind, and complex simulations session-based.
+For the back-end, we created a function to call Gemini and generate a list of supplies for an emergency kit. We added several facets to the list (in addition to the item’s literal name): a brief description of each item, the quantity required, and its expiration date (if applicable). Later, we linked this function to be displayed with the front-end framework. For the front-end, we designed the interface using HTML and CSS, prioritizing the list and map for the composition of the website. We made it so that generating the list is as easy as clicking a button, with all sorts of information, such as setting reminders and extra information regarding the items showing up second. We integrated a map that tracks your location by using the map openstreetmap.org provides for free.
+Challenges we ran into
+We ran into a multitude of issues, ranging from things as benign as a missing indent to corrupted files. Our most intense hurdles we overcame were self-learning an entirely new language- React- for our project, one of our team members’ laptops being incapable of installing things as simple as Homebrew, and our code not merging properly when pushed.
+Accomplishments that we're proud of
+Despite the adversity we endured, we’re most proud of our AI integration and the fact that we were able to self learn Flask and React in such a short period of time. After some initial issues with permissions and API keys, we were able to embed Gemini into our code, from where we could tailor its responses to our exact needs.
 What we learned
-Teenagers prefer real-time personalization, AI guidance can actually be useful for acquiring life skills, and session-based apps may be more entertaining than ongoing platforms.
-What's next for TeenThrive
-Implementing real-time anonymous peer chat assistance, voice-controlled AI guidance for interactive hands-free experiences, and partnering with schools for classroom autonomy training."
-studium-k0sfw7,True,Third Place,"['figma', 'javascript', 'node.js', 'react-native', 'visual-studio-code']","Inspiration ✨
-Oftentimes, studying feels like a boring and strenuous task. It is something that many high school students struggle with, including us, even though it is essential to getting good grades. That's where we came up with Studium: a mobile app that offers a solution to make studying more fun and rewarding!
-What it does 🎮
-Studium offers a gamefied and easy way to study by including features like leveling up your own avatar, a built-in pomodoro timer in the study mode feature to make studying efficient, and a study tracker to ensure you're meeting your study goals.
-How we built it 🛠️
-We built Studium using React Native with Expo. The user interface was first designed in Figma, where we created a homepage and supporting pages, and then converted those designs into React Native components.
-Challenges we ran into 🚧
-Our team had difficulties implementing a user log-in system, as there were many errors involved, and we are very new to designing apps. There were also many other small debugging issues that consumed a lot of time. It was also challenging to use react-native and add all the dependencies required to get our app running.
-Accomplishments that we're proud of 🏆
-Our team is proud of making an app that is functional through learning how to use react-native and Node.js. We are also proud of making something that can help other teenagers with a real struggle that most of us have, which is the whole purpose of this project.
-What we learned 📚
-As we are pretty new to app development, we have heavily learned about the process and stages of building an app, including UI, frontend, and navigating through a sea of problems that we encountered.
-What's next for Studium 🔮
-Adding a unique virtual pet that users can grow and level up the more frequently they study (generate a personalized visual goal for the user).
-More customizable features for people who learn differently to cater to more people's needs.
-Connect to in-school assignments to track people's progress on them
-Be able to add friends to hold each other accountable"
+Our team members all learned new languages, the person writing this specifically learning HTML and CSS, while others learned Flask and React. We also learned to maintain a growth mindset, as patience is the fruit of labor.
+What's next for KitCreate
+We plan to develop a heatmap of past earthquakes' prevalence and intensity in order to inform the user of their area’s historical-based disaster risk. In addition, we could expand our website into covering other natural disasters, such as wildfires, hurricanes, floods, and the like."
+24504,ody,True,TRACK C: Gamify Everything,"['flask', 'next', 'python']","Inspiration
+We took a lot of inspiration from the gym app Liftoff when coming up with our idea. Liftoff is really cool because it doesn’t just track your workouts in general, it actually keeps track of which muscle groups you’re working on and then gives you a ranking for each one. This makes people feel accomplished and motivated to keep improving, because they can see exactly how they’re doing in different areas. We wanted to take that same idea and apply it to coding, since sometimes it’s hard for coders to feel validated or see their progress in a clear way. So, we decided to create a game that helps coders feel recognized for their achievements by using a ranking system, just like Liftoff does for workouts. Our goal is to make coding feel more rewarding and fun, and to help people see how much they’re growing and learning, not just overall, but in specific coding skills. It's kind of like tracking different muscle groups at the gym.
+What it does
+ODY is designed to track several important aspects of your coding journey, making it feel almost like a game where your progress really matters. For example, ODY keeps track of your commits, the number of lines of code you write, and even how much you use AI tools while programming. All of this data is used to calculate experience points, which you can either gain or lose depending on your activity and performance. As you earn more experience points, your rank goes up, showing your growth and achievements as a coder. This ranking system is meant to motivate you to keep improving and to make your progress more visible and rewarding, kind of like leveling up in a video game as you get better and learn new things.
+How we built it
+We built this project with a next js frontend, and a flask backend. The terminal app was built with python.
+Challenges we ran into
+One of the biggest challenges we faced was deploying our webpage on Vercel and building the API to support it. Integrating the backend with the frontend turned out to be much more complicated than we expected, especially when it came to merging the two systems so they worked together smoothly. We encountered several issues with getting the API to communicate properly with the frontend and ensuring that data was updated correctly.
+Accomplishments that we're proud of
+One accomplishment we were really proud of was getting the web dashboard to show live statistics that update constantly. It was tough at first to make the data refresh automatically, but after some trial and error, we got it working. Now, users can see their progress update in real time, which makes the whole experience feel much more interactive and rewarding.
+What's next for ODY
+We want to increase the gamified aspects and add a ranked platform where users can compete globally to motivate them even more."
