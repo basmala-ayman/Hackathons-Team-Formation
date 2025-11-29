@@ -7,8 +7,7 @@ import time
 
 members_url = pd.read_csv('Devpost-Datasets/team_members.csv')
 usernames = members_url["Member Username"]
-members_url = members_url["Member URL"]
-members_url = members_url.head(15)
+members_url = members_url["Member URL"].drop_duplicates().head(15).tolist()
 
 members_table = []
 
@@ -17,7 +16,7 @@ service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
 
 for i in range(len(members_url)):
-    driver.get(members_url.iloc[i])
+    driver.get(members_url[i])
     time.sleep(2)
 
     username = usernames.iloc[i]
@@ -26,25 +25,31 @@ for i in range(len(members_url)):
     hard_skills = []
     soft_skills = []
 
-    # location if found
+    # bio if exists
+    try:
+        bio = driver.find_element(By.XPATH, '//*[@id="portfolio-user-bio"]/i').text.strip()
+    except:
+        bio = ''
+
+    # location if exists
     try:
         location = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-location"]]').text.strip()
     except:
         location = ''
     
-    # website if found
+    # website if exists
     try:
         website = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-link"]]/a').get_attribute("href")
     except:
         website = ''
 
-    # github if found
+    # github if exists
     try:
         github = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-social ss-octocat"]]/a').get_attribute("href")
     except:
         github = ''
 
-    # hard_skills if found
+    # hard_skills if exists
     try:
         hard_skills_container = driver.find_elements(By.XPATH, '//*[@id="portfolio-user-info"]/div/div/div[1]/ul/li/span')
         for skill in hard_skills_container:
@@ -52,7 +57,7 @@ for i in range(len(members_url)):
     except:
         hard_skills = []
     
-    # Interests if found
+    # Interests if exists
     try:
         interests_container = driver.find_elements(By.XPATH, '//*[@id="portfolio-user-info"]/div/div/div[2]/ul/li/span')
         for interest in interests_container:
@@ -83,6 +88,7 @@ for i in range(len(members_url)):
     members_table.append({
         "Username": username,
         "Name": name,
+        "Bio": bio,
         "Location": location,
         "Website": website,
         "GitHub": github,
