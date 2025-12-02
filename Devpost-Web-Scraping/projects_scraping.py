@@ -8,14 +8,14 @@ import re
 
 df = pd.read_csv("Devpost-Datasets/all-hackathons.csv")
 
-# Filter: more than 100 participants and years 2024 or 2025
-df = df[
-    (df["Registrations Count"] > 100) &
-    (df["Submission Period"].str.contains("2024|2025", na=False))
-]
+# # Filter: more than 100 participants and years 2024 or 2025
+# df = df[
+#     (df["Registrations Count"] > 100) &
+#     (df["Submission Period"].str.contains("2024|2025", na=False))
+# ]
 
-# Limit hackathons number to 10 (for testing)
-df = df.head(10)
+# # Limit hackathons number to 10 (for testing)
+# df = df.head(10)
 
 print(f"Selected {len(df)} hackathons after filtering.")
 
