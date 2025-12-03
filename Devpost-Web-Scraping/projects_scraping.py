@@ -2,8 +2,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-import time
+# import time
 import re
 
 df = pd.read_csv("Devpost-Datasets/all-hackathons.csv")
@@ -17,11 +19,15 @@ df = pd.read_csv("Devpost-Datasets/all-hackathons.csv")
 # # Limit hackathons number to 10 (for testing)
 # df = df.head(10)
 
-print(f"Selected {len(df)} hackathons after filtering.")
+# print(f"Selected {len(df)} hackathons after filtering.")
+
+# run for each 100 hackathons
+df = df.iloc[0:5]
 
 # Open browser to be controlled by the code
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
+wait = WebDriverWait(driver, 3)
 
 all_projects = []
 
@@ -38,10 +44,19 @@ for i, row in df.iterrows():
         driver.get(paged_url)
 
         # wait for page to load
-        time.sleep(5)
+        # time.sleep(2)
 
-        projects = driver.find_elements(By.CLASS_NAME, "gallery-item")
-        if not projects:
+        # projects = driver.find_elements(By.CLASS_NAME, "gallery-item")
+        # if not projects:
+            # break
+
+         # Wait until project cards exist OR break if not found
+        try:
+            projects = wait.until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "gallery-item"))
+            )
+        except:
+            # No more pages
             break
 
         print(f"  Page {page_number}: Found {len(projects)} projects.")
@@ -112,12 +127,9 @@ for i, row in df.iterrows():
             })
 
         page_number += 1
-        time.sleep(2)
-
-    time.sleep(3)
 
 projects_df = pd.DataFrame(all_projects)
-projects_df.to_csv("Devpost-Datasets/hackathon-projects.csv", index=False, encoding="utf-8-sig")
+projects_df.to_csv("Devpost-Datasets/hackathon-projects.csv", mode="w", index=False, encoding="utf-8-sig")
 
 driver.quit()
 print("Scraping done, saved to hackathon-projects.csv")

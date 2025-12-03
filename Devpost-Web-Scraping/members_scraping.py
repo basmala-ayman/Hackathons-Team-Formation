@@ -2,22 +2,34 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
-import time
 
 members_url = pd.read_csv('Devpost-Datasets/team_members.csv')
 usernames = members_url["Member Username"]
-members_url = members_url["Member URL"].drop_duplicates().head(15).tolist()
+members_url = members_url["Member URL"].drop_duplicates().head(3).tolist()
 
 members_table = []
 
 # Open browser
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
+wait = WebDriverWait(driver, 5)
 
 for i in range(len(members_url)):
+    if(members_url[i] == "private user" or members_url[i] == ""):
+        print(f"Skipping private or invalid user at index {i}")
+        continue
+    
     driver.get(members_url[i])
-    time.sleep(2)
+
+    # Wait for the profile header to load
+    try:
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="container"]')))
+    except:
+        print(f"Failed to load profile: {members_url[i]}")
+        continue
 
     username = usernames.iloc[i]
 
@@ -75,10 +87,13 @@ for i in range(len(members_url)):
     like_count = counts_container[5].text.strip()
     
     # get hackathons page link to get #winnings
-    hackathons_page = driver.find_element(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a').get_attribute("href")
-    driver.get(hackathons_page)
-    time.sleep(1)
+    # hackathons_page = driver.find_element(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a').get_attribute("href")
+    try:
+        hackathons_page = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a'))).get_attribute("href")
+    except:
+        print(f"Failed to load hackathons page for {members_url[i]}")
 
+    driver.get(hackathons_page)
     # number of hackathon winnings
     try:
         winnings_count = len(driver.find_elements(By.XPATH, '//*[@id="container"]/section/div[2]/div/section/div[1]/div/article/a/div[1]/section/div/span'))
