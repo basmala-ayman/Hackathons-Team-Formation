@@ -1,115 +1,115 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import requests
 import pandas as pd
+import time
+from bs4 import BeautifulSoup
 
-df = pd.read_csv("Devpost-Datasets/hackathon-projects.csv")
-hackathons_ID = df["Hackathon ID"]
-# projects_slug = df["Project Slug"]
-df = df["Project Link"]
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+df = pd.read_csv("Devpost-Datasets/hackathon_projects.csv")
+df = df.dropna(subset=["Project Link"])
 df = df.iloc[0:5]
-
-# Open browser
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service)
-wait = WebDriverWait(driver, 5)
+CHUNK_SIZE = 300
 
 teams = []
 team_members = []
 
-for i in range(len(df)):
-    driver.get(df.iloc[i])
+for start in range(0, len(df), CHUNK_SIZE):
+    chunk = df.iloc[start:start + CHUNK_SIZE]
+    print(f"Processing projects {start} → {start + len(chunk)}")
 
-    # wait for project page to fully load
-    try:
-        wait.until(
-            EC.presence_of_all_elements_located((By.XPATH, '//*[@id="container"]'))
-        )
-    except:
-        print(f"No team members found for project {df.iloc[i]}")
-        continue
+    for _, row in chunk.iterrows():
+        url = row["Project Link"]
+        hackathon_id = row["Hackathon ID"]
+        project_slug = url.rstrip("/").split("/")[-1]
 
-
-    project_slug = df[i].split("/")[-1]
-    hackathon_ID = hackathons_ID.iloc[i]
-
-    members_container = driver.find_elements(By.XPATH, '//*[@id="app-team"]/ul/li/div/div/figure')
-    members_url = []
-    members_usernames = []
-    members_desc = []
-    index = 1
-    for member in members_container:
         try:
-            # normal user
-            a_tag = member.find_element(By.XPATH, ".//a")
-            user_url =  a_tag.get_attribute("href")
-            members_url.append(user_url)
-            username = user_url.split("/")[-1]
-            members_usernames.append(username)
+            r = requests.get(url, headers=HEADERS, timeout=20)
+            if r.status_code != 200:
+                continue
         except:
-            # check for private user
-            try:
-                # private user
-                span_tag = member.find_element(By.XPATH, ".//span")
-                user_url =  "private user"
-                members_url.append(user_url)
-                username = "private user"
-                members_usernames.append(username)
-            except:
-                members_url.append("")
-                members_usernames.append("")
-        
-        try:
-            member_bubble = driver.find_element(By.XPATH, f'//*[@id="app-team"]/ul/li[{index}]/div[@class = "bubble"]').text
-            members_desc.append(member_bubble)
-        except:
-            member_bubble = ""
-            members_desc.append("")
-        index += 1
+            continue
 
-    winners = driver.find_elements(By.XPATH, '//*[@id="submissions"]/ul/li/div/ul/li')
-    winners_desc =[]
-    isWinner = False
-    if(len(winners)>0):
-        isWinner = True
-        for winner in winners:
-            winners_desc.append(winner.text.partition(" ")[2])
-    
-    tags_container = driver.find_elements(By.XPATH, '//*[@id="built-with"]/ul/li')
-    tags =[]
-    for tag in tags_container:
-        tags.append(tag.text)
+        soup = BeautifulSoup(r.text, "lxml")
 
-    project_desc = driver.find_element(By.XPATH, '//*[@id="app-details-left"]/div[2]').text
+        # =====================
+        # Team members
+        # =====================
+        members = soup.select("#app-team ul li")
+        member_count = 0
 
-    # members info
-    for i in range(len(members_url)):
-        team_members.append({
+        for m in members:
+            member_count += 1
+            a = m.select_one("a[href]")
+            username = "private user"
+            member_url = "private user"
+
+            if a:
+                member_url = a["href"]
+                username = member_url.split("/")[-1]
+
+            bubble = m.select_one(".bubble")
+            desc = bubble.text.strip() if bubble else ""
+
+            team_members.append({
+                "Project Slug": project_slug,
+                "Member Username": username,
+                "Member URL": member_url,
+                "Member Description": desc
+            })
+
+        # =====================
+        # Winners
+        # =====================
+        winner_nodes = soup.select("#submissions ul li div ul li")
+        is_winner = bool(winner_nodes)
+        winner_desc = [w.text.partition(" ")[2] for w in winner_nodes]
+
+        # =====================
+        # Tags
+        # =====================
+        tags = [t.text.strip() for t in soup.select("#built-with ul li")]
+
+        # =====================
+        # Description
+        # =====================
+        desc_div = soup.select_one("#app-details-left div:nth-of-type(2)")
+        project_desc = desc_div.text.strip() if desc_div else ""
+
+        teams.append({
+            "Hackathon ID": hackathon_id,
             "Project Slug": project_slug,
-            "Member Username": members_usernames[i],
-            "Member URL": members_url[i],
-            "Member Description": members_desc[i] ,
+            "Members Count": member_count,
+            "Is Winner": is_winner,
+            "Winners Description": ", ".join(winner_desc),
+            "Project Tags": tags,
+            "Project Description": project_desc
         })
 
-    # team info
-    teams.append({
-        "Hackathon ID": hackathon_ID,
-        "Project Slug": project_slug,
-        "Members Count": len(members_url),
-        "Is Winner": isWinner,
-        "Winners Description": ", ".join(winners_desc),
-        "Project Tags": tags,
-        "Project Description": project_desc
-    })
+        time.sleep(0.7)  # SAFE rate
 
-team_members_df = pd.DataFrame(team_members)
-team_members_df.to_csv("Devpost-Datasets/team_members.csv", index=False, encoding="utf-8-sig")
+    # =====================
+    # SAVE INCREMENTALLY
+    # =====================
+    pd.DataFrame(team_members).to_csv(
+        "Devpost-Datasets/team_members.csv",
+        mode="a",
+        header=(start == 0),
+        index=False,
+        encoding="utf-8-sig"
+    )
 
-teams_df = pd.DataFrame(teams)
-teams_df.to_csv("Devpost-Datasets/teams.csv", index=False, encoding="utf-8-sig")
+    pd.DataFrame(teams).to_csv(
+        "Devpost-Datasets/teams.csv",
+        mode="a",
+        header=(start == 0),
+        index=False,
+        encoding="utf-8-sig"
+    )
 
-driver.quit()
-print("Scraping done, saved to teams.csv")
+    team_members.clear()
+    teams.clear()
+
+print("✅ Project details scraping completed safely.")

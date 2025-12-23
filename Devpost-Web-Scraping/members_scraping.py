@@ -1,141 +1,193 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import requests
 import pandas as pd
+import time
+from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
-members_url = pd.read_csv('Devpost-Datasets/team_members.csv')
-usernames = members_url["Member Username"]
-members_url = members_url["Member URL"].drop_duplicates().head(3).tolist()
+# =====================
+# HEADERS
+# =====================
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+    "Accept-Language": "en-US,en;q=0.9",
+}
 
-members_table = []
+# =====================
+# PLAYWRIGHT: COUNT WINS
+# =====================
+def count_user_wins_playwright(challenges_url):
+    wins = 0
+    page_num = 1
 
-# Open browser
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service)
-wait = WebDriverWait(driver, 3)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
-for i in range(len(members_url)):
-    if(members_url[i] == "private user" or members_url[i] == ""):
-        print(f"Skipping private or invalid user at index {i}")
-        continue
-    
-    driver.get(members_url[i])
+        while True:
+            url = f"{challenges_url}?page={page_num}"
+            print(f"[PW] Checking {url}")
 
-    # Wait for the profile header to load
-    try:
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="container"]')))
-    except:
-        print(f"Failed to load profile: {members_url[i]}")
-        continue
+            page.goto(url, timeout=5000)
 
-    username = usernames.iloc[i]
+            try:
+                page.wait_for_selector(
+                    'div.row[data-browse-challenges="challenge-listing"]',
+                    timeout=4000
+                )
+            except:
+                break
 
-    name = driver.find_element(By.XPATH, '//*[@id="portfolio-user-name"]').text.split("(")[0].strip()
-    hard_skills = []
-    soft_skills = []
+            rows = page.query_selector_all(
+                'div.row[data-browse-challenges="challenge-listing"]'
+            )
 
-    # bio if exists
-    try:
-        bio = driver.find_element(By.XPATH, '//*[@id="portfolio-user-bio"]/i').text.strip()
-    except:
-        bio = ''
+            if not rows:
+                break
 
-    # location if exists
-    try:
-        location = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-location"]]').text.strip()
-    except:
-        location = ''
-    
-    # website if exists
-    try:
-        website = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-link"]]/a').get_attribute("href")
-    except:
-        website = ''
+            wins_on_page = 0
+            for row in rows:
+                if row.query_selector("span.participation-badge.winner"):
+                    wins_on_page += 1
 
-    # github if exists
-    try:
-        github = driver.find_element(By.XPATH, '//*[@id="portfolio-user-links"]/li[span[@class="ss-icon ss-social ss-octocat"]]/a').get_attribute("href")
-    except:
-        github = ''
+            print(f"[PW] wins on page: {wins_on_page}")
+            wins += wins_on_page
+            page_num += 1
 
-    # hard_skills if exists
-    try:
-        hard_skills_container = driver.find_elements(By.XPATH, '//*[@id="portfolio-user-info"]/div/div/div[1]/ul/li/span')
-        for skill in hard_skills_container:
-            hard_skills.append(skill.text.strip())
-    except:
-        hard_skills = []
-    
-    # Interests if exists
-    try:
-        interests_container = driver.find_elements(By.XPATH, '//*[@id="portfolio-user-info"]/div/div/div[2]/ul/li/span')
-        for interest in interests_container:
-            soft_skills.append(interest.text.strip())
-    except:
-        soft_skills = []
-    
-    # counters of Projects, Hackathons, Achievements, Followers, Following, Like
-    counts_container = driver.find_elements(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li/a/div/span')
-    projects_count = counts_container[0].text.strip()
-    hackathons_count = counts_container[1].text.strip()
-    achievements_count = counts_container[2].text.strip()
-    followers_count = counts_container[3].text.strip()
-    following_count = counts_container[4].text.strip()
-    like_count = counts_container[5].text.strip()
-    
-    # get hackathons page link to get #winnings
-    try:
-        hackathons_page = driver.find_element(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a').get_attribute("href")
-    except:
-        hackathons_page = ""
+        browser.close()
 
-    winnings_count = 0
-    page_number = 1
+    return wins
 
-    while True:
-        hack_page = f"{hackathons_page}?page={page_number}"
-        driver.get(hack_page)
+# =====================
+# LOAD USERS
+# =====================
+df = pd.read_csv("Devpost-Datasets/team_members.csv")
+df = df.drop_duplicates(subset=["Member URL"])
+df = df[~df["Member URL"].isin(["", "private user"])]
+df = df.iloc[0:5]
+
+# =====================
+# CONFIG
+# =====================
+CHUNK_SIZE = 200
+OUTPUT_FILE = "Devpost-Datasets/members.csv"
+users_buffer = []
+
+# =====================
+# MAIN LOOP
+# =====================
+for start in range(0, len(df), CHUNK_SIZE):
+    chunk = df.iloc[start:start + CHUNK_SIZE]
+    print(f"\nProcessing users {start} → {start + len(chunk)}")
+
+    for _, row in chunk.iterrows():
+        profile_url = row["Member URL"]
+        username = row["Member Username"]
 
         try:
-            hacks = wait.until(
-                EC.presence_of_all_elements_located((By.XPATH, '//div[@data-browse-challenges="challenge-listing"]'))
-            )
+            r = requests.get(profile_url, headers=HEADERS, timeout=20)
+            if r.status_code != 200:
+                continue
         except:
-            # No more pages
-            break
-        
-        winners = driver.find_elements(By.XPATH,"//span[contains(@class, 'winner')]")
-        winnings_count += len(winners)
-        page_number += 1
-    
-    
-    members_table.append({
-        "Username": username,
-        "Name": name,
-        "Bio": bio,
-        "Location": location,
-        "Website": website,
-        "GitHub": github,
-        "Hard Skills": hard_skills,
-        "Soft Skills": soft_skills,
-        "Projects Count": projects_count,
-        "Hackathons Count": hackathons_count,
-        "Achievements Count": achievements_count,
-        "Followers Count": followers_count,
-        "Following Count": following_count,
-        "Like Count": like_count,
-        "Hackathons Page URL": hackathons_page,
-        "Winnings Count": winnings_count
-    })
+            continue
 
-    # just for checking / tracking
-    print(f"{username} is Completed!!")
+        soup = BeautifulSoup(r.text, "lxml")
 
-members_df = pd.DataFrame(members_table)
-members_df.to_csv('Devpost-Datasets/members.csv', index=False, encoding="utf-8-sig")
+        # =====================
+        # BASIC INFO
+        # =====================
+        name_tag = soup.select_one("#portfolio-user-name")
+        name = name_tag.text.split("(")[0].strip() if name_tag else ""
 
-driver.quit()
-print("Scraping Completed!")
+        bio_tag = soup.select_one("#portfolio-user-bio i")
+        bio = bio_tag.text.strip() if bio_tag else ""
+
+        location = ""
+        loc = soup.select_one("li span.ss-location")
+        if loc:
+            location = loc.find_parent("li").text.strip()
+
+        def get_link(icon_class):
+            icon = soup.select_one(f"li span.{icon_class}")
+            if icon:
+                a = icon.find_parent("li").find("a")
+                return a["href"] if a else ""
+            return ""
+
+        website = get_link("ss-link")
+        github = get_link("ss-octocat")
+
+        # =====================
+        # SKILLS
+        # =====================
+        hard_skills = [
+            s.text.strip()
+            for s in soup.select(
+                "#portfolio-user-info div div div:nth-of-type(1) ul li span"
+            )
+        ]
+
+        soft_skills = [
+            s.text.strip()
+            for s in soup.select(
+                "#portfolio-user-info div div div:nth-of-type(2) ul li span"
+            )
+        ]
+
+        # =====================
+        # COUNTS
+        # =====================
+        counts = [
+            c.text.strip()
+            for c in soup.select(
+                "#portfolio-navigation ul li a div span"
+            )
+        ]
+
+        projects, hackathons, achievements, followers, following, likes = (
+            counts + ["0"] * 6
+        )[:6]
+
+        hackathon_num = int(hackathons.replace("+", "")) if hackathons else 0
+
+        # =====================
+        # 🔥 WINNINGS (PLAYWRIGHT)
+        # =====================
+        winnings = 0
+        if hackathon_num > 0:
+            challenges_url = profile_url.rstrip("/") + "/challenges"
+            winnings = count_user_wins_playwright(challenges_url)
+
+        # =====================
+        # SAVE USER
+        # =====================
+        users_buffer.append({
+            "Username": username,
+            "Name": name,
+            "Bio": bio,
+            "Location": location,
+            "Website": website,
+            "GitHub": github,
+            "Hard Skills": hard_skills,
+            "Soft Skills": soft_skills,
+            "Projects Count": projects,
+            "Hackathons Count": hackathons,
+            "Achievements Count": achievements,
+            "Followers Count": followers,
+            "Following Count": following,
+            "Like Count": likes,
+            "Winnings Count": winnings,
+        })
+
+        time.sleep(0.7)  # safe profile rate
+
+    pd.DataFrame(users_buffer).to_csv(
+        OUTPUT_FILE,
+        mode="a",
+        header=(start == 0),
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+    users_buffer.clear()
+
+print("\n✅ Hybrid scraping completed successfully.")

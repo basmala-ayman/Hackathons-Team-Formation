@@ -1,4 +1,6 @@
-﻿Username,Name,Bio,Location,Website,GitHub,Hard Skills,Soft Skills,Projects Count,Hackathons Count,Achievements Count,Followers Count,Following Count,Like Count,Hackathons Page URL,Winnings Count
-bl3321,Brayton Lordianto,,United States,,,"['some', 'swift', 'swiftui', 'core-data', 'flask', 'c++', 'python', 'sql', 'mongodb']",['Mobile'],22,49,10,18,2,2,https://devpost.com/bl3321/challenges,14
-longhoag,Long Hoang,,"Los Angeles, California, United States",https://github.com/longhoag,https://github.com/longhoag,"['swift', 'java', 'cpp', 'machine-learning', 'ios']","['Gaming', 'Lifehacks', 'Machine Learning/AI', 'Mobile', 'Productivity', 'Music/Art']",3,4,9,2,0,4,https://devpost.com/longhoag/challenges,3
-X3NOSIZ,Pratyay Banerjee,I share memes more than I code :p // Smurfing @Neilblaze,,https://neox.js.org/,https://github.com/X3NOSIZ,['javascript'],"['DevOps', 'IoT', 'Web']",16,28,10,17,7,14,https://devpost.com/X3NOSIZ/challenges,16
+﻿Username,Name,Bio,Location,Website,GitHub,Hard Skills,Soft Skills,Projects Count,Hackathons Count,Achievements Count,Followers Count,Following Count,Like Count,Winnings Count
+bl3321,Brayton Lordianto,,United States,,,"['some', 'swift', 'swiftui', 'core-data', 'flask', 'c++', 'python', 'sql', 'mongodb']",['Mobile'],22,49,10,18,2,2,14
+longhoag,Long Hoang,,"Los Angeles, California, United States",https://github.com/longhoag,https://github.com/longhoag,"['swift', 'java', 'cpp', 'machine-learning', 'ios']","['Gaming', 'Lifehacks', 'Machine Learning/AI', 'Mobile', 'Productivity', 'Music/Art']",3,4,9,2,0,4,3
+X3NOSIZ,Pratyay Banerjee,I share memes more than I code :p // Smurfing @Neilblaze,,https://neox.js.org,https://github.com/X3NOSIZ,['javascript'],"['DevOps', 'IoT', 'Web']",16,28,10,17,7,14,16
+joshgwolk,Joshua Wolk,,,https://joshuawolk.framer.website/,https://github.com/https://github.com/WoshuaJolk,[],[],7,8,8,8,2,1,3
+dkeller,Dustin Keller,,"Shelton, Connecticut, United States",https://github.com/dustinkeller,https://github.com/dustinkeller,"['python', 'java', 'opencv', 'pytorch', 'visual-studio']",['Beginner Friendly'],2,3,6,2,3,0,2
