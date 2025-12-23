@@ -15,7 +15,7 @@ members_table = []
 # Open browser
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
-wait = WebDriverWait(driver, 5)
+wait = WebDriverWait(driver, 3)
 
 for i in range(len(members_url)):
     if(members_url[i] == "private user" or members_url[i] == ""):
@@ -87,19 +87,31 @@ for i in range(len(members_url)):
     like_count = counts_container[5].text.strip()
     
     # get hackathons page link to get #winnings
-    # hackathons_page = driver.find_element(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a').get_attribute("href")
     try:
-        hackathons_page = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a'))).get_attribute("href")
+        hackathons_page = driver.find_element(By.XPATH, '//*[@id="portfolio-navigation"]/ul/li[2]/a').get_attribute("href")
     except:
-        print(f"Failed to load hackathons page for {members_url[i]}")
+        hackathons_page = ""
 
-    driver.get(hackathons_page)
-    # number of hackathon winnings
-    try:
-        winnings_count = len(driver.find_elements(By.XPATH, '//*[@id="container"]/section/div[2]/div/section/div[1]/div/article/a/div[1]/section/div/span'))
-    except:
-        winnings_count = 0
+    winnings_count = 0
+    page_number = 1
 
+    while True:
+        hack_page = f"{hackathons_page}?page={page_number}"
+        driver.get(hack_page)
+
+        try:
+            hacks = wait.until(
+                EC.presence_of_all_elements_located((By.XPATH, '//div[@data-browse-challenges="challenge-listing"]'))
+            )
+        except:
+            # No more pages
+            break
+        
+        winners = driver.find_elements(By.XPATH,"//span[contains(@class, 'winner')]")
+        winnings_count += len(winners)
+        page_number += 1
+    
+    
     members_table.append({
         "Username": username,
         "Name": name,
