@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import time
 import re
+import os
 from bs4 import BeautifulSoup
 
 df = pd.read_csv("Devpost-Datasets/all-hackathons.csv").dropna(subset=["Projects Gallery"])
@@ -11,18 +12,29 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-all_projects = []
+OUTPUT_FILE = "Devpost-Datasets/hackathon_projects.csv"
+
+session = requests.Session()
+session.headers.update(HEADERS)
+
+file_exists = os.path.exists(OUTPUT_FILE)
 
 for i, row in df.iterrows():
     gallery_url = row["Projects Gallery"]
     page = 1
+    rows_buffer = []
 
     while True:
         url = f"{gallery_url}?page={page}"
-        r = requests.get(url, headers=HEADERS, timeout=20)
 
-        if r.status_code != 200:
-            break
+        try:
+            r = session.get(url, timeout=20)
+            if r.status_code != 200:
+                break
+        except requests.RequestException:
+            print("⚠️ request failed, retrying...")
+            time.sleep(2)
+            continue
 
         soup = BeautifulSoup(r.text, "html.parser")
         projects = soup.select(".gallery-item")
@@ -53,7 +65,7 @@ for i, row in df.iterrows():
             likes = p.select_one(".like-count")
             comments = p.select_one(".comment-count")
 
-            all_projects.append({
+            rows_buffer.append({
                 "Hackathon ID": row["id"],
                 "Hackathon Slug": row["Hackathon Slug"],
                 "Project Title": title,
@@ -67,7 +79,17 @@ for i, row in df.iterrows():
         page += 1
         time.sleep(0.5)
 
-    print(f"✔ Finished hackathon {row['id']}")
+    # WRITE AFTER EACH HACKATHON (CRASH SAFE)
+    if rows_buffer:
+        pd.DataFrame(rows_buffer).to_csv(
+            OUTPUT_FILE,
+            mode="a",
+            header=not file_exists,
+            index=False,
+            encoding="utf-8-sig"
+        )
+        file_exists = True
 
-projects_df = pd.DataFrame(all_projects)
-projects_df.to_csv("Devpost-Datasets/hackathon_projects.csv", index=False, encoding="utf-8-sig")
+    print(f"✔ Finished hackathon {row['id']} ({i+1}/{len(df)})")
+
+print("✅ All hackathon projects scraped safely.")
