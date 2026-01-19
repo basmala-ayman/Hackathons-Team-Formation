@@ -13,7 +13,7 @@ df = pd.read_csv("Devpost-Datasets/filtered_projects.csv")
 df = df.dropna(subset=["Project Link"])
 
 # for testing
-df = df.iloc[0:5]
+df = df.iloc[0:8]
 
 CHUNK_SIZE = 300
 
@@ -38,18 +38,22 @@ for start in range(0, len(df), CHUNK_SIZE):
         hackathon_id = row["Hackathon ID"]
         project_slug = url.rstrip("/").split("/")[-1]
 
-        # ---------- Request with retry ----------
-        try:
-            r = session.get(url, timeout=20)
-            if r.status_code != 200:
+        print(f"→ Scraping project: {project_slug} ({idx + 1}/{len(df)})")
+
+        while True:
+            try:
+                r = session.get(url, timeout=20)
+                if r.status_code != 200:
+                    break
+                break
+            except requests.RequestException:
+                print("⚠️ request failed, retrying...")
+                time.sleep(2)
                 continue
-        except requests.RequestException:
-            time.sleep(2)
-            continue
 
         soup = BeautifulSoup(r.text, "lxml")
 
-        # Team members
+        # TEAM MEMBERS
         members = soup.select("#app-team ul li")
         member_count = 0
 
@@ -73,31 +77,26 @@ for start in range(0, len(df), CHUNK_SIZE):
                 "Member Description": desc
             })
 
-        # Winners
+        # WINNERS
         winner_nodes = soup.select("#submissions ul li div ul li")
         is_winner = bool(winner_nodes)
         winner_desc = [w.text.partition(" ")[2] for w in winner_nodes]
 
-        # Tags
+        # TAGS
         tags = [t.text.strip() for t in soup.select("#built-with ul li")]
 
-        # Description
+        # DESCRIPTION
         left = soup.select_one("#app-details-left")
-
         project_desc = ""
-        if left:
-            # get direct child divs only (no deep nesting)
-            direct_divs = left.find_all("div", recursive=False)
 
-            # pick the first div that isn't gallery or built-with
+        if left:
+            direct_divs = left.find_all("div", recursive=False)
             desc_div = next(
                 (d for d in direct_divs if d.get("id") not in ("gallery", "built-with")),
                 None
             )
-
             if desc_div:
                 project_desc = desc_div.get_text(" ", strip=True)
-
 
         teams_buffer.append({
             "Hackathon ID": hackathon_id,
@@ -108,10 +107,10 @@ for start in range(0, len(df), CHUNK_SIZE):
             "Project Tags": tags,
             "Project Description": project_desc
         })
-        print(f"✔ Finished project: {project_slug} ({idx + 1}/{len(df)})")
+
         time.sleep(0.7)
 
-    # SAVE CHUNK SAFELY
+    # SAVE CHUNK (CRASH SAFE)
     if team_members_buffer:
         pd.DataFrame(team_members_buffer).to_csv(
             TEAM_MEMBERS_FILE,
