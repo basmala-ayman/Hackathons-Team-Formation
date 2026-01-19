@@ -9,7 +9,7 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-df = pd.read_csv("Devpost-Datasets/hackathon_projects.csv")
+df = pd.read_csv("Devpost-Datasets/filtered_projects.csv")
 df = df.dropna(subset=["Project Link"])
 
 # for testing
@@ -82,8 +82,22 @@ for start in range(0, len(df), CHUNK_SIZE):
         tags = [t.text.strip() for t in soup.select("#built-with ul li")]
 
         # Description
-        desc_div = soup.select_one("#app-details-left div:nth-of-type(2)")
-        project_desc = desc_div.text.strip() if desc_div else ""
+        left = soup.select_one("#app-details-left")
+
+        project_desc = ""
+        if left:
+            # get direct child divs only (no deep nesting)
+            direct_divs = left.find_all("div", recursive=False)
+
+            # pick the first div that isn't gallery or built-with
+            desc_div = next(
+                (d for d in direct_divs if d.get("id") not in ("gallery", "built-with")),
+                None
+            )
+
+            if desc_div:
+                project_desc = desc_div.get_text(" ", strip=True)
+
 
         teams_buffer.append({
             "Hackathon ID": hackathon_id,
@@ -95,7 +109,6 @@ for start in range(0, len(df), CHUNK_SIZE):
             "Project Description": project_desc
         })
         print(f"✔ Finished project: {project_slug} ({idx + 1}/{len(df)})")
-        # print(f"✔ Finished project: {project_slug} ({start + _ + 1}/{len(df)})")
         time.sleep(0.7)
 
     # SAVE CHUNK SAFELY
