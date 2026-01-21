@@ -62,7 +62,7 @@ def count_user_wins_playwright(page, challenges_url):
 df = pd.read_csv("Devpost-Datasets/unique_members.csv")
 
 # for testing
-df = df.iloc[0:2]
+df = df.iloc[600:605]
 
 CHUNK_SIZE = 200
 OUTPUT_FILE = "Devpost-Datasets/members.csv"
@@ -89,14 +89,24 @@ with sync_playwright() as p:
             while True:
                 try:
                     r = session.get(profile_url, timeout=20)
+
+                    if r.status_code == 410:
+                        print("⏭️ User does not exist, skipping...")
+                        r = None
+                        break
+
                     if r.status_code != 200:
+                        print(f"⚠️ HTTP {r.status_code}, retrying...")
+                        time.sleep(2)
                         continue
                     break
                 except:
                     print("⚠️ request failed, retrying...")
                     time.sleep(2)
-                    continue
 
+
+            if r is None:
+                continue
             soup = BeautifulSoup(r.text, "lxml")
 
             # BASIC INFO
