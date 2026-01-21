@@ -9,7 +9,12 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-# PLAYWRIGHT: COUNT WINS (REUSED PAGE)
+session = requests.Session()
+session.headers.update(HEADERS)
+
+# =====================
+# PLAYWRIGHT: COUNT WINS (SIMPLE RETRY)
+# =====================
 def count_user_wins_playwright(page, challenges_url):
     wins = 0
     page_num = 1
@@ -17,7 +22,15 @@ def count_user_wins_playwright(page, challenges_url):
     while True:
         url = f"{challenges_url}?page={page_num}"
 
-        page.goto(url, timeout=15000)
+        # 🔁 simple retry like your other script
+        while True:
+            try:
+                page.goto(url, timeout=15000)
+                break
+            except:
+                print("⚠️ Playwright navigation failed, retrying...")
+                time.sleep(2)
+                continue
 
         try:
             page.wait_for_selector(
@@ -43,24 +56,25 @@ def count_user_wins_playwright(page, challenges_url):
 
     return wins
 
+# =====================
 # LOAD USERS
-df = pd.read_csv("Devpost-Datasets/team_members.csv")
-df = df.drop_duplicates(subset=["Member URL"])
-df = df[~df["Member URL"].isin(["", "private user"])]
+# =====================
+df = pd.read_csv("Devpost-Datasets/unique_members.csv")
 
 # for testing
-df = df.iloc[0:5]
+df = df.iloc[0:2]
 
-CHUNK_SIZE = 2
+CHUNK_SIZE = 200
 OUTPUT_FILE = "Devpost-Datasets/members.csv"
 users_buffer = []
 
+# =====================
 # START PLAYWRIGHT ONCE
+# =====================
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
     page = browser.new_page()
 
-    # MAIN LOOP
     for start in range(0, len(df), CHUNK_SIZE):
         chunk = df.iloc[start:start + CHUNK_SIZE]
         print(f"\nProcessing users {start} → {start + len(chunk)}")
@@ -69,12 +83,19 @@ with sync_playwright() as p:
             profile_url = row["Member URL"]
             username = row["Member Username"]
 
-            try:
-                r = requests.get(profile_url, headers=HEADERS, timeout=20)
-                if r.status_code != 200:
+            print(f"→ Scraping user: {username} ({idx + 1}/{len(df)})")
+
+            # SIMPLE REQUEST RETRY
+            while True:
+                try:
+                    r = session.get(profile_url, timeout=20)
+                    if r.status_code != 200:
+                        continue
+                    break
+                except:
+                    print("⚠️ request failed, retrying...")
+                    time.sleep(2)
                     continue
-            except:
-                continue
 
             soup = BeautifulSoup(r.text, "lxml")
 
@@ -108,7 +129,6 @@ with sync_playwright() as p:
                 )
             ]
 
-            # interests
             soft_skills = [
                 s.text.strip()
                 for s in soup.select(
@@ -130,7 +150,7 @@ with sync_playwright() as p:
 
             hackathon_num = int(hackathons.replace("+", "")) if hackathons else 0
 
-            # WINNINGS (REUSED PLAYWRIGHT)
+            # WINNINGS (PLAYWRIGHT, SIMPLE RETRY)
             winnings = 0
             if hackathon_num > 0:
                 challenges_url = profile_url.rstrip("/") + "/challenges"
@@ -154,7 +174,6 @@ with sync_playwright() as p:
                 "Winnings Count": winnings,
             })
 
-            print(f"✔ Finished user: {username} ({idx + 1}/{len(df)})")
             time.sleep(0.6)
 
         pd.DataFrame(users_buffer).to_csv(
