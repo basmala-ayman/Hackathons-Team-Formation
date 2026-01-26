@@ -9,13 +9,13 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-df = pd.read_csv("Devpost-Datasets/filtered_projects.csv")
+df = pd.read_csv("Devpost-Datasets/old_projects.csv")
 df = df.dropna(subset=["Project Link"])
 
 # for testing
-df = df.iloc[0:8]
+df = df.iloc[0:10000]
 
-CHUNK_SIZE = 300
+CHUNK_SIZE = 200
 
 TEAM_MEMBERS_FILE = "Devpost-Datasets/team_members.csv"
 TEAMS_FILE = "Devpost-Datasets/teams.csv"
