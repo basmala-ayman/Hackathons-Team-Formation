@@ -59,13 +59,12 @@ def count_user_wins_playwright(page, challenges_url):
 # =====================
 # LOAD USERS
 # =====================
-df = pd.read_csv("Devpost-Datasets/unique_members.csv")
+df = pd.read_csv("Devpost-Datasets/2020_unique_members.csv")
 
 # for testing
-df = df.iloc[600:605]
-
-CHUNK_SIZE = 200
-OUTPUT_FILE = "Devpost-Datasets/members.csv"
+df = df.iloc[0:6000]
+CHUNK_SIZE = 100
+OUTPUT_FILE = "Devpost-Datasets/2020_members.csv"
 users_buffer = []
 
 # =====================
@@ -86,6 +85,7 @@ with sync_playwright() as p:
             print(f"→ Scraping user: {username} ({idx + 1}/{len(df)})")
 
             # SIMPLE REQUEST RETRY
+            rcount = 0
             while True:
                 try:
                     r = session.get(profile_url, timeout=20)
@@ -97,12 +97,22 @@ with sync_playwright() as p:
 
                     if r.status_code != 200:
                         print(f"⚠️ HTTP {r.status_code}, retrying...")
-                        time.sleep(2)
+                        rcount += 1
+                        if rcount >= 8:
+                            print("⚠️ Max retries reached, skipping user.")
+                            r = None
+                            break
+                        time.sleep(1)
                         continue
                     break
-                except:
-                    print("⚠️ request failed, retrying...")
-                    time.sleep(2)
+                except Exception as e:
+                 rcount += 1
+                 print(f"⚠️ request failed ({e}), retrying... ({rcount}/8)")
+                if rcount >= 8:
+                     print("⚠️ Max retries reached due to exceptions, skipping user.")
+                     r = None
+                     break
+                time.sleep(2)
 
 
             if r is None:
@@ -130,7 +140,6 @@ with sync_playwright() as p:
 
             website = get_link("ss-link")
             github = get_link("ss-octocat")
-
             # SKILLS
             hard_skills = [
                 s.text.strip()
