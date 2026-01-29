@@ -59,12 +59,12 @@ def count_user_wins_playwright(page, challenges_url):
 # =====================
 # LOAD USERS
 # =====================
-df = pd.read_csv("Devpost-Datasets/2020_unique_members.csv")
+df = pd.read_csv("Devpost-Datasets/non_winner_unique_members.csv")
 
 # for testing
-df = df.iloc[0:6000]
+df = df.iloc[0:10000]
 CHUNK_SIZE = 100
-OUTPUT_FILE = "Devpost-Datasets/2020_members.csv"
+OUTPUT_FILE = "Devpost-Datasets/non_winner_members.csv"
 users_buffer = []
 
 # =====================
