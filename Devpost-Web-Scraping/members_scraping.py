@@ -59,12 +59,12 @@ def count_user_wins_playwright(page, challenges_url):
 # =====================
 # LOAD USERS
 # =====================
-df = pd.read_csv("Devpost-Datasets/non_winner_unique_members.csv")
-
+df = pd.read_csv("Devpost-Datasets/remaining_usernames.csv")
+df = df.drop_duplicates(subset=["Member Username"])
 # for testing
-df = df.iloc[0:10000]
+df = df.iloc[0:2000]
 CHUNK_SIZE = 100
-OUTPUT_FILE = "Devpost-Datasets/non_winner_members.csv"
+OUTPUT_FILE = "Devpost-Datasets/remaining_members.csv"
 users_buffer = []
 
 # =====================
@@ -79,7 +79,9 @@ with sync_playwright() as p:
         print(f"\nProcessing users {start} → {start + len(chunk)}")
 
         for idx, row in chunk.iterrows():
-            profile_url = row["Member URL"]
+            # profile_url = row["Member URL"]
+            profile_url = 'https://devpost.com/' + row["Member Username"]
+            print(f"Profile URL: {profile_url}")
             username = row["Member Username"]
 
             print(f"→ Scraping user: {username} ({idx + 1}/{len(df)})")
