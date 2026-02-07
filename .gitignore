@@ -7,3 +7,7 @@ datasets/*
 embeddings/*
 *.npy
 *.csv
+# Large data/embeddings
+embeddings/
+datasets/
+*.npy
