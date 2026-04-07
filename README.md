@@ -1,2 +1,2 @@
 # Hackathons-Team-Formation
-🎓 Graduation Project
+🎓 Team Catalyst - Graduation Project
