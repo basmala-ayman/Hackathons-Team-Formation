@@ -88,11 +88,11 @@ body {
   display: flex;
   width: 3.54rem;
   height: 5rem;
-  padding: 1rem;
+  padding: 10px;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  border-radius: 1rem;
+  gap: 10px;
+  border-radius: 10px;
   border: none;
   border: 2px solid var(--color-primary-dark);
   color: var(--color-white) !important;

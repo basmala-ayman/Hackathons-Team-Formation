@@ -92,7 +92,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  border-radius: 1rem;
+  border-radius: 10px;
   border: none;
   border: 2px solid var(--color-primary-dark);
   color: var(--color-white) !important;
