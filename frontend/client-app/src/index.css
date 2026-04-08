@@ -71,7 +71,9 @@ body {
   border-radius: 10px;
   border: none;
   background: var(--gradient-primary);
-  color: var(--color-white);
+  color: var(--color-white) !important;
+  font-size: large;
+  font-weight: 600;
 }
 
 .primary-btn:hover {
@@ -90,7 +92,9 @@ body {
   border-radius: 10px;
   border: none;
   border: 2px solid var(--color-primary-dark);
-  color: var(--color-white);
+  color: var(--color-white) !important;
+  font-size: large;
+  font-weight: 600;
 }
 
 .secondary-btn:hover {
