@@ -1,0 +1,20 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "prisma": "^7.7.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.7.0",
+    "dotenv": "^17.4.1"
+  }
+}

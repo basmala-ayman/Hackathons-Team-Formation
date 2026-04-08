@@ -1,0 +1,323 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// lets first start define the ENUMS we will need
+//-----------------------------------------------------
+
+enum Role {
+  PARTICIPANT
+  ADMIN
+}
+
+//describe the team status itself the current to see if he still need persons so it is forming or it is complete and can apply now to the hackathon
+enum TeamStatus {
+  FORMING
+  COMPLETE
+}
+
+//this is when the human invite another person to join to my team
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+//the matching request the user make it in the website what is its current state now?
+enum MatchingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+//and this is the recommended teams that ai recommend them 
+enum RecommendationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum HackathonStatus {
+  UPCOMING
+  ONGOING
+  ENDED
+}
+
+enum NotificationType {
+  TEAM_INVITE
+  MATCH_FOUND
+  INVITE_ACCEPTED
+  INVITE_REJECTED
+  HACKATHON_REMINDER
+}
+
+//--------------------------------------------------
+//USERS
+//--------------------------------------------------
+
+/*
+there is some notes here now why we will make the password string?
+cause this meaning string? it can be null but how? and that cause we planned to make oAUTH 
+so to can support this 2 ways we need to make the passowrd can be null and that cause the normal traditional way
+need password and the second way is can not be success if user required to enter password
+
+we will not put the indexes now until we load all the dataset into the database and then measure
+each query how much time it takes to can define which ones need to be increased and need to have index
+
+*/
+
+
+
+model User {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  password       String?
+  name           String
+  bio            String?
+  role           Role     @default(PARTICIPANT)
+  isVerified     Boolean  @default(false)
+  profilePicture String?
+  resumeUrl      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  // Relations
+  //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
+  skills             UserSkill[]
+  ownedTeams         Team[]            @relation("TeamOwner")
+  teamMemberships    TeamMember[]
+  sentInvitations    TeamInvitation[]  @relation("InvitationSender")
+  receivedInvitations TeamInvitation[] @relation("InvitationReceiver")
+  notifications      Notification[]
+  matchingRequests   MatchingRequest[]
+  refreshTokens      RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+
+//this one its goal is to define the name of the table in teh database to be called users
+  @@map("users")
+}
+
+
+// ─────────────────────────────────────────
+// SKILLS
+// ─────────────────────────────────────────
+
+model Skill {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+
+  // Relations
+  users UserSkill[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  skillId   Int
+  createdAt DateTime @default(now())
+
+  // Relations
+  //cascade here meaning if the skill is deleted so any record with it deleted
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  
+  @@map("user_skills")
+}
+
+// ─────────────────────────────────────────
+// HACKATHONS
+// ─────────────────────────────────────────
+
+model Hackathon {
+  id           Int             @id @default(autoincrement())
+  title        String
+  description  String?
+  applyLink    String
+  thumbnailUrl String?
+  startDate    DateTime?
+  endDate      DateTime?
+  status       HackathonStatus @default(UPCOMING)
+  source       String          @default("devpost")
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  // Relations
+  tags             HackathonTag[]
+  teams            Team[]
+  matchingRequests MatchingRequest[]
+
+ 
+  @@map("hackathons")
+}
+
+model HackathonTag {
+  id           Int       @id @default(autoincrement())
+  hackathonId  Int
+  tag          String
+  createdAt    DateTime  @default(now())
+
+  // Relations
+  hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+
+ 
+  @@map("hackathon_tags")
+}
+
+// ─────────────────────────────────────────
+// TEAMS
+// ─────────────────────────────────────────
+
+model Team {
+  id          Int        @id @default(autoincrement())
+  name        String
+  hackathonId Int
+  ownerId     Int
+  status      TeamStatus @default(FORMING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+
+  // Relations
+  hackathon   Hackathon        @relation(fields: [hackathonId], references: [id])
+  owner       User             @relation("TeamOwner", fields: [ownerId], references: [id])
+  members     TeamMember[]
+  invitations TeamInvitation[]
+
+ 
+  @@map("teams")
+}
+
+model TeamMember {
+  id       Int      @id @default(autoincrement())
+  teamId   Int
+  userId   Int
+  joinedAt DateTime @default(now())
+
+  // Relations
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+ 
+  @@map("team_members")
+}
+
+model TeamInvitation {
+  id         Int              @id @default(autoincrement())
+  teamId     Int
+  senderId   Int
+  receiverId Int
+  status     InvitationStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  // Relations
+  team     Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sender   User @relation("InvitationSender", fields: [senderId], references: [id])
+  receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id])
+
+ 
+  @@map("team_invitations")
+}
+
+// ─────────────────────────────────────────
+// AI MATCHING
+// ─────────────────────────────────────────
+
+model MatchingRequest {
+  id          Int            @id @default(autoincrement())
+  userId      Int
+  hackathonId Int
+  status      MatchingStatus @default(PENDING)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  user            User              @relation(fields: [userId], references: [id])
+  hackathon       Hackathon         @relation(fields: [hackathonId], references: [id])
+  recommendations AIRecommendation[]
+
+ 
+  @@map("matching_requests")
+}
+
+model AIRecommendation {
+  id                Int                  @id @default(autoincrement())
+  matchingRequestId Int
+  teamData          Json
+  compatibilityScore Float
+  status            RecommendationStatus @default(PENDING)
+  createdAt         DateTime             @default(now())
+
+  // Relations
+  matchingRequest MatchingRequest @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
+
+ 
+  @@map("ai_recommendations")
+}
+
+// ─────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  @@map("notifications")
+}
+
+// ─────────────────────────────────────────
+// AUTH TOKENS
+// ─────────────────────────────────────────
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+ 
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+ 
+  @@map("password_reset_tokens")
+}
