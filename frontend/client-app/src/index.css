@@ -74,6 +74,7 @@ body {
   color: var(--color-white) !important;
   font-size: large;
   font-weight: 600;
+  transition: background-color 200ms ease-in-out;
 }
 
 .primary-btn:hover {
@@ -95,6 +96,7 @@ body {
   color: var(--color-white) !important;
   font-size: large;
   font-weight: 600;
+  transition: background-color 200ms ease-in-out;
 }
 
 .secondary-btn:hover {
