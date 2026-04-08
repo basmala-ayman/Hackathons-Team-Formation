@@ -63,7 +63,7 @@ body {
 .primary-btn {
   display: flex;
   width: 354px;
-  height: 60px;
+  height: 50px;
   padding: 10px;
   justify-content: center;
   align-items: center;
@@ -84,7 +84,7 @@ body {
 .secondary-btn {
   display: flex;
   width: 354px;
-  height: 60px;
+  height: 50px;
   padding: 10px;
   justify-content: center;
   align-items: center;
