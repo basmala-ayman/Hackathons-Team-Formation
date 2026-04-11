@@ -55,7 +55,7 @@ export default function ForgetPassword() {
             />
           </div>
 
-          <button type="submit" className="primary-btn w-100">
+          <button type="submit" className="btn primary-btn w-100">
             Send Reset Link
           </button>
         </form>

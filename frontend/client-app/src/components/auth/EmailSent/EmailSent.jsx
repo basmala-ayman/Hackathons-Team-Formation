@@ -34,7 +34,7 @@ export default function EmailSent() {
         </p>
         <Link
           to="/login"
-          className="primary-btn w-100 text-center mt-4 text-decoration-none"
+          className="btn primary-btn w-100 text-center mt-4 text-decoration-none"
         >
           Back to Login
         </Link>

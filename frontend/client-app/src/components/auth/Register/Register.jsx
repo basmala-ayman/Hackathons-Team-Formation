@@ -4,7 +4,7 @@ import loginStyles from "../Login/Login.module.css";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import { GoogleIcon, GithubIcon } from "../Login/Login";
-import Login from "./../Login/Login";
+// import Login from "./../Login/Login";
 import { Link } from "react-router-dom";
 
 export default function Register() {
@@ -108,7 +108,7 @@ export default function Register() {
             </label>
           </div>
 
-          <button type="submit" className="primary-btn w-100 mt-2">
+          <button type="submit" className="btn primary-btn mt-2">
             Create Account
           </button>
 

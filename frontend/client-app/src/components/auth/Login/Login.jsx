@@ -111,10 +111,12 @@ export default function Login() {
           />
 
           <div className="text-start mb-4">
-            <Link to = "/forgetpassword" className={styles.forgotLink}>Forget Password?</Link>
+            <Link to="/forgetpassword" className={styles.forgotLink}>
+              Forget Password?
+            </Link>
           </div>
 
-          <button type="submit" className="primary-btn w-100">
+          <button type="submit" className="btn primary-btn w-100">
             Login
           </button>
 
