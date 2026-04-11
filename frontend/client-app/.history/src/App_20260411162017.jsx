@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-     <CustomButton variant={"primary"}>Zeina</CustomButton>
+     <CustomButton variant={"primary"}></CustomButton>
     </>
   )
 }
