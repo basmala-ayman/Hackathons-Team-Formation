@@ -1,0 +1,13 @@
+.venv/
+.DS_Store
+
+
+## large files
+datasets/*
+embeddings/*
+*.npy
+*.csv
+# Large data/embeddings
+embeddings/
+datasets/
+*.npy
