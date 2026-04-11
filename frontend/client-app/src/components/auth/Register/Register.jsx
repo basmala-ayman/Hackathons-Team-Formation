@@ -41,7 +41,7 @@ export default function Register() {
       <div className={loginStyles.loginContainer}>
         <h2 className={loginStyles.title}>Create your account</h2>
 
-        <div className="d-flex flex-column flex-sm-row gap-3 mb-4">
+        <div className="d-flex flex-column flex-sm-row gap-4 mb-4">
           <button type="button" className={loginStyles.socialBtn}>
             <GoogleIcon /> Sign Up with Google
           </button>
@@ -81,6 +81,7 @@ export default function Register() {
               value={password}
               onChange={handleChange(setPassword, "password")}
               error={errors.password}
+              helperText="Make it strong — at least 8 characters with numbers and symbols."
               required
             />
           </div>

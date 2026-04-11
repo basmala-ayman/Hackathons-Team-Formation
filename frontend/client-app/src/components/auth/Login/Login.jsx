@@ -107,7 +107,6 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={errors.password}
-            helperText="Make it strong — at least 8 characters with numbers and symbols."
             required
           />
 

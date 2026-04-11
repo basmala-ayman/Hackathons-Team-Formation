@@ -35,13 +35,13 @@ export default function EmailSent() {
           Click the link in the email to reset your password. If you don't see
           it, check your spam folder.
         </p>
-       <CustomButton 
-  variant="primary" 
-  className="w-100 mt-4" 
-  onClick={() => navigate("/login")}
->
-  Back to Login
-</CustomButton>
+        <CustomButton
+          variant="primary"
+          className="w-100 mt-4"
+          onClick={() => navigate("/login")}
+        >
+          Back to Login
+        </CustomButton>
         <p className={styles.footerText}>
           Didn't receive the email?{" "}
           <button

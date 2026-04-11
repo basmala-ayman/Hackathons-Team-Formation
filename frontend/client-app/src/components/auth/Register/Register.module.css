@@ -1,12 +1,3 @@
-.registerContainer {
-  padding: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: auto;
-  max-height: 67rem;
-}
-
 .checkboxWrapper {
   display: flex;
   align-items: center;
