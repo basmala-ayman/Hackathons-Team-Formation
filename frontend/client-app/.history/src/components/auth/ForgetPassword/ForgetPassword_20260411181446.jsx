@@ -4,7 +4,6 @@ import styles from "./ForgetPassword.module.css";
 import loginStyles from "../Login/Login.module.css";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");

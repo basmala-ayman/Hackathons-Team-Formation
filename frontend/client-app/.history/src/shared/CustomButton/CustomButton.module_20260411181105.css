@@ -1,0 +1,43 @@
+
+.base-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 0.2rem solid transparent; 
+  font-weight: 300;
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+}
+
+.md-btn {
+  padding: 1rem;
+  font-size: var(--fs-regular);
+}
+
+.sm-btn {
+  padding: 1rem 3.5rem;
+  font-size: var(--fs-small);
+}
+
+.primary-btn {
+  background: var(--gradient-primary);
+  color: var(--color-white);
+}
+
+.primary-btn:hover {
+  background: var(--gradient-primary-reverse);
+}
+
+.secondary-btn {
+  background-color: transparent;
+  border-color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
+}
+
+.secondary-btn:hover {
+  border-color: var(--color-primary-light);
+  background-color: var(--color-primary-light);
+  color: var(--color-white);
+}

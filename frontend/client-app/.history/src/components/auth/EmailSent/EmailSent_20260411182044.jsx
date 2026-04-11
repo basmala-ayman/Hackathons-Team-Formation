@@ -4,11 +4,9 @@ import { Mail } from "lucide-react";
 import styles from "./EmailSent.module.css";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function EmailSent() {
   const location = useLocation();
-  const navigate = useNavigate();
   // Email will come later from backend
   const email = location.state?.email || "example@gmail.com";
 

@@ -6,7 +6,6 @@ import Input from "../../../shared/Input/Input";
 import { GoogleIcon, GithubIcon } from "../Login/Login";
 // import Login from "./../Login/Login";
 import { Link } from "react-router-dom";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function Register() {
   // const [fullName, setFullName] = useState("");
@@ -109,9 +108,9 @@ export default function Register() {
             </label>
           </div>
 
-          <CustomButton type="submit" variant="primary" className="mt-2">
+          <button type="submit" className="btn primary-btn mt-2">
             Create Account
-          </CustomButton>
+          </button>
 
           <p className={loginStyles.footerText}>
             Already have an account?{" "}

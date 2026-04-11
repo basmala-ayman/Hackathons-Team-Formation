@@ -61,9 +61,8 @@ body {
   background-color: var(--gradient-website-bg);
 }
 
-/* Transfered to CustomButton.css */
 /* CTAs Styles */
-/* .btn {
+.btn {
   padding: 1rem !important;
   gap: 1rem;
   border-radius: 1rem !important;
@@ -108,4 +107,4 @@ body {
 .secondary-sm-btn {
   padding: 1rem 3.5rem !important;
   font-size: var(--fs-small) !important;
-} */
+}

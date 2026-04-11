@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Login.module.css";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { Link } from "react-router-dom";
 
 export const GoogleIcon = () => (
@@ -117,9 +116,13 @@ export default function Login() {
             </Link>
           </div>
 
-          <CustomButton type="submit" variant="primary" className="w-100">
-            Login
-          </CustomButton>
+        <CustomButton 
+  type="submit" 
+  variant="primary" 
+  className="w-100"
+>
+  Login
+</CustomButton>
 
           <p className={styles.footerText}>
             Don't have an account?{" "}

@@ -4,11 +4,9 @@ import { Mail } from "lucide-react";
 import styles from "./EmailSent.module.css";
 import AuthLayout from "../AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function EmailSent() {
   const location = useLocation();
-  const navigate = useNavigate();
   // Email will come later from backend
   const email = location.state?.email || "example@gmail.com";
 
@@ -35,13 +33,12 @@ export default function EmailSent() {
           Click the link in the email to reset your password. If you don't see
           it, check your spam folder.
         </p>
-       <CustomButton 
-  variant="primary" 
-  className="w-100 mt-4" 
-  onClick={() => navigate("/login")}
->
-  Back to Login
-</CustomButton>
+        <Link
+          to="/login"
+          className="btn primary-btn w-100 text-center mt-4 text-decoration-none"
+        >
+          Back to Login
+        </Link>
         <p className={styles.footerText}>
           Didn't receive the email?{" "}
           <button

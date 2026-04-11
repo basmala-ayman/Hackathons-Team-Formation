@@ -6,7 +6,6 @@ import Input from "../../../shared/Input/Input";
 import { GoogleIcon, GithubIcon } from "../Login/Login";
 // import Login from "./../Login/Login";
 import { Link } from "react-router-dom";
-import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function Register() {
   // const [fullName, setFullName] = useState("");
