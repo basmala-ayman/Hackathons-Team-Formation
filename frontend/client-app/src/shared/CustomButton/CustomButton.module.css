@@ -1,11 +1,10 @@
-
 .base-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   border-radius: 1rem;
-  border: 0.2rem solid transparent; 
+  border: 0.2rem solid transparent;
   font-weight: 400;
   transition: all 200ms ease-in-out;
   cursor: pointer;
@@ -13,12 +12,12 @@
 
 .md-btn {
   padding: 1rem;
-  font-size: var(--fs-regular);
+  font-size: var(--fs-small);
 }
 
 .sm-btn {
   padding: 1rem 3.5rem;
-  font-size: var(--fs-small);
+  font-size: var(--fs-v-small);
 }
 
 .primary-btn {

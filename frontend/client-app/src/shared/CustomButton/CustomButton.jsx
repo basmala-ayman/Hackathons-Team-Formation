@@ -15,7 +15,7 @@ function CustomButton({
       onClick={onClick}
       disabled={disabled}
       className={`
-        ${styles['base-btn']} 
+        ${styles["base-btn"]} 
         ${styles[`${variant}-btn`]} 
         ${styles[`${size}-btn`]} 
         ${className}
