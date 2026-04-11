@@ -48,7 +48,8 @@
 }
 
 html {
-  font-size: 62.5%; /*1rem = 10px*/
+  font-size: 62.5%;
+>>>>>>> 9cf702b6e1dac942128da297367c48544275de8c
 }
 * {
   margin: 0;

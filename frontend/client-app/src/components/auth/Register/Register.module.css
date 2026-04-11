@@ -1,0 +1,45 @@
+.registerContainer {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: auto;
+  max-height: 67rem;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  padding: 0.1rem;
+}
+
+.checkboxInput {
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: var(--color-primary-dark);
+  cursor: pointer;
+  border-radius: 0.4rem;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--fs-small);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.checkboxLabel span {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: var(--fs-small);
+}

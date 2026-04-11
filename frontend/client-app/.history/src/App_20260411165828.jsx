@@ -8,6 +8,12 @@ import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
 import EmailSent from "./components/auth/EmailSent/EmailSent";
 function App() {
   return (
+<<<<<<< HEAD
+    <>
+     <CustomButton variant={"primary"}>Zeina</CustomButton>
+    </>
+  )
+=======
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -17,6 +23,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
+>>>>>>> 9cf702b6e1dac942128da297367c48544275de8c
 }
 
 export default App;
