@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+:root {
+  /* Primary Palette */
+  --color-very-dark-purple: #3b1b84;
+  --color-primary-dark: #6b46c1;
+  --color-primary-light: #b794f4;
+  --color-primary-light-2: #e9dcff;
+  --color-primary-light-3: #faf5ff;
+
+  /* Functional Colors */
+  --color-accent: #ffd700;
+  --color-register-bg: #f0f1f4;
+  --color-error-red: #d91709;
+  --color-success-green: #008236;
+  --color-dark-gray: #4a5565;
+
+  /* Neutrals */
+  --color-text: #2a2626;
+  --color-gray: #909090;
+  --color-white: #fefdff;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    90deg,
+    var(--color-primary-dark) 12%,
+    #8945ff 80%
+  );
+  --gradient-primary-reverse: linear-gradient(
+    90deg,
+    #8945ff 12%,
+    var(--color-primary-dark) 80%
+  );
+
+  --gradient-website-bg: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
+
+  /* Typography */
+  --font-family-inter: "Inter", sans-serif;
+
+  /* Typography Scale - Desktop */
+  --fs-h1: 4.8rem; /* 48px */
+  --fs-h2: 4rem; /* 40px */
+  --fs-h3: 3.2rem; /* 32px */
+  --fs-h4: 1.625rem; /* 26px */
+  --fs-body-lg: 1.5rem; /* 24px */
+  --fs-regular: 1.25rem; /* 20px */
+  --fs-small: 1rem; /* 16px */
+  --fs-v-small: 0.8125rem; /* 13px */
+}
+html {
+  /* This sets 1rem to equal exactly 10px (62.5% of the default 16px) */
+  font-size: 62.5%; 
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-inter);
+  background-color: var(--gradient-website-bg);
+}
+
+/* Primary Button */
+
+.primary-btn {
+  display: flex;
+  width: 354px;
+  height: 50px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--gradient-primary);
+  color: var(--color-white) !important;
+  font-size: large;
+  font-weight: 600;
+}
+
+.primary-btn:hover {
+  background: var(--gradient-primary-reverse);
+}
+
+/* Secondary Button */
+.secondary-btn {
+  display: flex;
+  width: 354px;
+  height: 50px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  border: none;
+  border: 2px solid var(--color-primary-dark);
+  color: var(--color-white) !important;
+  font-size: large;
+  font-weight: 600;
+}
+
+.secondary-btn:hover {
+  border: 2px solid var(--color-primary-light);
+}
