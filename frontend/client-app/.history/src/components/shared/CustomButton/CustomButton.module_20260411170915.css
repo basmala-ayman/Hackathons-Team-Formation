@@ -26,14 +26,19 @@
   color: var(--color-primary-dark) !important;
 }
 
-.secondary-btn:hover {
+.secondary-btn:hover,
+.secondary-sm-btn:hover {
   border-color: var(--color-primary-light) !important;
   background-color: var(--color-primary-light) !important;
   color: var(--color-white) !important;
 }
 
+.primary-sm-btn {
+  background: var(--gradient-primary);
+}
 
-.sm-btn{
+.primary-sm-btn,
+.secondary-sm-btn {
   padding: 1rem 3.5rem !important;
   font-size: var(--fs-small) !important;
 }

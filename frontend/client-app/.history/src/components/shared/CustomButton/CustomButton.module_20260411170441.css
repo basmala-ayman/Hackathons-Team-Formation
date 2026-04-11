@@ -16,24 +16,31 @@
   background: var(--gradient-primary) !important;
 }
 
-.primary-btn:hover{
+.primary-btn:hover,
+.primary-sm-btn:hover {
   background: var(--gradient-primary-reverse) !important;
 }
 
-.secondary-btn{
+.secondary-btn,
+.secondary-sm-btn {
   background-color: transparent;
   border: 0.2rem solid var(--color-primary-dark) !important;
   color: var(--color-primary-dark) !important;
 }
 
-.secondary-btn:hover {
+.secondary-btn:hover,
+.secondary-sm-btn:hover {
   border-color: var(--color-primary-light) !important;
   background-color: var(--color-primary-light) !important;
   color: var(--color-white) !important;
 }
 
+.primary-sm-btn {
+  background: var(--gradient-primary);
+}
 
-.sm-btn{
+.primary-sm-btn,
+.secondary-sm-btn {
   padding: 1rem 3.5rem !important;
   font-size: var(--fs-small) !important;
 }

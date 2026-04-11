@@ -33,7 +33,8 @@
 }
 
 
-.sm-btn{
+.primary-sm-btn,
+.secondary-sm-btn {
   padding: 1rem 3.5rem !important;
   font-size: var(--fs-small) !important;
 }
