@@ -2,8 +2,8 @@
 //later in dealing with the database and there is cases where you may need more than one provider like when dealing with graphicql
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
