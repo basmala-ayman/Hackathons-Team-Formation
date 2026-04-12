@@ -1,0 +1,6 @@
+.navbar{
+    box-shadow: 0px 2px 0px 0px #E6D5F7;
+}
+.navlinks{
+    font-size: var(--fs-regular);
+}

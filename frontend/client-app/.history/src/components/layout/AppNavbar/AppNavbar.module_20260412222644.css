@@ -1,0 +1,25 @@
+.navbar{
+    box-shadow:  0 4px 4px 0  var(--color-primary-light-2);
+}
+a.navlinks{
+    font-size: var(--fs-regular);
+}
+a.navlinks:hover{
+    color:var(--color-primary-dark);
+
+}
+a.navlinks::before{
+    
+}
+
+@media (max-width:991px) {
+    a.navlinks{
+    font-size: var( --fs-small);
+}
+}
+
+@media (max-width:767px) {
+    a.navlinks{
+    font-size: var(--fs-v-small);
+}
+}

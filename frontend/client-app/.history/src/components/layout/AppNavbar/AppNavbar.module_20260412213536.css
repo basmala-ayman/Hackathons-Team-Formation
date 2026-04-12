@@ -1,0 +1,18 @@
+.navbar{
+    box-shadow:  0 4px 4px 0  var(--color-primary-light-2);
+}
+.navlinks{
+    font-size: var(--fs-regular);
+}
+
+@media (max-width:991px) {
+    .navlinks{
+    font-size: var(  --fs-small);
+}
+}
+
+@media (max-width:px) {
+    .navlinks{
+    font-size: var(  --fs-small);
+}
+}

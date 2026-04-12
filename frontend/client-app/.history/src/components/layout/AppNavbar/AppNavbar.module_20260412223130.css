@@ -1,0 +1,34 @@
+.navbar{
+    box-shadow:  0 4px 4px 0  var(--color-primary-light-2);
+}
+a.navlinks{
+    font-size: var(--fs-regular);
+    position: relative;
+}
+a.navlinks:hover{
+    background:var(--gradient-primary);
+    background-clip: text;
+    color: transparent;
+
+}
+a.navlinks::before{
+content: "";
+position: absolute;  
+bottom: -10px;
+left: 0;
+width: 100%;
+height: 3px;
+background-color: var(--color-primary-dark);  
+}
+
+@media (max-width:991px) {
+    a.navlinks{
+    font-size: var( --fs-small);
+}
+}
+
+@media (max-width:767px) {
+    a.navlinks{
+    font-size: var(--fs-v-small);
+}
+}

@@ -1,0 +1,16 @@
+import { useNavigate } from "react-router-dom"
+import CustomButton from "../../../shared/CustomButton/CustomButton"
+function GuestAuthButtons() {
+    const navigate=useNavigate();
+  return (
+    <div className="d-flex flex-column flex-lg-row gap-3 mt">
+    
+      <CustomButton variant="secondary"  size="sm"onClick={()=>navigate("/login")}>Login</CustomButton>
+      <CustomButton variant="primary" size="sm" onClick={()=>navigate("/register")}>Register</CustomButton>
+      
+
+    </div>
+  )
+}
+
+export default GuestAuthButtons
