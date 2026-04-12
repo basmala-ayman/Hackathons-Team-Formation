@@ -32,10 +32,6 @@ export default function ForgetPassword() {
       imgClass={styles.immgIllustration}
     >
       <div>
-        <Link to="/" className={styles.backLink}>
-          ← Back to Login
-        </Link>
-
         <h2 className={styles.title}>Forgot Password?</h2>
 
         <p className={styles.description}>
