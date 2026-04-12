@@ -1,40 +1,48 @@
-➜  backend git:(backend) ✗ git status
-On branch backend
-Your branch is up to date with 'origin/backend'.
+# Backend Setup Guide
 
-You have unmerged paths.
-  (fix conflicts and run "git commit")
-  (use "git merge --abort" to abort the merge)
+## Prerequisites
+Make sure you have the following installed:
+- Node.js v22+
+- npm
+- Git
 
-Changes to be committed:
-	new file:   ../.gitignore
-	modified:   .gitignore
-	modified:   README.md
-	new file:   app.js
-	modified:   package-lock.json
-	modified:   package.json
-	modified:   prisma.config.ts
-	modified:   prisma/schema.prisma
-	new file:   server.js
-	new file:   src/config/db.js
-	new file:   src/config/prisma.js
-	new file:   src/controllers/user.controller.js
-	new file:   src/middlewares/auth.middleware.js
-	new file:   src/middlewares/error.middleware.js
-	new file:   src/models/user.model.js
-	new file:   src/repositories/user.repository.js
-	new file:   src/routes/index.js
-	new file:   src/routes/user.routes.js
-	new file:   src/services/user.service.js
-	deleted:    tsconfig.json
-	new file:   ../package-lock.json
-	new file:   ../package.json
+## Steps to Run the Project
 
-Unmerged paths:
-  (use "git add <file>..." to mark resolution)
-	both modified:   ../README.md
+### 1. Clone the repository
+```bash
+git clone https://github.com/basmala-ayman/Hackathons-Team-Formation.git
+cd Hackathons-Team-Formation/backend
+```
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	../docs/architecture/ADR/ADR-006-database-design-decisions.md
+### 2. Install dependencies
+```bash
+npm install
+```
 
+### 3. Set up environment variables
+Create a `.env` file inside the `backend/` folder:
+```env
+DATABASE_URL="your_neon_connection_string_here"
+PORT=3000
+```
+
+> Ask the team for the actual DATABASE_URL value.
+> Never commit the `.env` file to GitHub.
+
+### 4. Generate Prisma Client
+```bash
+npx prisma generate
+```
+
+### 5. Run database migrations
+```bash
+npx prisma migrate dev
+```
+
+### 6. Start the development server
+```bash
+npm run dev
+```
+
+### 7. Verify it works
+You should see:
