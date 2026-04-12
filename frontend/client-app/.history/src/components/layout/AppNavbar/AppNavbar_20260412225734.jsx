@@ -13,13 +13,16 @@ function AppNavbar({ isLoggedIn = false }) {
           <img src={logo} alt="Team Catalyst Logo" height="90" />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.toggler}/>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Offcanvas
           id="basic-navbar-nav"
           aria-labelledby="offcanvasNavbarLabel"
           placement="end"
         >
           <Offcanvas.Header closeButton>
+            <Offcanvas.Title id="offcanvasNavbarLabel">
+              Menu {/* You can leave this blank or add your logo here! */}
+            </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="mx-auto gap-lg-5 gap-sm-4 py-sm-5 align-items-center">

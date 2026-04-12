@@ -28,11 +28,11 @@ a.navlinks:hover::before{
 .toggler{
     border: none;
 }
-.toggler:focus,
-.toggler:active {
-  outline: none;
-  box-shadow: none;
+.toggler{
+    border: none;
 }
+
+
 @media (max-width:991px) {
     a.navlinks{
     font-size: var( --fs-small);

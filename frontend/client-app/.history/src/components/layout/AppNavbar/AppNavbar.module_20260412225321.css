@@ -32,7 +32,10 @@ a.navlinks:hover::before{
 .toggler:active {
   outline: none;
   box-shadow: none;
+  background-color: var(--color-primary-light-2); /* A super subtle background shift */
+  border-radius: 0.5rem;
 }
+
 @media (max-width:991px) {
     a.navlinks{
     font-size: var( --fs-small);

@@ -13,7 +13,7 @@ function AppNavbar({ isLoggedIn = false }) {
           <img src={logo} alt="Team Catalyst Logo" height="90" />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.toggler}/>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Offcanvas
           id="basic-navbar-nav"
           aria-labelledby="offcanvasNavbarLabel"
