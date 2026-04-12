@@ -46,3 +46,6 @@ npm run dev
 
 ### 7. Verify it works
 You should see:
+
+postgreSQL connected via prisma 🔥
+server running on port 3000 🚀
