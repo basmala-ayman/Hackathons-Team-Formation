@@ -46,14 +46,13 @@
 .errorText {
   color: var(--color-error-red);
   font-size: var(--fs-v-small);
-  margin-top: 4px;
   font-size: 1.4rem;
 }
 
 .helperText {
   color: var(--color-dark-gray);
   font-size: 1.4rem;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .iconRight {

@@ -31,7 +31,7 @@ export default function ForgetPassword() {
       formClass={styles.smallFormContainer}
       imgClass={styles.immgIllustration}
     >
-      <div className={styles.forgetContainer}>
+      <div>
         <Link to="/" className={styles.backLink}>
           ← Back to Login
         </Link>
