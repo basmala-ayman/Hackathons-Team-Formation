@@ -1,17 +1,22 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const app = require("./app");
-const { connectDB } = require("./src/config/db");
+import app from "./app.js";
+import { connectRedis } from "./config/redis.js";
 
 const PORT = process.env.PORT || 3000;
 
-connectDB();
+const start = async () => {
+  try {
+    await connectRedis(); // 👈 لازم الأول
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🚀`);
-});
-const { sequelize } = require("./src/config/db");
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Server failed to start:", error);
+    process.exit(1);
+  }
+};
 
-connectDB().then(() => {
-  sequelize.sync(); // creates tables
-});
+start();
