@@ -6,15 +6,15 @@
 
 //so this is the correct way
 
-require("dotenv").config();
 
 
 const { PrismaClient } = require ("@prisma/client")
 const { PrismaPg } = require("@prisma/adapter-pg");
+const config = require("./env")
 
 //and then making new object from the prisma client to can use it in dealing with the database
 
-const adapter = new PrismaPg(process.env.DATABASE_URL);
+const adapter = new PrismaPg(config.db.url);
 
 const prisma = new PrismaClient({adapter});
 

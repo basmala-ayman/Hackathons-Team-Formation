@@ -1,25 +1,25 @@
 require("dotenv").config();
 
 const app = require("./app");
-const prisma = require ("./src/config/prisma")
+const prisma = require("./src/config/prisma");
+const config = require("./src/config/env");
 
-const PORT = process.env.PORT || 3000;
-
+const PORT = config.port;
 
 // there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
-const startServer = async () =>{
+const startServer = async () => {
   try {
     //connect the database
     await prisma.$connect();
     console.log("postgreSQL connected via prisma 🔥 ");
 
     //make the server
-    app.listen(PORT, ()=>{
+    app.listen(PORT, () => {
       console.log(`server running on port ${PORT} 🚀`)
     });
 
-  }catch (error){
-    console.log("DB connection falied ",error);
+  } catch (error) {
+    console.log("DB connection falied ", error);
     process.exit(1);
   }
 }
