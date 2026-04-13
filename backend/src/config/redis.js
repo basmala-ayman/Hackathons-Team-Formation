@@ -1,6 +1,6 @@
 // import { createClient } from "redis";
 
-export const redisClient = createClient({
+const redisClient = createClient({
   url: process.env.UPSTASH_REDIS_URL,
 });
 
@@ -8,7 +8,7 @@ redisClient.on("error", (err) => {
   console.error("❌ Redis Error:", err);
 });
 
-export const connectRedis = async () => {
+const connectRedis = async () => {
   try {
     console.log("🔌 Connecting to Upstash...");
 
@@ -20,3 +20,5 @@ export const connectRedis = async () => {
     throw error;
   }
 };
+
+module.exports={redisClient,connectRedis};

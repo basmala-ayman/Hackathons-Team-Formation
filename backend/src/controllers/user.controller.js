@@ -18,9 +18,8 @@
 //   }
 // };
 
-import * as userService from "../services/userService.js";
-
-export const createUserController = async (req, res, next) => {
+const userService =require( "../services/user.service");
+ const createUserController = async (req, res, next) => {
   try {
     const user = await userService.createUserService(req.body);
 
@@ -32,3 +31,5 @@ export const createUserController = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports=createUserController;

@@ -4,7 +4,11 @@ const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const app = express();
 
+
+
 const routes = require("./src/routes");
+//cause we will use it and call it in the glocal error handler in the last
+const errorHandler=require("./src/middlewares/error.middleware");
 
 
 app.use(express.json());
@@ -29,6 +33,13 @@ app.use(rateLimit({
 }));
 
 
-app.use("/api", routes);
+ app.use("/api", routes);
+//routes will go here TODO: put here the entry points to all other routes that follow the api design
+
+
+//and then the last thing in the app is to just calling the global error handler
+app.use(errorHandler);
+
+
 
 module.exports = app;

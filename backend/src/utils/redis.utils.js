@@ -1,6 +1,6 @@
-import { redisClient } from "../config/redis.js";
+const redisClient =require("../config/redis.js");
 
-export const setCache = async (key, value, ttl = 3600) => {
+const setCache = async (key, value, ttl = 3600) => {
   try {
     await redisClient.set(key, JSON.stringify(value), {
       EX: ttl,
@@ -10,7 +10,7 @@ export const setCache = async (key, value, ttl = 3600) => {
   }
 };
 
-export const getCache = async (key) => {
+const getCache = async (key) => {
   try {
     const data = await redisClient.get(key);
     return data ? JSON.parse(data) : null;
@@ -20,10 +20,12 @@ export const getCache = async (key) => {
   }
 };
 
-export const deleteCache = async (key) => {
+const deleteCache = async (key) => {
   try {
     await redisClient.del(key);
   } catch (err) {
     console.error("Redis delete error:", err);
   }
 };
+
+module.exports={setCache,getCache,deleteCache};

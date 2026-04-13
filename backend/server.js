@@ -5,6 +5,7 @@ const prisma = require("./src/config/prisma");
 const config = require("./src/config/env");
 const logger=require("./src/config/logger");
 
+
 const PORT = config.port;
 
 // there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
@@ -21,7 +22,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       // console.log(`server running on port ${PORT} 🚀`)
 
-      logger.info("server running on port ${PORT} 🚀");
+      logger.info(`server running on port ${PORT} 🚀`);
     });
 
   } catch (error) {

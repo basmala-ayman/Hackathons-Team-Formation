@@ -1,7 +1,7 @@
-import * as userRepo from "../repositories/userRepository.js";
-import { AppError } from "../utils/AppError.js";
+const userRepo =require("../repositories/user.repository.js");
+const AppError =require( "../utils/AppError.js");
 
-export const createUserService = async (data) => {
+const createUserService = async (data) => {
   const existingUser = await userRepo.getUserByEmail(data.email);
 
   if (existingUser) {
@@ -10,3 +10,5 @@ export const createUserService = async (data) => {
 
   return userRepo.createUser(data);
 };
+
+module.exports=createUserService;

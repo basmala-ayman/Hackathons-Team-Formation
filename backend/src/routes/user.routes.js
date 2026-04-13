@@ -7,17 +7,17 @@
 // });
 
 // module.exports = router;
-import express from "express";
-import { createUserController } from "../controllers/userController.js";
-import { validate } from "../middlewares/validate.js";
-import { createUserSchema } from "../validation/userValidation.js";
+const express = require("express");
+const  createUserController=require("../controllers/user.controller.js");
+const  validate = require("../middlewares/validate.middleware.js");
+//import { createUserSchema } from "../validation/userValidation.js";
 
 const router = express.Router();
 
 router.post(
   "/",
-  validate(createUserSchema),
+//  validate(createUserSchema),
   createUserController
 );
 
-export default router;
+module.exports=router;

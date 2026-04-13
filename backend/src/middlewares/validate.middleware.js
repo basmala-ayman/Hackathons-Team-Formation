@@ -18,9 +18,9 @@
 
 // module.exports = validate;
 
-import { AppError } from "../utils/AppError.js";
+const  AppError = require("../utils/AppError");
 
-export const validate = (schema) => (req, res, next) => {
+const validate = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
 
   if (error) {
@@ -29,3 +29,5 @@ export const validate = (schema) => (req, res, next) => {
 
   next();
 };
+
+module.exports=validate;
