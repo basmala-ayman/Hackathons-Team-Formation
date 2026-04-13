@@ -1,22 +1,29 @@
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
-import app from "./app.js";
-import { connectRedis } from "./config/redis.js";
+const app = require("./app");
+const prisma = require("./src/config/prisma");
+const config = require("./src/config/env");
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
-const start = async () => {
+// there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
+const startServer = async () => {
   try {
-    await connectRedis(); // 👈 لازم الأول
+    //connect the database
+    await prisma.$connect();
+    console.log("postgreSQL connected via prisma 🔥 ");
 
+    //make the server
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`server running on port ${PORT} 🚀`)
     });
+
   } catch (error) {
-    console.error("❌ Server failed to start:", error);
+    console.log("DB connection falied ", error);
     process.exit(1);
   }
-};
+}
 
-start();
+
+//and then just call the function to start the things
+startServer();

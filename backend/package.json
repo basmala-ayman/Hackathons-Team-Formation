@@ -1,25 +1,27 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "@prisma/client": "^7.7.0",
-    "@upstash/redis": "^1.37.0",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.4.1",
-    "redis": "^5.11.0"
-  },
   "devDependencies": {
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.5.2",
     "prisma": "^7.7.0"
   },
-  "type": "module"
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0",
+    "nodemon": "^3.1.14",
+    "pg": "^8.20.0"
+  }
 }
