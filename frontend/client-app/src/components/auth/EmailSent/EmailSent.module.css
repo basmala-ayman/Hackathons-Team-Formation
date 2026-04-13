@@ -18,8 +18,8 @@
 }
 
 .iconWrapper {
-  width: 8rem;
-  height: 8rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
   background: linear-gradient(180deg, var(--color-primary-dark), #8945ff);
   display: flex;

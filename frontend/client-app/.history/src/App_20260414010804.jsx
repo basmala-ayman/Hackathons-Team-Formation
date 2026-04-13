@@ -9,21 +9,15 @@ import EmailSent from "./components/auth/EmailSent/EmailSent";
 function App() {
   return (
     <BrowserRouter>
-    <div className="min-vh-100 d-flex flex-column">
     <AppNavbar isLoggedIn={false}/>
-
-    <main className="flex-grow-1">
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/emailsent" element={<EmailSent />} />
       </Routes>
-      </main>
       <Footer/>
-      </div>
     </BrowserRouter>
   );
 }

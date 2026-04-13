@@ -21,9 +21,7 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/emailsent" element={<EmailSent />} />
       </Routes>
-      </main>
       <Footer/>
-      </div>
     </BrowserRouter>
   );
 }
