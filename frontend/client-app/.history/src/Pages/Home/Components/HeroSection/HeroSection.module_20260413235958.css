@@ -1,0 +1,10 @@
+.heroImg{
+    width: 90%;
+}
+.badge{
+    background:linear-gradient(
+    90deg,
+    rgb(183, 148, 244) 12%,
+    rgb(137, 69, 254) 80%
+  );
+}
