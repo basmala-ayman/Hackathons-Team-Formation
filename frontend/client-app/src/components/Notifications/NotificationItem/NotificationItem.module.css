@@ -119,14 +119,12 @@
   font-weight: 700;
 }
 
-/* Update the existing classes in your CSS file */
-
 .actions {
   display: flex;
   gap: 1rem;
   margin-top: 1.6rem;
   align-items: center;
-  flex-wrap: wrap; /* Prevents overflow on smaller screens */
+  flex-wrap: wrap;
 }
 
 .btnAccept {
