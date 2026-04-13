@@ -22,7 +22,7 @@ function AppNavbar({ isLoggedIn = false }) {
           <Offcanvas.Header closeButton>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="mx-auto gap-lg-5 gap-sm-4 py-sm-5 py-lg-6 align-items-center">
+            <Nav className="mx-auto gap-lg-5 gap-sm-4 py-sm-5 py-lg-1 align-items-center">
               <Nav.Link
                 as={Link}
                 to="/"

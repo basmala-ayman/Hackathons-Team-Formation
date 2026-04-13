@@ -1,0 +1,17 @@
+footer{
+    background-color: var( --color-primary-light-2);
+}
+.
+.footerLink{
+    color: var(--color-text);
+    text-decoration: none;
+        font-size: var(--fs-regular);
+
+}
+.footerSections {
+      font-size: var(--fs-regular);
+  
+}
+.copyrightRow{
+    margin-top: 5.5rem;
+}
