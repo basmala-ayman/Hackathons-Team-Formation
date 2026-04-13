@@ -1,0 +1,170 @@
+.card {
+  padding: 2rem;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-primary-light-2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 1rem;
+}
+
+.card:hover {
+  background-color: var(--color-primary-light-3);
+}
+
+.unread {
+  background-color: var(--color-primary-light-3);
+}
+
+.main {
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+}
+
+/* Icon / Avatar Area */
+.iconArea {
+  position: relative;
+}
+
+.iconCircle {
+  width: 4.8rem;
+  height: 4.8rem;
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: var(--color-primary-dark);
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.titleGroup {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.notTitle {
+  padding: 0.6rem;
+}
+
+.notTitle h3 {
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--color-very-dark-purple);
+}
+
+.highPriority {
+  background-color: #fff0f0;
+  color: var(--color-light-red);
+  font-size: var(--fs-v-small);
+  font-weight: 700;
+  border-radius: 1rem;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem;
+}
+
+.message {
+  font-size: var(--fs-small);
+  color: var(--color-dark-gray);
+  line-height: 1.5;
+}
+
+/* Metadata Row */
+.meta {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 0.8rem;
+  font-size: var(--fs-v-small);
+  color: var(--color-gray);
+}
+
+.meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.match {
+  color: var(--color-success-green);
+  background-color: #e6fffa;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  font-weight: 700;
+}
+
+/* Update the existing classes in your CSS file */
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.6rem;
+  align-items: center;
+  flex-wrap: wrap; /* Prevents overflow on smaller screens */
+}
+
+.btnAccept {
+  /* height: 4rem; */
+  padding: 1rem;
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.8rem;
+  font-weight: 400;
+  font-size: var(--fs-small);
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+.btnAccept:hover {
+  background: var(--gradient-primary-reverse);
+}
+
+.btnDecline {
+  /* height: 4rem; */
+  padding: 1rem;
+  background: transparent;
+  border: 1px solid var(--color-primary-light-2);
+  color: var(--color-dark-gray);
+  border-radius: 0.8rem;
+  font-size: var(--fs-small);
+  cursor: pointer;
+}
+
+.btnLink {
+  /* height: 4rem; */
+  padding: 1rem;
+  background: transparent;
+  border: 0.1rem solid var(--color-primary-dark);
+  color: var(--color-primary-dark);
+  border-radius: 0.8rem;
+  font-weight: 400;
+  font-size: var(--fs-small);
+  cursor: pointer;
+}
