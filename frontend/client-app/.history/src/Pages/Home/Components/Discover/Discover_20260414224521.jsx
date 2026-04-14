@@ -1,8 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import styles from "./Discover.module.css";
-import {BrainIcon, PrizeIcon} from '../../../../assets/Icons'
 function Discover() {
-   
+  
   const featuresData = [
     {
       id: 1,
