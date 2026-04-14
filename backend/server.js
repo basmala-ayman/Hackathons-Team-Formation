@@ -1,9 +1,9 @@
 require("dotenv").config();
 
-const app = require("./app");
+const app = require("./src/app");
 const prisma = require("./src/config/prisma");
 const config = require("./src/config/env");
-const logger=require("./src/config/logger");
+const logger = require("./src/config/logger");
 
 
 const PORT = config.port;

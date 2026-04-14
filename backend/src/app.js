@@ -6,9 +6,9 @@ const app = express();
 
 
 
-const routes = require("./src/routes");
+const routes = require("./routes");
 //cause we will use it and call it in the glocal error handler in the last
-const errorHandler=require("./src/middlewares/error.middleware");
+const errorHandler = require("./middlewares/error.middleware");
 
 
 app.use(express.json());
@@ -33,7 +33,7 @@ app.use(rateLimit({
 }));
 
 
- app.use("/api", routes);
+app.use("/api", routes);
 //routes will go here TODO: put here the entry points to all other routes that follow the api design
 
 
