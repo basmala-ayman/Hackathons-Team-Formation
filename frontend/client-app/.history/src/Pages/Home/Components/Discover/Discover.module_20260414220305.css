@@ -1,0 +1,12 @@
+.purbleBg{
+  background-color: var(--color-primary-light);  
+}
+.yellowBg{
+    background-color: var( --color-primary-light-3);
+}
+.iconBox{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+align-items: center;
+}
