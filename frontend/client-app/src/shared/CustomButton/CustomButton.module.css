@@ -6,7 +6,8 @@
   border-radius: 1rem;
   border: 0.2rem solid transparent;
   font-weight: 400;
-  transition: all 200ms ease-in-out;
+  /* transition: all 200ms ease-in-out; */
+  transition: all 0.2s ease;
   cursor: pointer;
   min-width: 15rem;
 }
@@ -28,6 +29,8 @@
 
 .primary-btn:hover {
   background: var(--gradient-primary-reverse);
+  /* Added opacity to enhance hover effect */
+  opacity: 0.9;
 }
 
 .secondary-btn {
