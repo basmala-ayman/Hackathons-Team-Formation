@@ -2,7 +2,7 @@
 //later in dealing with the database and there is cases where you may need more than one provider like when dealing with graphicql
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -73,22 +73,21 @@ enum NotificationType {
  * need password and the second way is can not be success if user required to enter password
  * we will not put the indexes now until we load all the dataset into the database and then measure
  * each query how much time it takes to can define which ones need to be increased and need to have index
- @id made prisma understand that this attribute need to be converted to the primary key of this table
- after each edit in the schema we need to migerate it again to can see the updates  and to make that and to enabel the prisma client to see the new updates we just need to use the command
- npm prisma generate 
- now after this command the prisma client can see the updates that happened in the schema easily but 
- is it added into the database and in the migeration file? NO 
- if you make changes in schema and added attributes and then you try to migrate it it will give you error if there is exised data in the database in the old schema
- npm prisma migrate dev
- so it will give you prisma validation error tells you that you can not migerate and the solution in this case is to delete the old schema data and then migrate again based on the new schema
-one of the best practise things and well known that to make the id is string and using uuid which make to each user id randomly string as id 
-rather than making it as sequential incremental number id which is predictable
-
+ * @id made prisma understand that this attribute need to be converted to the primary key of this table
+ * after each edit in the schema we need to migerate it again to can see the updates  and to make that and to enabel the prisma client to see the new updates we just need to use the command
+ * npm prisma generate
+ * now after this command the prisma client can see the updates that happened in the schema easily but
+ * is it added into the database and in the migeration file? NO
+ * if you make changes in schema and added attributes and then you try to migrate it it will give you error if there is exised data in the database in the old schema
+ * npm prisma migrate dev
+ * so it will give you prisma validation error tells you that you can not migerate and the solution in this case is to delete the old schema data and then migrate again based on the new schema
+ * one of the best practise things and well known that to make the id is string and using uuid which make to each user id randomly string as id
+ * rather than making it as sequential incremental number id which is predictable
  */
 
 //done
 model User {
-  id             String       @id @default(uuid())
+  id             String    @id @default(uuid())
   email          String    @unique
   password       String?
   name           String
@@ -103,13 +102,13 @@ model User {
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
-  skills              UserSkill[]//each user can have many skills 
+  skills              UserSkill[] //each user can have many skills 
   ownedTeams          Team[]               @relation("TeamOwner") //and can create more than one team 
   teamMemberships     TeamMember[]
-  sentInvitations     TeamInvitation[]     @relation("InvitationSender")//can send many  invitation to ask persons to join
-  receivedInvitations TeamInvitation[]     @relation("InvitationReceiver")//can get many invitations to join their teams
+  sentInvitations     TeamInvitation[]     @relation("InvitationSender") //can send many  invitation to ask persons to join
+  receivedInvitations TeamInvitation[]     @relation("InvitationReceiver") //can get many invitations to join their teams
   notifications       Notification[] //can have many notifications
-  matchingRequests    MatchingRequest[]//can make more than mathcing requests
+  matchingRequests    MatchingRequest[] //can make more than mathcing requests
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
 
@@ -122,12 +121,12 @@ model User {
 // ─────────────────────────────────────────
 
 model Skill {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String   @unique
   createdAt DateTime @default(now())
 
   // Relations
-  users UserSkill[]//and it is array too cause the relation is many to many which will make us to make new table
+  users UserSkill[] //and it is array too cause the relation is many to many which will make us to make new table
 
   @@map("skills")
 }
@@ -135,7 +134,7 @@ model Skill {
 model UserSkill {
   //there is no need for this id too the primary key for this table will be composite key too
   userId    String //the forien key this is their names
-  skillId   String//the same for here
+  skillId   String //the same for here
   createdAt DateTime @default(now())
 
   // Relations
@@ -143,8 +142,8 @@ model UserSkill {
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, skillId])
   @@map("user_skills")
-  @@unique([userId,skillId])
 }
 
 // ─────────────────────────────────────────
@@ -153,16 +152,24 @@ model UserSkill {
 
 //done 
 model Hackathon {
-  id           String             @id @default(uuid())
-  title        String
-  description  String?
-  applyLink    String
-  startDate    DateTime?
-  endDate      DateTime?
-  status       HackathonStatus @default(UPCOMING)
-  source       String          @default("devpost")
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id                 String          @id @default(uuid())
+  title              String
+  description        String?
+  slug               String?
+  location           String          @default("Online")
+  applyLink          String
+  remainingTime      String?
+  submissionPeriod   String?
+  prizeAmount        Float           @default(0)
+  prizesCounts       Int             @default(0)
+  registrationsCount Int             @default(0)
+  organization       String?
+  startDate          DateTime?
+  endDate            DateTime?
+  status             HackathonStatus @default(UPCOMING)
+  source             String          @default("devpost")
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
   // Relations
   tags             HackathonTag[]
@@ -177,12 +184,13 @@ model Hackathon {
 
 //done
 model Tag {
-  id          String      @id @default(uuid())
-  name         String     @unique
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
 
   // Relations
   hackathons HackathonTag[]
+
   @@map("tags")
 }
 
@@ -199,13 +207,12 @@ model HackathonTag {
   @@map("hackathon_tags")
 }
 
-
 // ─────────────────────────────────────────
 // TEAMS
 // ─────────────────────────────────────────
 
 model Team {
-  id          String        @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
   hackathonId String //foriegn key
   ownerId     String //foriegn key
@@ -214,7 +221,7 @@ model Team {
   updatedAt   DateTime   @updatedAt
 
   // Relations
-  hackathon   Hackathon        @relation(fields: [hackathonId], references: [id])//cause the relation is 1:m
+  hackathon   Hackathon        @relation(fields: [hackathonId], references: [id]) //cause the relation is 1:m
   owner       User             @relation("TeamOwner", fields: [ownerId], references: [id])
   members     TeamMember[]
   invitations TeamInvitation[]
@@ -232,20 +239,20 @@ model TeamMember {
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("team_members")
   //just for extra check to ensure that there is duplication can happened and there is no putted the same user duplicated in the same team 
-  @@unique([teamId,userId])
+  @@unique([teamId, userId])
+  @@map("team_members")
 }
 
 model TeamInvitation {
-  id         String              @id @default(uuid())
+  id         String           @id @default(uuid())
   teamId     String
   senderId   String
   receiverId String
   status     InvitationStatus @default(PENDING)
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
-  deadline  DateTime
+  deadline   DateTime
 
   // Relations
   team     Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
@@ -260,7 +267,7 @@ model TeamInvitation {
 // ─────────────────────────────────────────
 
 model MatchingRequest {
-  id          String            @id @default(uuid())
+  id          String         @id @default(uuid())
   userId      String
   hackathonId String
   status      MatchingStatus @default(PENDING)
@@ -276,7 +283,7 @@ model MatchingRequest {
 }
 
 model AIRecommendation {
-  id                 String                  @id @default(uuid())
+  id                 String               @id @default(uuid())
   matchingRequestId  String
   teamData           Json
   compatibilityScore Float
@@ -294,7 +301,7 @@ model AIRecommendation {
 // ─────────────────────────────────────────
 
 model Notification {
-  id        String              @id @default(uuid())
+  id        String           @id @default(uuid())
   userId    String
   type      NotificationType
   title     String
@@ -314,7 +321,7 @@ model Notification {
 // ─────────────────────────────────────────
 
 model RefreshToken {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
   token     String   @unique
   expiresAt DateTime
@@ -327,7 +334,7 @@ model RefreshToken {
 }
 
 model PasswordResetToken {
-  id        String      @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
   token     String   @unique
   expiresAt DateTime
