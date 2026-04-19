@@ -33,7 +33,7 @@ app.use(rateLimit({
 }));
 
 
-app.use("/api", routes);
+app.use("/api/v1", routes);
 //routes will go here TODO: put here the entry points to all other routes that follow the api design
 
 
