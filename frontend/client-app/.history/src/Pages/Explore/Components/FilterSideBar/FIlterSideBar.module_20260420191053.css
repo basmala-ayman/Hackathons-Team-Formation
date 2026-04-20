@@ -1,0 +1,7 @@
+.checkbox{
+    transform: scale(1.4);
+}
+.checkbox:focus {
+  outline: none;
+  box-shadow: none;
+}
