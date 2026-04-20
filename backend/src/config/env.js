@@ -4,6 +4,9 @@ const requiredEnvVars = [
     "DATABASE_URL",
     "PORT",
     "NODE_ENV",
+    "EMAIL_USER",
+    "EMAIL_PASS",
+    "BASE_URL",
 ];
 
 //and then loop for each of this needed variables and making validation for them to make fast failure if there is missing in one of them and detect them from the start
@@ -28,6 +31,13 @@ const config = {
     db: {
         url: process.env.DATABASE_URL,
     },
+
+    email: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+
+  baseUrl: process.env.BASE_URL,
 };
 
 

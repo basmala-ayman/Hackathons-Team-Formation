@@ -27,15 +27,9 @@ const registerSchema = Joi.object({
 
 //now the second thing is to make the validation but for verify email validation
 const verifyEmailSchema = Joi.object({
-  email: Joi.string().email().required(),
-
-  otp: Joi.string()
-    .length(6)
-    .required()
-    .messages({
-      "string.length": "OTP must be 6 digits",
-      "string.empty": "OTP is required",
-    }),
+  token: Joi.string().required().messages({
+    "string.empty": "Token is required",
+  }),
 });
 
 

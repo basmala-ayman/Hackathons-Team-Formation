@@ -87,18 +87,20 @@ enum NotificationType {
 
 //done
 model User {
-  id             String    @id @default(uuid())
-  email          String    @unique
-  password       String?
-  name           String
-  bio            String?
-  role           Role      @default(PARTICIPANT)
-  isVerified     Boolean   @default(false)
-  profilePicture String?
-  resumeUrl      String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  deletedAt      DateTime? //that means can be null
+  id                       String    @id @default(uuid())
+  email                    String    @unique
+  password                 String?
+  name                     String
+  bio                      String?
+  role                     Role      @default(PARTICIPANT)
+  isVerified               Boolean   @default(false)
+  profilePicture           String?
+  resumeUrl                String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  deletedAt                DateTime? //that means can be null
+  verificationToken        String?
+  verificationTokenExpires DateTime?
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship

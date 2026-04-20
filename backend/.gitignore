@@ -5,3 +5,7 @@ node_modules
 /generated/prisma
 
 logs/
+
+*.tgz
+*.zip
+*.tar.gz
