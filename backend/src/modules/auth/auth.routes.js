@@ -17,6 +17,10 @@ const validate = require("../../middlewares/validate.middleware");
 router.post("/register", validate(registerSchema) ,authController.register);
 
 
+//login
+router.post("/login",authController.login);
+
+
 //verify email
 //and here when the user click on the sending link there will be request coming to me to make its account activate
 //now in this request we need to get the token and we have 2 options the first to put the token as url param and the second is to put it as query param and we will follow the second

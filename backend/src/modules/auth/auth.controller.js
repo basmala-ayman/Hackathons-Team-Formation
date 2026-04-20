@@ -66,8 +66,27 @@ const resendVerification = async (req, res,next) => {
 
 };
 
+
+//login
+const login = async (req,res,next)=>{
+
+  try {
+    const result = await authService.login(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "Logged in successfully",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+
+};
+
 module.exports = {
   register,
   verifyEmail,
   resendVerification,
+  login,
 };
