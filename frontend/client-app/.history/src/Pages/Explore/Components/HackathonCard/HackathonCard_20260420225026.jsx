@@ -10,7 +10,9 @@ import {
 function HackathonCard({ hackathon }) {
   const { title, prizeAmount, image, date, location, level } = hackathon;
   const navigate = useNavigate();
- 
+ if (!hackathons || hackathons.length === 0) {
+    return <p className="text-center mt-5">No hackathons available at the moment.</p>;
+  }
   return (
     <div
       className={`${styles.hackathonCard} d-flex flex-column  rounded-4 p-3 `}
