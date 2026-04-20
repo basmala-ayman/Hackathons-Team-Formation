@@ -1,6 +1,24 @@
 const axios = require('axios');
 const prisma = require('../../config/prisma');
 
+const HackathonStatus = Object.freeze({
+    UPCOMING: 'UPCOMING',
+    ONGOING: 'ONGOING',
+    ENDED: 'ENDED'
+});
+
+const mapDevpostStatus = (status) => {
+    switch (status?.toLowerCase()) {
+        case 'upcoming':
+            return HackathonStatus.UPCOMING;
+        case 'open':
+            return HackathonStatus.ONGOING;
+        case 'ended':
+            return HackathonStatus.ENDED;
+        default:
+            return HackathonStatus.UPCOMING; // default to upcoming if unknown
+    }
+};
 
 const collectHackathonsDevpost = async () => {
     let page = 0;
@@ -15,11 +33,22 @@ const collectHackathonsDevpost = async () => {
                 // prize amount
                 const rawPrize = hack.prize_amount || "";
                 const prizeAmount = parseFloat(rawPrize.replace(/[^0-9.]/g, '')) || 0;
-
+                const currentStatus = mapDevpostStatus(hack.open_state);
+                // themes
+                const themeNames = hack.themes?.map(t => t.name) || [];
+                const tagsData = themeNames.map(name => ({
+                    tag: {
+                        connectOrCreate: {
+                            where: { name: name },
+                            create: { name: name }
+                        }
+                    }
+                }));
+                
                 await prisma.hackathon.upsert({
                     where: { id: hack.id.toString() },
                     update: {
-                        status: hack.open_state,
+                        status: currentStatus,
                         remainingTime: hack.time_left_to_submission,
                         submissionPeriod: hack.submission_period_dates,
                         registrationsCount: hack.registrations_count,
@@ -28,9 +57,12 @@ const collectHackathonsDevpost = async () => {
                         id: hack.id.toString(),
                         slug: slug,
                         title: hack.title,
-                        status: hack.open_state,
+                        status: currentStatus,
                         applyLink: hack.url,
-                        tags: hack.themes?.map(t => t.name) || [],
+                        thumbnailUrl: hack.thumbnail_url,
+                        tags: {
+                            create: tagsData
+                        },
                         location: hack.displayed_location?.location || "Online",
                         remainingTime: hack.time_left_to_submission,
                         submissionPeriod: hack.submission_period_dates,
