@@ -131,6 +131,8 @@ const resendVerification = async (email) => {
 
 
 //  #17  login 
+//here now according to the #18 updation we will need to make refresh token and access token and sending them to the front
+//so when the user login we send to him the access token and the refresh token too
 const login = async (data) => {
 
     const { email, password } = data;
@@ -151,8 +153,9 @@ const login = async (data) => {
     }
 
 
+    // #17 here the first part related to access token prepare it to be sent 
     //generate jst of this user 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
         {
             userId: user.id,
             role: user.role,
@@ -163,24 +166,87 @@ const login = async (data) => {
         }
     );
 
+
+    // #18 and then here make the refresh token ready to sent it too
+    const refreshToken = crypto.randomBytes(40).toString("hex");
+    await authRepository.createRefreshToken({
+        userId: user.id,
+        token: refreshToken,
+        expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    });
+    //making the refresh token expire after 3 days only for more security rather than 1 week  
+
     //and then return the response back
 
-     return {
-    token,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-  };
+    return {
+        accessToken,
+        refreshToken,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        },
+    };
 
 };
 
+
+//but if the user is not log in and the access token expire the front end will already send request for refresh token 
+//that will enter and will use this service
+const refreshToken = async (token) => {
+    const existingToken = await authRepository.findRefreshToken(token);
+
+    if (!existingToken) {
+        throw new AppError("Invalid refresh token", 401);
+    }
+
+    //if the end date of the expire for the token is already passed so we can not refresh
+    //we will redirect it again but into the login page 
+    if (existingToken.expiresAt < new Date()) {
+        throw new AppError("Refresh token expired", 401);
+    }
+
+    //we will continue the logic if the refresh token already stored and not expired so that we can get the user if from it too cause we store it in the table
+
+    //and then delete the old token cause we will make new one and will store it
+    await authRepository.deleteRefreshToken(existingToken.id);
+
+    const newRefreshToken = crypto.randomBytes(40).toString("hex");
+
+    await authRepository.createRefreshToken({
+        userId: existingToken.userId,
+        token: newRefreshToken,
+        expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    });
+
+    //but we didnot have the role of this user we just have its id so we need to get its user object to can make the new access token
+    const user = await authRepository.findById(existingToken.userId);
+
+    const newAccessToken = jwt.sign(
+    {
+      userId: user.id,
+      role: user.role,
+    },
+    config.jwt.secret,
+    {
+      expiresIn: config.jwt.expiresIn,
+    }
+  );
+
+  
+//and then the last thing is to return the new access token and the new refresh token 
+   return {
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken,
+  };
+
+};
 
 module.exports = {
     register,
     verifyEmail,
     resendVerification,
     login,
+    refreshToken,
 };

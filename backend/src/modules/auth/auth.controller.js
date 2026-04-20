@@ -3,6 +3,7 @@
 //this controller its main goal is to get the request and getting the data from it and call service and then return the response later thats only 
 
 const authService = require("./auth.service");
+const AppError=require("../../utils/AppError");
 
 // register
 const register = async (req, res,next) => {
@@ -84,9 +85,31 @@ const login = async (req,res,next)=>{
 
 };
 
+//controller for refresh token again and that cause we will take refresh token and then we will return new refresh token and new access token
+const refreshTokenHandler = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return next(new AppError("Refresh token is required", 400));
+    }
+
+    const result = await authService.refreshToken(refreshToken);
+
+    res.status(200).json({
+      success: true,
+      message: "Token refreshed successfully",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   register,
   verifyEmail,
   resendVerification,
   login,
+  refreshTokenHandler,
 };

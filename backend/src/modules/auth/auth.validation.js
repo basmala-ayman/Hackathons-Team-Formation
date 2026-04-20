@@ -39,8 +39,14 @@ const resendVerificationSchema = Joi.object({
 });
 
 
+const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
+
 module.exports = {
   registerSchema,
   verifyEmailSchema,
   resendVerificationSchema,
+  refreshTokenSchema,
 };

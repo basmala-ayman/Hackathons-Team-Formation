@@ -46,3 +46,7 @@ npm run dev
 
 ### 7. Verify it works
 You should see:
+
+
+### for running the negix and making the things online until deployment run this command:
+ngrok http 3000  
