@@ -49,3 +49,7 @@ You should see:
 
 postgreSQL connected via prisma 🔥
 server running on port 3000 🚀
+
+### If there is any problem with prisma client try this steps:
+update prisma client using this command: npx prisma generate
+and then apply the migrations using this command : npx prisma migrate dev 
