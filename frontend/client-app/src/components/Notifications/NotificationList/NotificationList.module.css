@@ -1,0 +1,57 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.4rem;
+}
+
+.titleInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.titleInfo h2 {
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  color: var(--color-very-dark-purple);
+}
+
+.badge {
+  background-color: #ffe8e8;
+  color: var(--color-light-red);
+  font-size: var(--fs-v-small);
+  font-weight: 600;
+  padding: 0.4rem 1.4rem;
+  border-radius: 5rem;
+}
+
+.markAllBtn {
+  background: none;
+  border: none;
+  color: var(--color-primary-dark);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.markAllBtn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.itemsStack {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  border-radius: 1.6rem;
+  border: 1px solid var(--color-primary-light-2);
+  overflow: hidden;
+  box-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.02);
+}

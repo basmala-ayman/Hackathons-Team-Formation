@@ -9,7 +9,7 @@ export default function NoticationsPage() {
   return (
     <div className="container py-5">
       <header className={styles.header}>
-        <h1>Notifications</h1>
+        <h1 className="fs-md-4">Notifications</h1>
         <p>Stay updated with your teams and hackathons</p>
       </header>
 

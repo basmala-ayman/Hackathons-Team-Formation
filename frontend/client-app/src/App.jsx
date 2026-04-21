@@ -6,6 +6,8 @@ import Home from './Pages/Home/Home'
 import Register from "./components/auth/Register/Register";
 import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
 import EmailSent from "./components/auth/EmailSent/EmailSent";
+import NoticationsPage from "./Pages/NotificationPage/NotificationsPage"
+import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
 import Footer from "./components/layout/Footer/Footer";
 import Explore from "./Pages/Explore/Explore";
 import { useState } from "react";
@@ -27,6 +29,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/emailsent" element={<EmailSent />} />
+        <Route path="/notifications" element={<NoticationsPage />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/explore" element={<Explore />} />
 
       </Routes>

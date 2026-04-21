@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Register.module.css";
 import loginStyles from "../Login/Login.module.css";
-import AuthLayout from "../AuthLayout/AuthLayout";
+import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import { GoogleIcon, GithubIcon } from "../Login/Login";
 // import Login from "./../Login/Login";
