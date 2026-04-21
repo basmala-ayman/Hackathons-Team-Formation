@@ -3,14 +3,23 @@
 }
 
 .header h1 {
-  font-size: var(--fs-h3);
-  font-weight: 700;
-  color: var(--color-very-dark-purple);
-  margin-bottom: 0.8rem;
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 4rem;
 }
 
 .header p {
-  /* Using your 16px small variable */
   font-size: var(--fs-small);
-  color: var(--color-gray);
+  color: var(--color-text);
+}
+
+/* Small Screens */
+@media (max-width: 992px) {
+  .header h1 {
+    font-size: var(--fs-h3);
+  }
+  .header p {
+    font-size: var(--fs-v-small);
+  }
 }

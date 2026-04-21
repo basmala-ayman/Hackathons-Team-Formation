@@ -5,6 +5,8 @@ import Login from "./components/auth/Login/Login";
 import Register from "./components/auth/Register/Register";
 import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
 import EmailSent from "./components/auth/EmailSent/EmailSent";
+import NoticationsPage from "./Pages/NotificationPage/NotificationsPage"
+import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +15,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/emailsent" element={<EmailSent />} />
+        <Route path="/notifications" element={<NoticationsPage />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

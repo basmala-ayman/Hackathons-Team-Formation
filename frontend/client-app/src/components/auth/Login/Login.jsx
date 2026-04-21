@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
-import AuthLayout from "../AuthLayout/AuthLayout";
+import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { Link } from "react-router-dom";
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 export const GoogleIcon = () => (
   <svg
@@ -65,6 +67,34 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
+  // Logic to use later when handling the login with Google 
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      //   try {
+
+      //     const res = await axios.post("http://localhost:3000/api/auth/google", {
+      //       access_token: tokenResponse.access_token
+      //     });
+
+      //     console.log("Server Response:", res.data);
+
+      //     // FIX 3: Your friend's backend might send 'status: "success"' or just the token
+      //     if (res.data.token) {
+      //       localStorage.setItem("token", res.data.token);
+      //       // navigate("/dashboard"); 
+      //       alert("Login Successful!");
+      //     }
+      //   } catch (err) {
+      //     // Log the actual error response from the server to help your friend debug
+      //     console.error("Backend Google Auth Failed:", err.response?.data || err.message);
+      //   }
+      // },
+      // onError: (error) => console.log('Login Failed:', error),
+      console.log("Google Login Hook Initialized")
+    }
+  });
+
+
   const handleLogin = (e) => {
     e.preventDefault();
     let newErrors = {};
@@ -79,11 +109,11 @@ export default function Login() {
         <h2 className={styles.title}>Welcome Back!</h2>
         {/* Social Buttons */}
         <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
-          <button type="button" className={styles.socialBtn}>
-            <GoogleIcon /> Sign Up with Google
+          <button type="button" className={styles.socialBtn} onClick={handleGoogleLogin}>
+            <GoogleIcon /> Sign In with Google
           </button>
           <button type="button" className={styles.socialBtn}>
-            <GithubIcon /> Sign Up with Github
+            <GithubIcon /> Sign In with Github
           </button>
         </div>
         <div className={styles.divider}>

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Mail } from "lucide-react";
 import styles from "./EmailSent.module.css";
-import AuthLayout from "../AuthLayout/AuthLayout";
+import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 

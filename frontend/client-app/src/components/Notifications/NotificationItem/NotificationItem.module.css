@@ -40,15 +40,14 @@
 .dot {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 1.2rem;
-  height: 1.2rem;
+  right:0;
+  width: 1.4rem;
+  height: 1.4rem;
   background-color: var(--color-primary-dark);
-  border: 2px solid var(--color-white);
+  border: 2.5px solid var(--color-white);
   border-radius: 50%;
 }
 
-/* Content Area */
 .content {
   flex: 1;
 }
@@ -119,52 +118,57 @@
   font-weight: 700;
 }
 
-/* Update the existing classes in your CSS file */
-
 .actions {
   display: flex;
   gap: 1rem;
   margin-top: 1.6rem;
   align-items: center;
-  flex-wrap: wrap; /* Prevents overflow on smaller screens */
+  flex-wrap: wrap;
+}
+
+.btnAccept,
+.btnDecline,
+.btnLink {
+  padding: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border-radius: 0.8rem;
+  font-size: var(--fs-small);
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
 }
 
 .btnAccept {
-  /* height: 4rem; */
-  padding: 1rem;
   background: var(--gradient-primary);
   color: var(--color-white);
   border: none;
-  border-radius: 0.8rem;
-  font-weight: 400;
-  font-size: var(--fs-small);
-  cursor: pointer;
-  transition: all 200ms ease-in-out;
-}
-
-.btnAccept:hover {
-  background: var(--gradient-primary-reverse);
+  font-weight: 600;
 }
 
 .btnDecline {
-  /* height: 4rem; */
-  padding: 1rem;
-  background: transparent;
-  border: 1px solid var(--color-primary-light-2);
+  background: var(--color-register-bg);
+  border: 1.6px solid #e2e8f0;
   color: var(--color-dark-gray);
-  border-radius: 0.8rem;
-  font-size: var(--fs-small);
-  cursor: pointer;
 }
 
 .btnLink {
-  /* height: 4rem; */
-  padding: 1rem;
   background: transparent;
-  border: 0.1rem solid var(--color-primary-dark);
+  border: 1px solid var(--color-primary-dark);
   color: var(--color-primary-dark);
-  border-radius: 0.8rem;
-  font-weight: 400;
-  font-size: var(--fs-small);
-  cursor: pointer;
+  font-weight: 600;
+}
+
+.btnAccept:hover {
+  background-color: var(--gradient-primary-reverse);
+  opacity: 0.9;
+}
+.btnDecline:hover {
+  background-color: var(--color-white);
+}
+.btnLink:hover {
+  border-color: var(--color-primary-light);
+  background-color: var(--color-primary-light);
+  color: var(--color-white);
 }
