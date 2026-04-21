@@ -106,10 +106,30 @@ const refreshTokenHandler = async (req, res, next) => {
   }
 };
 
+
+//#20 lets define its controller
+const googleAuth = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+
+    const result = await authService.googleAuth(token);
+
+    res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 module.exports = {
   register,
   verifyEmail,
   resendVerification,
   login,
   refreshTokenHandler,
+  googleAuth,
 };

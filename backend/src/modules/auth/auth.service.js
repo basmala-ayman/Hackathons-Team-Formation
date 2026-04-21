@@ -6,6 +6,10 @@ const jwt = require("jsonwebtoken");
 const AppError = require("../../utils/AppError");
 const emailService = require("../../services/email.services");
 const config = require("../../config/env");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(config.google.clientId);
+
 
 // #16 register user
 const register = async (data) => {
@@ -224,22 +228,92 @@ const refreshToken = async (token) => {
     const user = await authRepository.findById(existingToken.userId);
 
     const newAccessToken = jwt.sign(
-    {
-      userId: user.id,
-      role: user.role,
-    },
-    config.jwt.secret,
-    {
-      expiresIn: config.jwt.expiresIn,
-    }
-  );
+        {
+            userId: user.id,
+            role: user.role,
+        },
+        config.jwt.secret,
+        {
+            expiresIn: config.jwt.expiresIn,
+        }
+    );
 
-  
-//and then the last thing is to return the new access token and the new refresh token 
-   return {
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
-  };
+
+    //and then the last thing is to return the new access token and the new refresh token 
+    return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+    };
+
+};
+
+
+//#20 now lets start writing the OAUTH google service code step by step
+//first we need to install the package we will use to check if the token is coming really from google or fake
+//and this package is called google-auth-library
+
+const googleLogin = async (token) => {
+
+    //first thing we will need to ensure and check if the token is google token or no and that will be  the email verification rather than the one we made in register
+    const ticket = await googleClient.verifyIdToken({
+        idToken: token,
+        //i need to define the audience here to prevent the token reply attack 
+        //and that means i define here that i am the one that this token is created for me so if there is another token with created but not for me so i will not the audience so that will not valid and will not continue
+        audience: config.google.clientId,
+    })
+
+
+    //then after checking we will need to get the payload of the user
+    const payload = ticket.payload;
+
+    const email = ticket.email;
+    const name = ticket.name;
+
+    //now we need to check if the user is existed in our system or no cause it is existed so we will need to make it login otherwise we will make it register
+    let user = await authRepository.findByEmail(email);
+
+    if (!user)//if the user is not existed
+    {
+        user = await authRepository.createUser({
+            name,
+            email,
+            password: null,
+            isVerified: true,
+        });
+    }
+
+    //and now the user is already existed in our system in both case now lets make for him its refresh and access tokens to return them back in the response
+    const accessToken = jwt.sign(
+        {
+            userId: user.id,
+            role: user.role,
+        },
+        config.jwt.secret,
+        { expiresIn: config.jwt.expiresIn }
+    );
+
+
+//just making the refresh token 40 bytes and containing unumbers and letters which making the knowing its value is really very hard and cannot happened as much as we can
+    const refreshToken = crypto.randomBytes(40).toString("hex");
+
+    await authRepository.createRefreshToken({
+        userId: user.id,
+        token: refreshToken,
+        expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    });
+
+
+    return {
+        accessToken,
+        refreshToken,
+        user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+        },
+    };
+
 
 };
 
@@ -249,4 +323,5 @@ module.exports = {
     resendVerification,
     login,
     refreshToken,
+    googleLogin,
 };

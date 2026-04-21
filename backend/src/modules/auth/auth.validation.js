@@ -44,9 +44,15 @@ const refreshTokenSchema = Joi.object({
 });
 
 
+const googleAuthSchema = Joi.object({
+  token: Joi.string().required(),
+});
+
+
 module.exports = {
   registerSchema,
   verifyEmailSchema,
   resendVerificationSchema,
   refreshTokenSchema,
+  googleAuthSchema,
 };
