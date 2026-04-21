@@ -6,7 +6,8 @@ const authController = require("./auth.controller");
 
 const { registerSchema,
     verifyEmailSchema,
-    resendVerificationSchema } = require("../auth/auth.validation");
+    resendVerificationSchema,
+refreshTokenSchema } = require("../auth/auth.validation");
 
 
 //and getting the validate middleware function too
@@ -32,6 +33,17 @@ router.get("/verify-email", validate(verifyEmailSchema) ,authController.verifyEm
 //resend link
 //and that when the user didnot recieve any email with link so he press the resend link button again
 router.post("/resend-verification",validate(resendVerificationSchema) ,authController.resendVerification);
+
+
+
+//lets define the route for making the refreshing for the refresh token
+router.post("/refresh-token",validate(refreshTokenSchema),authController.refreshTokenHandler);
+
+
+
+
+
+
 module.exports = router;
 
 
