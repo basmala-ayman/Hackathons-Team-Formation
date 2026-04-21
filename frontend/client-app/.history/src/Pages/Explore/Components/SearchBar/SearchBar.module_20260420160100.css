@@ -1,0 +1,7 @@
+.inputSearch{
+    
+}
+input::placeholder{
+    font-size: var(--fs-regular);
+    margin-top: ;
+}

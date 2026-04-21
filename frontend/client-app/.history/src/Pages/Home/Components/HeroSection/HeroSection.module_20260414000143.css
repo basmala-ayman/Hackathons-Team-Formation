@@ -1,0 +1,13 @@
+.heroImg{
+    width: 90%;
+}
+.badge{
+    color: white;
+    font-size: var(--fs-regular);
+    background:linear-gradient(
+    90deg,
+    rgb(183, 148, 244) 12%,
+    rgb(137, 69, 254) 80%
+  );
+  padding: 8px 36px;
+}

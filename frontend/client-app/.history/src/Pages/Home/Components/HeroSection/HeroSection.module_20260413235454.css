@@ -1,0 +1,6 @@
+.heroImg{
+    width: 90%;
+}
+.badge{
+    background: var(--gradient-primary-reverse);
+}

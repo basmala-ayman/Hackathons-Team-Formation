@@ -1,0 +1,6 @@
+.hackathonCard{
+    border:1px solid var(--color-primary-dark);
+}
+.hackathonDetails{
+    font-size: var( --fs-regular);
+}

@@ -1,0 +1,22 @@
+.heroImg {
+  width: 90%;
+}
+.badge {
+  color: white;
+  font-size: var(--fs-regular);
+  background: linear-gradient(
+    90deg,
+    rgb(183, 148, 244) 12%,
+    rgb(137, 69, 254) 80%
+  );
+}
+.heroTitle {
+  font-size: var(--fs-h1);
+  line-height: 1.6;
+}
+.textGradient {
+  background: linear-gradient(90deg, #8a2be2 0%, var()100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

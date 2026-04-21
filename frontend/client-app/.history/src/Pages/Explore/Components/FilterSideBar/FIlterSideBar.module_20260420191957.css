@@ -1,0 +1,15 @@
+.checkbox{
+    transform: scale(1.4);
+    border: 1px solid;
+}
+.checkbox:focus {
+  outline: none;
+  box-shadow: none;
+}
+.checkbox:hover{
+    cursor: pointer;
+}
+.checkbox:checked{
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
