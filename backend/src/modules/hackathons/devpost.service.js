@@ -20,9 +20,9 @@ const mapDevpostStatus = (status) => {
     }
 };
 
-const collectHackathonsDevpost = async () => {
+const collectDevpostHackathons = async () => {
     let page = 0;
-    const maxPages = 20;
+    const maxPages = 4;
     while (page <= maxPages) {
         try {
             const { data } = await axios.get(`https://devpost.com/api/hackathons?page=${page}`);
@@ -59,7 +59,7 @@ const collectHackathonsDevpost = async () => {
                         title: hack.title,
                         status: currentStatus,
                         applyLink: hack.url,
-                        thumbnailUrl: hack.thumbnail_url,
+                        // thumbnailUrl: hack.thumbnail_url,
                         tags: {
                             create: tagsData
                         },
@@ -82,4 +82,4 @@ const collectHackathonsDevpost = async () => {
     }
 };
 
-module.exports = { collectHackathonsDevpost };
+module.exports = { collectDevpostHackathons };
