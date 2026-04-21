@@ -3,10 +3,10 @@
 //this controller its main goal is to get the request and getting the data from it and call service and then return the response later thats only 
 
 const authService = require("./auth.service");
-const AppError=require("../../utils/AppError");
+const AppError = require("../../utils/AppError");
 
 // register
-const register = async (req, res,next) => {
+const register = async (req, res, next) => {
   try {
 
     const result = await authService.register(req.body);
@@ -25,19 +25,19 @@ const register = async (req, res,next) => {
 };
 
 // verify email
-const verifyEmail = async (req, res,next) => {
+const verifyEmail = async (req, res, next) => {
 
   try {
 
-//now lets get the token that as query param
-const {token} = req.query;
+    //now lets get the token that as query param
+    const { token } = req.query;
 
-const result = await authService.verifyEmail(token);
+    const result = await authService.verifyEmail(token);
 
-res.status(200).json({
+    res.status(200).json({
       success: true,
       message: result.message,
-      data : null,
+      data: null,
     });
 
   } catch (err) {
@@ -47,7 +47,7 @@ res.status(200).json({
 };
 
 // resend verification
-const resendVerification = async (req, res,next) => {
+const resendVerification = async (req, res, next) => {
 
   try {
 
@@ -69,7 +69,7 @@ const resendVerification = async (req, res,next) => {
 
 
 //login
-const login = async (req,res,next)=>{
+const login = async (req, res, next) => {
 
   try {
     const result = await authService.login(req.body);
@@ -125,6 +125,38 @@ const googleAuth = async (req, res, next) => {
 };
 
 
+// #21 making the forget password logic
+const forgetPassword = async (req, res, next) => {
+  try {
+    const result = await authService.forgotPassword(req.body.email);
+
+    res.status(200).json({
+      success: true,
+      message: result.message,
+      data: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+//#21 making the reset password controller
+const resetPassword = async (req, res, next) => {
+    try {
+        const result = await authService.resetPassword(req.body);
+
+        res.status(200).json({
+            success: true,
+            message: result.message,
+            data: null,
+        });
+
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
   register,
   verifyEmail,
@@ -132,4 +164,7 @@ module.exports = {
   login,
   refreshTokenHandler,
   googleAuth,
+  forgetPassword,
+  resetPassword,
+
 };
