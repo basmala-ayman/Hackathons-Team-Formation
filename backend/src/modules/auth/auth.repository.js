@@ -62,6 +62,30 @@ const findById = (id) => {
     });
 };
 
+
+// #21 this functions needed for the forget and the reset password service
+const createPasswordResetToken = (data) => {
+  return prisma.passwordResetToken.create({ data });
+};
+
+const findPasswordResetToken = (token) => {
+  return prisma.passwordResetToken.findUnique({
+    where: { token },
+  });
+};
+
+
+
+const updatePasswordResetToken = async (id, data) => {
+
+    return prisma.passwordResetToken.update({
+        where: { id },
+        data,
+    });
+};
+
+
+
 module.exports = {
     findByEmail,
     createUser,
@@ -71,4 +95,9 @@ module.exports = {
     findRefreshToken,
     deleteRefreshToken,
     findById,
+    createPasswordResetToken,
+    findPasswordResetToken,
+    updatePasswordResetToken,
+
+
 };

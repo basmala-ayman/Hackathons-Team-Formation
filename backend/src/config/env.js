@@ -10,6 +10,7 @@ const requiredEnvVars = [
     "JWT_SECRET",
     "JWT_EXPIRES_IN",
     "GOOGLE_CLIENT_ID",
+    "FRONTEND_URL",
 ];
 
 //and then loop for each of this needed variables and making validation for them to make fast failure if there is missing in one of them and detect them from the start
@@ -50,6 +51,9 @@ const config = {
     google: {
         clientId: process.env.GOOGLE_CLIENT_ID,
     },
+
+    frontendUrl: process.env.FRONTEND_URL,
+
 
 
 };

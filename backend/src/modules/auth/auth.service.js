@@ -266,8 +266,8 @@ const googleLogin = async (token) => {
     //then after checking we will need to get the payload of the user
     const payload = ticket.payload;
 
-    const email = ticket.email;
-    const name = ticket.name;
+    const email = payload.email;
+    const name = payload.name;
 
     //now we need to check if the user is existed in our system or no cause it is existed so we will need to make it login otherwise we will make it register
     let user = await authRepository.findByEmail(email);
@@ -293,7 +293,7 @@ const googleLogin = async (token) => {
     );
 
 
-//just making the refresh token 40 bytes and containing unumbers and letters which making the knowing its value is really very hard and cannot happened as much as we can
+    //just making the refresh token 40 bytes and containing unumbers and letters which making the knowing its value is really very hard and cannot happened as much as we can
     const refreshToken = crypto.randomBytes(40).toString("hex");
 
     await authRepository.createRefreshToken({
@@ -317,6 +317,84 @@ const googleLogin = async (token) => {
 
 };
 
+
+//#21 lets write the logic of the forget password 
+const forgetPassword = async (email) => {
+
+    //first thing we need to check if this user email already existed or no
+    const user = await authRepository.findByEmail(email);
+
+    if (!user) {
+        //are we just tell the hacker directly that this user not existed? 
+        //lol
+        // we need to be more smarter and not telling him directly that to make him try another way we willnot tell him much information
+        return { message: "If email exists, reset link sent" };
+    }
+
+    //and then now we ensure that the user existed so now we will make to him token to send it in the reset email
+    const token = crypto.randomBytes(40).toString("hex");
+
+    //and will prepare the expire date for this token that it will be ends and expired after 1 hours
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1);
+
+    //now we will need to store them in the password reset token model to can get it and check it later
+    await authRepository.createPasswordResetToken({
+        userId: user.id,
+        token,
+        expiresAt,
+        isUsed: false,
+
+    });
+
+    //and then sending the email for the user
+    await emailService.sendResetPasswordEmail(email, token);
+
+    //we do not return any data from the backend side 
+    return {
+        message: "If email exists, reset link sent"
+    };
+
+};
+
+
+const resetPassword = async (token, newPassword) => {
+
+    //first we need to get the password reset token object for this coming token to check
+    const resetTokenRecord = await authRepository.findPasswordResetToken(token);
+
+    //and then checking if it is existed
+    if (!resetTokenRecord) {
+        throw new AppError("Invalid or expired token", 400);
+    }
+
+    //and checking if it is not expired
+    if (resetTokenRecord.expiresAt < new Date()) {
+        throw new AppError("Token expired", 400);
+    }
+
+    //and check if it is used before or no
+    if (resetTokenRecord.isUsed) {
+        throw new AppError("Token already used", 400);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await authRepository.updateUser(resetTokenRecord.userId, {
+        password: hashedPassword,
+    });
+
+    await authRepository.updatePasswordResetToken(resetTokenRecord.id, {
+        isUsed: true,
+    });
+
+    return {
+        message: "Password reset successfully",
+    };
+
+
+};
+
 module.exports = {
     register,
     verifyEmail,
@@ -324,4 +402,6 @@ module.exports = {
     login,
     refreshToken,
     googleLogin,
+    forgetPassword,
+    resetPassword,
 };

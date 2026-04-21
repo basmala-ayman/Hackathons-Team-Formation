@@ -39,7 +39,7 @@ const sendVerificationEmail=async (email,token)=>{
 
 //now lets making the function for sending email to reset password too in the same time to make the things more easier later
 const sendResetPasswordEmail = async (email, token) => {
-  const resetLink = `${config.baseUrl}/api/v1/auth/reset-password?token=${token}`;
+const resetLink = `${config.frontendUrl}/reset-password?token=${token}`;
 
   await transporter.sendMail({
     from: `"Team Catalyst 🔮" <${config.email.user}>`,
