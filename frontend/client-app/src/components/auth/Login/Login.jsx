@@ -5,7 +5,7 @@ import Input from "../../../shared/Input/Input";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+// import axios from 'axios';
 
 export const GoogleIcon = () => (
   <svg
@@ -69,7 +69,8 @@ export default function Login() {
 
   // Logic to use later when handling the login with Google 
   const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
+    // onSuccess: async (tokenResponse) => {
+    onSuccess: async () => {
       //   try {
 
       //     const res = await axios.post("http://localhost:3000/api/auth/google", {
