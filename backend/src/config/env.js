@@ -9,6 +9,7 @@ const requiredEnvVars = [
     "BASE_URL",
     "JWT_SECRET",
     "JWT_EXPIRES_IN",
+    "GOOGLE_CLIENT_ID",
 ];
 
 //and then loop for each of this needed variables and making validation for them to make fast failure if there is missing in one of them and detect them from the start
@@ -35,18 +36,23 @@ const config = {
     },
 
     email: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
 
-  baseUrl: process.env.BASE_URL,
+    baseUrl: process.env.BASE_URL,
 
-  jwt :{
-    secret: process.env.JWT_SECRET,
-    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-  },
-  
+    jwt: {
+        secret: process.env.JWT_SECRET,
+        expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+    },
+
+    google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+    },
+
+
 };
 
 
-module.exports=config;
+module.exports = config;
