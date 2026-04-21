@@ -6,10 +6,12 @@ const router = express.Router();
 
 const userRoutes = require("../modules/user/user.routes");
 const authRoutes= require("../modules/auth/auth.routes");
+const hackathonRoutes = require("../modules/hackathons/hackathon.routes");
 //it making error so we will comment it until there is things be written there 
 //router.use("/users", userRoutes);
 
 
+router.use("/hackathons", hackathonRoutes);
 
 router.use("/auth",authRoutes);
 
