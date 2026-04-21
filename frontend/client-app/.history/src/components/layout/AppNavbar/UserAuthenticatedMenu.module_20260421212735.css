@@ -1,0 +1,8 @@
+.customToggle {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    box-shadow: none !important; /* Removes the blue glow on click */
+}
