@@ -30,7 +30,7 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/emailsent" element={<EmailSent />} />
         <Route path="/notifications" element={<NoticationsPage />} />
-        {/* <Route path="/admindashboard" element={<AdminDashboard />} /> */}
+        <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/explore" element={<Explore />} />
 
       </Routes>

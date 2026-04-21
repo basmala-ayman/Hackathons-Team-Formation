@@ -12,7 +12,7 @@ import Footer from "./components/layout/Footer/Footer";
 import Explore from "./Pages/Explore/Explore";
 import { useState } from "react";
 function App() {
-  const [isLoggedIn, setIsLoggedIn]=useState(true);
+  const [isLoggedIn, setIsLoggedIn]=useState(fa);
   const handleLogOut=()=>{
     setIsLoggedIn(false);
   }
