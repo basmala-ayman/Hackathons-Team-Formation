@@ -24,9 +24,9 @@ const startServer = async () => {
 
     //make the server
     app.listen(PORT, () => {
-      // console.log(`server running on port ${PORT} 🚀`)
-      logger.info(`server running on port ${PORT} 🚀`);
-    });
+  logger.info(`server running on port ${PORT} 🚀`);
+  logger.info(`Swagger docs available at http://localhost:${PORT}/api-docs 🔮`);
+});
 
   } catch (error) {
     // console.log("DB connection falied ", error);
