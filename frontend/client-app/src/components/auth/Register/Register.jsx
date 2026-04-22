@@ -3,7 +3,7 @@ import styles from "./Register.module.css";
 import loginStyles from "../Login/Login.module.css";
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
-import { GoogleIcon, GithubIcon } from "../Login/Login";
+import { GoogleIcon, GithubIcon } from "../Google_Github_Icons";
 // import Login from "./../Login/Login";
 import { Link } from "react-router-dom";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
@@ -116,7 +116,7 @@ export default function Register() {
 
           <p className={loginStyles.footerText}>
             Already have an account?{" "}
-            <Link to="/" className={loginStyles.link}>
+            <Link to="/login" className={loginStyles.link}>
               Login
             </Link>
           </p>

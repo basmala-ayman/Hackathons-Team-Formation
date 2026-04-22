@@ -38,7 +38,7 @@ export default function EmailSent() {
         <CustomButton
           variant="primary"
           className="w-100 mt-4"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/login")}
         >
           Back to Login
         </CustomButton>
