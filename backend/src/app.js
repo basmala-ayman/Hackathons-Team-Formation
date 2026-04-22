@@ -4,7 +4,8 @@ const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const app = express();
 
-
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const routes = require("./routes");
 //cause we will use it and call it in the glocal error handler in the last
@@ -31,7 +32,7 @@ app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
 }));
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/v1", routes);
 //routes will go here TODO: put here the entry points to all other routes that follow the api design
