@@ -1,44 +1,87 @@
 const prisma = require("../../config/prisma");
 
-// CREATE
-const createHackathon = (data) => {
-  return prisma.hackathon.create({ data });
-};
 
-// GET ALL
+
 const findAllHackathons = () => {
-  return prisma.hackathon.findMany();
+  return prisma.hackathon.findMany({
+    include: {
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+    },
+  });
 };
 
-// GET ONE
 const findHackathonById = (id) => {
-  // if (!id) throw new Error("Invalid id");
-  // console.log("DEBUG ID:", id);
-
   return prisma.hackathon.findUnique({
     where: { id },
+    include: {
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+    },
   });
 };
 
-// UPDATE
-const updateHackathon = (id, data) => {
-  return prisma.hackathon.update({
-    where: { id },
-    data,
-  });
-};
 
-// DELETE
-const deleteHackathon = (id) => {
-  return prisma.hackathon.delete({
-    where: { id },
-  });
-};
+// // Create
+// const createHackathon = (data) => {
+//   return prisma.hackathon.create({
+//     data,
+//   });
+// };
+
+
+
+// // Update
+// const updateHackathon = (id, data) => {
+//   return prisma.hackathon.update({
+//     where: { id },
+//     data,
+//   });
+// };
+
+// // Delete
+// const deleteHackathon = (id) => {
+//   return prisma.hackathon.delete({
+//     where: { id },
+//   });
+// };
+
+// // Add Tags
+// const addTagsToHackathon = async (hackathonId, tagIds) => {
+//   const data = tagIds.map(tagId => ({
+//     hackathonId,
+//     tagId,
+//   }));
+
+//   return prisma.hackathonTag.createMany({ data });
+// };
+
+// // Replace Tags
+// const replaceTags = async (hackathonId, tagIds) => {
+//   await prisma.hackathonTag.deleteMany({
+//     where: { hackathonId },
+//   });
+
+//   const data = tagIds.map(tagId => ({
+//     hackathonId,
+//     tagId,
+//   }));
+
+//   return prisma.hackathonTag.createMany({ data });
+// };
 
 module.exports = {
-  createHackathon,
   findAllHackathons,
   findHackathonById,
-  updateHackathon,
-  deleteHackathon,
+  // createHackathon,
+  // updateHackathon,
+  // deleteHackathon,
+  // addTagsToHackathon,
+  // replaceTags,
 };
