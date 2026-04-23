@@ -1,17 +1,29 @@
 require("dotenv").config();
 
 const app = require("./app");
-const { connectDB } = require("./src/config/db");
+const prisma = require("./src/config/prisma");
+const config = require("./src/config/env");
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
-connectDB();
+// there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
+const startServer = async () => {
+  try {
+    //connect the database
+    await prisma.$connect();
+    console.log("postgreSQL connected via prisma 🔥 ");
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} 🚀`);
-});
-const { sequelize } = require("./src/config/db");
+    //make the server
+    app.listen(PORT, () => {
+      console.log(`server running on port ${PORT} 🚀`)
+    });
 
-connectDB().then(() => {
-  sequelize.sync(); // creates tables
-});
+  } catch (error) {
+    console.log("DB connection falied ", error);
+    process.exit(1);
+  }
+}
+
+
+//and then just call the function to start the things
+startServer();

@@ -1,9 +1,12 @@
-const userRepository = require("../repositories/user.repository");
+import * as userRepo from "../repositories/userRepository.js";
+import { AppError } from "../utils/AppError.js";
 
-exports.getAllUsers = async () => {
-  return await userRepository.getAll();
-};
+export const createUserService = async (data) => {
+  const existingUser = await userRepo.getUserByEmail(data.email);
 
-exports.createUser = async (data) => {
-  return await userRepository.create(data);
+  if (existingUser) {
+    throw new AppError("User already exists", 400);
+  }
+
+  return userRepo.createUser(data);
 };
