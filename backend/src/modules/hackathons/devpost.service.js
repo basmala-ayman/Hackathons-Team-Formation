@@ -37,10 +37,10 @@ const collectDevpostHackathons = async () => {
                 const rawPrize = hack.prize_amount || "";
                 const prizeAmount = parseFloat(rawPrize.replace(/[^0-9.]/g, '')) || 0;
                 const currentStatus = mapDevpostStatus(hack.open_state);
-                // if (currentStatus === HackathonStatus.ENDED) {
-                //     endedStatus = true;
-                //     break;
-                // }
+                if (currentStatus === HackathonStatus.ENDED) {
+                    endedStatus = true;
+                    break;
+                }
                 // themes
                 const themeNames = hack.themes?.map(t => t.name) || [];
                 const tagsData = themeNames.map(name => ({
@@ -80,7 +80,7 @@ const collectDevpostHackathons = async () => {
                     },
                 });
             }
-            // if(endedStatus) break; // stop if we hit ended hackathons
+            if(endedStatus) break; // stop if we hit ended hackathons
             page++;
             await new Promise(res => setTimeout(res, 1000));
         } catch (error) {
