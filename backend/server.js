@@ -4,7 +4,6 @@ const app = require("./src/app");
 const prisma = require("./src/config/prisma");
 const config = require("./src/config/env");
 const logger = require("./src/config/logger");
-const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.service");
 
 // for scheduling the cron jobs
 // const { initCronJobs } = require("./src/utils/cron");
@@ -21,10 +20,9 @@ const startServer = async () => {
     logger.info("postgreSQL connected via prisma 🔥");
 
     // for scheduling the cron jobs
+    // logger.info("Starting scheduling data collection test...");
     // initCronJobs();
-    logger.info("Starting manual data collection test...");
-    await collectDevpostHackathons();
-    logger.info("Data collection testing completed! ✅");
+    // logger.info("Data collection scheduled completed! ✅");
 
     //make the server
     app.listen(PORT, () => {
