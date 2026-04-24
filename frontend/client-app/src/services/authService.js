@@ -68,7 +68,7 @@ export const googleOAuth = async (token) => {
     const response = await api.post("/auth/google", { token });
     return response.data;
   } catch (error) {
-    throw error.response?.data || "Google login failed!!";
+    throw error.response?.data || "Google Auth failed!!";
   }
 };
 
