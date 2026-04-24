@@ -252,7 +252,7 @@ const refreshToken = async (token) => {
 //first we need to install the package we will use to check if the token is coming really from google or fake
 //and this package is called google-auth-library
 
-const googleLogin = async (token) => {
+const googleAuth = async (token) => {
 
     //first thing we will need to ensure and check if the token is google token or no and that will be  the email verification rather than the one we made in register
     const ticket = await googleClient.verifyIdToken({
@@ -401,7 +401,7 @@ module.exports = {
     resendVerification,
     login,
     refreshToken,
-    googleLogin,
+    googleAuth,
     forgetPassword,
     resetPassword,
 };

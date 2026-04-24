@@ -143,18 +143,20 @@ const forgetPassword = async (req, res, next) => {
 
 //#21 making the reset password controller
 const resetPassword = async (req, res, next) => {
-    try {
-        const result = await authService.resetPassword(req.body);
+  try {
 
-        res.status(200).json({
-            success: true,
-            message: result.message,
-            data: null,
-        });
+    const { token, newPassword } = req.body;
+    const result = await authService.resetPassword(token, newPassword);
 
-    } catch (err) {
-        next(err);
-    }
+    res.status(200).json({
+      success: true,
+      message: result.message,
+      data: null,
+    });
+
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
