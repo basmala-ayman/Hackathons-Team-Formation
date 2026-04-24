@@ -249,7 +249,7 @@ export const SparkleIcon = ({ size = 64 }) => (
 export const StarIcon = ({size=35 , color="#FFCC00"}) => (
   <svg
     width={size}
-    height={size}
+    height="35"
     viewBox="0 0 35 35"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

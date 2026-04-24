@@ -168,7 +168,7 @@ export const ProfileIcon = () => (
   </svg>
 );
 
-export const TeamIcon = ({ size = 64, color = "#6B46C1" }) => (
+export const TeamIcon = ({size=64 , color="#6B46C1"}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -246,17 +246,17 @@ export const SparkleIcon = ({ size = 64 }) => (
   </svg>
 );
 
-export const StarIcon = ({size=35 , color="#FFCC00"}) => (
+export const StarIcon = () => (
   <svg
-    width={size}
-    height={size}
+    width="35"
+    height="35"
     viewBox="0 0 35 35"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
       d="M8.49512 30.6251L10.8649 20.3803L2.91699 13.4897L13.417 12.5782L17.5003 2.91675L21.5837 12.5782L32.0837 13.4897L24.1357 20.3803L26.5055 30.6251L17.5003 25.1928L8.49512 30.6251Z"
-      fill={color}
+      fill="#FFCC00"
     />
   </svg>
 );
@@ -475,20 +475,4 @@ export const CheckIcon = () => (
   </svg>
 );
 
-export const CodeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="6"
-    height="11"
-    viewBox="0 0 6 11"
-    fill="none"
-  >
-    <path
-      d="M5.25 0.75L0.75 5.25L5.25 9.75"
-      stroke="#FEFDFF"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
+export const 

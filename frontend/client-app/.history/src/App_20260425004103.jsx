@@ -7,7 +7,7 @@ import Register from "./components/auth/Register/Register";
 import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
 import EmailSent from "./components/auth/EmailSent/EmailSent";
 import NoticationsPage from "./Pages/NotificationPage/NotificationsPage"
-import CreateTeam from "./Pages/CreateTeam/CreateTeam"
+import 
 // import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
 import Footer from "./components/layout/Footer/Footer";
 import Explore from "./Pages/Explore/Explore";
@@ -33,8 +33,6 @@ function App() {
         <Route path="/notifications" element={<NoticationsPage />} />
         {/* <Route path="/admindashboard" element={<AdminDashboard />} /> */}
         <Route path="/explore" element={<Explore />} />
-        <Route path="/createTeam" element={<CreateTeam />} />
-
 
       </Routes>
       </main>

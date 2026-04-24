@@ -33,8 +33,6 @@ function App() {
         <Route path="/notifications" element={<NoticationsPage />} />
         {/* <Route path="/admindashboard" element={<AdminDashboard />} /> */}
         <Route path="/explore" element={<Explore />} />
-        <Route path="/createTeam" element={<CreateTeam />} />
-
 
       </Routes>
       </main>
