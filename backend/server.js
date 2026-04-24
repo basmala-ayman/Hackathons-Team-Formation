@@ -4,6 +4,8 @@ const app = require("./src/app");
 const prisma = require("./src/config/prisma");
 const config = require("./src/config/env");
 const logger = require("./src/config/logger");
+const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.service");
+
 // for scheduling the cron jobs
 // const { initCronJobs } = require("./src/utils/cron");
 
@@ -20,13 +22,15 @@ const startServer = async () => {
 
     // for scheduling the cron jobs
     // initCronJobs();
-    // logger.info("Cron jobs initialized successfully! ⏰");
+    logger.info("Starting manual data collection test...");
+    await collectDevpostHackathons();
+    logger.info("Data collection testing completed! ✅");
 
     //make the server
     app.listen(PORT, () => {
-  logger.info(`server running on port ${PORT} 🚀`);
-  logger.info(`Swagger docs available at http://localhost:${PORT}/api-docs 🔮`);
-});
+      logger.info(`server running on port ${PORT} 🚀`);
+      logger.info(`Swagger docs available at http://localhost:${PORT}/api-docs 🔮`);
+    });
 
   } catch (error) {
     // console.log("DB connection falied ", error);
