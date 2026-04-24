@@ -7,7 +7,7 @@
 
 /**
  * =========================
- * TAGS SCHEMAS
+ * TAG SCHEMA
  * =========================
  */
 
@@ -20,17 +20,14 @@
  *       properties:
  *         id:
  *           type: string
+ *           example: "bc0b79bb-6b41-4a28-840b-4835daa5283a"
  *         name:
  *           type: string
+ *           example: "Machine Learning/AI"
  *         createdAt:
  *           type: string
  *           format: date-time
- *
- *     HackathonTag:
- *       type: object
- *       properties:
- *         tag:
- *           $ref: '#/components/schemas/Tag'
+ *           example: "2026-04-20T18:17:20.764Z"
  */
 
 /**
@@ -48,47 +45,63 @@
  *       properties:
  *         id:
  *           type: string
+ *           example: "28263"
  *         title:
  *           type: string
+ *           example: "DSH Hacks V1"
  *         slug:
  *           type: string
+ *           example: "dsh-hacks-v1"
  *         location:
  *           type: string
- *           example: Online
+ *           example: "Online"
  *         applyLink:
  *           type: string
+ *           example: "https://dsh-hacks-v1.devpost.com/"
  *         thumbnailUrl:
  *           type: string
+ *           example: "//cloudfront.net/image.png"
  *         remainingTime:
  *           type: string
+ *           example: "about 1 month left"
  *         submissionPeriod:
  *           type: string
+ *           example: "Mar 02 - Jun 02, 2026"
  *         prizeAmount:
  *           type: number
+ *           example: 5096
  *         prizesCounts:
  *           type: integer
+ *           example: 4
  *         registrationsCount:
  *           type: integer
+ *           example: 411
  *         organization:
  *           type: string
+ *           example: "DreamWeave"
  *         status:
  *           type: string
  *           enum: [UPCOMING, ONGOING, ENDED]
+ *           example: ONGOING
  *         createdAt:
  *           type: string
  *           format: date-time
+ *           example: "2026-04-24T12:46:29.786Z"
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *           example: "2026-04-24T12:58:57.702Z"
+
  *         tags:
  *           type: array
+ *           description: List of hackathon tags
  *           items:
- *             $ref: '#/components/schemas/HackathonTag'
+ *             $ref: '#/components/schemas/Tag'
  */
 
 /**
  * =========================
- * RESPONSE SCHEMAS
+ * RESPONSE SCHEMA
  * =========================
  */
 
@@ -101,6 +114,10 @@
  *       properties:
  *         success:
  *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: Hackathon fetched successfully
  *         data:
  *           $ref: '#/components/schemas/Hackathon'
  */
