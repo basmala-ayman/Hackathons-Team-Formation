@@ -16,14 +16,13 @@ export default function NotificationFilter({ activeFilter, onFilterChange }) {
         <Filter size={16} />
         <span>Filter</span>
       </div>
-      
+
       <ul className={styles.filterList}>
         {FILTER_CATEGORIES.map((category) => (
           <li
             key={category.id}
-            className={`${styles.filterItem} ${
-              activeFilter === category.id ? styles.active : ""
-            }`}
+            className={`${styles.filterItem} ${activeFilter === category.id ? styles.active : ""
+              }`}
             onClick={() => onFilterChange(category.id)}
           >
             <div className={styles.itemContent}>

@@ -1,0 +1,81 @@
+.activityWrapper {
+  display: flex;
+  padding: 2.4rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.4rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+}
+
+.activityHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.title {
+  font-size: var(--fs-regular);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: var(--fs-small);
+  color: var(--color-dark-gray);
+  font-weight: 400;
+}
+
+.list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+  align-self: stretch;
+}
+
+.list .item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-light-gray);
+  width: 100%;
+  padding: 0.8rem;
+}
+
+.iconWrapper {
+  display: flex;
+  width: 3.2rem;
+  aspect-ratio: 1/1;
+  padding: 0.8rem 0.8rem 0 0.8rem;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 1rem;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: cal(0.4rem);
+}
+
+.text h4 {
+  font-size: var(--fs-small);
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.text p,
+span {
+  font-size: var(--fs-v-small);
+  color: var(--color-dark-gray);
+}
+
+.text span {
+  color: var(--color-gray);
+}

@@ -59,7 +59,7 @@ export default function ForgetPassword() {
 
         <p className={styles.footerText}>
           Remember your password?{" "}
-          <Link to="/" className={loginStyles.link}>
+          <Link to="/login" className={loginStyles.link}>
             Login
           </Link>
         </p>
