@@ -38,6 +38,7 @@ router.post("/refresh-token", validate(authSchemas.refreshTokenSchema), authCont
 
 
 //#20 lets defnie the GOOGLE OAUTH endpoint
+//and this endpoint will be used for both register and the login in goole auth
 router.post("/google", validate(authSchemas.googleAuthSchema), authController.googleAuth);
 
 

@@ -231,6 +231,11 @@ model Team {
   @@map("teams")
 }
 
+
+
+
+
+
 //cause there is many to many (belongs to) relationship between the user and the team so we will need this new table
 model TeamMember {
   teamId   String
