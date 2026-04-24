@@ -114,6 +114,9 @@ model User {
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
 
+  //for performance search in the users invitation we need to make index on email and on name 
+  @@index([email])
+  @@index([name])
   //this one its goal is to define the name of the table in teh database to be called users
   @@map("users")
 }
@@ -129,6 +132,7 @@ model Skill {
 
   // Relations
   users UserSkill[] //and it is array too cause the relation is many to many which will make us to make new table
+  teams TeamSkill[]
 
   @@map("skills")
 }
@@ -156,20 +160,17 @@ model UserSkill {
 model Hackathon {
   id                 String          @id @default(uuid())
   title              String
-  description        String?
   slug               String?
   location           String          @default("Online")
   applyLink          String
+  thumbnailUrl       String?
   remainingTime      String?
   submissionPeriod   String?
   prizeAmount        Float           @default(0)
   prizesCounts       Int             @default(0)
   registrationsCount Int             @default(0)
   organization       String?
-  startDate          DateTime?
-  endDate            DateTime?
   status             HackathonStatus @default(UPCOMING)
-  source             String          @default("devpost")
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 
@@ -228,13 +229,23 @@ model Team {
   members     TeamMember[]
   invitations TeamInvitation[]
 
+  skills TeamSkill[]
+
   @@map("teams")
 }
 
+//now when the user will create the team for specific hackathon there is many to many relationship related to the teams and skills
+//that the user enter the skills he want to be in this team he created and so we need to make the table of this m:m relationship
+model TeamSkill {
+  teamId  String
+  skillId String
 
+  team  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
-
-
+  @@unique([teamId, skillId])
+  @@map("team_skills")
+}
 
 //cause there is many to many (belongs to) relationship between the user and the team so we will need this new table
 model TeamMember {
