@@ -192,14 +192,14 @@ export const TeamIcon = ({ size = 64, color = "#6B46C1" }) => (
     />
     <path
       d="M58.667 56V50.6667C58.6652 48.3033 57.8786 46.0074 56.4306 44.1395C54.9827 42.2716 52.9553 40.9375 50.667 40.3467"
-      stroke={color}
+      stroke="#6B46C1"
       stroke-width="5.33333"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M23.9997 29.3333C29.8907 29.3333 34.6663 24.5577 34.6663 18.6667C34.6663 12.7756 29.8907 8 23.9997 8C18.1086 8 13.333 12.7756 13.333 18.6667C13.333 24.5577 18.1086 29.3333 23.9997 29.3333Z"
-      stroke={color}
+      stroke="#6B46C1"
       stroke-width="5.33333"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -493,11 +493,11 @@ export const CodeIcon = () => (
   </svg>
 );
 
-export const AddMemberIcon=({color})=>(
+export const AddMemberIcon=()=>(
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H6C4.93913 15 3.92172 15.4214 3.17157 16.1716C2.42143 16.9217 2 17.9391 2 19V21" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M19 8V14" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M22 11H16" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H6C4.93913 15 3.92172 15.4214 3.17157 16.1716C2.42143 16.9217 2 17.9391 2 19V21" stroke="#6B46C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="#6B46C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 8V14" stroke="#6B46C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 11H16" stroke="#6B46C1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 )

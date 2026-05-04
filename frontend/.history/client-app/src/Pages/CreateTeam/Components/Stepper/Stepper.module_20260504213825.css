@@ -1,0 +1,34 @@
+.stepperContainer{
+display: flex;
+justify-content: space-between;
+width: 100%;
+padding: 2rem 0;
+position: relative;
+    z-index: 1;
+
+}
+.stepWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+.circle{
+    width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  font-size: var(--fs-small);
+}
+.activeCircle{
+    background-color: var(--color-primary-dark);
+    color: #fff;
+}
+.inActiveCircle{
+    
+}
