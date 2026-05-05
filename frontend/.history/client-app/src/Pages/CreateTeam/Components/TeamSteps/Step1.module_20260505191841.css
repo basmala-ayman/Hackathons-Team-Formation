@@ -31,7 +31,7 @@
 }
 
 .asterisk {
-  color: var(--color-error-red); 
+  color: #ef4444; 
 }
 
 .input,
@@ -85,8 +85,7 @@
 }
 
 .customInputWrapper{
-    margin-top: 1rem  ;
-
+    margin-top: 1rem;
 }
 
 

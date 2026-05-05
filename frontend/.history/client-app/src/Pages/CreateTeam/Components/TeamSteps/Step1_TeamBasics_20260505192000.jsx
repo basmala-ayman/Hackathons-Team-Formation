@@ -113,7 +113,7 @@ function Step1_TeamBasics({
 
       {/*team size  */}
       <div className={styles.formGroup}>
-        <label className={styles.label}>Team Size <span className={styles.asterisk}>*</span></label>
+        <label className={styles.label}>Team Size <span> className={styles.asterisk}>*</span></label>
         <div className={styles.sizeContainer}>
           {/* Standard Buttons */}
           {[2, 3, 4, 5].map((size) => (

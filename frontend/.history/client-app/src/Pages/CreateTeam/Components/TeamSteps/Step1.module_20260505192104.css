@@ -86,6 +86,7 @@
 
 .customInputWrapper{
     margin-top: 1rem  ;
+    font-size:var(--fs-v-small);
 
 }
 

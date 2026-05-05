@@ -113,7 +113,7 @@ function Step1_TeamBasics({
 
       {/*team size  */}
       <div className={styles.formGroup}>
-        <label className={styles.label}>Team Size <span className={styles.asterisk}>*</span></label>
+        <label className={styles.label}>Team Size</label>
         <div className={styles.sizeContainer}>
           {/* Standard Buttons */}
           {[2, 3, 4, 5].map((size) => (
@@ -153,15 +153,14 @@ function Step1_TeamBasics({
       </div>
 
       {/* next button */}
-      <CustomButton 
-        variant="primary" 
-        size="md" 
+      <button
+        type="button"
+        className={styles.nextButton}
         onClick={onNext}
-        disabled={!formData.hackathonName || !formData.teamSize} //validation as team hackthon and team size is required
-        className={styles.fullWidth}
+        disabled={!formData.hackathonName} //  validation-> disable if no hackathon choosen
       >
         Next Step
-      </CustomButton>
+      </button>
     </div>
   );
 }

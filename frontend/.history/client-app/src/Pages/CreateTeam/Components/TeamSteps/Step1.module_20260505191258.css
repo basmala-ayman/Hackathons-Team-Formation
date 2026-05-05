@@ -1,7 +1,7 @@
 .card {
   padding: 32px;
   border-radius: 10px;
-  border: 0.8px solid var(--color-very-dark-purple);
+  border: 0.8px solid #3b1b84;
   background: #fff;
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -31,7 +31,7 @@
 }
 
 .asterisk {
-  color: var(--color-error-red); 
+  color: #ef4444; 
 }
 
 .input,
@@ -67,26 +67,64 @@
 
 .sizeContainer {
   display: flex;
+  gap: 1.2rem;
+}
+/* .sizeContainer {
+  display: flex;
   gap: 0.8rem;
   width: 100%;
-}
+} */
 
 .compactBtn {
-    /* to be responsive */
-  min-width: 0;
   flex: 1;
-
+ 
 }
 
 .fullWidth {
   width: 100%;
-  min-width: 100%;
+  min-width: 100% !important;
   margin-top: 1.5rem;
 }
 
-.customInputWrapper{
-    margin-top: 1rem  ;
+/* .sizeBox {
+  flex: 1;
+  padding: 12px 0;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+    font-size:var(--fs-small);
 
 }
 
+.sizeBoxActive {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+} */
+.customInputWrapper{
+    margin-top: 1rem;
+}
 
+.nextButton {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-primary-dark);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+    font-size:var(--fs-small);
+
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.nextButton:hover {
+  background-color: var(--color-primary-dark);
+}
