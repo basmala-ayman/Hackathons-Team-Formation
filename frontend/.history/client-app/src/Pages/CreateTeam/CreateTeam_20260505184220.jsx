@@ -22,7 +22,7 @@ function CreateTeam() {
   return (
     <div>
       {/* <ProTips></ProTips> */}
-      <div className="container py-5">
+      <div className="container py-2">
 
       <Stepper></Stepper>
       <Step1_TeamBasics

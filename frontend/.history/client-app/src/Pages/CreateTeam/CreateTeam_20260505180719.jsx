@@ -13,26 +13,17 @@ function CreateTeam() {
     skills: [],
   });
 
-  const onNext=()=>{
-
-  }
-  const hackathonList=[{
-
-  }]
+  const 
   return (
     <div>
       {/* <ProTips></ProTips> */}
-      <div className="container py-5">
-
       <Stepper></Stepper>
       <Step1_TeamBasics
         formData={formData}
         setFormData={setFormData}
-        onNext={onNext}
-        hackathonList={hackathonList}
+        // onNext={""}
+        // hackathonList={""}
       ></Step1_TeamBasics>
-
-      </div>
     </div>
   );
 }

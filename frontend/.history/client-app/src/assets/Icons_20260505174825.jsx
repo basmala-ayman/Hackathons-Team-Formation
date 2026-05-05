@@ -511,7 +511,7 @@ export const TeamMeetIcon=({color="#6B46C1", size=24})=>(
   </g>
   <defs>
     <clipPath id="clip0_1724_1330">
-      <rect width={size} height={size} fill="white"/>
+      <rect width="24" height="24" fill="white"/>
     </clipPath>
   </defs>
 </svg>

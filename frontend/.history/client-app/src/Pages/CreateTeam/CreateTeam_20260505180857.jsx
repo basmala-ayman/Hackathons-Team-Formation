@@ -22,8 +22,6 @@ function CreateTeam() {
   return (
     <div>
       {/* <ProTips></ProTips> */}
-      <div className="container py-5">
-
       <Stepper></Stepper>
       <Step1_TeamBasics
         formData={formData}
@@ -31,8 +29,6 @@ function CreateTeam() {
         onNext={onNext}
         hackathonList={hackathonList}
       ></Step1_TeamBasics>
-
-      </div>
     </div>
   );
 }
