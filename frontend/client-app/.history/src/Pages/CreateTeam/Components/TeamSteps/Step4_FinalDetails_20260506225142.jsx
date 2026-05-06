@@ -47,10 +47,10 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
       </div>
 
       <div className={styles.footerActions}>
-        <CustomButton variant="secondary" size='sm' onClick={onPrev}>
+        <CustomButton variant="secondary" onClick={onPrev}>
           Previous
         </CustomButton>
-        <CustomButton variant="primary" size='sm' onClick={onSubmit}>
+        <CustomButton variant="primary" onClick={onSubmit}>
           Create Team
         </CustomButton>
       </div>

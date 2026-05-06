@@ -50,7 +50,7 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
         <CustomButton variant="secondary" size='sm' onClick={onPrev}>
           Previous
         </CustomButton>
-        <CustomButton variant="primary" size='sm' onClick={onSubmit}>
+        <CustomButton variant="primary" onClick={onSubmit}>
           Create Team
         </CustomButton>
       </div>

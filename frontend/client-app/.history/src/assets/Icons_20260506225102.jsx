@@ -485,14 +485,14 @@ export const CodeIcon = ({ color = "#FEFDFF" }) => (
   >
     <path
       d="M13.333 15L18.333 10L13.333 5"
-      stroke={color}
+      stroke="#6B46C1"
       stroke-width="1.66667"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M6.66699 5L1.66699 10L6.66699 15"
-      stroke={color}
+      stroke="#6B46C1"
       stroke-width="1.66667"
       stroke-linecap="round"
       stroke-linejoin="round"

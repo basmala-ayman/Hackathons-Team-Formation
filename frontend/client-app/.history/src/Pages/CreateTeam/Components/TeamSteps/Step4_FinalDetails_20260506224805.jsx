@@ -11,7 +11,7 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
 
         {/* Team Name */}
         <div className={styles.summaryItem}>
-          <div className={styles.iconWrapper}><TeamIcon size={20} /></div>
+          <div className={styles.iconWrapper}><TeamIcon /></div>
           <div className={styles.itemContent}>
             <span className={styles.itemLabel}>Team Name</span>
             <span className={styles.itemValue}>{formData.teamName || "Not set"}</span>
@@ -29,7 +29,7 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
 
         {/* Members Count */}
         <div className={styles.summaryItem}>
-          <div className={styles.iconWrapper}><AddMemberIcon /></div>
+          <div className={styles.iconWrapper}><HiOutlineUsers /></div>
           <div className={styles.itemContent}>
             <span className={styles.itemLabel}>Team Members</span>
             <span className={styles.itemValue}>{memberCount} member{memberCount > 1 ? 's' : ''}</span>
@@ -38,7 +38,7 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
 
         {/* Skills Count */}
         <div className={styles.summaryItem}>
-          <div className={styles.iconWrapper}><CodeIcon color='var(--color-primary-dark)' /></div>
+          <div className={styles.iconWrapper}><HiOutlineCodeBracket /></div>
           <div className={styles.itemContent}>
             <span className={styles.itemLabel}>Required Skills</span>
             <span className={styles.itemValue}>{skillCount} skill{skillCount !== 1 ? 's' : ''}</span>
@@ -47,10 +47,10 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
       </div>
 
       <div className={styles.footerActions}>
-        <CustomButton variant="secondary" size='sm' onClick={onPrev}>
+        <CustomButton variant="secondary" onClick={onPrev}>
           Previous
         </CustomButton>
-        <CustomButton variant="primary" size='sm' onClick={onSubmit}>
+        <CustomButton variant="primary" onClick={onSubmit}>
           Create Team
         </CustomButton>
       </div>

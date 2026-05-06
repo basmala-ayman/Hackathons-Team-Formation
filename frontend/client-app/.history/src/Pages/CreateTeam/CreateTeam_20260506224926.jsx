@@ -62,8 +62,7 @@ function CreateTeam() {
           onNext={onNext}
           onPrev={onPrev}
           apiSkills={apiSkills}></Step3_RequiredSkills> */}
-          <Step4_FinalDetails formData={formData}  onNext={onNext}
-          onPrev={onPrev}></Step4_FinalDetails>
+          <Step4_FinalDetails
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import Stepper from "./Components/Stepper/Stepper";
 import Step1_TeamBasics from "./Components/TeamSteps/Step1_TeamBasics";
 import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
-import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
+import S
 import {TeamMeetIcon,AddMemberIcon, CheckIcon, CodeIcon } from "../../assets/Icons";
 
 function CreateTeam() {
@@ -57,13 +57,11 @@ function CreateTeam() {
           currentUser={currentUser}
         ></Step2_AddMembers> */}
 
-        {/* <Step3_RequiredSkills formData={formData} 
+        <Step3_RequiredSkills formData={formData} 
           setFormData={setFormData} 
           onNext={onNext}
           onPrev={onPrev}
-          apiSkills={apiSkills}></Step3_RequiredSkills> */}
-          <Step4_FinalDetails formData={formData}  onNext={onNext}
-          onPrev={onPrev}></Step4_FinalDetails>
+          apiSkills={apiSkills}></Step3_RequiredSkills>
       </div>
     </div>
   );

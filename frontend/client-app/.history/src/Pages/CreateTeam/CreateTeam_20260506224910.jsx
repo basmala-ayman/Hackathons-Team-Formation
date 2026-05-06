@@ -57,13 +57,11 @@ function CreateTeam() {
           currentUser={currentUser}
         ></Step2_AddMembers> */}
 
-        {/* <Step3_RequiredSkills formData={formData} 
+        <Step3_RequiredSkills formData={formData} 
           setFormData={setFormData} 
           onNext={onNext}
           onPrev={onPrev}
-          apiSkills={apiSkills}></Step3_RequiredSkills> */}
-          <Step4_FinalDetails formData={formData}  onNext={onNext}
-          onPrev={onPrev}></Step4_FinalDetails>
+          apiSkills={apiSkills}></Step3_RequiredSkills>
       </div>
     </div>
   );
