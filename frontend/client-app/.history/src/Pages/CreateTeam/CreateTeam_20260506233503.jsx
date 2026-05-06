@@ -1,7 +1,7 @@
-import styles from "./CreateTeam.module.css";
+import styles from './CreateTeam.module.css'
 import { useState } from "react";
 import ProTips from "./Components/Sidebar/ProTips";
-import QuickStats from "./Components/Sidebar/QuickStats";
+import QuickStats from './Components/Sidebar/QuickStats';
 import Stepper from "./Components/Stepper/Stepper";
 import Step1_TeamBasics from "./Components/TeamSteps/Step1_TeamBasics";
 import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
@@ -12,31 +12,20 @@ import {
   AddMemberIcon,
   CheckIcon,
   CodeIcon,
-  SparkleIcon,
 } from "../../assets/Icons";
 
 function CreateTeam() {
-  //dummy data
-  const apiSkills = [
-    { value: "React", label: "React" },
-    { value: "Node.js", label: "Node.js" },
-    { value: "Python", label: "Python" },
-  ];
-  const currentUser = {
-    name: "Zeina",
-    role: "Full-Stack Developer",
-    profilePic: null,
-  };
-  const currentOption = {
-    name: "hafsa",
-    role: "Full-Stack Developer",
-    profilePic: null,
-  };
 
-  const hackathonList = [
-    { value: "CodeX", label: "CodeX" },
-    { value: "TechFest", label: "TechFest" },
+  //dummy data
+    const apiSkills = [
+    { value: 'React', label: 'React' },
+    { value: 'Node.js', label: 'Node.js' },
+    { value: 'Python', label: 'Python' }
   ];
+  const currentUser = { name: "Zeina", role: "Full-Stack Developer", profilePic: null };
+  const currentOption = { name: "hafsa", role: "Full-Stack Developer", profilePic: null };
+
+  const hackathonList = [{ value: "CodeX", label: "CodeX" }, { value: "TechFest", label: "TechFest" }];
 
   //states
   const [currentStep, setCurrentStep] = useState(1);
@@ -68,7 +57,7 @@ function CreateTeam() {
   };
   const handleCreateTeam = () => {
     console.log("Final Submission to API:", formData);
-    // API Call
+    // API Call 
   };
 
   const renderStep = () => {
@@ -116,52 +105,29 @@ function CreateTeam() {
     }
   };
   return (
-    <div className={`min-vh-100 ${styles.pageBackground}`}>
+   <div className={styles.pageContainer}>
       <div className="container py-5">
-        <header className="d-flex align-items-center mb-5">
-          <div className={styles.headerIconBox}>
-            <SparkleIcon color="#fff" size={24} />
-          </div>
-          <div className="ms-4">
-            <h1 className={styles.mainTitle}>Create Your Dream Team</h1>
-            <p className={`mb-0 ${styles.subTitle}`}>
-              Build an amazing team for your next hackathon adventure
-            </p>
-          </div>
-        </header>
+        
+        <Stepper currentStep={currentStep} steps={createSteps} />
 
-        {/* --- 2. Stepper Row --- */}
-        <div className="row mb-5">
-          <div className="col-12">
-            <Stepper currentStep={currentStep} steps={createSteps} />
-          </div>
-        </div>
-
-        {/* --- 3. Main Content Row (Grid) --- */}
-        <div className="row g-4">
-          {/* Left Column*/}
-          <div className="col-lg-8">
-            <div className={`card border-0 ${styles.formCard}`}>
-              <div className={styles.cardHeader}>
-                <span className="me-2">
-                  {createSteps[currentStep - 1].icon}
-                </span>
-                {createSteps[currentStep - 1].title}
+        <div className={styles.mainGrid}>
+          {/* LEFT COLUMN: The Form Card */}
+          <div className={styles.formColumn}>
+            <div className={styles.card}>
+              <div className={styles.header}>
+                <span className={styles.headerIcon}>{createSteps[currentStep - 1].icon}</span>
+                <h4 className={styles.headerTitle}>{createSteps[currentStep - 1].title}</h4>
               </div>
-              <div className="card-body p-0">{renderStep()}</div>
+              <div className={styles.cardBody}>
+                {renderStep()}
+              </div>
             </div>
           </div>
 
-          {/* Right Column*/}
-          <div className="col-lg-4">
-            <div
-              className="d-flex flex-column gap-4 sticky-top"
-              style={{ top: "2rem" }}
-            >
-              <QuickStats formData={formData} />
-              <ProTips currentStep={currentStep} />
-            </div>
-          </div>
+          <aside className={styles.sidebarColumn}>
+            <QuickStats formData={formData} />
+            <ProTips currentStep={currentStep} />
+          </aside>
         </div>
       </div>
     </div>

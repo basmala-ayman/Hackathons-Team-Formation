@@ -148,6 +148,7 @@ const handleSelectMember = (selectedOption) => {
           </CustomButton>
         </div>
       </div>
+        </div>
   );
 }
 

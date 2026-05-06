@@ -70,7 +70,8 @@ const handleSelectMember = (selectedOption) => {
     // Add logic to update formData.members with the new user
     console.log("Selected user:", selectedOption);
   };
-  return (      
+  return (
+      
 
       <div className={styles.container}>
         {/* --- Progress Bar Section --- */}
@@ -148,6 +149,7 @@ const handleSelectMember = (selectedOption) => {
           </CustomButton>
         </div>
       </div>
+        </div>
   );
 }
 

@@ -61,7 +61,11 @@ function Step1_TeamBasics({
     }),
   };
   return (
-    <div>
+    
+      <div className={styles.header}>
+        <TeamMeetIcon size={24} />
+        <h4 className="fw-bold mb-0">Team Basics</h4>
+      </div>
       <div className={styles.formGroup}>
         <label className={styles.label}>Team Name</label>
         <input
@@ -151,7 +155,7 @@ function Step1_TeamBasics({
       {/* next button */}
       <CustomButton 
         variant="primary" 
-        size="sm" 
+        size="md" 
         onClick={onNext}
         disabled={!formData.hackathonName || !formData.teamSize} //validation as team hackthon and team size is required
         className={styles.fullWidth}

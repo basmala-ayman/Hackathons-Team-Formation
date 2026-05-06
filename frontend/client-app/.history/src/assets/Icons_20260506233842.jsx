@@ -209,7 +209,7 @@ export const TeamIcon = ({ size = 64, color = "#6B46C1" }) => (
   </svg>
 );
 
-export const SparkleIcon = ({ size = 64, color = "#6B46C1" }) => (
+export const SparkleIcon = ({ size = 64 ,color="#6B46C1"}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -226,21 +226,19 @@ export const SparkleIcon = ({ size = 64, color = "#6B46C1" }) => (
     />
     <path
       d="M53.333 5.33337V16"
-      stroke={color}
-      stroke-width="5.33333"
+stroke={color}      stroke-width="5.33333"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M58.6667 10.6666H48"
-      stroke={color}
-      stroke-width="5.33333"
+stroke={color}      stroke-width="5.33333"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M10.6663 58.6667C13.6119 58.6667 15.9997 56.2789 15.9997 53.3333C15.9997 50.3878 13.6119 48 10.6663 48C7.72082 48 5.33301 50.3878 5.33301 53.3333C5.33301 56.2789 7.72082 58.6667 10.6663 58.6667Z"
-      stroke={color}
+      stroke="#6B46C1"
       stroke-width="5.33333"
       stroke-linecap="round"
       stroke-linejoin="round"

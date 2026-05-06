@@ -1,3 +1,4 @@
+
 .headerIconBox {
   width: 6rem;
   height: 6rem;
@@ -28,9 +29,8 @@
   border-radius: 1rem !important;
   border: 0.1rem solid var(--color-very-dark-purple) !important;
   background: #fff;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -4px rgba(0, 0, 0, 0.10);
+
 }
 
 .cardHeader {
