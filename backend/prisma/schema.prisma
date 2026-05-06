@@ -101,6 +101,8 @@ model User {
   deletedAt                DateTime? //that means can be null
   verificationToken        String?
   verificationTokenExpires DateTime?
+  githubUrl                String?
+  linkedinUrl              String?
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship

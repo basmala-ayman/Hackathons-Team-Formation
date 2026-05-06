@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
     "@types/node": "^25.5.2",
     "prisma": "^7.7.0"
   },
@@ -34,5 +36,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.19.0"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }
