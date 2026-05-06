@@ -113,7 +113,7 @@ function Step2_AddMembers({
           <CustomButton variant="secondary" size="sm" onClick={onPrev}>
             Previous
           </CustomButton>
-          <CustomButton variant="primary" size="sm" onClick={onNext}>
+          <CustomButton variant="primary" onClick={onNext}>
             Next Step
           </CustomButton>
         </div>

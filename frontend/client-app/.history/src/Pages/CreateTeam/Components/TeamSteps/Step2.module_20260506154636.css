@@ -1,0 +1,37 @@
+/* Progress Bar Area */
+.progressSection {
+  background-color: #f8faff; 
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary, linear-gradient(90deg, #8b5cf6, #6366f1));
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+.progressText {
+  font-size: 0.8rem;
+  color: #6b7280;
+}

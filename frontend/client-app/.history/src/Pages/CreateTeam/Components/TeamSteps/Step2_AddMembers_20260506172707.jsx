@@ -110,10 +110,10 @@ function Step2_AddMembers({
 
         {/* Nav Buttons */}
         <div className={styles.actionRow}>
-          <CustomButton variant="secondary" size="sm" onClick={onPrev}>
+          <CustomButton variant="secondary" onClick={onPrev}>
             Previous
           </CustomButton>
-          <CustomButton variant="primary" size="sm" onClick={onNext}>
+          <CustomButton variant="primary" onClick={onNext}>
             Next Step
           </CustomButton>
         </div>

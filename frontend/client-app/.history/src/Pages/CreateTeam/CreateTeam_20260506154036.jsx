@@ -15,9 +15,6 @@ function CreateTeam() {
   });
 
   const onNext = () => {};
-  const onPrev = () => {};
-  const currentUser={};
-
   const hackathonList = [{}];
   return (
     <div>
@@ -35,8 +32,8 @@ function CreateTeam() {
           formData={formData}
           setFormData={setFormData}
           onNext={onNext}
-          onPrev={onPrev}
-          currentUser={currentUser}
+          onPrev
+          currentUser
         ></Step2_AddMembers>
       </div>
     </div>

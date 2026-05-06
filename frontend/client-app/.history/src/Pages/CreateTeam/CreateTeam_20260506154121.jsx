@@ -36,7 +36,7 @@ function CreateTeam() {
           setFormData={setFormData}
           onNext={onNext}
           onPrev={onPrev}
-          currentUser={currentUser}
+          currentUser
         ></Step2_AddMembers>
       </div>
     </div>
