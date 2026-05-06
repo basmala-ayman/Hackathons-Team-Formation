@@ -95,7 +95,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
           <ElectricIcon /> <span>Popular Skills</span>
         </div>
         <div className={styles.chipContainer}>
-          {['ML/AI', 'UI/UX Design'].map(popSkill => (
+          {['ML/AI', 'UI/UX Design' ,'Frontend'].map(popSkill => (
             <button 
               key={popSkill}
               className={styles.popularChip}

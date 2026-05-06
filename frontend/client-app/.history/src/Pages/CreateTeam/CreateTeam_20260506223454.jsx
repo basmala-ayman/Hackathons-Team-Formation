@@ -4,7 +4,7 @@ import Stepper from "./Components/Stepper/Stepper";
 import Step1_TeamBasics from "./Components/TeamSteps/Step1_TeamBasics";
 import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
-import {TeamMeetIcon,AddMemberIcon, CheckIcon, CodeIcon } from "../../assets/Icons";
+import {TeamMeetIconm] CheckIcon, CodeIcon } from "../../assets/Icons";
 
 function CreateTeam() {
 

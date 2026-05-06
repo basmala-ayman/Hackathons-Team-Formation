@@ -523,8 +523,7 @@ export const ElectricIcon=()=>(
 </svg>
 )
 export const XIcon=()=>(
- <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-<path d="M9 3L3 9" stroke="#FEFDFF" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3 3L9 9" stroke="#FEFDFF" stroke-linecap="round" stroke-linejoin="round"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 7 7" fill="none">
+  <path d="M6.5 0.5L0.5 6.5" stroke="#FEFDFF" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 )

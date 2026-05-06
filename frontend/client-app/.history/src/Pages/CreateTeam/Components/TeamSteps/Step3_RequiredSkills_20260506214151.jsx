@@ -51,7 +51,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
   };
   
     return (
-    <div className='d-flex flex-column gap-4'>
+    <div className={styles.container}>
       <label className={styles.label}>Add Skills You're Looking For</label>
       
       <CreatableSelect
@@ -65,13 +65,13 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
         value={null} 
       />
 
-{/* show only if there are selected skills */}
+      {/* 3. Conditional Selected Skills Area */}
       {formData.skills.length > 0 && (
         <div className={styles.selectedArea}>
           <span className={styles.sectionTitle}>
             Selected Skills ({formData.skills.length})
           </span>
-          <div className='d-flex flex-wrap gap-3'>
+          <div className={styles.chipContainer}>
             {formData.skills.map((skill, index) => (
               <div key={index} className={styles.skillChip}>
                 {skill}

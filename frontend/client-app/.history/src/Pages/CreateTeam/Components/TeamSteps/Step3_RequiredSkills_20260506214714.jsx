@@ -71,7 +71,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
           <span className={styles.sectionTitle}>
             Selected Skills ({formData.skills.length})
           </span>
-          <div className='d-flex flex-wrap gap-3'>
+          <div className='d-flex'>
             {formData.skills.map((skill, index) => (
               <div key={index} className={styles.skillChip}>
                 {skill}

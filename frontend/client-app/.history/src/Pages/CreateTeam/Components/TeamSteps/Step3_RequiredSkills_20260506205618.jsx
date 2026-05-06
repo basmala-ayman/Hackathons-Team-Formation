@@ -1,12 +1,13 @@
 import styles from './Step3.module.css'
 import CreatableSelect from 'react-select/creatable';
 import CustomButton from '../../../../shared/CustomButton/CustomButton';
-import { CheckIcon , XIcon , ElectricIcon} from '../../../../assets/Icons';
+import { CheckIcon } from '../../../../assets/Icons';
+import { HiXMark} from 'react-icons/hi2';
 function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills }) {
   
   const validateSkill = (inputValue) => {
-    const pattern  = /^[a-zA-Z0-9.#+\-\s]{1,20}$/;
-    return pattern .test(inputValue);
+    const regex = /^[a-zA-Z0-9.#+\-\s]{1,20}$/;
+    return regex.test(inputValue);
   };
 
   const handleAddSkill = (newValue) => {
@@ -51,7 +52,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
   };
   
     return (
-    <div className='d-flex flex-column gap-4'>
+    <div className={styles.container}>
       <label className={styles.label}>Add Skills You're Looking For</label>
       
       <CreatableSelect
@@ -65,13 +66,13 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
         value={null} 
       />
 
-{/* show only if there are selected skills */}
+      {/* 3. Conditional Selected Skills Area */}
       {formData.skills.length > 0 && (
         <div className={styles.selectedArea}>
           <span className={styles.sectionTitle}>
             Selected Skills ({formData.skills.length})
           </span>
-          <div className='d-flex flex-wrap gap-3'>
+          <div className={styles.chipContainer}>
             {formData.skills.map((skill, index) => (
               <div key={index} className={styles.skillChip}>
                 {skill}
@@ -80,47 +81,16 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, apiSkills
                   className={styles.removeIcon} 
                   onClick={() => handleRemoveSkill(skill)}
                 >
-                  <XIcon/>
+                  <CheckIcon/>
                 </button>
               </div>
             ))}
           </div>
         </div>
       )}
-
-
-      {/* recommendations */}
-      <div className={styles.popularSection}>
-        <div className={styles.popularHeader}>
-          <ElectricIcon /> <span>Popular Skills</span>
-        </div>
-        <div className={styles.chipContainer}>
-          {['ML/AI', 'UI/UX Design'].map(popSkill => (
-            <button 
-              key={popSkill}
-              className={styles.popularChip}
-              onClick={() => handleAddSkill({ value: popSkill, label: popSkill })}
-            >
-              #{popSkill}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.actionRow}>
-        <CustomButton variant="secondary" size='sm' onClick={onPrev}>Previous</CustomButton>
-        <CustomButton 
-          variant="primary" 
-          size='sm'
-          onClick={onNext} 
-          disabled={formData.skills.length === 0}
-        >
-          Next Step
-        </CustomButton>
-      </div>
+      
     </div>
-  );
-    
+  )
 }
 
 export default Step3_RequiredSkills;

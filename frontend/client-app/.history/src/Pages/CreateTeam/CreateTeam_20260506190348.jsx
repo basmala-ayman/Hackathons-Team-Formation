@@ -4,24 +4,8 @@ import Stepper from "./Components/Stepper/Stepper";
 import Step1_TeamBasics from "./Components/TeamSteps/Step1_TeamBasics";
 import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
-import {TeamMeetIcon,AddMemberIcon, CheckIcon, CodeIcon } from "../../assets/Icons";
 
 function CreateTeam() {
-
-  const createSteps=[
-    {title:"Team Basics" , icon:<TeamMeetIcon/>},
-    {title:"Build Your Team" , icon:<AddMemberIcon/>},
-    {title:"Required Skills" , icon:<CodeIcon/>},
-    {title:"Final Details" , icon:<CheckIcon color="var(--color-primary-dark)"/>},
-  ]
-
-  //dummy data
-  const apiSkills = [
-    { value: 'React', label: 'React' },
-    { value: 'Node.js', label: 'Node.js' },
-    { value: 'Python', label: 'Python' }
-  ];
-
   const [formData, setFormData] = useState({
     teamName: "",
     hackathonName: "",
@@ -56,11 +40,7 @@ function CreateTeam() {
           currentUser={currentUser}
         ></Step2_AddMembers> */}
 
-        <Step3_RequiredSkills formData={formData} 
-          setFormData={setFormData} 
-          onNext={onNext}
-          onPrev={onPrev}
-          apiSkills={apiSkills}></Step3_RequiredSkills>
+        <Step3_RequiredSkills
       </div>
     </div>
   );

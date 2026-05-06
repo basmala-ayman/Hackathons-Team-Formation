@@ -63,7 +63,15 @@ const customStyles = {
       fontSize: 'var(--fs-small)',
       cursor: 'pointer'
     })
-    
+     option: (base, state) => ({
+    ...base,
+    fontSize: 'var(--fs-small)', 
+    fontFamily: 'var(--font-family-inter)',
+    padding: '1rem 1.5rem',
+    backgroundColor: state.isFocused ? 'var(--color-primary-light-3)' : 'transparent',
+    color: 'var(--color-text)',
+    cursor: 'pointer',
+  }),
   };
 
 const handleSelectMember = (selectedOption) => {
