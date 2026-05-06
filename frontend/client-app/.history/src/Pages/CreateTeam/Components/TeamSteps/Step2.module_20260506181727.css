@@ -39,28 +39,58 @@
 }
 
 /* Search Bar Area */
-.selectWrapper {
-  flex: 1;
-  position: relative;
+.searchRow{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6rem;
 }
-
-/* .selectSearchIcon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-gray);
-  font-size: 2rem;
-  z-index: 10;
-  pointer-events: none;
-} */
-
-.searchRow {
+@media (max-width: 768px) {
+    .searchRow {
+        gap: 1rem;
+    }
+}
+.inputContainer {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-  width: 100%;
+  gap: 1rem;
+  flex: 1;
+  padding: 0 1.5rem; 
+  height: 5.1rem; 
+  background-color: var(--color-white);
+  border: 0.1rem solid var(--color-primary-light);
+  border-radius: 1rem;
+  transition: all 0.2s ease;
+  cursor: text; 
 }
+
+.inputContainer:focus-within {
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 0.1rem var(--color-primary-light-2);
+}
+
+.searchIcon {
+  color: var(--color-gray);
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.realInput {
+  flex: 1;
+  height: 100%;
+  border: none ;
+  outline: none;
+  background: transparent;
+  
+  font-family: var(--font-family-inter);
+  font-size: var(--fs-small);
+  color: var(--color-text);
+  padding: 0; 
+}
+
+.realInput::placeholder {
+  color: var(--color-gray);
+}
+
 /* Members */
 .memberCard {
   display: flex;

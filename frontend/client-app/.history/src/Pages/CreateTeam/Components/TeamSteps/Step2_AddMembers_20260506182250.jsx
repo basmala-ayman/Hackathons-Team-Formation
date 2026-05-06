@@ -1,10 +1,10 @@
-// import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
-import Select , {components} from 'react-select';
+import Select, { components } from 'react-select';
 
 function Step2_AddMembers({
   formData,
@@ -103,8 +103,8 @@ const handleSelectMember = (selectedOption) => {
           options={userOptions} // Array of { value: 'userId', label: 'User Name' }
           components={{ 
             Control,
-            IndicatorSeparator: () => null, 
-            DropdownIndicator: () => null 
+            IndicatorSeparator: () => null, // Remove the vertical line
+            DropdownIndicator: () => null  // Remove the arrow for a cleaner 'search' look
           }}
           styles={customStyles}
           placeholder="Search by name or email..."

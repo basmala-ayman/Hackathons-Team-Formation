@@ -40,20 +40,20 @@
 
 /* Search Bar Area */
 .selectWrapper {
-  flex: 1;
+  /* flex: 1; */
   position: relative;
 }
 
-/* .selectSearchIcon {
+.selectSearchIcon {
   position: absolute;
-  left: 1rem;
+  left: 1.2rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--color-gray);
   font-size: 2rem;
   z-index: 10;
   pointer-events: none;
-} */
+}
 
 .searchRow {
   display: flex;

@@ -39,27 +39,10 @@
 }
 
 /* Search Bar Area */
-.selectWrapper {
-  flex: 1;
-  position: relative;
-}
-
-/* .selectSearchIcon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-gray);
-  font-size: 2rem;
-  z-index: 10;
-  pointer-events: none;
-} */
-
-.searchRow {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  width: 100%;
+@media (max-width: 768px) {
+    .searchRow {
+        gap: 1rem;
+    }
 }
 /* Members */
 .memberCard {

@@ -44,7 +44,7 @@
   position: relative;
 }
 
-/* .selectSearchIcon {
+.selectSearchIcon {
   position: absolute;
   left: 1rem;
   top: 50%;
@@ -53,7 +53,7 @@
   font-size: 2rem;
   z-index: 10;
   pointer-events: none;
-} */
+}
 
 .searchRow {
   display: flex;

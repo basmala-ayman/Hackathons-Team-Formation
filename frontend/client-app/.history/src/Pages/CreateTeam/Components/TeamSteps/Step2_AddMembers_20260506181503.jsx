@@ -1,10 +1,10 @@
-// import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
-import Select , {components} from 'react-select';
+import Select, { components } from 'react-select';
 
 function Step2_AddMembers({
   formData,
@@ -14,7 +14,7 @@ function Step2_AddMembers({
   currentUser,
   userOptions
 }) {
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -97,27 +97,30 @@ const handleSelectMember = (selectedOption) => {
         </div>
 
         {/* --- Search & Invite Section --- */}
-      <div className={styles.searchRow}>
-      <div className={styles.selectWrapper}>
-        <Select
-          options={userOptions} // Array of { value: 'userId', label: 'User Name' }
-          components={{ 
-            Control,
-            IndicatorSeparator: () => null, 
-            DropdownIndicator: () => null 
-          }}
-          styles={customStyles}
-          placeholder="Search by name or email..."
-          onChange={handleSelectMember}
-          isSearchable
-        />
-      </div>
-      
-      <CustomButton variant="primary" size="sm">
-        Invite
-      </CustomButton>
-    </div>
-      
+        <div className={styles.searchRow}>
+          <div
+            className={styles.inputContainer}
+            onClick={handleInputContainerClick}
+          >
+            <SearchIcon className={styles.searchIcon} />
+            <input
+              ref={inputRef}
+              type="text"
+              className={styles.realInput}
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <CustomButton
+            variant="primary"
+            size="sm"
+            onClick={() => console.log("Inviting...")}
+          >
+            Invite
+          </CustomButton>
+        </div>
 
         {/* Member Info */}
         <div className="my-4">
@@ -152,7 +155,7 @@ const handleSelectMember = (selectedOption) => {
           </CustomButton>
         </div>
       </div>
-        </div>
+    </div>
   );
 }
 

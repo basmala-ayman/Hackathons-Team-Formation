@@ -1,10 +1,10 @@
-// import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
-import Select , {components} from 'react-select';
+import Select, { components } from 'react-select';
 
 function Step2_AddMembers({
   formData,
@@ -12,9 +12,8 @@ function Step2_AddMembers({
   onNext,
   onPrev,
   currentUser,
-  userOptions
 }) {
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -24,51 +23,17 @@ function Step2_AddMembers({
 
 const Control = ({ children, ...props }) => (
   <components.Control {...props}>
-    <SearchIcon className={styles.selectSearchIcon} />
+    <HiOutlineSearch className={styles.selectSearchIcon} />
     {children}
   </components.Control>
 );
-const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      minHeight: '4.5rem',
-      borderRadius: '1rem',
-      border: state.isFocused 
-        ? '0.1rem solid var(--color-primary-dark)' 
-        : '0.1rem solid var(--color-primary-light)',
-      boxShadow: state.isFocused ? '0 0 0 0.3rem var(--color-primary-light-2)' : 'none',
-      paddingLeft: '3.5rem', // Make room for the absolute icon
-      backgroundColor: 'var(--color-white)',
-      '&:hover': {
-        borderColor: 'var(--color-primary-dark)'
-      }
-    }),
-    placeholder: (base) => ({
-      ...base,
-      fontSize: 'var(--fs-small)',
-      color: 'var(--color-gray)',
-      fontFamily: 'var(--font-family-inter)'
-    }),
-    input: (base) => ({
-      ...base,
-      fontSize: 'var(--fs-small)',
-      fontFamily: 'var(--font-family-inter)'
-    }),
-    option: (base, state) => ({
-      ...base,
-      backgroundColor: state.isSelected 
-        ? 'var(--color-primary-dark)' 
-        : state.isFocused ? 'var(--color-primary-light-3)' : 'transparent',
-      color: state.isSelected ? 'var(--color-white)' : 'var(--color-text)',
-      fontSize: 'var(--fs-small)',
-      cursor: 'pointer'
-    })
+
+  const handleInvite = () => {
+    if (!searchQuery.trim()) return;
+    //to be replaced with API
+    console.log("Searching backend for:", searchQuery);
   };
 
-const handleSelectMember = (selectedOption) => {
-    // Add logic to update formData.members with the new user
-    console.log("Selected user:", selectedOption);
-  };
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -97,27 +62,30 @@ const handleSelectMember = (selectedOption) => {
         </div>
 
         {/* --- Search & Invite Section --- */}
-      <div className={styles.searchRow}>
-      <div className={styles.selectWrapper}>
-        <Select
-          options={userOptions} // Array of { value: 'userId', label: 'User Name' }
-          components={{ 
-            Control,
-            IndicatorSeparator: () => null, 
-            DropdownIndicator: () => null 
-          }}
-          styles={customStyles}
-          placeholder="Search by name or email..."
-          onChange={handleSelectMember}
-          isSearchable
-        />
-      </div>
-      
-      <CustomButton variant="primary" size="sm">
-        Invite
-      </CustomButton>
-    </div>
-      
+        <div className={styles.searchRow}>
+          <div
+            className={styles.inputContainer}
+            onClick={handleInputContainerClick}
+          >
+            <SearchIcon className={styles.searchIcon} />
+            <input
+              ref={inputRef}
+              type="text"
+              className={styles.realInput}
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <CustomButton
+            variant="primary"
+            size="sm"
+            onClick={() => console.log("Inviting...")}
+          >
+            Invite
+          </CustomButton>
+        </div>
 
         {/* Member Info */}
         <div className="my-4">
@@ -152,7 +120,7 @@ const handleSelectMember = (selectedOption) => {
           </CustomButton>
         </div>
       </div>
-        </div>
+    </div>
   );
 }
 

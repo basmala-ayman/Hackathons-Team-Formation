@@ -55,12 +55,12 @@
   pointer-events: none;
 } */
 
-.searchRow {
+/* .searchRow {
   display: flex;
   align-items: center;
   gap: 1.2rem;
   width: 100%;
-}
+} */
 /* Members */
 .memberCard {
   display: flex;

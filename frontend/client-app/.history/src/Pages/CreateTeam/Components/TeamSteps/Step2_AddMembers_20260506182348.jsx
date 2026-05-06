@@ -1,10 +1,10 @@
-// import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
-import Select , {components} from 'react-select';
+import Select from 'react-select';
 
 function Step2_AddMembers({
   formData,
