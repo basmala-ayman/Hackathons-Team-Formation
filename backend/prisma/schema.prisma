@@ -62,6 +62,11 @@ enum NotificationType {
   HACKATHON_REMINDER
 }
 
+enum HackathonSource {
+  SCRAPED
+  USER_CREATED
+}
+
 //--------------------------------------------------
 //USERS
 //--------------------------------------------------
@@ -103,6 +108,7 @@ model User {
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
+  tachRole                 String?   //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
@@ -161,20 +167,21 @@ model UserSkill {
 //done 
 model Hackathon {
   id                 String          @id @default(uuid())
-  title              String
+  title              String          @unique
   slug               String?
-  location           String          @default("Online")
-  applyLink          String
+  location           String?         @default("Online")
+  applyLink          String?
   thumbnailUrl       String?
   remainingTime      String?
   submissionPeriod   String?
-  prizeAmount        Float           @default(0)
-  prizesCounts       Int             @default(0)
-  registrationsCount Int             @default(0)
+  prizeAmount        Float?          @default(0)
+  prizesCounts       Int?            @default(0)
+  registrationsCount Int?            @default(0)
   organization       String?
   status             HackathonStatus @default(UPCOMING)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
+  source             HackathonSource @default(SCRAPED)
 
   // Relations
   tags             HackathonTag[]
@@ -217,14 +224,17 @@ model HackathonTag {
 // ─────────────────────────────────────────
 
 model Team {
-  id          String     @id @default(uuid())
-  name        String
-  hackathonId String //foriegn key
-  ownerId     String //foriegn key
-  status      TeamStatus @default(FORMING)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
+  id            String     @id @default(uuid())
+  name          String
+  hackathonId   String //foriegn key
+  ownerId       String //foriegn key
+  status        TeamStatus @default(FORMING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  description   String?
+  size          Int        @default(1) //there is no default size of them team
+  roles         String[]    
+  
   // Relations
   hackathon   Hackathon        @relation(fields: [hackathonId], references: [id]) //cause the relation is 1:m
   owner       User             @relation("TeamOwner", fields: [ownerId], references: [id])
