@@ -102,7 +102,7 @@ def compatability_score( team_members_indices,score_dict, emb_dev, alpha):
 
 
 # Bounded greedy selection algorithm
-def greedy_beam_search(target_task_emb, candidate_A, emb_dev, team_size, K, alpha, score_dict, pinned=None):
+def greedy_beam_search(candidate_A, emb_dev, team_size, K, alpha, score_dict, pinned=None):
     pinned_members = list(pinned) if pinned else []
 
     if len(pinned_members)>team_size:
