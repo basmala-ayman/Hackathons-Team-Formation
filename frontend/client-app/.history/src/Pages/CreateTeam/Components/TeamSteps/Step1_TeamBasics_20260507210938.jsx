@@ -27,22 +27,16 @@ function Step1_TeamBasics({
   };
   //Ensuring that hackathon is required
   // inside your component
-  const [errors, setErrors] = useState({
-    hackathon: false,
-    teamSize: false,
-  });
+  const [showError, setShowError] = useState(false);
+
   const handleValidationAndNext = () => {
-    const isHackathonMissing = !formData.hackathonName || formData.hackathonName.trim() === "";
-  const isTeamSizeMissing = !formData.teamSize;
+    if (!formData.hackathonName || formData.hackathonName.trim() === "" || !formData.} ) {
+      setShowError(true);
+      return;
+    }
 
-  setErrors({
-    hackathon: isHackathonMissing,
-    teamSize: isTeamSizeMissing,
-  });
-
-  if (!isHackathonMissing && !isTeamSizeMissing) {
-    onNext();
-  }
+    setShowError(false);
+    onNext(); // Proceed to the next step
   };
 
   //handle change of team size
@@ -60,7 +54,7 @@ function Step1_TeamBasics({
 
   const handleCustomSizeChange = (e) => {
     const value = e.target.value;
-    if (value === "" || (Number(value) > 0 && Number(value) < 10)) {
+    if (value === "" || (Number(value) > 0 && Number(value) < 15)) {
       setFormData({ ...formData, teamSize: value });
     }
   };
@@ -90,7 +84,7 @@ function Step1_TeamBasics({
     }),
   };
   return (
-    <>
+    <div>
       <div className={styles.formGroup}>
         <label className={styles.label}>Team Name</label>
         <input
@@ -114,7 +108,7 @@ function Step1_TeamBasics({
           isSearchable={true}
           isClearable={true}
           onChange={(val) => {
-            setErrors(false);
+            setShowError(false);
             handleSelectChange(val);
           }}
           value={
@@ -122,7 +116,7 @@ function Step1_TeamBasics({
             null
           }
         />
-        {errors.hackathon && (
+        {showError && (
           <span
             style={{
               color: "var(--color-error-red)",
@@ -190,25 +184,13 @@ function Step1_TeamBasics({
               type="number"
               className={styles.input}
               placeholder="Enter team size (e.g. 8)"
-              min="6"
-              max="10"
+              min="6" 
+              max="20"
               value={formData.teamSize}
               onChange={handleCustomSizeChange}
               autoFocus
             />
           </div>
-        )}
-
-         {errors.teamSize && (
-          <span
-            style={{
-              color: "var(--color-error-red)",
-              fontSize: "1.5rem",
-              marginTop: "0.2rem",
-            }}
-          >
-            Team Size selection is required to proceed.
-          </span>
         )}
       </div>
 
@@ -221,7 +203,7 @@ function Step1_TeamBasics({
       >
         Next Step
       </CustomButton>
-    </>
+    </div>
   );
 }
 

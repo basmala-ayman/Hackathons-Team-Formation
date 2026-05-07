@@ -91,7 +91,7 @@ function Step1_TeamBasics({
   };
   return (
     <>
-      <div className={styles.formGroup}>
+      <div className='my-4'>
         <label className={styles.label}>Team Name</label>
         <input
           type="text"

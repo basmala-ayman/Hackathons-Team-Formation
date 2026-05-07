@@ -90,7 +90,7 @@ function Step1_TeamBasics({
     }),
   };
   return (
-    <>
+    <div>
       <div className={styles.formGroup}>
         <label className={styles.label}>Team Name</label>
         <input
@@ -122,7 +122,7 @@ function Step1_TeamBasics({
             null
           }
         />
-        {errors.hackathon && (
+        {errors && (
           <span
             style={{
               color: "var(--color-error-red)",
@@ -199,7 +199,7 @@ function Step1_TeamBasics({
           </div>
         )}
 
-         {errors.teamSize && (
+         {errors && (
           <span
             style={{
               color: "var(--color-error-red)",
@@ -221,7 +221,7 @@ function Step1_TeamBasics({
       >
         Next Step
       </CustomButton>
-    </>
+    </div>
   );
 }
 

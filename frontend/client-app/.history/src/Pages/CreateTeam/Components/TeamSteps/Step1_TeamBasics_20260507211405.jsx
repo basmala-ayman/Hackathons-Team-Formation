@@ -32,17 +32,13 @@ function Step1_TeamBasics({
     teamSize: false,
   });
   const handleValidationAndNext = () => {
-    const isHackathonMissing = !formData.hackathonName || formData.hackathonName.trim() === "";
-  const isTeamSizeMissing = !formData.teamSize;
+    if (!formData.hackathonName || formData.hackathonName.trim() === "") {
+      setErrors(true);
+      return;
+    }
 
-  setErrors({
-    hackathon: isHackathonMissing,
-    teamSize: isTeamSizeMissing,
-  });
-
-  if (!isHackathonMissing && !isTeamSizeMissing) {
-    onNext();
-  }
+    setShowError(false);
+    onNext(); // Proceed to the next step
   };
 
   //handle change of team size
@@ -90,7 +86,7 @@ function Step1_TeamBasics({
     }),
   };
   return (
-    <>
+    <div>
       <div className={styles.formGroup}>
         <label className={styles.label}>Team Name</label>
         <input
@@ -114,7 +110,7 @@ function Step1_TeamBasics({
           isSearchable={true}
           isClearable={true}
           onChange={(val) => {
-            setErrors(false);
+            setShowError(false);
             handleSelectChange(val);
           }}
           value={
@@ -122,7 +118,7 @@ function Step1_TeamBasics({
             null
           }
         />
-        {errors.hackathon && (
+        {showError && (
           <span
             style={{
               color: "var(--color-error-red)",
@@ -198,18 +194,6 @@ function Step1_TeamBasics({
             />
           </div>
         )}
-
-         {errors.teamSize && (
-          <span
-            style={{
-              color: "var(--color-error-red)",
-              fontSize: "1.5rem",
-              marginTop: "0.2rem",
-            }}
-          >
-            Team Size selection is required to proceed.
-          </span>
-        )}
       </div>
 
       {/* next button */}
@@ -221,7 +205,7 @@ function Step1_TeamBasics({
       >
         Next Step
       </CustomButton>
-    </>
+    </div>
   );
 }
 
