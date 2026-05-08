@@ -15,7 +15,7 @@ function Step2_AddMembers({
   currentUser,
   userOptions,
 }) {
-  const [showSuccess, setShowSuccessMsg] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -83,10 +83,11 @@ function Step2_AddMembers({
   const handleInvite = () => {
     //Validation must be added here for the invitation logic !! 
     //check that the user has chosen valid email or name
-    setShowSuccessMsg(true);
+    setShowSuccess(true);
+
     setTimeout(() => {
-      setShowSuccessMsg(false);
-    }, 5000);
+      setShowSuccess(false);
+    }, 7000);
   };
   return (
     <div className={styles.container}>
@@ -131,7 +132,7 @@ function Step2_AddMembers({
         </CustomButton>
       </div>
       {showSuccess && (
-        <div className="my-3 text-success fs-4 fw-semibold">Invite sent successfully!</div>
+        <div className="my-3 text-success fs-4 fw-bold">Invite sent successfully!</div>
       )}
 
       {/* Member Info */}

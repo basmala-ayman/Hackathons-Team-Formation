@@ -1,11 +1,12 @@
 import styles from "./Step3.module.css";
+import { useMemo } from "react";
 import Select from "react-select";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { CheckIcon, XIcon, ElectricIcon } from "../../../../assets/Icons";
 
 
 
-function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOptions , skillsOptions , reverseRolesMap , reverseSkillsMap }) {
+function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev }) {
  
  
 
@@ -29,7 +30,21 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOpti
     });
   };
 
- 
+  //to display the key not the value
+  const reverseRolesMap = useMemo(() => {
+    const map = {};
+    Object.entries(rolesData).forEach(([key, value]) => {
+      map[value] = key;
+    });
+    return map;
+  }, []);
+  const reverseSkillsMap = useMemo(() => {
+    const map = {};
+    Object.entries(skillsData).forEach(([key, value]) => {
+      map[value] = key;
+    });
+    return map;
+  }, []);
 
   const selectStyles = {
     control: (base) => ({

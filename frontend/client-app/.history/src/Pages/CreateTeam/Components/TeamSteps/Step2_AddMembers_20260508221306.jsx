@@ -4,7 +4,6 @@ import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
-import { useState } from "react";
 import Select, { components } from "react-select";
 
 function Step2_AddMembers({
@@ -15,7 +14,7 @@ function Step2_AddMembers({
   currentUser,
   userOptions,
 }) {
-  const [showSuccess, setShowSuccessMsg] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -79,15 +78,6 @@ function Step2_AddMembers({
     // Add logic to update formData.members with the new user
     console.log("Selected user:", selectedOption);
   };
-
-  const handleInvite = () => {
-    //Validation must be added here for the invitation logic !! 
-    //check that the user has chosen valid email or name
-    setShowSuccessMsg(true);
-    setTimeout(() => {
-      setShowSuccessMsg(false);
-    }, 5000);
-  };
   return (
     <div className={styles.container}>
       {/* --- Progress Bar Section --- */}
@@ -126,13 +116,10 @@ function Step2_AddMembers({
           />
         </div>
 
-        <CustomButton variant="primary" size="sm" onClick={handleInvite}>
+        <CustomButton variant="primary" size="sm">
           Invite
         </CustomButton>
       </div>
-      {showSuccess && (
-        <div className="my-3 text-success fs-4 fw-semibold">Invite sent successfully!</div>
-      )}
 
       {/* Member Info */}
       <div className="my-4">

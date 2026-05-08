@@ -8,8 +8,8 @@ import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
 import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
-import rolesData from "../../Data/roles.json";
-import skillsData from "../../Data/skills.json";
+import rolesData from "../../../../Data/roles.json";
+import skillsData from "../../../../Data/skills.json";
 
 
 import {
@@ -162,10 +162,6 @@ function CreateTeam() {
             setFormData={setFormData}
             onNext={handleNextStep}
             onPrev={handlePrevStep}
-            roleOptions={roleOptions}
-            skillsOptions={skillsOptions}
-            reverseRolesMap={reverseRolesMap} // Pass the map
-            reverseSkillsMap={reverseSkillsMap}
           />
         );
       case 4:

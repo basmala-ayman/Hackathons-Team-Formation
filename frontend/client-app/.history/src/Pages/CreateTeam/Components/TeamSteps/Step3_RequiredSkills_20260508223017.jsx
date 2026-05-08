@@ -5,7 +5,7 @@ import { CheckIcon, XIcon, ElectricIcon } from "../../../../assets/Icons";
 
 
 
-function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOptions , skillsOptions , reverseRolesMap , reverseSkillsMap }) {
+function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOptions , skillsOptions , reve }) {
  
  
 

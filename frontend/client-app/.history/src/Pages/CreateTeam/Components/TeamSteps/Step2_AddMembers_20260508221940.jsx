@@ -85,7 +85,7 @@ function Step2_AddMembers({
     //check that the user has chosen valid email or name
     setShowSuccessMsg(true);
     setTimeout(() => {
-      setShowSuccessMsg(false);
+      setShowSuccess(false);
     }, 5000);
   };
   return (

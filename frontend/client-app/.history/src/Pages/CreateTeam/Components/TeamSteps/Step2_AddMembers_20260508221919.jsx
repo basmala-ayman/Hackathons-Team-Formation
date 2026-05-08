@@ -15,7 +15,7 @@ function Step2_AddMembers({
   currentUser,
   userOptions,
 }) {
-  const [showSuccess, setShowSuccessMsg] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -85,7 +85,7 @@ function Step2_AddMembers({
     //check that the user has chosen valid email or name
     setShowSuccessMsg(true);
     setTimeout(() => {
-      setShowSuccessMsg(false);
+      setShowSuccess(false);
     }, 5000);
   };
   return (

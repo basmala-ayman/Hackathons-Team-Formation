@@ -1,5 +1,5 @@
 import styles from "./CreateTeam.module.css";
-import { useState, useEffect , useMemo } from "react";
+import { useState, useEffect } from "react";
 import ProTips from "./Components/Sidebar/ProTips";
 import QuickStats from "./Components/Sidebar/QuickStats";
 import Stepper from "./Components/Stepper/Stepper";
@@ -8,10 +8,6 @@ import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
 import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
-import rolesData from "../../Data/roles.json";
-import skillsData from "../../Data/skills.json";
-
-
 import {
   TeamMeetIcon,
   AddMemberIcon,
@@ -37,36 +33,6 @@ function CreateTeam() {
     { value: "CodeX", label: "CodeX" },
     { value: "TechFest", label: "TechFest" },
   ];
-//get SKills and roles data
-    const roleOptions = useMemo(() => {
-    return Object.entries(rolesData).map(([key, value]) => ({
-      label: key,
-      value: value,
-    }));
-  }, []);
-
-  const skillsOptions = useMemo(() => {
-    return Object.entries(skillsData).map(([key, value]) => ({
-      label: key,
-      value: value,
-    }));
-  }, []);
-   //to display the key not the value of roles and skills data when needed
-  const reverseRolesMap = useMemo(() => {
-    const map = {};
-    Object.entries(rolesData).forEach(([key, value]) => {
-      map[value] = key;
-    });
-    return map;
-  }, []);
-  const reverseSkillsMap = useMemo(() => {
-    const map = {};
-    Object.entries(skillsData).forEach(([key, value]) => {
-      map[value] = key;
-    });
-    return map;
-  }, []);
-
 
   //Steps Data
   const createSteps = [
@@ -162,10 +128,6 @@ function CreateTeam() {
             setFormData={setFormData}
             onNext={handleNextStep}
             onPrev={handlePrevStep}
-            roleOptions={roleOptions}
-            skillsOptions={skillsOptions}
-            reverseRolesMap={reverseRolesMap} // Pass the map
-            reverseSkillsMap={reverseSkillsMap}
           />
         );
       case 4:
