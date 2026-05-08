@@ -1,5 +1,5 @@
 import styles from "./CreateTeam.module.css";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect , useMemo } from "react";
 import ProTips from "./Components/Sidebar/ProTips";
 import QuickStats from "./Components/Sidebar/QuickStats";
 import Stepper from "./Components/Stepper/Stepper";
@@ -10,6 +10,7 @@ import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import rolesData from "../../Data/roles.json";
 import skillsData from "../../Data/skills.json";
+
 
 import {
   TeamMeetIcon,
@@ -26,18 +27,18 @@ function CreateTeam() {
     role: "Full-Stack Developer",
     profilePic: null,
   };
-  const userOptions = [
-    { value: "1", label: "Ahmed" },
-    { value: "2", label: "Mona" },
-    { value: "3", label: "Omar" },
-  ];
+ const userOptions = [
+  { value: "1", label: "Ahmed" },
+  { value: "2", label: "Mona" },
+  { value: "3", label: "Omar" }
+];
 
   const hackathonList = [
     { value: "CodeX", label: "CodeX" },
     { value: "TechFest", label: "TechFest" },
   ];
-  //get SKills and roles data
-  const roleOptions = useMemo(() => {
+//get SKills and roles data
+    const roleOptions = useMemo(() => {
     return Object.entries(rolesData).map(([key, value]) => ({
       label: key,
       value: value,
@@ -50,7 +51,7 @@ function CreateTeam() {
       value: value,
     }));
   }, []);
-  //to display the key not the value of roles and skills data when needed
+   //to display the key not the value of roles and skills data when needed
   const reverseRolesMap = useMemo(() => {
     const map = {};
     Object.entries(rolesData).forEach(([key, value]) => {
@@ -65,6 +66,7 @@ function CreateTeam() {
     });
     return map;
   }, []);
+
 
   //Steps Data
   const createSteps = [
@@ -93,7 +95,7 @@ function CreateTeam() {
   );
   const [showSuccess, setShowSuccess] = useState(false);
 
-  //Team Created Data
+  //
   const [formData, setFormData] = useState(() =>
     getSavedData("Team_Data", {
       //if Team_Data not found , default values:
@@ -103,7 +105,7 @@ function CreateTeam() {
       teamSize: 4,
       members: [],
       skills: [],
-      roles: [],
+      roles:[], 
       hasIdea: false,
     }),
   );
@@ -202,14 +204,14 @@ function CreateTeam() {
           </div>
         </header>
 
-        {/* ---  Stepper Row --- */}
+        {/* --- 2. Stepper Row --- */}
         <div className="row mb-5">
           <div className="col-12">
             <Stepper currentStep={currentStep} steps={createSteps} />
           </div>
         </div>
 
-        {/* --- Main Content Row (Grid) --- */}
+        {/* --- 3. Main Content Row (Grid) --- */}
         <div className="row g-4">
           {/* Left Column*/}
           <div className="col-lg-8">
@@ -226,11 +228,12 @@ function CreateTeam() {
 
           {/* Right Column*/}
           <div className="col-lg-4">
-             <div style={{ position: "sticky", top: "2rem" }}>
-              <div className="d-flex flex-column gap-4">
-                <QuickStats formData={formData} currentStep={currentStep} />
-                <ProTips currentStep={currentStep} />
-              </div>
+            <div
+              className="d-flex flex-column gap-4 sticky-top"
+              style={{ top: "2rem" }}
+            >
+              <QuickStats formData={formData} />
+              <ProTips currentStep={currentStep} />
             </div>
           </div>
         </div>

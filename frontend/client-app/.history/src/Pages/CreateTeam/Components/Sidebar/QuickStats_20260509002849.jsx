@@ -1,6 +1,4 @@
 import { PrizeIcon , TeamIcon , CodeIcon , StarIcon } from "../../../../assets/Icons"
-import styles from './QuickStats.module.css'
-
 function QuickStats({formData , currentStep}) {
 
   const memberCount = formData.members?.length || 0;
@@ -10,7 +8,7 @@ function QuickStats({formData , currentStep}) {
 
   const statItems = [
     {
-      icon: <TeamIcon size={20} color="#fff"/>,
+      icon: <TeamIcon />,
       label: "Team Size",
       value: `${memberCount + 1}/${teamSize}`, 
     },
@@ -25,7 +23,7 @@ function QuickStats({formData , currentStep}) {
       value: rolesCount,
     },
     {
-      icon: <StarIcon size={20} color="#fff"/>,
+      icon: <StarIcon />,
       label: "Completion",
       value: `${currentStep}/4`,
     },
@@ -34,9 +32,9 @@ function QuickStats({formData , currentStep}) {
   <div className={`p-4 ${styles.statsCard}`}>
       <div className="d-flex align-items-center gap-3 mb-4">
         <div className={styles.iconCircle}>
-          <PrizeIcon size={20} color="#fff" />
+          <PrizeIcon size={20} />
         </div>
-        <h5 className="mb-0 fw-semibold text-white fs-4">Quick Stats</h5>
+        <h5 className="mb-0 fw-bold text-white">Quick Stats</h5>
       </div>
 
       {/* Stat Rows */}
@@ -50,7 +48,7 @@ function QuickStats({formData , currentStep}) {
               <span className="fs-5 d-flex">{item.icon}</span>
               <span className={styles.statLabel}>{item.label}</span>
             </div>
-            <span className="fw-semibold text-white fs-5">{item.value}</span>
+            <span className="fw-bold text-white">{item.value}</span>
           </div>
         ))}
       </div>
@@ -58,4 +56,4 @@ function QuickStats({formData , currentStep}) {
   )
 }
 
-export default QuickStats;
+export default QuickStats

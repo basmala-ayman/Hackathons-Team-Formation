@@ -50,7 +50,7 @@ function QuickStats({formData , currentStep}) {
               <span className="fs-5 d-flex">{item.icon}</span>
               <span className={styles.statLabel}>{item.label}</span>
             </div>
-            <span className="fw-semibold text-white fs-5">{item.value}</span>
+            <span className="fw-bold text-white">{item.value}</span>
           </div>
         ))}
       </div>

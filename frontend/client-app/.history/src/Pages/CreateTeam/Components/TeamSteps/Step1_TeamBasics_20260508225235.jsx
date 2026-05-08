@@ -159,7 +159,7 @@ function Step1_TeamBasics({
           checked={formData.hasIdea}
           onChange={handleToggleIdea}
         />
-        <label htmlFor="hasIdea" className={`${styles.label} mb-0 fw-300`}>
+        <label htmlFor="hasIdea" className={`${styles.label} mb-0 fw-`}>
           I already have a project idea for this hackathon{" "}
         </label>
       </div>

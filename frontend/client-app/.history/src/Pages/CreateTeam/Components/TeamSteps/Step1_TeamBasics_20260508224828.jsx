@@ -10,13 +10,14 @@ function Step1_TeamBasics({
   onNext,
   hackathonList = [],
 }) {
+
   //handle if the user has an idea
   const handleToggleIdea = (e) => {
     const isChecked = e.target.checked;
-    setFormData({
-      ...formData,
+    setFormData({ 
+      ...formData, 
       hasIdea: isChecked,
-      description: isChecked ? formData.description : "",
+      description: isChecked ? formData.description : "" 
     });
   };
 
@@ -42,18 +43,17 @@ function Step1_TeamBasics({
     teamSize: false,
   });
   const handleValidationAndNext = () => {
-    const isHackathonMissing =
-      !formData.hackathonName || formData.hackathonName.trim() === "";
-    const isTeamSizeMissing = !formData.teamSize;
+    const isHackathonMissing = !formData.hackathonName || formData.hackathonName.trim() === "";
+  const isTeamSizeMissing = !formData.teamSize;
 
-    setErrors({
-      hackathon: isHackathonMissing,
-      teamSize: isTeamSizeMissing,
-    });
+  setErrors({
+    hackathon: isHackathonMissing,
+    teamSize: isTeamSizeMissing,
+  });
 
-    if (!isHackathonMissing && !isTeamSizeMissing) {
-      onNext();
-    }
+  if (!isHackathonMissing && !isTeamSizeMissing) {
+    onNext();
+  }
   };
 
   //handle change of team size
@@ -75,6 +75,7 @@ function Step1_TeamBasics({
       setFormData({ ...formData, teamSize: value });
     }
   };
+
 
   //Select Input Styles
   const selectStyles = {
@@ -147,40 +148,21 @@ function Step1_TeamBasics({
         )}
       </div>
 
-      {/* checkbox for idea */}
-      <div
-        className={`${styles.formGroup} d-flex align-items-center gap-3 mb-4`}
-      >
-        <input
-          type="checkbox"
-          id="hasIdea"
-          name="hasIdea"
-          className={styles.checkbox}
-          checked={formData.hasIdea}
-          onChange={handleToggleIdea}
-        />
-        <label htmlFor="hasIdea" className={`${styles.label} mb-0 fw-300`}>
-          I already have a project idea for this hackathon{" "}
-        </label>
-      </div>
+      
 
-      {formData.hasIdea && (
-        <div
-          className={`${styles.formGroup} animate__animated animate__fadeIn`}
-        >
-          <label className={styles.label}>Project Description</label>
-          <textarea
-            name="description"
-            className={styles.textarea}
-            placeholder="Describe your project idea, goals, and what makes it special..."
-            value={formData.description}
-            onChange={handleChange}
-          />
-          <span className={styles.charCount}>
-            {formData.description.length}/500 characters
-          </span>
-        </div>
-      )}
+      <div className={styles.formGroup}>
+        <label className={styles.label}>Project Description</label>
+        <textarea
+          name="description"
+          className={styles.textarea}
+          placeholder="Describe your project idea, goals, and what makes it special..."
+          value={formData.description}
+          onChange={handleChange}
+        />
+        <span className={styles.charCount}>
+          {formData.description.length}/500 characters
+        </span>
+      </div>
 
       {/*team size  */}
       <div className={styles.formGroup}>
@@ -232,7 +214,7 @@ function Step1_TeamBasics({
           </div>
         )}
 
-        {errors.teamSize && (
+         {errors.teamSize && (
           <span
             style={{
               color: "var(--color-error-red)",

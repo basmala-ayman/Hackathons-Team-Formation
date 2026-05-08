@@ -226,7 +226,7 @@ function CreateTeam() {
 
           {/* Right Column*/}
           <div className="col-lg-4">
-             <div style={{ position: "sticky", top: "2rem" }}>
+             <div style={{ position: "sticky", top: "2rem" }}>>
               <div className="d-flex flex-column gap-4">
                 <QuickStats formData={formData} currentStep={currentStep} />
                 <ProTips currentStep={currentStep} />

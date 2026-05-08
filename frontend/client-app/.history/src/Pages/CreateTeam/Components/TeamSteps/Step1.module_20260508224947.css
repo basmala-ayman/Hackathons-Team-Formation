@@ -76,10 +76,11 @@
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  accent-color: var(--color-primary-dark);
+  accent-color: var(--color-primary-dark); /* Matches your purple theme */
   border-radius: 0.4rem;
 }
 
+/* Optional: Add a subtle animation when the description appears */
 :global(.animate__fadeIn) {
   animation: fadeIn 0.4s ease-in-out;
 }

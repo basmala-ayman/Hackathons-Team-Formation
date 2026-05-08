@@ -17,7 +17,7 @@ function ProTips() {
         </div>
        <div className="d-flex flex-column gap-2">
         {tipsData.map((tip , index)=>(
-            <div key={index} className={`d-flex gap-2 text-muted align-items-start p-3 ${styles.tipRow}`}>
+            <div key={index} className={`d-flex gap-2 text-muted align-items-center p-3 ${styles.tipRow}`}>
                 <span><CheckIcon/></span>
                 <p className='mb-0'>{tip}</p>
 

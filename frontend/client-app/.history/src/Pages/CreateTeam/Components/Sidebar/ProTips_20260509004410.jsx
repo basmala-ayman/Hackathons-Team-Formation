@@ -9,7 +9,7 @@ function ProTips() {
   "Start with 3-4 members for optimal collaboration"
 ];
   return (
-    <div >
+    <div className='container'>
     <div className={styles.wrapper}>
         <div className="d-flex align-items-center gap-2 mb-4">
             <span ><SparkleIcon size={20}/></span>
@@ -17,9 +17,9 @@ function ProTips() {
         </div>
        <div className="d-flex flex-column gap-2">
         {tipsData.map((tip , index)=>(
-            <div key={index} className={`d-flex gap-2 text-muted align-items-start p-3 ${styles.tipRow}`}>
+            <div key={index} className={`d-flex gap-2 text-muted align-items-center ${styles.tipRow}`}>
                 <span><CheckIcon/></span>
-                <p className='mb-0'>{tip}</p>
+                <p className='mb-0 position-absolute top-0 '>{tip}</p>
 
 
             </div>

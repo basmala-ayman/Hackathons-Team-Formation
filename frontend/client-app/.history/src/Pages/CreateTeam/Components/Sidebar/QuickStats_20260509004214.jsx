@@ -31,7 +31,7 @@ function QuickStats({formData , currentStep}) {
     },
   ];
   return (
-  <div className={`p-4 ${styles.statsCard}`}>
+  <div className={` ${styles.statsCard}`}>
       <div className="d-flex align-items-center gap-3 mb-4">
         <div className={styles.iconCircle}>
           <PrizeIcon size={20} color="#fff" />

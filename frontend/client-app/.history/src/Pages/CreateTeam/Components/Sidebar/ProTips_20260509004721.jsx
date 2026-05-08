@@ -9,7 +9,7 @@ function ProTips() {
   "Start with 3-4 members for optimal collaboration"
 ];
   return (
-    <div >
+    <div className='container'>
     <div className={styles.wrapper}>
         <div className="d-flex align-items-center gap-2 mb-4">
             <span ><SparkleIcon size={20}/></span>

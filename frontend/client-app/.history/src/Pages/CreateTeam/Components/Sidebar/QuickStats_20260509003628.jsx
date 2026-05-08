@@ -36,7 +36,7 @@ function QuickStats({formData , currentStep}) {
         <div className={styles.iconCircle}>
           <PrizeIcon size={20} color="#fff" />
         </div>
-        <h5 className="mb-0 fw-semibold text-white fs-4">Quick Stats</h5>
+        <h5 className="mb-0 fw-semibold text-white fs-">Quick Stats</h5>
       </div>
 
       {/* Stat Rows */}
@@ -50,7 +50,7 @@ function QuickStats({formData , currentStep}) {
               <span className="fs-5 d-flex">{item.icon}</span>
               <span className={styles.statLabel}>{item.label}</span>
             </div>
-            <span className="fw-semibold text-white fs-5">{item.value}</span>
+            <span className="fw-bold text-white">{item.value}</span>
           </div>
         ))}
       </div>
