@@ -116,7 +116,7 @@ function CreateTeam() {
   return (
     <div className={`min-vh-100 ${styles.pageBackground}`}>
       {showSuccess && (
-        <SuccessPopUp 
+        <SuccessModal 
           teamName={formData.teamName} 
           onClose={() => setShowSuccess(false)} 
         />

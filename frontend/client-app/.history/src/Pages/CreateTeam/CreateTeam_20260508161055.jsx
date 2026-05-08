@@ -7,7 +7,6 @@ import Step1_TeamBasics from "./Components/TeamSteps/Step1_TeamBasics";
 import Step2_AddMembers from "./Components/TeamSteps/Step2_AddMembers";
 import Step3_RequiredSkills from "./Components/TeamSteps/Step3_RequiredSkills";
 import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
-import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import {
   TeamMeetIcon,
   AddMemberIcon,
@@ -116,7 +115,7 @@ function CreateTeam() {
   return (
     <div className={`min-vh-100 ${styles.pageBackground}`}>
       {showSuccess && (
-        <SuccessPopUp 
+        <SuccessModal 
           teamName={formData.teamName} 
           onClose={() => setShowSuccess(false)} 
         />

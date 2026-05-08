@@ -1,0 +1,76 @@
+.roundedModal {
+    border-radius: 2.4rem !important;
+}
+
+.mainIcon {
+    width: 9rem;
+    height: 9rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 4rem;
+    box-shadow: 0 1rem 2rem rgba(107, 70, 193, 0.3);
+}
+
+.title {
+    color: var(--color-very-dark-purple);
+    font-size: 3.5rem;
+}
+
+.teamName {
+    color: var(--color-primary-dark);
+    font-weight: 700;
+    margin:0 0.4rem ;
+}
+
+.aiCard {
+    background-color: var(--color-primary-light-3);
+    border-radius: 1.6rem;
+    font-size: var(--fs-regular);
+    line-height: 1.5;
+}
+
+.miniIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+}
+
+.progressTrack {
+    background-color: white;
+    border-radius: 1rem;
+}
+
+.progressFill {
+    background: var(--gradient-primary);
+}
+
+
+/* Animations */
+.modalExit {
+    opacity: 0 !important;
+    transform: scale(0.95) !important;
+    transition: all 0.4s ease-in-out !important;
+}
+.fadeOut {
+    opacity: 0 !important;
+    transition: opacity 0.4s ease-in-out;
+}
+.roundedModal {
+    border-radius: 2.4rem !important;
+    animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
