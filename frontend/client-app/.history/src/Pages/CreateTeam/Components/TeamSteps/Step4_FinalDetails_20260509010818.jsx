@@ -6,9 +6,6 @@ import { CirclesIcon , TeamIcon , AddMemberIcon , CodeIcon } from '../../../../a
 function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
     const memberCount= (formData.members?.length || 0) +1;
     const skillCount =formData.skills?.length||0;
-    const rolesCount =formData.roles?.length||0;
-
-    
   return (
     <div className={styles.container}>
       <div className={styles.summaryContainer}>
@@ -53,8 +50,8 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
         <div className={styles.summaryItem}>
           <div className={styles.iconWrapper}><CodeIcon color='var(--color-primary-dark)' /></div>
           <div className={styles.itemContent}>
-            <span className={styles.itemLabel}>Required Roles</span>
-            <span className={styles.itemValue}>{rolesCount} Role{rolesCount !== 1 ? 's' : ''}</span>
+            <span className={styles.itemLabel}>Required Skills</span>
+            <span className={styles.itemValue}>{skillCount} skill{skillCount !== 1 ? 's' : ''}</span>
           </div>
         </div>
       </div>

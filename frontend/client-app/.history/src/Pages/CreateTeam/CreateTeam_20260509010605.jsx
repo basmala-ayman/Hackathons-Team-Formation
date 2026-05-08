@@ -225,7 +225,7 @@ function CreateTeam() {
           </div>
 
           {/* Right Column*/}
-          <div className="col-lg-4 d-flex flex-column gap-4">
+          <div className="col-lg-4 d-flex flex-column gap-4 sti">
              
                 <QuickStats formData={formData} currentStep={currentStep} />
                 <ProTips currentStep={currentStep} />

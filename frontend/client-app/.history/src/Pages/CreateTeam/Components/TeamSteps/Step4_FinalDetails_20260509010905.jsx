@@ -54,7 +54,7 @@ function Step4_FinalDetails({ formData, onPrev, onSubmit }) {
           <div className={styles.iconWrapper}><CodeIcon color='var(--color-primary-dark)' /></div>
           <div className={styles.itemContent}>
             <span className={styles.itemLabel}>Required Roles</span>
-            <span className={styles.itemValue}>{rolesCount} Role{rolesCount !== 1 ? 's' : ''}</span>
+            <span className={styles.itemValue}>{rolesCount} Roles{rolesCount !== 1 ? 's' : ''}</span>
           </div>
         </div>
       </div>

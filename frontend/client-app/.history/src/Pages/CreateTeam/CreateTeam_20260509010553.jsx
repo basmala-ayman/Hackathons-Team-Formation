@@ -229,6 +229,7 @@ function CreateTeam() {
              
                 <QuickStats formData={formData} currentStep={currentStep} />
                 <ProTips currentStep={currentStep} />
+              </div>
           </div>
         </div>
       </div>

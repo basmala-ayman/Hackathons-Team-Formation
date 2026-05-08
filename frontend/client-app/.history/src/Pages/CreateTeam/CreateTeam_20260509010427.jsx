@@ -225,10 +225,13 @@ function CreateTeam() {
           </div>
 
           {/* Right Column*/}
-          <div className="col-lg-4 d-flex flex-column gap-4">
-             
+          <div className="col-lg-4" style={{ alignSelf: 'start' }}>
+             <div style={{ position: "sticky", top: "2rem" }}>
+              <div className="d-flex flex-column gap-4">
                 <QuickStats formData={formData} currentStep={currentStep} />
                 <ProTips currentStep={currentStep} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
