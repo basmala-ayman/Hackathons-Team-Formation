@@ -11,6 +11,7 @@ from typing import List
 import text_processor
 from hops_models import OneHopModule
 import greedy_algorithm
+from hops_models import TwoHopModule
 
 
 # This dictionary holds everything in RAM for speed
@@ -18,11 +19,14 @@ state = {}
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 
-# Format for the Sync Response
+# Format for the Sync Member
 class MemberSyncRequest(BaseModel):
     id: int
     bio: str
     skills: list
+    # for two-hop model
+    past_teammate_ids: List[int] = []
+    past_team_ids: List[int] = []
 
 class SyncResponseData(BaseModel):
     synced_id: int
@@ -31,7 +35,12 @@ class SyncResponse(BaseModel):
     success: bool
     data: SyncResponseData
 
-# Format for the Recommendation Response
+# Format for the Sync Project
+class ProjectSyncRequest(BaseModel):
+    id: int
+    tags: list
+
+# Format for the Recommendation
 class RecommendRequest(BaseModel):
     project_id: int
     tags: list
@@ -59,7 +68,7 @@ async def lifespan(app: FastAPI):
         state["label2id"] = json.load(f)
 
     # one-hop weights
-    weights_path = "models/trained_one_hop_weights.pt"
+    weights_path = "models/trained_onehop_weights.pt"
     state_dict = torch.load(weights_path, map_location=device)
 
     num_devs_trained = state_dict['dev_id.weight'].shape[0]
@@ -78,6 +87,50 @@ async def lifespan(app: FastAPI):
     # 4. Initialize our REAL USER POOL (Empty at start)
     state["live_member_embs"] = [] # Store 256D vectors here
     state["live_member_ids"] = []  # Store PostgreSQL IDs here
+
+    # two-hop weights
+    two_hop_weights_path = "models/trained_twohop_weights.pt"
+    # Load once
+    two_hop_state = torch.load(two_hop_weights_path, map_location=device)
+
+    with torch.no_grad():
+        # 1. Get raw 64D ID weights from the state_dict
+        raw_user_ids = state_dict['dev_id.weight']  # Shape: [38462, 64]
+        raw_proj_ids = state_dict['task_id.weight'] # Shape: [18569, 64]
+
+        # 2. FIX: Change 192 to 640 to reach the 704 input size (64 + 640 = 704)
+        user_zeros = torch.zeros((num_devs_trained, 640)).to(device)
+        proj_zeros = torch.zeros((num_tasks_trained, 640)).to(device)
+
+        # 3. Concatenate and make 'contiguous' for the Apple M2 GPU
+        user_input = torch.cat([raw_user_ids, user_zeros], dim=1).contiguous()
+        proj_input = torch.cat([raw_proj_ids, proj_zeros], dim=1).contiguous()
+
+        # 4. Project them into the 256D common space
+        full_user_embs = state["encoder"].dev_proj(user_input)
+        full_proj_embs = state["encoder"].task_proj(proj_input)
+        
+    state["two_hop"] = TwoHopModule(
+        onehop_user_embs=full_user_embs.cpu().numpy(),
+        onehop_proj_embs=full_proj_embs.cpu().numpy(),
+        common_dim=256
+    ).to(device)
+
+    # Now load the state into the initialized module
+    state["two_hop"].load_state_dict(two_hop_state)
+    state["two_hop"].eval()
+    # state["two_hop"] = TwoHopModule(
+    #     onehop_user_embs=state_dict['dev_id.weight'].cpu().numpy(),
+    #     onehop_proj_embs=state_dict['task_id.weight'].cpu().numpy(),
+    #     common_dim=256
+    # ).to(device)
+
+    state["two_hop"].load_state_dict(two_hop_state)
+    state["two_hop"].eval()
+
+    # 4. Initialize our REAL history of teams POOL (Empty at start)
+    state["live_past_team_embs"] = [] # Store 256D vectors here
+    state["live_past_team_ids"] = []  # Store PostgreSQL IDs here
 
     yield # server is now running
     state.clear()
@@ -138,6 +191,52 @@ def generate_project_emb(tags: list):
     return vector.cpu().squeeze().numpy()
 
 
+def refine_with_history(base_vec, teammate_ids, project_ids):
+    """
+    Refines a One-Hop vector using Two-Hop attention over past history.
+    """
+
+    # convert base vector to tensor
+    member_base = torch.tensor([base_vec]).to(device)
+
+    # find teammate vectors in our live memory
+    teammate_embs = [state["live_member_embs"][state["live_member_ids"].index(tid)]
+                     for tid in teammate_ids if tid in state["live_member_ids"]]
+    
+    # find project/team vectors in our live memory
+    project_embs = [state["live_past_team_embs"][state["live_past_team_ids"].index(pid)]
+                    for pid in project_ids if pid in state["live_past_team_ids"]]
+    
+    if not teammate_embs and not project_embs:
+        return base_vec
+    
+    with torch.no_grad():
+        # Handle Teammate Context (member_ctx2)
+        if teammate_embs:
+            t_mat = torch.from_numpy(np.stack(teammate_embs)).unsqueeze(0).to(device).float()
+            t_mask = torch.ones((1, len(teammate_embs)), dtype=torch.bool).to(device)
+            member_ctx2 = state["two_hop"].user_attn_2(member_base, t_mat, t_mask)
+        else:
+            member_ctx2 = member_base
+        
+        # Handle Project Context (member_ctx1)
+        if project_embs:
+            p_mat = torch.from_numpy(np.stack(project_embs)).unsqueeze(0).to(device).float()
+            p_mask = torch.ones((1, len(project_embs)), dtype=torch.bool).to(device)
+            member_ctx1 = state["two_hop"].user_attn_1(member_base, p_mat, p_mask)
+        else:
+            member_ctx1 = member_base
+        
+        # Fusion: Combine [member's profile + Project History + Teammate History]
+        # We pass member_base twice as per your TwoHopModule fuse signature
+        member_final, _ = state["two_hop"].fuse(
+            member_base, member_base,
+            member_ctx1, member_ctx2,
+            member_ctx1, member_ctx2)
+
+        return member_final.cpu().squeeze().numpy()
+
+
 @app.post("/sync/member", response_model=SyncResponse)
 async def sync_member(data: MemberSyncRequest):
     """Syncs a real database user into the AI search pool."""
@@ -145,11 +244,15 @@ async def sync_member(data: MemberSyncRequest):
     db_id = data.id
     bio = data.bio
     skills = data.skills
+    past_teammate_ids = data.past_teammate_ids
+    past_team_ids = data.past_team_ids
 
     # Generate their mathematical 'identity'
     vector = generate_member_emb(bio, skills)
 
-    # If the user already exists in our pool, update them. Otherwise, add them.
+    if past_teammate_ids or past_team_ids:
+        vector = refine_with_history(vector, past_teammate_ids, past_team_ids)
+
     if db_id in state["live_member_ids"]:
         idx = state["live_member_ids"].index(db_id)
         state["live_member_embs"][idx] = vector
@@ -164,6 +267,29 @@ async def sync_member(data: MemberSyncRequest):
         }
     }
 
+
+@app.post("/sync/project", response_model=SyncResponse)
+async def sync_project(data: ProjectSyncRequest):
+    db_id = data.id
+    tags = data.tags
+
+    vector = generate_project_emb(tags)
+
+    if db_id in state["live_past_team_ids"]:
+        idx = state["live_past_team_ids"].index(db_id)
+        state["live_past_team_embs"][idx] = vector
+    else:
+        state["live_past_team_embs"].append(vector)
+        state["live_past_team_ids"].append(db_id)
+    
+    return {
+        "success": True,
+        "data": {
+            "synced_id": db_id
+        }
+    }
+
+
 @app.post("/recommend", response_model=RecommendResponse)
 async def recommend(
     data: RecommendRequest
@@ -171,7 +297,7 @@ async def recommend(
     
     project_id = data.project_id
     tags = data.tags
-    search_member_ids = data.search_member_ids
+    search_member_ids = set(data.search_member_ids)
     team_size = data.team_size
     pinned_member_ids = data.pinned_member_ids
 
@@ -179,10 +305,11 @@ async def recommend(
 
     filtered_embs = []
     filtered_ids = []
-    for i, id in enumerate(state["live_member_ids"]):
-        if id in search_member_ids:
+
+    for i, db_id in enumerate(state["live_member_ids"]):
+        if db_id in search_member_ids:
             filtered_embs.append(state["live_member_embs"][i])
-            filtered_ids.append(id)
+            filtered_ids.append(db_id)
     
     if not filtered_embs:
         raise HTTPException(status_code=400, detail="None of the search_member_ids were found in AI memory.")
