@@ -7,7 +7,6 @@ from contextlib import asynccontextmanager
 from pydantic import BaseModel
 from typing import List
 
-# Import your custom files
 import text_processor
 from hops_models import OneHopModule
 import greedy_algorithm
