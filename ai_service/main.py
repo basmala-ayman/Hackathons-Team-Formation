@@ -18,6 +18,13 @@ state = {}
 device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 
+# Format for Status
+class StatusResponse(BaseModel):
+    memory_wiped: bool
+    total_members: int
+    total_projects: int
+
+
 # Format for the Sync Member
 class MemberSyncRequest(BaseModel):
     id: int
@@ -234,6 +241,16 @@ def refine_with_history(base_vec, teammate_ids, project_ids):
             member_ctx1, member_ctx2)
 
         return member_final.cpu().squeeze().numpy()
+
+
+@app.get("/status", response_model=StatusResponse)
+async def get_status():
+    """Returns the current state of the AI memory pools."""
+    return {
+        "memory_wiped": len(state["live_member_ids"]) == 0,
+        "total_members": len(state["live_member_ids"]),
+        "total_projects": len(state["live_past_team_ids"])
+    }
 
 
 @app.post("/sync/member", response_model=SyncResponse)
