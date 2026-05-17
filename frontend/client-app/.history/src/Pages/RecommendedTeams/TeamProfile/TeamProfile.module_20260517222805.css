@@ -1,0 +1,122 @@
+.pageBackground {
+  background: var(--gradient-website-bg);
+}
+
+.breadcrumbLink {
+  font-size: var(--fs-small);
+  color: var(--color-gray);
+}
+
+.breadcrumbActive {
+  font-size: var(--fs-small);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.teamTitle {
+  color: var(--color-very-dark-purple);
+  font-size: var(--fs-h3);
+}
+
+.hackathonLine {
+  color: var(--color-primary-dark);
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.description {
+  color: var(--color-text);
+  font-size: 1.8rem;
+  line-height: 1.7;
+  max-width: 90rem;
+}
+
+.sectionHeader {
+  color: var(--color-very-dark-purple);
+  font-size: 2.2rem;
+}
+
+.memberCard {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-primary-light);
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.02);
+}
+
+.memberAvatar {
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarWrapper {
+  position: relative;
+}
+
+.leaderCrown {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  background-color: var(--color-accent);
+  border: 0.2rem solid var(--color-white);
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.memberName {
+  color: var(--color-very-dark-purple);
+  font-size: 1.9rem;
+}
+
+.memberRole {
+  color: var(--color-gray);
+  font-size: var(--fs-small);
+}
+
+.skillTag {
+  background-color: var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 0.3rem 1.2rem;
+  border-radius: 0.6rem;
+}
+
+.progressSection {
+  margin-top: 5rem;
+}
+
+.progressLabel {
+  font-size: 1.7rem;
+  color: var(--color-dark-gray);
+  font-weight: 600;
+}
+
+.progressValue {
+  font-size: 1.7rem;
+  color: var(--color-primary-dark);
+}
+
+.progressTrackLine {
+  height: 1rem;
+  background-color: var(--color-light-gray);
+  border-radius: 1rem;
+}
+
+.progressFillLine {
+  height: 100%;
+  background-color: var(--color-primary-dark);
+  border-radius: 1rem;
+}
+
+.btnDecline:hover {
+  background-color: #fff5f5 !important;
+  color: var(--color-light-red) !important;
+  border-color: var(--color-light-red) !important;
+}

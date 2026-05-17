@@ -1,0 +1,58 @@
+.matchBadge {
+  background-color: #fef7e0;
+  color: #b07c00;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+}
+
+.sectionTitle {
+  color: #7c4dff;
+}
+
+.memberCard {
+  background-color: #ffffff;
+  border: 1px solid #e1dbf7;
+  border-radius: 1rem;
+}
+
+.memberAvatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.skillTag {
+  background-color: #f1ecfe;
+  color: #7c4dff;
+  font-size: 1.2rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.progressSection {
+  margin-top: 3.5rem;
+}
+
+.progressLabel {
+  color: #7e849a;
+  font-weight: 500;
+}
+
+.progressValue {
+  color: #7c4dff;
+}
+
+.progressTrackLine {
+  height: 6px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progressFillLine {
+  height: 100%;
+  background-color: #7c4dff;
+  border-radius: 10px;
+}

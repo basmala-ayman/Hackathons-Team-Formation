@@ -37,7 +37,7 @@ function App() {
         <Route path="/explore" element={<Explore />} />
         <Route path="/createTeam" element={<CreateTeam />} />
         <Route path="/recommendedTeams" element={<RecommendedTeams />} />
-        <Route path="/teams/:id" element={<TeamProfile />} />
+        <Route path="/teams:id" element={<TeamProfile />} />
 
 
 
