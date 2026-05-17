@@ -29,7 +29,7 @@ function SuccessPopUp({ teamName, onClose}) {
 
             <div className="modal-body text-center">
               <div className={`${styles.mainIcon} mx-auto mb-4`}>
-                <SparkleIcon color='#fff' />
+                <SparkleIcon color='var(--color-white)' />
               </div>
 
               <h2 className={`fw-bolder mb-2 ${styles.title}`}>Stay Tuned! 🚀</h2>

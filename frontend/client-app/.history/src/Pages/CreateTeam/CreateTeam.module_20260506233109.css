@@ -2,7 +2,7 @@
   padding: 32px;
   border-radius: 10px;
   border: 0.8px solid var(--color-very-dark-purple);
-  background: #fff;
+  background:var(--color-white);
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);

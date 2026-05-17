@@ -120,7 +120,7 @@ function CreateTeam() {
       <div className="container py-5">
         <header className="d-flex align-items-center mb-5">
           <div className={styles.headerIconBox}>
-            <SparkleIcon color="#fff" />
+            <SparkleIcon color="var(--color-white)" />
           </div>
           <div className="ms-4">
             <h1 className={styles.mainTitle}>Create Your Dream Team</h1>

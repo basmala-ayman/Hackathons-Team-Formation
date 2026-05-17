@@ -1,0 +1,112 @@
+.cardWrapper {
+  background-color: #ffffff;
+  border: 1px solid #e1dbf7; /* Soft purple tinted border border */
+  border-radius: 1.2rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.cardWrapper:hover {
+  box-shadow: 0 0.5rem 1.5rem rgba(124, 77, 255, 0.08);
+}
+
+.teamTitle {
+  color: #1a064f;
+  font-size: 1.8rem;
+}
+
+/* Match Badges Color Schemes */
+.matchBadge {
+  border-radius: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.badgeHigh {
+  background-color: #fef7e0;
+  color: #b07c00;
+}
+
+.badgeMedium {
+  background-color: #fef7e0;
+  color: #b07c00; /* Mirroring image color style mapping */
+}
+
+.badgeLow {
+  background-color: #fef7e0;
+  color: #b07c00;
+}
+
+.hackathonTag {
+  color: #7c4dff;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.description {
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.sectionLabel {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a064f;
+}
+
+/* Avatar Stack Overlap Rules */
+.avatarStack {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
+.avatarImg {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  margin-left: -0.8rem;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.avatarCountCircle {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  background-color: #f1ecfe;
+  color: #7c4dff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  margin-left: -0.8rem;
+}
+
+.progressText {
+  color: #7c4dff;
+}
+
+/* Action Button Designs */
+.btnAccept {
+  background-color: #7c4dff !important;
+  color: #ffffff !important;
+  border-radius: 0.8rem;
+  border: none;
+}
+
+.btnAccept:hover {
+  background-color: #693bdf !important;
+}
+
+.btnView {
+  background-color: transparent !important;
+  color: #7c4dff !important;
+  border: 1px solid #7c4dff !important;
+  border-radius: 0.8rem;
+}
+
+.btnView:hover {
+  background-color: rgba(124, 77, 255, 0.05) !important;
+}
