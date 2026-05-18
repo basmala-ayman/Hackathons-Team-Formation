@@ -60,6 +60,13 @@ enum NotificationType {
   INVITE_ACCEPTED
   INVITE_REJECTED
   HACKATHON_REMINDER
+  RECOMMENDATION_RECEIVED //this used when the founder get the ai recommendation 
+  ROUND2_AVAILABLE ///to tell the owner if he has missing in his currect team
+}
+
+enum HackathonSource {
+  SCRAPED
+  USER_CREATED
 }
 
 //--------------------------------------------------
@@ -101,6 +108,9 @@ model User {
   deletedAt                DateTime? //that means can be null
   verificationToken        String?
   verificationTokenExpires DateTime?
+  githubUrl                String?
+  linkedinUrl              String?
+  tachRole                 String? //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
@@ -113,6 +123,10 @@ model User {
   matchingRequests    MatchingRequest[] //can make more than mathcing requests
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
+
+  hackathonInterests HackathonInterest[]
+  projectInterests   ProjectInterest[]
+  ownedProjects      Project[]
 
   //for performance search in the users invitation we need to make index on email and on name 
   @@index([email])
@@ -159,25 +173,27 @@ model UserSkill {
 //done 
 model Hackathon {
   id                 String          @id @default(uuid())
-  title              String
+  title              String          @unique
   slug               String?
-  location           String          @default("Online")
-  applyLink          String
+  location           String?         @default("Online")
+  applyLink          String?
   thumbnailUrl       String?
   remainingTime      String?
   submissionPeriod   String?
-  prizeAmount        Float           @default(0)
-  prizesCounts       Int             @default(0)
-  registrationsCount Int             @default(0)
+  prizeAmount        Float?          @default(0)
+  prizesCounts       Int?            @default(0)
+  registrationsCount Int?            @default(0)
   organization       String?
   status             HackathonStatus @default(UPCOMING)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
+  source             HackathonSource @default(SCRAPED)
 
   // Relations
   tags             HackathonTag[]
   teams            Team[]
   matchingRequests MatchingRequest[]
+  interests        HackathonInterest[]
 
   @@map("hackathons")
 }
@@ -222,6 +238,9 @@ model Team {
   status      TeamStatus @default(FORMING)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  description String?
+  size        Int        @default(1) //there is no default size of them team
+  roles       String[]
 
   // Relations
   hackathon   Hackathon        @relation(fields: [hackathonId], references: [id]) //cause the relation is 1:m
@@ -229,7 +248,9 @@ model Team {
   members     TeamMember[]
   invitations TeamInvitation[]
 
-  skills TeamSkill[]
+  skills           TeamSkill[]
+  project          Project? //cause this team can be happened but for project user made not hackathon 
+  matchingRequests MatchingRequest[]
 
   @@map("teams")
 }
@@ -285,16 +306,22 @@ model TeamInvitation {
 // ─────────────────────────────────────────
 
 model MatchingRequest {
-  id          String         @id @default(uuid())
-  userId      String
-  hackathonId String
-  status      MatchingStatus @default(PENDING)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id            String         @id @default(uuid())
+  userId        String
+  hackathonId   String
+  teamId        String? //the team who requested this matching request
+  projectId     String? //the project that matching happened to but it is optional cause it may be for hackathon not project
+  roundNumber   Int            @default(1)
+  queuePosition Int? //cause who making this request is the owners persons so we need to know each person position to the priority of respond will be based on it
+  status        MatchingStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   // Relations
   user            User               @relation(fields: [userId], references: [id])
   hackathon       Hackathon          @relation(fields: [hackathonId], references: [id])
+  team            Team?              @relation(fields: [teamId], references: [id])
+  project         Project?           @relation(fields: [projectId], references: [id])
   recommendations AIRecommendation[]
 
   @@map("matching_requests")
@@ -303,9 +330,10 @@ model MatchingRequest {
 model AIRecommendation {
   id                 String               @id @default(uuid())
   matchingRequestId  String
-  teamData           Json
+  teamData           Json // teamData shape: { members: [{ userId, name, skills }], explanation: "" }
   compatibilityScore Float
   status             RecommendationStatus @default(PENDING)
+  expiresAt          DateTime? //cause after for example 24 hours that this team was recommended to the owner we will ask if make round 2 or that enough
   createdAt          DateTime             @default(now())
 
   // Relations
@@ -363,4 +391,55 @@ model PasswordResetToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("password_reset_tokens")
+}
+
+// Case 2 when user presses "I'm Interested" on a hackathon
+// this is the candidate pool for hackathon-based matching
+model HackathonInterest {
+  //so we store here each user and the hackathon he interested on it cause we will send them for the model
+  userId      String
+  hackathonId String
+  createdAt   DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, hackathonId])
+  @@map("hackathon_interests")
+}
+
+// Case 1 when the project idea the team owner attaches during team creation
+// one project per team, one team per project and that cause just the owner who made the team so there is no any other teams 
+//just one team for each project 
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  ownerId     String
+  teamId      String   @unique // one project per team
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner            User              @relation(fields: [ownerId], references: [id])
+  team             Team              @relation(fields: [teamId], references: [id])
+  interests        ProjectInterest[]
+  matchingRequests MatchingRequest[] //and this is an array of requests cause the owner can ask to get round 2 recommendations 
+
+  @@map("projects")
+}
+
+// Case 1 when user presses "I'm Interested" on a project in Explore Projects
+// this is the candidate pool for project-based matching
+
+//it is the same idea of the hackathon interest except it is for the projects not hackathons 
+model ProjectInterest {
+  userId    String
+  projectId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_interests")
 }
