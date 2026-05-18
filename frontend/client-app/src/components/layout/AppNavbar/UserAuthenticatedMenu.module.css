@@ -1,29 +1,35 @@
-
-.bellIcon{
-    cursor: pointer;
+.wrapper {
+  width: 155px;
+  position: relative;
+}
+.bellIcon {
+  cursor: pointer;
 }
 .customToggle {
-     transition: all 0.1s ease-in-out;
-    border-radius: 0.5rem;
-    border: none ;   
-    box-shadow: none ; 
+  width: 100%;
+  transition: all 0.1s ease-in-out;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: none;
 }
 .customToggle::after {
-    display: none;
+  display: none;
 }
-.customToggle[aria-expanded="true"] {
-    background-color: var(--color-primary-light-2);
+.customToggle[aria-expanded="true"],
+.customToggle:hover {
+  background-color: var(--color-primary-light-2);
 }
 
 .customMenu {
-    border: none;
-    border-radius: 15px; 
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-    padding: 10px 0;
-    min-width: 200px;
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  /* min-width: 200px; */
 }
-.customMenu{
-    font-size: var(--fs-small);
-    padding: 1rem;
-    line-height: 2;
+.customMenu {
+  font-size: var(--fs-small);
+  padding: 1rem;
+  line-height: 2;
 }

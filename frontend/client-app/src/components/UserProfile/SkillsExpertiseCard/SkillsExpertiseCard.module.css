@@ -1,0 +1,113 @@
+.skillsMainCard {
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-primary-light-2);
+  border-radius: 1rem;
+  padding: 2.2rem 2.5rem;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(107, 70, 193, 0.02);
+}
+
+.cardHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f7fafc;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.cardTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.headerIcon {
+  color: var(--color-primary-dark);
+}
+
+.cardTitleText {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+
+.addSkillBtn {
+  background: transparent;
+  border: 1.5px solid var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+  border-radius: 0.6rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: var(--fs-v-small);
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.addSkillBtn:hover {
+  background-color: rgba(107, 70, 193, 0.05);
+  border-color: var(--color-primary-dark);
+}
+
+.skillsContentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.skillsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sectionTitle {
+  font-size: var(--fs-v-small);
+  font-weight: 700;
+  color: var(--color-dark-gray);
+  margin: 0;
+  text-align: left;
+}
+
+.badgesWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.hardSkillBadge {
+  background-color: var(--color-primary-light-2) !important;
+  color: var(--color-primary-dark);
+  font-family: var(--font-family-inter);
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.6rem;
+  border: none;
+}
+
+.softSkillBadge {
+  background-color: #e3efff !important;
+  color: #3182ce;
+  font-family: var(--font-family-inter);
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.6rem;
+  border: none;
+}
+
+.interestSkillBadge {
+  background-color: #e6fffa !important;
+  color: var(--color-success-green);
+  font-family: var(--font-family-inter);
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.6rem;
+  border: none;
+}

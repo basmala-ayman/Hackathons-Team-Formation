@@ -9,10 +9,18 @@ function CustomButton({
   disabled = false,
   className = "",
 }) {
+  // Create a safe handler
+  const handleClick = (e) => {
+    // If it's a submit button, we let the form handle it
+    // If an onClick was provided, we run it
+    if (onClick) {
+      onClick(e);
+    }
+  };
   return (
     <button
       type={type}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       className={`
         ${styles["base-btn"]} 

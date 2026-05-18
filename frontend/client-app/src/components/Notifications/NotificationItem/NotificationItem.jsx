@@ -69,7 +69,7 @@ export default function NotificationItem({ data, onRead }) {
             {/* ACTION AREA */}
             {data.type === "JOIN_REQUEST" && (
               <div className={styles.actions}>
-                <button className={styles.btnAccept}>
+                <button className={styles.btnAccept} >
                   <Check size={16} strokeWidth={3} />
                   <span>Accept</span>
                 </button>

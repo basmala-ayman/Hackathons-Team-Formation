@@ -1,8 +1,10 @@
 .authRow {
   display: flex;
-  align-items: stretch; /* This ensures the image and form are always the same height */
+  align-items: stretch;
   overflow: hidden;
   min-height: 50rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 
 .formWrapper {
@@ -27,7 +29,5 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
+  padding: 0.7rem;
 }
-
-

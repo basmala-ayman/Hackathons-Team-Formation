@@ -1,0 +1,60 @@
+.popupContainer {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  padding: 1.6rem 2.4rem;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: transparent;
+  border: none;
+  color: var(--color-light-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  border-radius: 50%;
+}
+
+.closeBtn:hover {
+  color: var(--color-text);
+  background-color: var(--color-primary-light-3);
+  transform: rotate(90deg);
+}
+
+.title {
+  font-family: var(--font-family-inter);
+  color: var(--color-very-dark-purple);
+}
+
+.subText {
+  color: var(--color-dark-gray);
+  max-width: 85%;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.warningCircle {
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--color-error-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-error-red);
+}
+
+.successIcon {
+  color: var(--color-success-green);
+}

@@ -1,0 +1,62 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding: 2rem;
+}
+
+.smallFormContainer {
+  height: 52rem;
+}
+
+.immgIllustration {
+  height: 52rem;
+  box-shadow: 0 0.4rem 0.4rem 0 var(--color-primary-light-2);
+}
+
+.iconCircle {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--color-primary-dark), #8945ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  color: var(--color-very-dark-purple);
+  margin-bottom: 1.6rem;
+}
+
+.description {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.description strong {
+  color: var(--color-very-dark-purple);
+}
+
+.footerText {
+  font-size: var(--fs-small);
+  color: var(--color-gray);
+}
+
+.backLink {
+  color: var(--color-very-dark-purple);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1.6rem;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}

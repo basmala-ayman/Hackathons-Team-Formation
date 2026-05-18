@@ -1,28 +1,43 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./ForgetPassword.module.css";
 import loginStyles from "../Login/Login.module.css";
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
+import { useAuth } from "../../../context/AuthContext/useAuth.js";
+import { popUp } from "../../../utils/popUp.js";
+import {useFormHandler} from "../../../CustomeHook/useFormHandler.js";
+import { useLocalStorage } from "../../../CustomeHook/useLocalStorage.js";
 
 export default function ForgetPassword() {
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({});
+  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useLocalStorage("resetEmail", "");
+  // const [errors, setErrors] = useState({});
+  const { forgotPassword, isSubmitting } = useAuth();
+  const navigate = useNavigate()
+  const { errors, setErrors, handleChange } = useFormHandler({})
 
-  const handleSubmit = (e) => {
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let newErrors = {};
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
+    let validationErrors = {};
+    if (!email) {
+      validationErrors.email = "Email is required";
+      setErrors(validationErrors);
+      return;
     }
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Reset link sent");
+    // if (Object.keys(errors).length > 0) {
+    //   setErrors(errors);
+    //   return;
+    // }
+    try {
+      await forgotPassword(email);
+      popUp.success("Reset link sent successfully!");
+      navigate("/emailsent");
+    } catch (err) {
+      popUp.error(err.message);
     }
   };
 
@@ -46,14 +61,14 @@ export default function ForgetPassword() {
               type="email"
               placeholder="example@gmail.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange("email", setEmail)}
               error={errors.email}
               required
             />
           </div>
 
           <CustomButton type="submit" variant="primary" className="w-100">
-            Send Reset Link
+            {isSubmitting ? "Sending..." : "Send Reset Link"}
           </CustomButton>
         </form>
 

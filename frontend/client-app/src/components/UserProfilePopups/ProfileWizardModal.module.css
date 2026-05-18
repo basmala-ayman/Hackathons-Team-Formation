@@ -1,0 +1,76 @@
+.wizardModal :global(.modal-content) {
+  background-color: var(--color-white) !important;
+  border: 1.5px solid var(--color-primary-light-2) !important;
+  border-radius: 1.5rem !important;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.wizardHeaderContainer {
+  background-color: var(--color-primary-light);
+  width: 100%;
+}
+
+.stepTab {
+  flex: 1;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-family: var(--font-family-inter);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--color-white);
+  opacity: 0.65;
+  transition: all 0.3s ease;
+}
+
+.activeTab {
+  background-color: var(--color-primary-dark) !important;
+  opacity: 1;
+  position: relative;
+}
+
+.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: var(--color-primary-dark) transparent;
+  display: block;
+  width: 0;
+  z-index: 10;
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: transparent;
+  border: none;
+  color: #a0aec0;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  border-radius: 50%;
+  z-index: 100;
+}
+
+.modalCloseBtn:hover {
+  color: var(--color-text);
+  background-color: var(--color-primary-light-3);
+  transform: rotate(90deg);
+}
+
+.clickableTab {
+  cursor: pointer;
+}
+
+.clickableTab:hover {
+  opacity: 0.9;
+  background-color: rgba(250, 245, 255, 0.1);
+}

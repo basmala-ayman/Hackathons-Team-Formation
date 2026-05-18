@@ -1,0 +1,91 @@
+.bannerContainer {
+  background-color: var(--color-primary-dark, #6b46c1);
+  border-radius: 0.5rem;
+  padding: 1.5rem 2rem;
+  position: relative;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: translateY(-10px);
+}
+
+.textRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.textRow:hover .bannerTitle {
+  text-decoration: underline;
+}
+
+.textRow:hover .arrowIcon {
+  transform: translateX(4px);
+}
+
+.bannerTitle {
+  color: var(--color-white, #ffffff);
+  font-family: var(--font-family-inter);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.arrowIcon {
+  color: var(--color-white, #ffffff);
+  transition: transform 0.2s ease;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.progressWrapper {
+  flex-grow: 1;
+}
+
+.customProgress {
+  height: 8px !important;
+  background-color: rgba(255, 255, 255, 0.24) !important;
+  border-radius: 1rem !important;
+  overflow: hidden;
+}
+
+.customProgress :global(.progress-bar) {
+  background-color: var(--color-white, #ffffff) !important;
+  border-radius: 1rem !important;
+}
+
+.percentageText {
+  color: var(--color-white, #ffffff);
+  font-family: var(--font-family-inter);
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--color-white, #ffffff);
+}
