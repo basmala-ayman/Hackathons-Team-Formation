@@ -1,6 +1,6 @@
 import React from "react";
 import ProjectCard from "./ProjectCard/ProjectCard";
-import styles from "./DiscoverProjects.module.css";
+import styles from './DiscoverProjects.module.css'
 import { useState } from "react";
 
 function DiscoverProjects() {
@@ -90,25 +90,24 @@ function DiscoverProjects() {
             fontSize: "var(--fs-regular)",
           }}
         >
-          Browse exciting projects and join teams that match your skills
+          Find the perfect team to join and collaborate on exciting hackathon
+          projects
         </p>
 
-        <div className="d-flex flex-column mt-4 gap-5">
-          {projects.map((project) => (
-            <ProjectCard
-              title={project.title}
-              description={project.description}
-              hackathonName={project.hackathonName}
-              dateRange={project.dateRange}
-              maxTeamSize={project.maxTeamSize}
-              interestedCount={project.interestedCount}
-              skills={project.skills}
-              roles={project.roles}
-              creator={project.creator}
-              onInterestToggle={() => handleInterestToggle(project.id)}
-            ></ProjectCard>
-          ))}
-        </div>
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            hackathonName={project.hackathonName}
+            dateRange={project.dateRange}
+            maxTeamSize={project.maxTeamSize}
+            interestedCount={project.interestedCount}
+            skills={project.skills}
+            roles={project.roles}
+            creator={project.creator}
+            onInterestToggle={() => handleInterestToggle(project.id)}
+          ></ProjectCard>
+        ))}
       </div>
     </div>
   );
