@@ -1,10 +1,9 @@
 import { useState, useMemo, useCallback } from "react";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
-import SearchBar from "../../shared/SearchBar/SearchBar";
+import SearchBar from "../../shared/SearchBar/SearchBar"
 import FilterSideBar from "./Components/FilterSideBar/FilterSideBar";
 import HackathonGrid from "./Components/HackathonGrid/HackathonGrid";
 import { FilterIcon } from "../../assets/Icons";
-import styles from "./Explore.module.css";
 
 function Explore() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,11 +88,7 @@ function Explore() {
       //check if hackthon properties matches filter
       //no filter in date or the date value matches date of hackathon
       const isTagsMatch =
-        filters.tags.length === 0 ||
-        (hackathon.tags &&
-          filters.tags.some((selectedTag) =>
-            hackathon.tags.includes(selectedTag),
-          ));
+        filters.tags.length === 0 || (hackathon.tags && filters.tags.some(selectedTag => hackathon.tags.includes(selectedTag)));
       const isPrizeAmountMatch =
         filters.prizeAmount.length === 0 ||
         filters.prizeAmount.includes(hackathon.prizeAmount);
@@ -104,24 +99,12 @@ function Explore() {
   }, [searchWord, filters, dummyHackathons]);
 
   return (
-    <div className={styles.pageBackground}>
+    <div className="">
       <Container className="my-5">
         {/* search part */}
         <Row>
-          <h3
-            className="fw-bolder"
-            style={{
-              color: "var(--color-very-dark-purple)",
-              fontSize: "var(--fs-h3)",
-            }}
-          >
-            Explore Hackathons
-          </h3>
-
-          <SearchBar
-            onSearch={handleSearch}
-            placeholderText={"Search by hackathon title or keyword"}
-          ></SearchBar>
+          <h2 className="fs-1 fw-bold">Explore Hackathons</h2>
+          <SearchBar onSearch={handleSearch} placeholderText={"Search by hackathon title or keyword"}></SearchBar>
         </Row>
 
         <Row className="mt-5">

@@ -5,10 +5,7 @@ import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
 import logo from "../../../assets/logo.png";
 import UserAuthenticatedMenu from "./UserAuthenticatedMenu";
 import GuestAuthButtons from "./GuestAuthButtons";
-// import { useTheme } from "../../../context/ThemeContext";
-// import { Sun, Moon } from "lucide-react";
 function AppNavbar({ isLoggedIn, onLogout }) {
-  // const { theme, toggleTheme } = useTheme();
   return (
     <Navbar expand="xl" className={`${styles.navbar}`}>
       <Container className="">
@@ -16,7 +13,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
           <img src={logo} alt="Team Catalyst Logo" height="70" />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.toggler} />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className={styles.toggler}/>
         <Navbar.Offcanvas
           id="basic-navbar-nav"
           aria-labelledby="offcanvasNavbarLabel"
@@ -50,20 +47,13 @@ function AppNavbar({ isLoggedIn, onLogout }) {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/recommendedTeams"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Recommended Teams
               </Nav.Link>
             </Nav>
-            <div className="d-flex justify-content-center">
-              {/* <button
-                onClick={toggleTheme}
-                className={styles.themeToggle}
-                aria-label="Toggle Dark Mode"
-              >
-                {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
-              </button> */}
+            <div className="d-flex justify-content-center   ">
               {isLoggedIn ? <UserAuthenticatedMenu onLogout={onLogout} /> : <GuestAuthButtons />}
             </div>
           </Offcanvas.Body>
@@ -71,7 +61,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
       </Container>
     </Navbar>
   );
-
+  
 }
 
 export default AppNavbar;
