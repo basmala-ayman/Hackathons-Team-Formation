@@ -33,21 +33,21 @@ function AppNavbar({ isLoggedIn, onLogout }) {
              
               <Nav.Link
                 as={Link}
-                to="/exploreProjects"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Explore Project Ideas
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/exploreHackathons"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Explore Hackathons
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/recommendedTeams"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Recommended Teams

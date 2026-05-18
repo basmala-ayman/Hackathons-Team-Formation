@@ -25,32 +25,38 @@ function AppNavbar({ isLoggedIn, onLogout }) {
             <Nav className="mx-auto gap-lg-5 gap-sm-4 py-sm-5 py-lg-6 align-items-center">
               <Nav.Link
                 as={Link}
-                to="/createTeam"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Create a team
               </Nav.Link>
-             
               <Nav.Link
                 as={Link}
-                to="/exploreProjects"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
-                Explore Project Ideas
+                Recommended Teams
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/exploreHackathons"
+                to="/"
+                className={`text-dark text-nowrap ${styles.navlinks}`}
+              >
+                Join a team
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Explore Hackathons
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/recommendedTeams"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
-                Recommended Teams
+                Explore Hackathons
               </Nav.Link>
             </Nav>
             <div className="d-flex justify-content-center   ">

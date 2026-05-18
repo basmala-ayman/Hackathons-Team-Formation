@@ -47,7 +47,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
               </Nav.Link>
               <Nav.Link
                 as={Link}
-                to="/recommendedTeams"
+                to="/"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Recommended Teams
