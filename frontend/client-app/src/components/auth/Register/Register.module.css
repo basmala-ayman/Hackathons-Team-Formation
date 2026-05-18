@@ -29,8 +29,47 @@
 }
 
 .checkboxLabel span {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-dark) !important;
   font-weight: 600;
   text-decoration: underline;
   font-size: var(--fs-small);
+}
+
+.termsModal {
+  border-radius: 24px !important;
+  border: none !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+  padding: 10px;
+}
+
+.modalTitle {
+  color: var(--color-very-dark-purple);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.termsSectionTitle {
+  color: var(--color-primary-dark);
+  font-size:var(--fs-body-large);
+  font-weight: 700;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.termsText {
+  color: var(--color-gray);
+  font-size:var(--fs-regular);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: var(--color-white);
+  border-radius: 10px;
 }

@@ -25,12 +25,13 @@
 
 .inputField {
   width: 100%;
-  padding: 15px 1rem;
+  padding: 1rem ;
   border: 1px solid var(--color-dark-gray);
   border-radius: 10px;
   transition: all 0.2s ease;
   outline: none;
   height: 4.8rem;
+  font-size: var(--fs-small);
 }
 
 .inputField::placeholder {

@@ -49,6 +49,16 @@
   --fs-v-small: 1.3rem; /* 13px */
 }
 
+[data-theme="dark"] {
+  --color-text: #f1f5f9;
+  --gradient-website-bg: #110615;
+  --color-primary-dark: #faf5ff;
+  --color-primary-light-2: #faf5ff;
+  --color-very-dark-purple: #e9dcff;
+  --color-dark-gray: #e3e4e5;
+  --color-white: #2a2626;
+}
+
 html {
   font-size: 62.5%; /*1rem = 10px*/
 }
@@ -61,6 +71,7 @@ html {
 body {
   font-family: var(--font-family-inter);
   background-color: var(--gradient-website-bg);
+  transition: all 0.3s ease;
 }
 
 /* Transfered to CustomButton.css */

@@ -1,0 +1,144 @@
+.dashboardWrapper {
+  background-color: var(--color-white);
+  min-height: 100vh;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.welcomeTitle {
+  color: var(--color-very-dark-purple);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.subTitle {
+  color: var(--color-gray);
+  font-size: var(--fs-v-small);
+  margin-bottom: 3rem;
+}
+
+.mainContent {
+  margin-top: 3rem;
+}
+
+.sectionHeading {
+  font-weight: 700;
+  color: var(--color-very-dark-purple);
+}
+
+.joinBtn {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  padding: 0.8rem 2rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  border: none;
+}
+
+.joinBtn:hover {
+  background-color: #5a45d1; /* Darker shade for hover */
+  color: var(--color-white);
+}
+
+.sidebarCard {
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.sidebarTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.primaryAction {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  padding: 1.2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.secondaryAction {
+  background-color: transparent;
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-dark);
+  padding: 1.2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+.secondaryAction:hover {
+  background-color: #f0f0ff;
+  color: var(--color-primary-dark);
+}
+
+aside h3 {
+  font-size: var(--fs-regular);
+  font-weight: 700px;
+  color: var(--color-text);
+}
+
+.sidebarCard {
+  border: 1.5px solid var(--color-primary-dark);
+  border-radius: 1rem;
+  padding: 2.4rem;
+  background-color: #fff;
+  box-shadow: none;
+}
+
+.sidebarTitle {
+  font-size: var(--fs-regular);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2.4rem;
+}
+
+/* Recent Activiites */
+.activityList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activityItem {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.green {
+  background-color: #38a169;
+}
+.blue {
+  background-color: #4299e1;
+}
+.purple {
+  background-color: #9f7aea;
+}
+.orange {
+  background-color: #ed8936;
+}
+
+.activityItem p {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.activityItem small {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-v-small);
+}

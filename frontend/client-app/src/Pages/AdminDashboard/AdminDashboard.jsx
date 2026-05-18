@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./AdminDashboard.module.css";
-import StatCard from "../../components/Admin/StatCard/StatCard";
+import StatCard from "../../components/StatCard/StatCard";
 import ActivityLog from "../../components/Admin/ActivityLog/ActivityLog";
 // Import your new Chart components
 import GrowthChart from "../../components/Admin/Charts/GrowthChart/GrowthChart";
@@ -11,7 +11,7 @@ import { Users, Zap, Award } from "lucide-react";
 import logo from "../../assets/logo.png";
 
 const STATS_DATA = [
-  { id: 1, title: "Total users", value: "1,156", increase: 13.2, icon: <Users size={22} /> },
+  { id: 1, title: "Total users", value: "1156", increase: 13.2, icon: <Users size={22} /> },
   { id: 2, title: "Team Formed", value: "356", increase: 9.8, icon: <Zap size={22} /> },
   { id: 3, title: "AI matched", value: "276", increase: 10.4, icon: <Award size={22} /> },
 ];
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
       <div className="row g-4 mb-5">
         {STATS_DATA.map((stat) => (
           <div key={stat.id} className="col-md-4">
-            <StatCard data={stat} />
+            <StatCard role="admin" data={stat} />
           </div>
         ))}
       </div>

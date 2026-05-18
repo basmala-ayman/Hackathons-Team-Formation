@@ -22,21 +22,21 @@
 .socialBtn {
   display: flex;
   height: 5rem;
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem;
   justify-content: center;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
   flex: 1;
   border-radius: 1rem;
   border: 0.12rem solid var(--color-primary-light-2);
-  background: #fff;
+  background: var(--color-white);
   color: var(--color-text);
-  font-size: 1.3rem;
+  font-size: var(--fs-v-small);
   transition: background-color 0.2s ease-in-out;
 }
 
 .socialBtn:hover {
-  background: var(--color-primary-light-3);
+  background: var(--color-primary-light-2);
 }
 
 .divider {
@@ -45,14 +45,14 @@
   text-align: center;
   margin: 1.5rem 0;
   color: var(--color-dark-gray);
-  font-size: 1.3rem;
+  font-size: var(--fs-small);
 }
 
 .divider::before,
 .divider::after {
   content: "";
   flex: 1;
-  border-bottom: 0.1rem solid var(--color-gray);
+  border-bottom: 0.1rem solid var(--color-dark-gray);
 }
 
 .divider span {

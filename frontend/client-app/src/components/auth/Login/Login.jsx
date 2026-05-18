@@ -4,54 +4,68 @@ import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { Link } from "react-router-dom";
-import { GoogleIcon, GithubIcon } from "../Google_Github_Icons";
+import { GoogleIcon, GithubIcon } from "../../../shared/Icons/GoogleGithubIcons.jsx";
 import { useGoogleLogin } from '@react-oauth/google';
 // import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext/useAuth.js";
+import { popUp } from "../../../utils/popUp.js";
+import { useFormHandler } from "../../../CustomeHook/useFormHandler.js";
+
 
 
 export default function Login() {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
+  const { login, googleLogin, isSubmitting } = useAuth();
 
-  // Logic to use later when handling the login with Google 
+  const { errors, setErrors, handleChange } = useFormHandler({});
+
   const handleGoogleLogin = useGoogleLogin({
-    // onSuccess: async (tokenResponse) => {
-    onSuccess: async () => {
-      //   try {
 
-      //     const res = await axios.post("http://localhost:3000/api/auth/google", {
-      //       access_token: tokenResponse.access_token
-      //     });
-
-      //     console.log("Server Response:", res.data);
-
-      //     // FIX 3: Your friend's backend might send 'status: "success"' or just the token
-      //     if (res.data.token) {
-      //       localStorage.setItem("token", res.data.token);
-      //       // navigate("/dashboard"); 
-      //       alert("Login Successful!");
-      //     }
-      //   } catch (err) {
-      //     // Log the actual error response from the server to help your friend debug
-      //     console.error("Backend Google Auth Failed:", err.response?.data || err.message);
-      //   }
-      // },
-      // onError: (error) => console.log('Login Failed:', error),
-      alert("Google Login Hook Initialized")
+    onSuccess: async (tokenResponse) => {
+      try {
+        await googleLogin(tokenResponse.access_token);
+        navigate("/");
+      } catch {
+        setErrors({ google: "Google login failed" });
+      }
     }
   });
 
+  const handleLogin = async (e) => {
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
-  const handleLogin = (e) => {
-    e.preventDefault();
     let newErrors = {};
     if (!email) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
-    setErrors(newErrors);
-    navigate("/");
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      const result = await login({ email, password });
+      if (result) {
+        const userName = result.user?.name || "User";
+        popUp.success(`Welcome, ${userName}!`);
+        navigate("/", { replace: true });
+      }
+    } catch (err) {
+      const { status, message } = err;
+      console.log("Detailed Error:", status, message);
+      if (status === 401 || status === 404 || message === "Something went wrong") {
+        popUp.warn("We couldn't find your account, please register first.");
+      } else {
+        popUp.error("Incorrect email or password.");
+      }
+    }
   };
 
   return (
@@ -71,13 +85,14 @@ export default function Login() {
           <span>Or login with email</span>
         </div>
         <form onSubmit={handleLogin}>
+
           <Input
             label="Email"
             type="email"
             placeholder="example@gmail.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
             error={errors.email}
+            onChange={handleChange("email", setEmail)}
             required
           />
 
@@ -86,7 +101,7 @@ export default function Login() {
             type="password"
             placeholder="********"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange("password", setPassword)}
             error={errors.password}
             required
           />
@@ -97,8 +112,8 @@ export default function Login() {
             </Link>
           </div>
 
-          <CustomButton type="submit" variant="primary" className="w-100" onClic={handleLogin}>
-            Login
+          <CustomButton type="submit" variant="primary" className="w-100" disabled={isSubmitting}>
+            {isSubmitting ? "Logging in..." : "Login"}
           </CustomButton>
 
           <p className={styles.footerText}>

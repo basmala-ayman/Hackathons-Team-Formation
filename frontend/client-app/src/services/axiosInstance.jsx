@@ -28,6 +28,9 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    if (originalRequest.url.includes("/auth/login")) {
+      return Promise.reject(error);
+    }
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
@@ -46,7 +49,8 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // if refresh fails (refreshToken expired)
         clearTokens();
-        window.location.href = "/login";
+        // window.location.href = "/login";
+        console.log("Redirect blocked by debugger");
         return Promise.reject(refreshError);
       }
     }

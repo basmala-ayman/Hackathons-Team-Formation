@@ -1,0 +1,127 @@
+.card {
+  background: var(--gradient-website-bg);
+  border: 1px solid var(--color-primary-dark);
+  border-radius: 1.6rem;
+  padding: 2.4rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.6rem;
+}
+
+.iconCircle {
+  width: 4.4rem;
+  background: var(--color-primary-light-3);
+  color: var(--color-primary-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  aspect-ratio: 1/1;
+  justify-content: center;
+  border: 1px solid var(--color-primary-dark);
+}
+
+.trend {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-success-green);
+  font-weight: 700;
+  font-size: var(--fs-v-small);
+}
+
+.trend span {
+  color: var(--color-success-green);
+}
+
+.value {
+  font-size: var(--fs-h3);
+  color: var(--color-text);
+  font-weight: 600;
+  margin-bottom: 1.3rem;
+}
+
+.label {
+  font-size: var(--fs-v-small);
+  color: var(--color-text);
+}
+
+/* User Card Styles */
+.userCard {
+  border: 1.5px solid transparent;
+  min-height: 140px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.purple {
+  border-color: var(--color-primary-dark);
+}
+.blue {
+  border-color: #155dfc;
+}
+.orange {
+  border-color: #ff6900;
+}
+
+.leftContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.iconBox {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.purple .iconBox {
+  background: #faf5ff;
+  color: var(--color-primary-dark);
+}
+.blue .iconBox {
+  background: #ebf8ff;
+  color: #155dfc;
+}
+.orange .iconBox {
+  background: #fffaf0;
+  color: #ff6900;
+}
+
+.userLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-dark-gray);
+  margin: 0;
+}
+
+.subText {
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  color: var(--color-dark-gray);
+  margin-top: 2px;
+}
+
+.userValue {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.purple h2 {
+  color: var(--color-primary-dark);
+}
+.blue h2 {
+  color: #155dfc;
+}
+.orange h2 {
+  color: #ff6900;
+}

@@ -2,6 +2,11 @@ import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./UserAuthenticatedMenu.module.css";
 import defaultProfile from "../../../assets/defaultProfile.png";
+import { useAuth } from "../../../context/AuthContext/useAuth.js";
+import {
+  getCSSVariable
+
+} from "../../../utils/getColors.js";
 import {
   BellIcon,
   ChevronIconUp,
@@ -11,8 +16,10 @@ import {
 } from "../../../assets/Icons";
 import { useState } from "react";
 
-function UserAuthenticatedMenu({onLogout}) {
+function UserAuthenticatedMenu({ onLogout }) {
   const [isOpen, setIsopen] = useState(false);
+  const { user } = useAuth();
+  const displayName = user?.name || "User";
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">
       <div>
@@ -40,7 +47,7 @@ function UserAuthenticatedMenu({onLogout}) {
             alt="User"
             className={`rounded-circle  ${styles.avatar}`}
           />
-          <p className={`mb-0 fs-5 fw-semibold ${styles.userName}`}>Omar H.</p>
+          <p className={`mb-0 fs-5 fw-semibold ${styles.userName}`}>{displayName}</p>
           <span className={` ${styles.arrow}`}>
             {isOpen ? <ChevronIconUp /> : <ChevronIconDown />}
           </span>
@@ -53,7 +60,7 @@ function UserAuthenticatedMenu({onLogout}) {
             View Profile
           </Dropdown.Item>
 
-          <Dropdown.Item as={Link} to="/dashboard" className={styles.menuItem}>
+          <Dropdown.Item as={Link} to="/userdashboard" className={styles.menuItem}>
             <span className={styles.icon}>
               {/* <DashboardIcon></DashboardIcon> */}
             </span>{" "}
@@ -64,7 +71,7 @@ function UserAuthenticatedMenu({onLogout}) {
           <Dropdown.Item
             as={Link}
             to="/"
-            style={{color:"#D91709"}}
+            style={{ color: getCSSVariable("--color-error-red") }}
             className={`${styles.menuItem}`}
             onClick={onLogout}
           >

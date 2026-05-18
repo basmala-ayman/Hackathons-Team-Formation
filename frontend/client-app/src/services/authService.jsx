@@ -5,7 +5,7 @@ import api from "./axiosInstance";
  * @param {Object} userData - The object containing { name, email, password }
  */
 
-export const register = async (userData) => {
+export const registerService = async (userData) => {
   try {
     const response = await api.post("/auth/register", userData);
     return response.data;

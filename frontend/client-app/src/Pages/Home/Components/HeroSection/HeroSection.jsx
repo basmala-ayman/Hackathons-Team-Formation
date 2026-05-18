@@ -6,7 +6,7 @@ import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import { useNavigate } from "react-router-dom";
 
 function HeroSection() {
-    const navigate=useNavigate()
+  const navigate = useNavigate()
   return (
     <section className="py-5 bg-white">
       <Container className="py-5">
@@ -16,7 +16,7 @@ function HeroSection() {
               className={`d-inline-flex align-items-center gap-2 px-5 py-2 rounded-pill mb-4  ${styles.badgeWrapper}  ${styles.badge}`}
             >
               <Sparkles size={20} />
-              <span className="text-sm-center d-block w-100">AI-powered Platform</span>
+              <span className="text-sm-center d-block w-100 ">AI-powered Platform</span>
             </div>
 
             <h1 className={`text-center text-lg-start fw-bold mb-4  ${styles.heroTitle}`}>
@@ -28,13 +28,13 @@ function HeroSection() {
               personality matching.
             </p>
             <Row className="mt-3 w-100 gx-3 gy-3">
-              
+
               <Col xs={12} md={6}>
                 <CustomButton variant="primary" className="w-100 h-100" onClick={() => navigate('/')}>
                   Create a team
                 </CustomButton>
               </Col>
-              
+
               <Col xs={12} md={6}>
                 <CustomButton variant="secondary" className="w-100 h-100" onClick={() => navigate('/')}>
                   Explore Hackathons
