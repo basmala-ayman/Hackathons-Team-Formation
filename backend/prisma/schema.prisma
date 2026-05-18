@@ -189,6 +189,9 @@ model Hackathon {
   updatedAt          DateTime        @updatedAt
   source             HackathonSource @default(SCRAPED)
 
+  //we will need also to store the number counter of intereseted persons for each hackathon to make it more faster and mroe easy when print it in the explore page rather than making another quesry 
+  interestCount Int @default(0)
+
   // Relations
   tags             HackathonTag[]
   teams            Team[]
