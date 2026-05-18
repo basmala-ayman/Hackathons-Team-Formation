@@ -102,7 +102,6 @@
   display: flex;
   align-items: center;
   transition: color 0.3s ease;
-  cursor: pointer;
 }
 
 .readMoreContainer:hover .toggleText {

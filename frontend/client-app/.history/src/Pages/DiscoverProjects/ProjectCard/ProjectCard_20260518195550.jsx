@@ -75,12 +75,12 @@ function ProjectCard({
         </div>
       </div>
 
-      <h4
+      <h3
         className={`fw-bolder mb-2 ${isExpanded ? styles.projectTitleExpanded : styles.projectTitleCollapsed}`}
         ref={titleRef}
       >
         {title || "New Team"}
-      </h4>
+      </h3>
       <p
         className={`mb-3 fw-normal ${isExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}`}
         ref={descRef}
@@ -148,8 +148,8 @@ function ProjectCard({
           <button
             type="button"
             className={`btn p-0 border-0 ${styles.readMoreContainer}`}
-            onClick={() => setIsExpanded(!isExpanded)}>
-
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
             {isExpanded ? (
               <span className={styles.toggleText}>
                 Show Less

@@ -1,5 +1,5 @@
 import styles from "./ProjectCard.module.css";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import {
@@ -31,32 +31,11 @@ function ProjectCard({
   const hasHiddenRoles = roles.length > 3;
 
   //condition to show (show more) or not
-  const titleRef = useRef(null);
-  const descRef = useRef(null);
-  const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
-
-  useEffect(() => {
-    const titleElement = titleRef.current;
-    const descElement = descRef.current;
-
-    if (titleElement && descElement) {
-      // is  real hight > the height that user see
-      const isTitleClipped =
-        titleElement.scrollHeight > titleElement.clientHeight;
-      const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
-
-      if (
-        isTitleClipped ||
-        isDescClipped ||
-        hasHiddenSkills ||
-        hasHiddenRoles
-      ) {
-        setCanExpand(true);
-      } else {
-        setCanExpand(false);
-      }
-    }
-  }, [title, description, skills, roles]);
+  const isTitleLong = title.length > 60;
+  const isDescLong = description.length > 180;
+  const hasManySkills = skills.length > 3;
+  const hasManyRoles = roles.length > 3;
+  const canExpand = isTitleLong || isDescLong || hasManySkills || hasManyRoles;
 
   return (
     <div
@@ -70,20 +49,20 @@ function ProjectCard({
           className={styles.creatorAvatar}
         />
         <div>
-          <h6 className={`fw-bold fs-4 mb-0`}>{creator.name}</h6>
+          <h6 className={`fw-bold fs-4 mb-0`}>
+            {creator.name}
+          </h6>
           <small className={styles.creatorLabel}>Project Creator</small>
         </div>
       </div>
 
-      <h4
+      <h3
         className={`fw-bolder mb-2 ${isExpanded ? styles.projectTitleExpanded : styles.projectTitleCollapsed}`}
-        ref={titleRef}
       >
-        {title || "New Team"}
-      </h4>
+        {title}
+      </h3>
       <p
         className={`mb-3 fw-normal ${isExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}`}
-        ref={descRef}
       >
         {description}
       </p>
@@ -141,28 +120,28 @@ function ProjectCard({
         </div>
       </div>
 
-      {/* show more part */}
+{/* show more part */}
 
-      {canExpand && (
-        <div className="d-flex justify-content-start mt-2 mb-4">
-          <button
-            type="button"
-            className={`btn p-0 border-0 ${styles.readMoreContainer}`}
-            onClick={() => setIsExpanded(!isExpanded)}>
-
-            {isExpanded ? (
-              <span className={styles.toggleText}>
-                Show Less
-                <ChevronIconUp />
-              </span>
-            ) : (
-              <span className={styles.toggleText}>
-                Show Full Project Details ... <ChevronIconDown />
-              </span>
-            )}
-          </button>
-        </div>
-      )}
+{canExpand &&
+}
+      <div className="d-flex justify-content-start mt-2 mb-4">
+        <button
+          type="button"
+          className={`btn p-0 border-0 ${styles.readMoreContainer}`}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <span className={styles.toggleText}>
+              Show Less
+              <ChevronIconUp />
+            </span>
+          ) : (
+            <span className={styles.toggleText}>
+              Show Full Project Details ... <ChevronIconDown />
+            </span>
+          )}
+        </button>
+      </div>
 
       {/* Card Footer*/}
       <div className="mt-2">
@@ -187,7 +166,7 @@ function ProjectCard({
           className="w-100"
           onClick={onInterestToggle}
         >
-          <HeartIcon color="var(--color-white)"></HeartIcon>
+            <HeartIcon color="var(--color-white)"></HeartIcon>
           <span>I'm Interested</span>
         </CustomButton>
       </div>

@@ -93,7 +93,7 @@ function DiscoverProjects() {
           Browse exciting projects and join teams that match your skills
         </p>
 
-        <div className="d-flex flex-column mt-4 gap-5">
+        <div className="d-flex flex-column gap-4">
           {projects.map((project) => (
             <ProjectCard
               title={project.title}

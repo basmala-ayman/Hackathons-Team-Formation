@@ -36,7 +36,7 @@ function ProjectCard({
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
   useEffect(() => {
-    const titleElement = titleRef.current;
+    const title = titleRef.current;
     const descElement = descRef.current;
 
     if (titleElement && descElement) {

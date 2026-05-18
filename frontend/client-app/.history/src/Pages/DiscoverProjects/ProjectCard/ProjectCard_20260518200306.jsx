@@ -36,10 +36,10 @@ function ProjectCard({
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
   useEffect(() => {
-    const titleElement = titleRef.current;
-    const descElement = descRef.current;
+    const titleDom = titleRef.current;
+    const descDom = descRef.current;
 
-    if (titleElement && descElement) {
+    if (titleDom && descElement) {
       // is  real hight > the height that user see
       const isTitleClipped =
         titleElement.scrollHeight > titleElement.clientHeight;

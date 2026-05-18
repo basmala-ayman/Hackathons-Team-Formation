@@ -33,30 +33,12 @@ function ProjectCard({
   //condition to show (show more) or not
   const titleRef = useRef(null);
   const descRef = useRef(null);
-  const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
-  useEffect(() => {
-    const titleElement = titleRef.current;
-    const descElement = descRef.current;
-
-    if (titleElement && descElement) {
-      // is  real hight > the height that user see
-      const isTitleClipped =
-        titleElement.scrollHeight > titleElement.clientHeight;
-      const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
-
-      if (
-        isTitleClipped ||
-        isDescClipped ||
-        hasHiddenSkills ||
-        hasHiddenRoles
-      ) {
-        setCanExpand(true);
-      } else {
-        setCanExpand(false);
-      }
-    }
-  }, [title, description, skills, roles]);
+  const isTitleLong = title.length > 100;
+  const isDescLong = description.length > 200;
+  const hasManySkills = skills.length > 3;
+  const hasManyRoles = roles.length > 3;
+  const canExpand = isTitleLong || isDescLong || hasManySkills || hasManyRoles;
 
   return (
     <div
@@ -75,15 +57,13 @@ function ProjectCard({
         </div>
       </div>
 
-      <h4
+      <h3
         className={`fw-bolder mb-2 ${isExpanded ? styles.projectTitleExpanded : styles.projectTitleCollapsed}`}
-        ref={titleRef}
       >
-        {title || "New Team"}
-      </h4>
+        {title}
+      </h3>
       <p
         className={`mb-3 fw-normal ${isExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}`}
-        ref={descRef}
       >
         {description}
       </p>
@@ -148,8 +128,8 @@ function ProjectCard({
           <button
             type="button"
             className={`btn p-0 border-0 ${styles.readMoreContainer}`}
-            onClick={() => setIsExpanded(!isExpanded)}>
-
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
             {isExpanded ? (
               <span className={styles.toggleText}>
                 Show Less
