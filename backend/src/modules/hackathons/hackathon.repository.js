@@ -7,16 +7,27 @@ const createHackathon = (data) => {
 
 // GET ALL
 const findAllHackathons = () => {
-  return prisma.hackathon.findMany();
+  return prisma.hackathon.findMany({
+    where: {
+      source: "SCRAPED",
+    },
+  });
 };
 
-// GET ONE
+// GET ONE by id
 const findHackathonById = (id) => {
   // if (!id) throw new Error("Invalid id");
   // console.log("DEBUG ID:", id);
 
   return prisma.hackathon.findUnique({
     where: { id },
+  });
+};
+
+//get hackathon knowing only its title
+const findHackathonByTitle = (title) => {
+  return prisma.hackathon.findUnique({
+    where: { title },
   });
 };
 
@@ -41,4 +52,5 @@ module.exports = {
   findHackathonById,
   updateHackathon,
   deleteHackathon,
+  findHackathonByTitle,
 };

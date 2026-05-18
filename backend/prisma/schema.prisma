@@ -422,6 +422,7 @@ model Project {
   teamId      String   @unique // one project per team
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  interestsCount Int     @default(0) //the number of interested persons in this project idea
 
   owner            User              @relation(fields: [ownerId], references: [id])
   team             Team              @relation(fields: [teamId], references: [id])
