@@ -9,9 +9,9 @@ import ProfileWizardModal from './../../components/UserProfilePopups/ProfileWiza
 import ProfileHeaderCard from "../../components/UserProfile/ProfileHeader/ProfileHeaderCard";
 import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/MyProjectIdeasCard";
 
-export default function UserProfile() {
+export default function UserProfile({ isOwner = true, initialData }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const { values, setValues, handleChange, errors, setErrors } = useFormHandler({
+  const defaultProfileData = {
     avatar: "",
     name: "Omar H.",
     username: "@OmarH.",
@@ -25,16 +25,36 @@ export default function UserProfile() {
     interests: ["Web Development", "DevOps"],
     linkedin: "",
     github: ""
-  });
+  };
+
+  const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
+    initialData || defaultProfileData
+  );
 
   return (
     <Container className="py-4 d-flex flex-column gap-4">
-      <CompleteProfile onBannerClick={() => setIsWizardOpen(true)} />
+      {isOwner && (<CompleteProfile onBannerClick={() => setIsWizardOpen(true)} />)
+      }
       <ProfileHeaderCard
         user={values}
-        onEditClick={() => setIsWizardOpen(true)}
-        setFormData={setValues}
+        onEditClick={isOwner ? () => setIsWizardOpen(true) : null}
+        setFormData={isOwner ? setValues : null}
+        isOwner={isOwner}
       />
+
+      {isOwner && (
+        <ProfileWizardModal
+          show={isWizardOpen}
+          handleClose={() => setIsWizardOpen(false)}
+          values={values}
+          setValues={setValues}
+          handleChange={handleChange}
+          errors={errors}
+          setErrors={setErrors}
+        />
+      )}
+
+      {/*       
       <ProfileWizardModal
         show={isWizardOpen}
         handleClose={() => setIsWizardOpen(false)}
@@ -43,12 +63,15 @@ export default function UserProfile() {
         handleChange={handleChange}
         errors={errors}
         setErrors={setErrors}
-      />
+      /> */}
+
       <SkillsExpertiseCard
         techSkills={values.technicalSkills}
         softSkills={values.softSkills}
         interests={values.interests}
-        onAddSkillClick={() => setIsWizardOpen(true)} />
+        onAddSkillClick={() => setIsWizardOpen(true)}
+        isOwner={isOwner}
+      />
       <InterestedHackathonsCard />
       <MyProjectIdeasCard userAvatar={values.avatar} />
     </Container>
