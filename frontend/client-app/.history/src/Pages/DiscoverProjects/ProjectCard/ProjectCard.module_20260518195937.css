@@ -99,10 +99,10 @@
   font-size: var(--fs-small);
   font-weight: 700;
   letter-spacing: 0.02rem;
-  display: flex;
-  align-items: center;
-  transition: color 0.3s ease;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;  /* Centers the text and the Chevron icon vertically */
+  gap: 0.6rem;
+  transition: color 0.2s ease;
 }
 
 .readMoreContainer:hover .toggleText {
