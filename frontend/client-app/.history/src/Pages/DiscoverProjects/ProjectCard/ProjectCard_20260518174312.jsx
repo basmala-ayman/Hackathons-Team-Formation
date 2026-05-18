@@ -1,0 +1,143 @@
+import styles from "./ProjectCard.module.css";
+import { useState } from "react";
+import CustomButton from "../../../shared/CustomButton/CustomButton";
+function ProjectCard({
+  creator,
+  title,
+  description,
+  hackathonName,
+  dateRange,
+  skills = [],
+  roles = [],
+  maxTeamSize = 4,
+  interestedCount = 0,
+  onInterestToggle,
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
+  const hasHiddenSkills = skills.length > 3;
+  const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
+  const hasHiddenRoles = roles.length > 3;
+  return (
+    <div
+      className={`p-4 d-flex flex-column justify-content-between ${styles.cardWrapper}`}
+    >
+      <div>
+        {/* Header Profile */}
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="d-flex align-items-center gap-3">
+            <img
+              src={creator.avatarUrl}
+              alt={creator.name}
+              className={styles.creatorAvatar}
+            />
+            <div>
+              <h6 className={`fw-bold mb-0 ${styles.creatorName}`}>
+                {creator.name}
+              </h6>
+              <small className={styles.creatorLabel}>Project Creator</small>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className={`btn btn-link text-decoration-none ${styles.toggleBtn}`}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? <>Show Less </> : <>Show More </>}
+          </button>
+        </div>
+
+        <h4
+          className={`fw-bolder mb-2 ${isExpanded ? styles.projectTitleExpanded : styles.projectTitleCollapsed}`}
+        >
+          {title}
+        </h4>
+        <p
+          className={`mb-3 ${isExpanded ? styles.descriptionExpanded : styles.descriptionCollapsed}`}
+        >
+          {description}
+        </p>
+
+        <div className="d-flex align-items-center gap-4 flex-wrap mb-4">
+          <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
+            {/* <HiOutlineTrophy className={styles.purpleIcon} size={20} /> */}
+            <span>{hackathonName}</span>
+          </div>
+          <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
+            {/* <HiOutlineCalendar className={styles.purpleIcon} size={20} /> */}
+            <span className="text-uppercase">{dateRange}</span>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <div className="d-flex align-items-center gap-2 mb-2 text-dark fw-bold fs-5">
+            {/* <HiOutlineAdjustmentsHorizontal className={styles.purpleIcon} size={22} /> */}
+            <span className={styles.skillsSectionTitle}>Required Skills</span>
+          </div>
+          <div className="d-flex gap-2 flex-wrap">
+            {visibleSkills.map((skill, index) => (
+              <span key={index} className={styles.skillPill}>
+                #{skill}
+              </span>
+            ))}
+
+            {/* Show a helpful indicator count if collapsed */}
+            {!isExpanded && hasHiddenSkills && (
+              <span className={styles.moreSkillsIndicator}>
+                +{skills.length - 3} more
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+{/* --- NEW BOTTOM ACTION TOGGLE ZONE --- */}
+        <div className="d-flex justify-content-start mb-4">
+          <button 
+            type="button" 
+            className={`btn p-0 border-0 ${styles.readMoreContainer}`}
+            onClick={() => setIsExpanded(!isExpanded)}
+          >
+            {isExpanded ? (
+              <span className={styles.toggleText}>
+                Show Less <HiChevronUp size={16} className="ms-1" />
+              </span>
+            ) : (
+              <span className={styles.toggleText}>
+                ... Read Full Project Details <HiChevronDown size={16} className="ms-1" />
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+      {/* Card Footer Statistics & Button */}
+      <div className="mt-2">
+        <div className="d-flex justify-content-between align-items-center mb-3 pt-3 border-top">
+          <div
+            className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
+          >
+            {/* <HiOutlineUsers size={20} /> */}
+            <span>Team of {maxTeamSize}</span>
+          </div>
+          <div
+            className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
+          >
+            {/* <HiOutlineHeart size={20} className="text-danger" /> */}
+            <span>{interestedCount} interested</span>
+          </div>
+        </div>
+
+        <CustomButton
+          variant="primary"
+          className="w-100 py-3 fw-semibold text-white d-flex align-items-center justify-content-center gap-2 fs-5"
+          onClick={onInterestToggle}
+        >
+          {/* <HiOutlineHeart size={22} /> */}
+          <span>I'm Interested</span>
+        </CustomButton>
+      </div>
+    </div>
+  );
+}
+
+export default ProjectCard;

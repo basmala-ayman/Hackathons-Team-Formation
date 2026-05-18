@@ -1,0 +1,153 @@
+.pageBackground {
+  background: linear-gradient(180deg, #fff 0%, #faf5ff 100%);
+}
+
+.breadcrumbLink {
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.breadcrumbActive {
+  font-size: 1.5rem;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.teamTitle {
+  color: #1a064f;
+  font-size: 3.2rem; 
+}
+
+.matchBadge {
+  background-color: #fff8e6;
+  color: #b07c00;
+  border: 1px solid #ffe8cc;
+  border-radius: 0.8rem;
+  font-size: 1.6rem; 
+}
+
+.hackathonLine {
+  color:var(--color-primary-dark);
+  font-size: 1.8rem; 
+  font-weight: 500;
+}
+
+.description {
+  color: #4a4d5a;
+  font-size: 1.8rem; 
+  line-height: 1.7;
+  max-width: 900px;
+}
+
+.sectionHeader {
+  color: #1a064f;
+  font-size: 2.2rem;
+}
+
+/* Cards & Profiles Configuration */
+.memberCard {
+  background-color: #ffffff;
+  border: 1px solid #e2daf8;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.02);
+}
+
+.memberAvatar {
+  width: 6.5rem; /* Enlarged avatars */
+  height: 6.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarWrapper {
+  position: relative;
+}
+
+.leaderCrown {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #ffd700;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.memberName {
+  color: #1a064f;
+  font-size: 1.9rem; 
+}
+
+.memberRole {
+  color: #6c757d;
+  font-size: 1.6rem;
+}
+
+.skillTag {
+  background-color: #f2edfe;
+  color: var(--color-primary-dark);
+  font-size: 1.4rem; 
+  font-weight: 600;
+  padding: 0.3rem 1.2rem;
+  border-radius: 0.6rem;
+}
+
+.progressSection {
+  margin-top: 5rem;
+}
+
+.progressLabel {
+  font-size: 1.7rem;
+  color: #4a4d5a;
+  font-weight: 600;
+}
+
+.progressValue {
+  font-size: 1.7rem;
+  color: #7c4dff;
+}
+
+.progressTrackLine {
+  height: 10px; /* Thicker track line */
+  background-color: #eef0f5;
+  border-radius: 10px;
+}
+
+.progressFillLine {
+  height: 100%;
+  background-color: #7c4dff;
+  border-radius: 10px;
+}
+
+/* --- BUTTON OVERRIDES AND REDESIGNS --- */
+.btnAccept {
+  font-size: 1.7rem !important;
+  border-radius: 0.8rem !important;
+  background-color: #7c4dff !important;
+  border: none !important;
+  transition: background-color 0.2s ease;
+}
+
+.btnAccept:hover {
+  background-color: #6436e2 !important;
+}
+
+.btnDecline {
+  font-size: 1.7rem !important;
+  border-radius: 0.8rem !important;
+  background-color: #ffffff !important;
+  color: #6c757d !important;
+  border: 1px solid #ced4da !important;
+  transition: all 0.2s ease;
+}
+
+.btnDecline:hover {
+  background-color: #fff5f5 !important;
+  color: #e53e3e !important;
+  border-color: #feb2b2 !important;
+}

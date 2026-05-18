@@ -9,6 +9,6 @@
     justify-content: center;
 align-items: center;
 border-radius: 14px;
-background: #FFF;
+background: var(--color-white);
 box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10), 0 1px 2px -1px rgba(0, 0, 0, 0.10);
 }

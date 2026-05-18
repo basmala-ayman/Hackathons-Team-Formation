@@ -1,0 +1,92 @@
+.card {
+  padding: 32px;
+  border-radius: 10px;
+  border: 0.8px solid var(--color-very-dark-purple);
+  background: #fff;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--color-primary-dark);
+}
+.header h4 {
+  font-size: var(--fs-body-lg);
+}
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: var(--fs-regular);
+}
+
+.asterisk {
+  color: var(--color-error-red); 
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size:var(--fs-small);
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.charCount {
+  display: block;
+  text-align: left;
+   font-size:var(--fs-v-small);
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.sizeContainer {
+  display: flex;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.compactBtn {
+    /* to be responsive */
+  min-width: 0;
+  flex: 1;
+
+}
+
+.fullWidth {
+  width: 100%;
+  min-width: 100%;
+  margin-top: 1.5rem;
+}
+
+.customInputWrapper{
+    margin-top: 1rem  ;
+
+}
+
+

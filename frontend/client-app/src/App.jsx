@@ -16,6 +16,10 @@ import { useAuth } from "./context/AuthContext/useAuth.js";
 import VerifyEmail from './components/auth/VerifyEmail/VerifyEmail';
 import UserDashboard from './Pages/UserDashboard/UserDashboard.jsx';
 import UserProfile from "./Pages/UserProfile/UserProfile.jsx";
+import CreateTeam from "./Pages/CreateTeam/CreateTeam"
+import RecommendedTeams from "./Pages/RecommendedTeams/RecommendedTeams";
+import TeamProfile from "./Pages/RecommendedTeams/TeamProfile/TeamProfile";
+import DiscoverProjects from "./Pages/DiscoverProjects/DiscoverProjects";
 function App() {
   const { isAuthenticated, logout } = useAuth();
   return (
@@ -41,7 +45,11 @@ function App() {
             <Route path="/emailsent" element={<EmailSent />} />
             <Route path="/notifications" element={<NoticationsPage />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
-            <Route path="/explore" element={<Explore />} />
+            <Route path="/exploreHackathons" element={<Explore />} />
+            <Route path="/createTeam" element={<CreateTeam />} />
+            <Route path="/recommendedTeams" element={<RecommendedTeams />} />
+            <Route path="/teams/:id" element={<TeamProfile />} />
+            <Route path="/exploreProjects" element={<DiscoverProjects />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/userdashboard" element={<UserDashboard />} />
             <Route path="/userprofile" element={<UserProfile />} />

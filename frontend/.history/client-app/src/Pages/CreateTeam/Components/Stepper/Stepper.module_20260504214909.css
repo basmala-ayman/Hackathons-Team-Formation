@@ -1,0 +1,60 @@
+.stepperContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 1;
+  border: 0.8px solid var(--color-primary-light-2);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
+
+  background-color: #fff;
+  margin-top: 20rem;
+}
+.stepWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.circle {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  font-size: var(--fs-small);
+}
+.activeCircle {
+  background: var(--gradient-primary);
+  color: #fff;
+}
+.inActiveCircle {
+  background-color: var(--color-primary-light-2);
+}
+.label {
+  margin-top: 1rem;
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.activeLabel{
+    color: var(--color-primary-dark);
+}
+.inActiveLabel{
+    color: var(--color-dark-gray);
+}
+.line{
+    position: absolute;
+    top: 2.2rem;
+    right: -10rem;
+    width: 50%;
+    height: 2px;
+    background-color: var(--color-primary-dark);
+}

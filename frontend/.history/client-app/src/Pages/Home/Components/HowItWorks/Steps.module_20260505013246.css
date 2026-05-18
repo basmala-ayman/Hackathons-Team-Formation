@@ -1,0 +1,54 @@
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 16rem;
+  height: 16rem;
+  background-color: var(--color-primary-light-2);
+  border-radius: 50%;
+  text-align: center;
+}
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+  background-color: var(--color-primary-dark);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.withArrow::after {
+  content: "→";
+  position: absolute;
+  right: -2.5rem;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 2rem;
+  color: var(--color-primary-dark);
+  font-weight: bold;
+  z-index: 1;
+}
+.title {
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: #2d3748;
+  margin-top: 10px;
+  max-width: 80%;
+}
+@media (max-width: 992px) {
+  .withArrow::after {
+    display: none;
+  }
+}

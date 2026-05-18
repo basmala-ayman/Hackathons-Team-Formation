@@ -1,0 +1,65 @@
+.card {
+  padding: 32px;
+  border-radius: 10px;
+  border: 0.8px solid var(--color-very-dark-purple);
+  background: #fff;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--color-primary-dark);
+}
+.header h4 {
+  font-size: var(--fs-body-lg);
+}
+
+.pageContainer {
+  min-height: 100vh;
+  background-color: var(--color-register-bg);
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 32rem; /* Form takes rest of space, Sidebar is 320px */
+  gap: 3.2rem;
+  margin-top: 2.4rem;
+  align-items: start;
+}
+
+.formColumn {
+  min-width: 0; /* Prevents flex/grid blowouts */
+}
+
+.sidebarColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  position: sticky; /* Keeps the sidebar visible as they scroll through long forms */
+  top: 2.4rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 1.5rem;
+  padding: 3.2rem;
+  border: 0.1rem solid var(--color-light-gray);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive: Stack columns on smaller screens */
+@media (max-width: 992px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebarColumn {
+    position: static;
+    order: -1; /* Puts stats/tips above the form on mobile if preferred */
+  }
+}

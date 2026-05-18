@@ -1,0 +1,52 @@
+import "./App.css";
+import AppNavbar from "./components/layout/AppNavbar/AppNavbar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/auth/Login/Login";
+import Home from './Pages/Home/Home'
+import Register from "./components/auth/Register/Register";
+import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
+import EmailSent from "./components/auth/EmailSent/EmailSent";
+import NoticationsPage from "./Pages/NotificationPage/NotificationsPage"
+import CreateTeam from "./Pages/CreateTeam/CreateTeam"
+// import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
+import Footer from "./components/layout/Footer/Footer";
+import Explore from "./Pages/Explore/Explore";
+import { useState } from "react";
+import RecommendedTeams from "./Pages/RecommendedTeams/RecommendedTeams";
+import TeamProfile from "./Pages/RecommendedTeams/TeamProfile/TeamProfile";
+function App() {
+  const [isLoggedIn, setIsLoggedIn]=useState(true);
+  const handleLogOut=()=>{
+    setIsLoggedIn(false);
+  }
+  return (
+    <BrowserRouter>
+    <div className="min-vh-100 d-flex flex-column">
+    <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogOut}/>
+
+    <main className="flex-grow-1">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgetPassword" element={<ForgetPassword />} />
+        <Route path="/emailsent" element={<EmailSent />} />
+        <Route path="/notifications" element={<NoticationsPage />} />
+        {/* <Route path="/admindashboard" element={<AdminDashboard />} /> */}
+        <Route path="/exploreHackathons" element={<Explore />} />
+        <Route path="/createTeam" element={<CreateTeam />} />
+        <Route path="/recommendedTeams" element={<RecommendedTeams />} />
+        <Route path="/teams/:id" element={<TeamProfile />} />
+
+
+
+      </Routes>
+      </main>
+      <Footer/>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
