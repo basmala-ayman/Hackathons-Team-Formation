@@ -14,7 +14,6 @@ import Explore from "./Pages/Explore/Explore";
 import { useState } from "react";
 import RecommendedTeams from "./Pages/RecommendedTeams/RecommendedTeams";
 import TeamProfile from "./Pages/RecommendedTeams/TeamProfile/TeamProfile";
-import DiscoverProjects from "./Pages/DiscoverProjects/DiscoverProjects";
 function App() {
   const [isLoggedIn, setIsLoggedIn]=useState(true);
   const handleLogOut=()=>{
@@ -39,7 +38,7 @@ function App() {
         <Route path="/createTeam" element={<CreateTeam />} />
         <Route path="/recommendedTeams" element={<RecommendedTeams />} />
         <Route path="/teams/:id" element={<TeamProfile />} />
-        <Route path="/exploreProjects" element={<DiscoverProjects />} />
+        <Route path="/exploreProject" element={<RecommendedTeams />} />
 
 
 

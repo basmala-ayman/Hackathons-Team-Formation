@@ -1,0 +1,90 @@
+.cardWrapper {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 1.2rem;
+  width: 100%;
+  transition: all 0.7s ease-in-out;
+}
+
+/* expansion settings */
+.projectTitleCollapsed {
+  color: var(--color-very-dark-purple);
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.projectTitleExpanded {
+  color: var(--color-very-dark-purple);
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.descriptionCollapsed {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.descriptionExpanded {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+/* normal styles */
+
+
+.creatorAvatar {
+  width: 5.2rem;
+  height: 5.2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.creatorLabel {
+  font-size: var(--fs-v-small);
+  color: var(--color-gray);
+}
+
+.metaText {
+  font-size: var(--fs-small);
+  color: var(--color-gray);
+  font-weight: 500;
+}
+
+.skillPill {
+  background-color: var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  padding: 0.4rem 1.6rem;
+  border-radius: 0.6rem;
+}
+
+.moreSkillsIndicator {
+  background-color: var(--color-register-bg);
+  color: var(--color-gray);
+  font-size: var(--fs-v-small);
+  font-weight: 600;
+  padding: 0.4rem 1.2rem;
+  border-radius: 0.6rem;
+  border: 1px dashed var(--color-light-gray);
+}
+
+.bottomStat {
+  font-size: var(--fs-small);
+  color: var(--color-dark-gray);
+  font-weight: 500;
+}
