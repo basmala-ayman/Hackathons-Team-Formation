@@ -1,5 +1,8 @@
 import api from "./axiosInstance";
+<<<<<<< HEAD
+=======
 
+>>>>>>> 03c8ef8294183c378e0276a5974eb3b03735ed42
 /**
  * getBasicUsers:
  * Fetch lightweight list of users (id, name, email)
@@ -7,12 +10,20 @@ import api from "./axiosInstance";
  */
 export const getBasicUsers = async () => {
   try {
+<<<<<<< HEAD
     const response = await api.get("/users/list/basic");
     return response.data?.data || []; // return only users array
   } catch (error) {
     throw error.response?.data || "Failed to fetch users list!!";
   }
-}
+=======
+    const response = await api.get("/user/list/basic");
+    return response.data.data; // return only users array
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch users list!!";
+  }
+};
+
 /**
  * getUserProfile: Fetches the profile data of the currently logged-in user.
  * Requires a valid Authorization token (handled automatically by interceptor).
@@ -37,4 +48,5 @@ export const updateUserProfile = async (updatedData) => {
   } catch (error) {
     throw error.response?.data || "Failed to update user profile!!";
   }
+>>>>>>> 03c8ef8294183c378e0276a5974eb3b03735ed42
 };
