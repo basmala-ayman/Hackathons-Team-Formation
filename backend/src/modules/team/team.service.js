@@ -22,6 +22,7 @@ const createTeam = async (ownerId, data) => {
         // projectTitle,
         // projectDescription,
         userCreated,
+        hasIdea,  
     } = data;
 
 
@@ -136,7 +137,7 @@ const createTeam = async (ownerId, data) => {
     //     });
     // }
 
-    if (userCreated === true) {
+    if (hasIdea === true) {
         await teamRepository.createProject({
             title: teamName.trim(),                // project title = team name
             description: description?.trim() || "", // project description = team description

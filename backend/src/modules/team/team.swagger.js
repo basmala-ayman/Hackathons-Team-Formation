@@ -80,22 +80,19 @@
  *                   - "AI Engineer"
  *                   - "Designer"
  *
- *               projectTitle:
- *                 type: string
- *                 nullable: true
- *                 example: "AI Accessibility Assistant"
- *
- *               projectDescription:
- *                 type: string
- *                 nullable: true
- *                 example: "A smart assistant helping visually impaired users navigate digital platforms."
- *
  *               userCreated:
  *                 type: boolean
  *                 description: |
  *                   If true, a new hackathon record will be created automatically.
  *                   If false, the hackathon must already exist.
  *                 example: false
+ *
+ *               hasIdea:
+ *                 type: boolean
+ *                 description: |
+ *                   If true, a project idea will be created and linked to the team.
+ *                   If false, no project will be created.
+ *                 example: true
  *
  *     responses:
  *       201:

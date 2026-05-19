@@ -27,6 +27,7 @@ const createTeamSchema = Joi.object({
 
 
     userCreated: Joi.boolean().default(false),
+     hasIdea: Joi.boolean().default(false),
 });
 
 module.exports = { createTeamSchema };
