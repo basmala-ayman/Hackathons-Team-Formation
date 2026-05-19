@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
 import { login as loginService, registerService, resendVerification as resendVerificationService, forgotPassword as forgotPasswordService } from "../../services/authService";
 import { storeTokens, clearTokens, getAccessToken } from "../../utils/tokenStorage";
 import { useLocalStorage } from "../../CustomeHook/useLocalStorage.js";
+import { AuthContext } from "./AuthContext.jsx";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
@@ -12,10 +12,6 @@ export const AuthProvider = ({ children }) => {
   // load user on refresh
   useEffect(() => {
     const token = getAccessToken();
-    // const storedUser = localStorage.getItem("user");
-    // if (token && storedUser) {
-    //   setUser(JSON.parse(storedUser));
-    // }
     if (!token) {
       setUser(null);
     }

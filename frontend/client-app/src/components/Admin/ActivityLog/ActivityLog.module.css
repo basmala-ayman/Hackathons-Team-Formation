@@ -70,12 +70,12 @@
   font-weight: 400;
 }
 
-.text p,
-span {
+.sub,
+.time {
   font-size: var(--fs-v-small);
   color: var(--color-dark-gray);
 }
 
-.text span {
+.time {
   color: var(--color-gray);
 }

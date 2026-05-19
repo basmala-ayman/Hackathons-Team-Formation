@@ -24,9 +24,9 @@ export default function ActivityLog() {
               {item.type === "team" ? <Users size={16} /> : item.type === "join" ? <Zap size={16} /> : <Target size={16} />}
             </div>
             <div className={styles.text}>
-              <h4>{item.title}</h4>
-              <p>{item.sub}</p>
-              {item.time && <span>{item.time}</span>}
+              <h4 >{item.title}</h4>
+              <p className={styles.sub}>{item.sub}</p>
+              {item.time && <span className={styles.time}>{item.time}</span>}
             </div>
           </div>
         ))}
