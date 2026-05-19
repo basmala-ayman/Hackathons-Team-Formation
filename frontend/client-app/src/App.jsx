@@ -64,7 +64,7 @@ function App() {
             <Route path="/recommended-Teams" element={<RecommendedTeams />} />
             <Route path="/teams/:id" element={<TeamProfile />} />
             <Route path="/explore-Projects" element={<DiscoverProjects />} />
-            <Route path="/verifyemail" element={<VerifyEmail />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/userdashboard" element={<UserDashboard />} />
             <Route path="/userprofile" element={<UserProfile isOwner={true} />} />
             <Route path="/profile" element={<UserProfile isOwner={false} initialData={externalUserData} />} />
