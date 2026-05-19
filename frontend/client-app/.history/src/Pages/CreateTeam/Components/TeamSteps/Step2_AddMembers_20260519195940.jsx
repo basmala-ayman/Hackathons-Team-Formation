@@ -168,26 +168,6 @@ function Step2_AddMembers({
         </div>
 
         {/* Invited Members would be mapped here from formData.members */}
-        {formData.members.map((memberId) => {
-          const user = userOptions.find((u) => u.value === memberId);
-
-          return (
-            <div key={memberId} className={styles.memberCard}>
-              <div className={styles.memberLeft}>
-                <img src={defaultProfile} className={styles.avatar} />
-                <div className={styles.memberInfo}>
-                  <span className={styles.memberName}>
-                    {user?.label || "Unknown user"}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.badge}>
-                <CheckIcon /> Invited
-              </div>
-            </div>
-          );
-        })}
       </div>
 
       {/* Nav Buttons */}

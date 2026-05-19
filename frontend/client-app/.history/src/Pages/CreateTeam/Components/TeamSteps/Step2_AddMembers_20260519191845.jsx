@@ -14,7 +14,6 @@ function Step2_AddMembers({
   userOptions,
 }) {
   const [showSuccess, setShowSuccessMsg] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
   const currentMemberCount = (formData.members?.length || 0) + 1;
   const teamSizeLimit = Number(formData.teamSize) || 1;
   const progressPercentage = Math.min(
@@ -75,25 +74,13 @@ function Step2_AddMembers({
   };
 
   const handleSelectMember = (selectedOption) => {
+    // Add logic to update formData.members with the new user
     console.log("Selected user:", selectedOption);
-    setSelectedUser(selectedOption);
   };
 
   const handleInvite = () => {
-    if (!selectedUser) return;
-
-    setFormData((prev) => {
-      const alreadyAdded = prev.members.includes(selectedUser.value);
-
-      if (alreadyAdded) return prev;
-
-      return {
-        ...prev,
-        members: [...prev.members, selectedUser.value],
-      };
-    });
-
-    setSelectedUser(null);
+    //Validation must be added here for the invitation logic !! 
+    //check that the user has chosen valid email or name
     setShowSuccessMsg(true);
     setTimeout(() => {
       setShowSuccessMsg(false);
@@ -142,9 +129,7 @@ function Step2_AddMembers({
         </CustomButton>
       </div>
       {showSuccess && (
-        <div className="my-3 text-success fs-4 fw-semibold">
-          Invite sent successfully!
-        </div>
+        <div className="my-3 text-success fs-4 fw-semibold">Invite sent successfully!</div>
       )}
 
       {/* Member Info */}
@@ -168,26 +153,6 @@ function Step2_AddMembers({
         </div>
 
         {/* Invited Members would be mapped here from formData.members */}
-        {formData.members.map((memberId) => {
-          const user = userOptions.find((u) => u.value === memberId);
-
-          return (
-            <div key={memberId} className={styles.memberCard}>
-              <div className={styles.memberLeft}>
-                <img src={defaultProfile} className={styles.avatar} />
-                <div className={styles.memberInfo}>
-                  <span className={styles.memberName}>
-                    {user?.label || "Unknown user"}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.badge}>
-                <CheckIcon /> Invited
-              </div>
-            </div>
-          );
-        })}
       </div>
 
       {/* Nav Buttons */}

@@ -30,7 +30,6 @@ export const getHackathonById = async (id) => {
 export const getHackathonNames = async () => {
   try {
     const response = await api.get("/hackathons/names/list");
-    console.log("RAW:", response.data);
     return response.data?.data || [];
   } catch (error) {
     throw error.response?.data || "Failed to fetch hackathon names!!";

@@ -10,8 +10,7 @@ import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import rolesData from "../../Data/roles.json";
 import skillsData from "../../Data/skills.json";
-import { useAuth } from "../../context/AuthContext/useAuth";
-import { getBasicUsers } from "../../services/userService";
+import { getBasicUsers } from "../../services/usersService";
 import { getHackathonNames } from "../../services/hackathonService";
 
 import {
@@ -23,9 +22,12 @@ import {
 } from "../../assets/Icons";
 
 function CreateTeam() {
- 
-  //get current user
-  const {user}= useAuth();
+  //dummy data
+  const currentUser = {
+    name: "Zeina",
+    role: "Full-Stack Developer",
+    profilePic: null,
+  };
 
   //get SKills and roles data
   const roleOptions = useMemo(() => {
@@ -130,20 +132,13 @@ function CreateTeam() {
   fetchData();
 }, []);
 
-//store data as (value  , label) format for SELECT element
+//store data 
 const userOptions = useMemo(() => {
   return users.map((user) => ({
     value: user.id,
     label: `${user.name} (${user.email})`,
   }));
 }, [users]);
-
-const hackathonList = useMemo(() => {
-  return hackathons.map((name) => ({
-    value: name,
-    label: name,
-  }));
-}, [hackathons]);
 
 
   //save data inside local storage
@@ -188,7 +183,7 @@ const hackathonList = useMemo(() => {
           <Step2_AddMembers
             formData={formData}
             setFormData={setFormData}
-            currentUser={user}
+            currentUser={currentUser}
             userOptions={userOptions}
             onNext={handleNextStep}
             onPrev={handlePrevStep}

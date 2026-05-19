@@ -10,10 +10,8 @@ import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import rolesData from "../../Data/roles.json";
 import skillsData from "../../Data/skills.json";
-import { useAuth } from "../../context/AuthContext/useAuth";
-import { getBasicUsers } from "../../services/userService";
+import { getBasicUsers } from "../../services/usersService";
 import { getHackathonNames } from "../../services/hackathonService";
-
 import {
   TeamMeetIcon,
   AddMemberIcon,
@@ -23,10 +21,22 @@ import {
 } from "../../assets/Icons";
 
 function CreateTeam() {
- 
-  //get current user
-  const {user}= useAuth();
+  //dummy data
+  const currentUser = {
+    name: "Zeina",
+    role: "Full-Stack Developer",
+    profilePic: null,
+  };
+  const userOptions = [
+    { value: "1", label: "Ahmed" },
+    { value: "2", label: "Mona" },
+    { value: "3", label: "Omar" },
+  ];
 
+  const hackathonList = [
+    { value: "CodeX", label: "CodeX" },
+    { value: "TechFest", label: "TechFest" },
+  ];
   //get SKills and roles data
   const roleOptions = useMemo(() => {
     return Object.entries(rolesData).map(([key, value]) => ({
@@ -79,12 +89,6 @@ function CreateTeam() {
     return saved ? JSON.parse(saved) : defaultValue;
   };
   //states
-  const [users, setUsers] = useState([]);
-  const [hackathons, setHackathons] = useState([]);
-
-  const [loadingUsers, setLoadingUsers] = useState(false);
-  const [loadingHackathons, setLoadingHackathons] = useState(false);
-
   const [currentStep, setCurrentStep] = useState(() =>
     Number(getSavedData("Current_step", 1)),
   );
@@ -104,47 +108,6 @@ function CreateTeam() {
       hasIdea: false,
     }),
   );
-
-  //fetch data
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoadingUsers(true);
-      setLoadingHackathons(true);
-
-      const [usersRes, hackathonsRes] = await Promise.all([
-        getBasicUsers(),
-        getHackathonNames(),
-      ]);
-
-      setUsers(usersRes);
-      setHackathons(hackathonsRes);
-    } catch (error) {
-      console.error("Failed to load data:", error);
-    } finally {
-      setLoadingUsers(false);
-      setLoadingHackathons(false);
-    }
-  };
-
-  fetchData();
-}, []);
-
-//store data as (value  , label) format for SELECT element
-const userOptions = useMemo(() => {
-  return users.map((user) => ({
-    value: user.id,
-    label: `${user.name} (${user.email})`,
-  }));
-}, [users]);
-
-const hackathonList = useMemo(() => {
-  return hackathons.map((name) => ({
-    value: name,
-    label: name,
-  }));
-}, [hackathons]);
-
 
   //save data inside local storage
   useEffect(() => {
@@ -188,7 +151,7 @@ const hackathonList = useMemo(() => {
           <Step2_AddMembers
             formData={formData}
             setFormData={setFormData}
-            currentUser={user}
+            currentUser={currentUser}
             userOptions={userOptions}
             onNext={handleNextStep}
             onPrev={handlePrevStep}
@@ -264,8 +227,9 @@ const hackathonList = useMemo(() => {
 
           {/* Right Column*/}
           <div className="col-lg-4 d-flex flex-column gap-4">
-            <QuickStats formData={formData} currentStep={currentStep} />
-            <ProTips currentStep={currentStep} />
+             
+                <QuickStats formData={formData} currentStep={currentStep} />
+                <ProTips currentStep={currentStep} />
           </div>
         </div>
       </div>
