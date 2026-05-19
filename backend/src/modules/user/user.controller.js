@@ -2,50 +2,44 @@ const userService = require("./user.service");
 
 const getProfile = async (req, res, next) => {
   try {
-    const data = await userService.getProfile(req.user.userId);
-
+    const profileData = await userService.getProfile(req.user.userId);
     res.status(200).json({
       success: true,
-      message: "Profile fetched successfully",
-      data
+      message: "Profile data fetched successfully",
+      data: profileData
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 
 const updateProfile = async (req, res, next) => {
   try {
-    const data = await userService.updateProfile(req.user.userId, req.body);
-
+    const updatedProfileData = await userService.updateProfile(req.user.id, req.body);
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      data
+      data: updatedProfileData
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
-
 
 const searchUsers = async (req, res, next) => {
   try {
-    const { q } = req.query;
-    const currentUserId = req.user.userId;
-    const users = await userService.searchUsers(q, currentUserId);
+    const users = await userService.searchUsers(req.query.q, req.user.id);
     res.status(200).json({
       success: true,
-      data: users,
+      data: users
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
-
 
 module.exports = {
   getProfile,
   updateProfile,
-    searchUsers
+  searchUsers
 };

@@ -4,38 +4,20 @@ const findUserProfile = (id) => {
   return prisma.user.findUnique({
     where: { id },
     include: {
-      skills: { include: { skill: true } },
-      ownedTeams: {
-        include: {
-          hackathon: true,
-          members: true
-        }
+      skills: { 
+        include: { skill: true } 
       },
-      teamMemberships: {
-        include: {
-          team: {
-            include: {
-              hackathon: true
-            }
-          }
-        }
+      hackathonInterests: { 
+        include: { hackathon: true } 
       },
-      sentInvitations: {
-        include: {
-          team: true,
-          receiver: true
-        }
+      ownedProjects: true,
+      ownedTeams: { 
+        include: { hackathon: true } 
       },
-      receivedInvitations: {
-        include: {
-          team: true,
-          sender: true
-        }
-      },
-      matchingRequests: {
-        include: {
-          hackathon: true
-        }
+      teamMemberships: { 
+        include: { 
+          team: { include: { hackathon: true } } 
+        } 
       }
     }
   });
@@ -48,7 +30,25 @@ const updateUser = (id, data) => {
   });
 };
 
+const clearUserSkills = (userId) => {
+  return prisma.userSkill.deleteMany({
+    where: { userId }
+  });
+};
 
+const upsertSkillByName = (name) => {
+  return prisma.skill.upsert({
+    where: { name },
+    update: {}, 
+    create: { name }
+  });
+};
+
+const createUserSkillRelation = (userId, skillId) => {
+  return prisma.userSkill.create({
+    data: { userId, skillId }
+  });
+};
 
 const searchUsers = async (query, excludeUserId) => {
   return prisma.user.findMany({
@@ -74,9 +74,11 @@ const searchUsers = async (query, excludeUserId) => {
   });
 };
 
-
 module.exports = {
   findUserProfile,
   updateUser,
-  searchUsers,
+  clearUserSkills,
+  upsertSkillByName,
+  createUserSkillRelation,
+  searchUsers
 };

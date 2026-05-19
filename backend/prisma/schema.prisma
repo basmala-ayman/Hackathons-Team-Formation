@@ -25,6 +25,13 @@ enum TeamStatus {
   COMPLETE
 }
 
+//enum for team formation method 
+enum FormationMethod {
+  MANUAL
+  AUTO_MATCHED
+  INVITED
+}
+
 //this is when the human invite another person to join to my team
 enum InvitationStatus {
   PENDING
@@ -110,7 +117,7 @@ model User {
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
-  tachRole                 String? //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
+  techRole                 String? //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
@@ -127,6 +134,7 @@ model User {
   hackathonInterests HackathonInterest[]
   projectInterests   ProjectInterest[]
   ownedProjects      Project[]
+  createdHackathons  Hackathon[]         @relation("HackathonCreator")
 
   //for performance search in the users invitation we need to make index on email and on name 
   @@index([email])
@@ -184,10 +192,14 @@ model Hackathon {
   prizesCounts       Int?            @default(0)
   registrationsCount Int?            @default(0)
   organization       String?
+  endDate            DateTime?
   status             HackathonStatus @default(UPCOMING)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
   source             HackathonSource @default(SCRAPED)
+
+  createdBy  String?
+  creator    User?    @relation("HackathonCreator", fields: [createdBy], references: [id], onDelete: SetNull)
 
   //we will need also to store the number counter of intereseted persons for each hackathon to make it more faster and mroe easy when print it in the explore page rather than making another quesry 
   interestCount Int @default(0)
@@ -239,6 +251,7 @@ model Team {
   hackathonId String //foriegn key
   ownerId     String //foriegn key
   status      TeamStatus @default(FORMING)
+  formationMethod FormationMethod  @default(AUTO_MATCHED)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   description String?
