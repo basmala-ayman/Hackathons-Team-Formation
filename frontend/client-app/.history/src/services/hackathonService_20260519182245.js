@@ -22,7 +22,6 @@ export const getHackathonById = async (id) => {
     throw error.response?.data || `Failed to fetch hackathon with ID: ${id}!!`;
   }
 };
-
 /**
  * getHackathonNames: Fetches only hackathon names for dropdowns / search suggestions.
  * Returns: ["Hackathon A", "Hackathon B", ...]
