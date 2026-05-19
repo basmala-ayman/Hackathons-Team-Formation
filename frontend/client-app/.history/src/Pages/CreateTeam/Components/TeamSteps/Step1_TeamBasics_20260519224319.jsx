@@ -78,7 +78,6 @@ function Step1_TeamBasics({
     setFormData({ ...formData, teamSize: "" });
     return;
   }
-  //convert to number
   const numericValue = Number(value);
   if (numericValue > 0 && numericValue <= 10) {
     setFormData({
