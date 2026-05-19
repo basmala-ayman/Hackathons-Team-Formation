@@ -167,28 +167,26 @@ function CreateTeam() {
   const handleCreateTeam = async () => {
     try {
       console.log("Final Submission to API:", formData);
+       setIsSubmitting(true);
+    setSubmitError("");
 
-      setIsSubmitting(true);
-      setSubmitError("");
+    const payload = {
+      ...formData,
+      userCreated,
+    };
 
-      const payload = {
-        ...formData,
-        userCreated,
-      };
+    console.log("Payload:", payload);
 
-      console.log("Payload:", payload);
+    const response = await createTeam(payload);
 
-      const response = await createTeam(payload);
+    console.log("Created Team:", response);
 
-      console.log("Created Team:", response);
+    localStorage.removeItem("current_step");
+    localStorage.removeItem("Team_Data");
 
-      localStorage.removeItem("current_step");
-      localStorage.removeItem("Team_Data");
-
-      setShowSuccess(true);
+    setShowSuccess(true);
     } catch (error) {
-      console.error(error);
-      setSubmitError("Failed to create team.");
+      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -238,8 +236,6 @@ function CreateTeam() {
             formData={formData}
             onPrev={handlePrevStep}
             onSubmit={handleCreateTeam}
-            isSubmitting={isSubmitting}
-            submitError={submitError}
           />
         );
       default:

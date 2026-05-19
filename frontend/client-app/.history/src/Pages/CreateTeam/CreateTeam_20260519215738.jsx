@@ -167,7 +167,7 @@ function CreateTeam() {
   const handleCreateTeam = async () => {
     try {
       console.log("Final Submission to API:", formData);
-
+      
       setIsSubmitting(true);
       setSubmitError("");
 
@@ -188,7 +188,9 @@ function CreateTeam() {
       setShowSuccess(true);
     } catch (error) {
       console.error(error);
-      setSubmitError("Failed to create team.");
+      setSubmitError(
+      error.message || "Failed to create team."
+    );
     } finally {
       setIsSubmitting(false);
     }
@@ -238,8 +240,6 @@ function CreateTeam() {
             formData={formData}
             onPrev={handlePrevStep}
             onSubmit={handleCreateTeam}
-            isSubmitting={isSubmitting}
-            submitError={submitError}
           />
         );
       default:

@@ -13,7 +13,6 @@ import skillsData from "../../Data/skills.json";
 import { useAuth } from "../../context/AuthContext/useAuth";
 import { getBasicUsers } from "../../services/userService";
 import { getHackathonNames } from "../../services/hackathonService";
-import { createTeam } from "../../services/teamService";
 
 import {
   TeamMeetIcon,
@@ -85,15 +84,11 @@ function CreateTeam() {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingHackathons, setLoadingHackathons] = useState(false);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
-
   const [currentStep, setCurrentStep] = useState(() =>
     Number(getSavedData("Current_step", 1)),
   );
   const [showSuccess, setShowSuccess] = useState(false);
-  const [userCreated, setUserCreated] = useState(false); //state for adding new hackthon not in the list
-
+  const [userCreated, setUserCreated] = useState(false);
   //Team Created Data
   const [formData, setFormData] = useState(() =>
     getSavedData("Team_Data", {
@@ -165,33 +160,13 @@ function CreateTeam() {
     setCurrentStep((curr) => curr - 1);
   };
   const handleCreateTeam = async () => {
-    try {
-      console.log("Final Submission to API:", formData);
+    // API Call will be here !!!
+    console.log("Final Submission to API:", formData);
 
-      setIsSubmitting(true);
-      setSubmitError("");
+    localStorage.removeItem("current_step");
+    localStorage.removeItem("Team_Data");
 
-      const payload = {
-        ...formData,
-        userCreated,
-      };
-
-      console.log("Payload:", payload);
-
-      const response = await createTeam(payload);
-
-      console.log("Created Team:", response);
-
-      localStorage.removeItem("current_step");
-      localStorage.removeItem("Team_Data");
-
-      setShowSuccess(true);
-    } catch (error) {
-      console.error(error);
-      setSubmitError("Failed to create team.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    setShowSuccess(true);
   };
 
   //rendering components
@@ -204,8 +179,6 @@ function CreateTeam() {
             setFormData={setFormData}
             hackathonList={hackathonList}
             onNext={handleNextStep}
-            userCreated={userCreated}
-            setUserCreated={setUserCreated}
           />
         );
       case 2:
@@ -238,8 +211,6 @@ function CreateTeam() {
             formData={formData}
             onPrev={handlePrevStep}
             onSubmit={handleCreateTeam}
-            isSubmitting={isSubmitting}
-            submitError={submitError}
           />
         );
       default:

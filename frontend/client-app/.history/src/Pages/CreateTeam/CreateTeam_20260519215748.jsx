@@ -238,8 +238,6 @@ function CreateTeam() {
             formData={formData}
             onPrev={handlePrevStep}
             onSubmit={handleCreateTeam}
-            isSubmitting={isSubmitting}
-            submitError={submitError}
           />
         );
       default:

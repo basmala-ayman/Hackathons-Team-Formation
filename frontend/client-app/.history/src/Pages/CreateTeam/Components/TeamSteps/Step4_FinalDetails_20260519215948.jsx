@@ -93,7 +93,7 @@ function Step4_FinalDetails({
           Previous
         </CustomButton>
         <CustomButton variant="primary" size="sm" onClick={onSubmit}  disabled={isSubmitting}>
-          {isSubmitting ? "Creating Team..." : "Create Team"}
+          Create Team
         </CustomButton>
       </div>
     </div>
