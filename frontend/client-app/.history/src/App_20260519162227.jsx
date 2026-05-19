@@ -63,7 +63,7 @@ function App() {
             <Route path="/create-Team" element={<CreateTeam />} />
             <Route path="/recommended-Teams" element={<RecommendedTeams />} />
             <Route path="/teams/:id" element={<TeamProfile />} />
-            <Route path="/explore-Projects" element={<DiscoverProjects />} />
+            <Route path="/explore-projects" element={<DiscoverProjects />} />
             <Route path="/verifyemail" element={<VerifyEmail />} />
             <Route path="/userdashboard" element={<UserDashboard />} />
             <Route path="/userprofile" element={<UserProfile isOwner={true} />} />

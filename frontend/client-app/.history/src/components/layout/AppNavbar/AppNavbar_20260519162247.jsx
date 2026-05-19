@@ -28,7 +28,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
             <Nav className="mx-auto gap-lg-5 gap-sm-4 py-sm-5 py-lg-6 align-items-center">
               <Nav.Link
                 as={Link}
-                to="/create-Team"
+                to="/createTeam"
                 className={`text-dark text-nowrap ${styles.navlinks}`}
               >
                 Create a team
