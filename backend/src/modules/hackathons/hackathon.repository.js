@@ -56,11 +56,20 @@ const getHackathonNames = async () => {
   });
 };
 
+const findHackathonByTitle = async (title) => {
+  return prisma.hackathon.findFirst({
+    where: {
+      title: title
+    }
+  });
+};
+
 module.exports = {
   createHackathon,
   findAllHackathons,
   findHackathonById,
   updateHackathon,
   deleteHackathon,
-  getHackathonNames
+  getHackathonNames,
+  findHackathonByTitle
 };

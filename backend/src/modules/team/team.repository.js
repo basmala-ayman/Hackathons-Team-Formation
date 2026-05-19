@@ -41,7 +41,7 @@ const createInvitations = async (invitationsData) => {
 
 //now here we want to add the project things in the repositry too
 const createProject = (data) => {
-    return prisma.project.create({ data });
+  return prisma.project.create({ data });
 };
 
 

@@ -22,8 +22,8 @@ const createTeamSchema = Joi.object({
         .default([]),
 
         //and they will be optional cause maybe the user enter the project idea he want 
-    projectTitle: Joi.string().min(3).max(100).optional(),
-    projectDescription: Joi.string().max(1000).optional(),
+    // projectTitle: Joi.string().min(3).max(100).optional(),
+    // projectDescription: Joi.string().max(1000).optional(),
 
 
     userCreated: Joi.boolean().default(false),
