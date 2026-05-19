@@ -142,6 +142,7 @@ function Step1_TeamBasics({
           style={{
             color: "var(--color-error-red)",
             fontSize: "1.5rem",
+            marginTop: "0.2rem",
           }}
         >
           Team name must be between 3 and 100 characters.

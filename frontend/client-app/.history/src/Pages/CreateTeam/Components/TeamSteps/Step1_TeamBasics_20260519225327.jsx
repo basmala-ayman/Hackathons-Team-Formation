@@ -25,7 +25,6 @@ function Step1_TeamBasics({
   //handle any change in inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "teamName" && value.length > 100) return;
     if (name === "description" && value.length > 500) return;
 
     setFormData({ ...formData, [name]: value });
@@ -58,7 +57,7 @@ function Step1_TeamBasics({
       teamName: isTeamNameInvalid,
     });
 
-    if (!isHackathonMissing && !isTeamSizeMissing && !isTeamNameInvalid) {
+    if (!isHackathonMissing && !isTeamSizeMissing  && !isTeamNameInvalid) {
       onNext();
     }
   };
@@ -137,16 +136,6 @@ function Step1_TeamBasics({
           onChange={handleChange}
         />
       </div>
-      {errors.teamName && (
-        <span
-          style={{
-            color: "var(--color-error-red)",
-            fontSize: "1.5rem",
-          }}
-        >
-          Team name must be between 3 and 100 characters.
-        </span>
-      )}
 
       <div className={styles.formGroup}>
         <label className={styles.label}>

@@ -58,7 +58,7 @@ function Step1_TeamBasics({
       teamName: isTeamNameInvalid,
     });
 
-    if (!isHackathonMissing && !isTeamSizeMissing && !isTeamNameInvalid) {
+    if (!isHackathonMissing && !isTeamSizeMissing  && !isTeamNameInvalid) {
       onNext();
     }
   };
@@ -138,15 +138,16 @@ function Step1_TeamBasics({
         />
       </div>
       {errors.teamName && (
-        <span
-          style={{
-            color: "var(--color-error-red)",
-            fontSize: "1.5rem",
-          }}
-        >
-          Team name must be between 3 and 100 characters.
-        </span>
-      )}
+  <span
+    style={{
+      color: "var(--color-error-red)",
+      fontSize: "1.5rem",
+      marginTop: "0.2rem",
+    }}
+  >
+    Team name must be between 3 and 100 characters.
+  </span>
+)}
 
       <div className={styles.formGroup}>
         <label className={styles.label}>

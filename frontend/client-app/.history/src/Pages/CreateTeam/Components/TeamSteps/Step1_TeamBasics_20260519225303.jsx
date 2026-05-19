@@ -25,7 +25,6 @@ function Step1_TeamBasics({
   //handle any change in inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "teamName" && value.length > 100) return;
     if (name === "description" && value.length > 500) return;
 
     setFormData({ ...formData, [name]: value });
@@ -43,11 +42,11 @@ function Step1_TeamBasics({
   const [errors, setErrors] = useState({
     hackathon: false,
     teamSize: false,
-    teamName: false,
+     teamName: false,
   });
   const handleValidationAndNext = () => {
-    const teamName = formData.teamName?.trim() || "";
-    const isTeamNameInvalid = teamName.length < 3 || teamName.length > 100;
+      const teamName = formData.teamName?.trim() || "";
+
     const isHackathonMissing =
       !formData.hackathonName || formData.hackathonName.trim() === "";
     const isTeamSizeMissing = !formData.teamSize;
@@ -55,10 +54,9 @@ function Step1_TeamBasics({
     setErrors({
       hackathon: isHackathonMissing,
       teamSize: isTeamSizeMissing,
-      teamName: isTeamNameInvalid,
     });
 
-    if (!isHackathonMissing && !isTeamSizeMissing && !isTeamNameInvalid) {
+    if (!isHackathonMissing && !isTeamSizeMissing) {
       onNext();
     }
   };
@@ -76,22 +74,22 @@ function Step1_TeamBasics({
     setFormData({ ...formData, teamSize: "" });
   };
 
-  const handleCustomSizeChange = (e) => {
-    const value = e.target.value;
+ const handleCustomSizeChange = (e) => {
+  const value = e.target.value;
 
-    if (value === "") {
-      setFormData({ ...formData, teamSize: "" });
-      return;
-    }
-    //convert to number
-    const numericValue = Number(value);
-    if (numericValue > 0 && numericValue <= 10) {
-      setFormData({
-        ...formData,
-        teamSize: numericValue,
-      });
-    }
-  };
+  if (value === "") {
+    setFormData({ ...formData, teamSize: "" });
+    return;
+  }
+  //convert to number
+  const numericValue = Number(value);
+  if (numericValue > 0 && numericValue <= 10) {
+    setFormData({
+      ...formData,
+      teamSize: numericValue,
+    });
+  }
+};
 
   //validation of the new entered hackthon
   const validateSkill = (inputValue) => {
@@ -137,16 +135,6 @@ function Step1_TeamBasics({
           onChange={handleChange}
         />
       </div>
-      {errors.teamName && (
-        <span
-          style={{
-            color: "var(--color-error-red)",
-            fontSize: "1.5rem",
-          }}
-        >
-          Team name must be between 3 and 100 characters.
-        </span>
-      )}
 
       <div className={styles.formGroup}>
         <label className={styles.label}>
