@@ -1,4 +1,4 @@
-const Joi=require("joi");
+const Joi = require("joi");
 
 //in this file the first problem that will face us in the growing that in each endpoint we will need to add schema validation here
 //and to make it statuc and manually you will need to change in more than one file thats why using namign improvement here will be the good choice
@@ -81,6 +81,6 @@ module.exports = {
   refreshTokenSchema,
   googleAuthSchema,
   forgotPasswordSchema,
- resetPasswordSchema,
- loginSchema,
+  resetPasswordSchema,
+  loginSchema,
 };

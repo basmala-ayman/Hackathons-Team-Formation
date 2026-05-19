@@ -39,3 +39,6 @@ Websockets for real-time notification push — nice to have post-launch
 
 
 -- make the user getting all its names and emails in list in api 
+
+
+-- the front in the create-team will not sending the project title and description

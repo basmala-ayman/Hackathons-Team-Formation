@@ -19,8 +19,8 @@ const createTeam = async (ownerId, data) => {
         skills,
         roles,
         members,
-        projectTitle,
-        projectDescription,
+        // projectTitle,
+        // projectDescription,
         userCreated,
     } = data;
 
@@ -125,18 +125,25 @@ const createTeam = async (ownerId, data) => {
 
 
 
-    //now here what about if the user is choose that he create this team for new project idea he enter its name 
-    //so we will need to store this project and make record for it to be showed in the explore projects page
-    if (projectTitle) {
+    // //now here what about if the user is choose that he create this team for new project idea he enter its name 
+    // //so we will need to store this project and make record for it to be showed in the explore projects page
+    // if (projectTitle) {
+    //     await teamRepository.createProject({
+    //         title: projectTitle.trim(),
+    //         description: projectDescription?.trim() || "",
+    //         ownerId,
+    //         teamId: team.id,
+    //     });
+    // }
+
+    if (userCreated === true) {
         await teamRepository.createProject({
-            title: projectTitle.trim(),
-            description: projectDescription?.trim() || "",
+            title: teamName.trim(),                // project title = team name
+            description: description?.trim() || "", // project description = team description
             ownerId,
             teamId: team.id,
         });
     }
-
-
 
 
     //now for the members we get from the front we need to send for each one of them an invitation 

@@ -39,7 +39,7 @@ const deleteHackathon = async (id, userId) => {
 const getHackathonNames = async () => {
   const hackathons = await hackathonRepository.getHackathonNames();
 
-  return hackathons.map(hackathon => hackathon.name);
+  return hackathons.map(hackathon => hackathon.title);
 };
 
 module.exports = {

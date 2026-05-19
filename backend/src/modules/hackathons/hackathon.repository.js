@@ -49,7 +49,11 @@ const deleteHackathon = (id) => {
 };
 
 const getHackathonNames = async () => {
-  return await Hackathon.find({}, 'name');
+  return prisma.hackathon.findMany({
+    select: {
+      title: true
+    }
+  });
 };
 
 module.exports = {
