@@ -34,6 +34,17 @@ const collectDevpostHackathons = async () => {
                 const rawPrize = hack.prize_amount || "";
                 const prizeAmount = parseFloat(rawPrize.replace(/[^0-9.]/g, '')) || 0;
                 const currentStatus = mapDevpostStatus(hack.open_state);
+
+              //check if hackathon ended 
+                const endDate = hack.submission_period_dates?.end
+                    ? new Date(hack.submission_period_dates.end)
+                    : null;
+
+                let finalStatus = currentStatus;
+
+                if (endDate && endDate < new Date()) {
+                    finalStatus = HackathonStatus.ENDED;
+                }
                 // themes
                 const themeNames = hack.themes?.map(t => t.name) || [];
                 const tagsData = themeNames.map(name => ({
@@ -48,7 +59,8 @@ const collectDevpostHackathons = async () => {
                 await prisma.hackathon.upsert({
                     where: { id: hack.id.toString() },
                     update: {
-                        status: currentStatus,
+                        // status: currentStatus,
+                        status: finalStatus,
                         remainingTime: hack.time_left_to_submission,
                         submissionPeriod: hack.submission_period_dates,
                         registrationsCount: hack.registrations_count,
@@ -57,7 +69,8 @@ const collectDevpostHackathons = async () => {
                         id: hack.id.toString(),
                         slug: slug,
                         title: hack.title,
-                        status: currentStatus,
+                        // status: currentStatus,
+                        status: finalStatus,
                         applyLink: hack.url,
                         // thumbnailUrl: hack.thumbnail_url,
                         tags: {

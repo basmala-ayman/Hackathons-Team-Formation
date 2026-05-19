@@ -23,7 +23,20 @@ const findAllHackathons = async () => {
   });
 };
 
-const findHackathonById = (id) => {
+const findHackathonById = async (id) => {
+   await prisma.hackathon.updateMany({
+    where: {
+      id,
+      status: { in: ["UPCOMING", "ONGOING"] },
+      endDate: {
+        lt: new Date()
+      }
+    },
+    data: {
+      status: "ENDED"
+    }
+  });
+
   return prisma.hackathon.findUnique({ where: { id } });
 };
 
