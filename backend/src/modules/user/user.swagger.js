@@ -272,14 +272,17 @@
  * @swagger
  * /user/list/basic:
  *   get:
- *     summary: Retrieve lightweight list of all users with names and emails
- *     description: Returns simplified user records intended for dropdown menus, member selection, invitations, and autocomplete UI components.
+ *     summary: Get lightweight list of verified users (names and emails)
+ *     description: >
+ *       Returns a simplified list of users where isVerified = true.
+ *       The currently authenticated user is excluded from the results.
+ *       This endpoint is intended for dropdowns, invitations, and autocomplete UI components.
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lightweight user list fetched successfully
+ *         description: Verified users list fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -303,7 +306,7 @@
  *                         type: string
  *                         example: "habiba@gmail.com"
  *       401:
- *         description: Unauthorized - Bearer token missing or invalid
+ *         description: Unauthorized - Missing or invalid token
  *       500:
  *         description: Internal server error
  */

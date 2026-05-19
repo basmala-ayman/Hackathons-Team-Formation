@@ -74,10 +74,13 @@ const searchUsers = async (query, excludeUserId) => {
   });
 };
 
-const getUsersBasicList = async () => {
+const getUsersBasicList = async (currentUserId) => {
   return prisma.user.findMany({
     where: {
-      deletedAt: null
+      isVerified: true,
+       id: {
+        not: currentUserId,
+      },
     },
     select: {
       id: true,

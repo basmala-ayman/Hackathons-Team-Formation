@@ -110,8 +110,8 @@ const searchUsers = async (query, currentUserId) => {
   return userRepository.searchUsers(query.trim(), currentUserId);
 };
 
-const getUsersBasicList = async () => {
-  const users = await userRepository.getUsersBasicList();
+const getUsersBasicList = async (currentUserId) => {
+  const users = await userRepository.getUsersBasicList(currentUserId);
 
   return users.map(user => ({
   id: user.id,

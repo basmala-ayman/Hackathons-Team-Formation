@@ -40,7 +40,7 @@ const searchUsers = async (req, res, next) => {
 
 const getUsersBasicList = async (req, res, next) => {
   try {
-    const users = await userService.getUsersBasicList();
+    const users = await userService.getUsersBasicList(req.user.userId);
 
     res.status(200).json({
       success: true,
