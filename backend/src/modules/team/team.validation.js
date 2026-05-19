@@ -15,19 +15,21 @@ const createTeamSchema = Joi.object({
 
     skills: Joi.array()
         .items(Joi.string().trim().min(1))
-        .default([]),
+        .min(1)
+        .required(),
 
     roles: Joi.array()
         .items(Joi.string().trim().min(1))
-        .default([]),
+        .min(1)
+        .required(),
 
-        //and they will be optional cause maybe the user enter the project idea he want 
+    //and they will be optional cause maybe the user enter the project idea he want 
     // projectTitle: Joi.string().min(3).max(100).optional(),
     // projectDescription: Joi.string().max(1000).optional(),
 
 
     userCreated: Joi.boolean().default(false),
-     hasIdea: Joi.boolean().default(false),
+    hasIdea: Joi.boolean().default(false),
 });
 
 module.exports = { createTeamSchema };
