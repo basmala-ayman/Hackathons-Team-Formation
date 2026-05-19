@@ -2,7 +2,7 @@ const service = require('./hackathon.service');
 
 const createHackathon = async (req, res, next) => {
   try {
-    const hackathon = await service.createHackathon(req.body, req.user.id);
+    const hackathon = await service.createHackathon(req.body, req.user.userId);
     res.status(201).json({
       success: true,
       data: hackathon
@@ -38,7 +38,7 @@ const getHackathonById = async (req, res, next) => {
 
 const updateHackathon = async (req, res, next) => {
   try {
-    const hackathon = await service.updateHackathon(req.params.id, req.body, req.user.id);
+    const hackathon = await service.updateHackathon(req.params.id, req.body, req.user.userId);
     res.status(200).json({
       success: true,
       data: hackathon
@@ -50,7 +50,7 @@ const updateHackathon = async (req, res, next) => {
 
 const deleteHackathon = async (req, res, next) => {
   try {
-    await service.deleteHackathon(req.params.id, req.user.id);
+    await service.deleteHackathon(req.params.id, req.user.userId);
     res.status(204).send();
   } catch (error) {
     next(error);

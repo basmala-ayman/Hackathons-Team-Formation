@@ -7,7 +7,7 @@ const updateProfile = Joi.object({
   linkedinUrl: Joi.string().uri().allow("", null),
   profilePicture: Joi.string().uri().allow("", null),
   resumeUrl: Joi.string().uri().allow("", null),
-  tachRole: Joi.string().max(50).allow("", null),
+  techRole: Joi.string().max(50).allow("", null),
   hardSkills: Joi.array().items(Joi.string().min(1)).unique(),
   softSkills: Joi.array().items(Joi.string().min(1)).unique()
 });

@@ -15,7 +15,7 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    const updatedProfileData = await userService.updateProfile(req.user.id, req.body);
+    const updatedProfileData = await userService.updateProfile(req.user.userId, req.body);
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
@@ -28,7 +28,7 @@ const updateProfile = async (req, res, next) => {
 
 const searchUsers = async (req, res, next) => {
   try {
-    const users = await userService.searchUsers(req.query.q, req.user.id);
+    const users = await userService.searchUsers(req.query.q, req.user.userId);
     res.status(200).json({
       success: true,
       data: users
