@@ -48,10 +48,15 @@ const deleteHackathon = (id) => {
   return prisma.hackathon.delete({ where: { id } });
 };
 
+const getHackathonNames = async () => {
+  return await Hackathon.find({}, 'name');
+};
+
 module.exports = {
   createHackathon,
   findAllHackathons,
   findHackathonById,
   updateHackathon,
-  deleteHackathon
+  deleteHackathon,
+  getHackathonNames
 };

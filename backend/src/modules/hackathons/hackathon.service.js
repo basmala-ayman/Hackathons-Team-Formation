@@ -36,10 +36,17 @@ const deleteHackathon = async (id, userId) => {
   return await hackathonRepository.deleteHackathon(id);
 };
 
+const getHackathonNames = async () => {
+  const hackathons = await hackathonRepository.getHackathonNames();
+
+  return hackathons.map(hackathon => hackathon.name);
+};
+
 module.exports = {
   createHackathon,
   getAllHackathons,
   getHackathonById,
   updateHackathon,
-  deleteHackathon
+  deleteHackathon,
+  getHackathonNames
 };

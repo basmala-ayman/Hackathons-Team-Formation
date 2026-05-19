@@ -36,3 +36,5 @@ Swagger documentation
 The dashboard module — check what's in there, it's registered in routes but was never discussed
 Rate limiting per endpoint (auth endpoints especially)
 Websockets for real-time notification push — nice to have post-launch
+
+

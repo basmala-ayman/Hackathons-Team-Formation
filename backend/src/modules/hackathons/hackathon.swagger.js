@@ -96,6 +96,35 @@
 
 /**
  * @swagger
+ * /hackathons/names/list:
+ *   get:
+ *     summary: Retrieve all hackathon names only
+ *     description: Returns a lightweight array containing only hackathon title strings for dropdowns, search suggestions, and frontend selection components.
+ *     tags: [Hackathons]
+ *     responses:
+ *       200:
+ *         description: Hackathon names retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example:
+ *                     - "Global AI Innovation Hackathon"
+ *                     - "Hack Cairo 2026"
+ *                     - "Web3 Sprint Challenge"
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
  * /hackathons/{id}:
  *   get:
  *     summary: Retrieve full contextual details for a specific hackathon by ID

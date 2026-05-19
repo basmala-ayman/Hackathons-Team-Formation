@@ -57,10 +57,24 @@ const deleteHackathon = async (req, res, next) => {
   }
 };
 
+const getHackathonNames = async (req, res, next) => {
+  try {
+    const names = await hackathonService.getHackathonNames();
+
+    res.status(200).json({
+      success: true,
+      data: names
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createHackathon,
   getAllHackathons,
   getHackathonById,
   updateHackathon,
-  deleteHackathon
+  deleteHackathon,
+  getHackathonNames
 };
