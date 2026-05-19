@@ -17,8 +17,13 @@ const markAllNotificationsAsRead = async (userId) => {
   return { success: true };
 };
 
+const getUnreadCount = async (userId) => {
+    return notificationRepository.countUnread(userId);
+};
+
 module.exports = {
   getUserNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
+  getUnreadCount,
 };

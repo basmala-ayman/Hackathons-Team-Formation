@@ -35,9 +35,14 @@ const markAllAsRead = async (userId) => {
   });
 };
 
+const countUnread = (userId) => {
+    return prisma.notification.count({ where: { userId, isRead: false } });
+};
+
 module.exports = {
   createNotifications,
   findByUserId,
   markAsRead,
   markAllAsRead,
+  countUnread,
 };

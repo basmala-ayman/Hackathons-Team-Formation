@@ -4,6 +4,9 @@ const hackathonRepository = require("../hackathons/hackathon.repository");
 const notificationRepository = require("../notifications/notification.repository");
 const interestRepository = require("../interests/interest.repository");
 const AppError = require("../../utils/AppError");
+const { syncHackathonEntity } = require("../ai/aiCandidate.service");
+
+
 
 const createTeam = async (ownerId, data) => {
 
@@ -165,6 +168,12 @@ const createTeam = async (ownerId, data) => {
             }))
         );
     }
+
+
+    syncHackathonEntity(hackathon.id).catch((err) =>
+        console.error("Failed to sync hackathon to AI:", err.message)
+    );
+
 
     return {
         teamId: team.id,

@@ -37,6 +37,8 @@ enum InvitationStatus {
   PENDING
   ACCEPTED
   REJECTED
+  EXPIRED
+  CANCELLED
 }
 
 //the matching request the user make it in the website what is its current state now?
@@ -53,6 +55,7 @@ enum RecommendationStatus {
   PENDING
   ACCEPTED
   REJECTED
+  EXPIRED
 }
 
 enum HackathonStatus {
@@ -131,10 +134,11 @@ model User {
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
 
-  hackathonInterests HackathonInterest[]
-  projectInterests   ProjectInterest[]
-  ownedProjects      Project[]
-  createdHackathons  Hackathon[]         @relation("HackathonCreator")
+  hackathonInterests      HackathonInterest[]
+  projectInterests        ProjectInterest[]
+  ownedProjects           Project[]
+  createdHackathons       Hackathon[]              @relation("HackathonCreator")
+  airecommendationMembers AIRecommendationMember[]
 
   //for performance search in the users invitation we need to make index on email and on name 
   @@index([email])
@@ -198,10 +202,10 @@ model Hackathon {
   updatedAt          DateTime        @updatedAt
   source             HackathonSource @default(SCRAPED)
 
-  createdBy  String?
-  creator    User?    @relation("HackathonCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  createdBy String?
+  creator   User?   @relation("HackathonCreator", fields: [createdBy], references: [id], onDelete: SetNull)
 
-  //we will need also to store the number counter of intereseted persons for each hackathon to make it more faster and mroe easy when print it in the explore page rather than making another quesry 
+  //we will need aagolso to store the number counter of intereseted persons for each hackathon to make it more faster and mroe easy when print it in the explore page rather than making another quesry 
   interestCount Int @default(0)
 
   // Relations
@@ -246,17 +250,17 @@ model HackathonTag {
 // ─────────────────────────────────────────
 
 model Team {
-  id          String     @id @default(uuid())
-  name        String
-  hackathonId String //foriegn key
-  ownerId     String //foriegn key
-  status      TeamStatus @default(FORMING)
-  formationMethod FormationMethod  @default(AUTO_MATCHED)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  description String?
-  size        Int        @default(1) //there is no default size of them team
-  roles       String[]
+  id              String          @id @default(uuid())
+  name            String
+  hackathonId     String //foriegn key
+  ownerId         String //foriegn key
+  status          TeamStatus      @default(FORMING)
+  formationMethod FormationMethod @default(AUTO_MATCHED)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  description     String?
+  size            Int             @default(1) //there is no default size of them team
+  roles           String[]
 
   // Relations
   hackathon   Hackathon        @relation(fields: [hackathonId], references: [id]) //cause the relation is 1:m
@@ -346,6 +350,7 @@ model MatchingRequest {
 model AIRecommendation {
   id                 String               @id @default(uuid())
   matchingRequestId  String
+  //this will be snapshot and that to make it faster to be appeared in the front end 
   teamData           Json // teamData shape: { members: [{ userId, name, skills }], explanation: "" }
   compatibilityScore Float
   status             RecommendationStatus @default(PENDING)
@@ -353,11 +358,43 @@ model AIRecommendation {
   createdAt          DateTime             @default(now())
 
   // Relations
-  matchingRequest MatchingRequest @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
+  matchingRequest         MatchingRequest          @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
+  airecommendationMembers AIRecommendationMember[]
 
   @@map("ai_recommendations")
 }
 
+//now we yes save the returned member in the ai recommendation as json but this will not be usedful for using it in queries or in asking if there is member of them accept another team or no
+//so we need to make another table to save the returned member in the ai recommendation and that to make the things more faster with keeping the json snapshot as it is
+model AIRecommendationMember {
+  id               String           @id @default(uuid())
+  recommendationId String
+  userId           String
+  status           InvitationStatus @default(PENDING)
+  createdAt        DateTime         @default(now())
+
+  recommendation AIRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([recommendationId, userId])
+  @@map("ai_recommendation_members")
+}
+
+
+//we need also to save the mapping of each user id that it is stored here as string uuid and the ai expected integer user ids as mapping here
+//we will need also to store the entity type and that cause we hae more than one entity not just user and each one has itwn own uuid which can be similar in the 2 difference entities objects but each one of them is different so the mapping will be different too
+model AIIdentityMap {
+  //this is the one will be used when talking to the ai model
+  id        Int    @id @default(autoincrement())
+  //and this is the real one that it is stored in the db 
+  entityId  String  //cause the user uuid and the project uuid maybe have the same one so we can not making it unique condition 
+  entityType String
+  createdAt DateTime @default(now())
+
+  @@unique([entityId, entityType])
+
+  @@map("ai_identity_maps")
+}
 // ─────────────────────────────────────────
 // NOTIFICATIONS
 // ─────────────────────────────────────────
@@ -428,14 +465,14 @@ model HackathonInterest {
 // one project per team, one team per project and that cause just the owner who made the team so there is no any other teams 
 //just one team for each project 
 model Project {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  ownerId     String
-  teamId      String   @unique // one project per team
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  interestsCount Int     @default(0) //the number of interested persons in this project idea
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  ownerId        String
+  teamId         String   @unique // one project per team
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  interestsCount Int      @default(0) //the number of interested persons in this project idea
 
   owner            User              @relation(fields: [ownerId], references: [id])
   team             Team              @relation(fields: [teamId], references: [id])

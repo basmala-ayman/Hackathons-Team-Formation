@@ -49,4 +49,16 @@ const markAllAsRead = async (req, res, next) => {
   }
 };
 
-module.exports = { getMyNotifications, markAsRead, markAllAsRead };
+
+const getUnreadCount = async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const count = await notificationService.getUnreadCount(userId);
+        res.status(200).json({ success: true, data: { count } });
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+module.exports = { getMyNotifications, markAsRead, markAllAsRead ,getUnreadCount};
