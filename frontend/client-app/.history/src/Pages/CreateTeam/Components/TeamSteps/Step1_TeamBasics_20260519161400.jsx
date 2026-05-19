@@ -31,7 +31,7 @@ function Step1_TeamBasics({
 
   //state for adding new hackthon not in the list
   const [userCreated, setUserCreated] = useState(false);
-
+  
   //handle change in selecting hackathon
   const handleSelectChange = (selectedOption) => {
   setFormData((prev) => ({
@@ -137,11 +137,9 @@ function Step1_TeamBasics({
           isClearable={true}
           isValidNewOption={(inputValue) => validateSkill(inputValue)}
           formatCreateLabel={(inputValue) => `Create new event: "${inputValue}"`}
-          onChange={(val , actionMeta) => {
+          onChange={(val) => {
             setErrors((prev) => ({ ...prev, hackathon: false }));
             handleSelectChange(val);
-            //if user entered new hackthon , action will be "create-option" , so it will be true
-            setUserCreated(actionMeta.action === "create-option");
           }}
           value={
             hackathonList.find((opt) => opt.value === formData.hackathonName) ||

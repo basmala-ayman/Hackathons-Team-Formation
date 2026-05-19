@@ -149,6 +149,9 @@ function Step1_TeamBasics({
             (formData.hackathonName ? { label: formData.hackathonName, value: formData.hackathonName } : null)
           }
         />
+        {{constructor(params) {
+          
+        }}}
         {errors.hackathon && (
           <span
             style={{

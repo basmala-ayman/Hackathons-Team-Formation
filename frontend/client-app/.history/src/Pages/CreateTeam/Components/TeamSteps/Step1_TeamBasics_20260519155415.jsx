@@ -1,4 +1,4 @@
-import CreatableSelect from "react-select/creatable";
+import CreatableSelect  from "react-select";
 import styles from "./Step1.module.css";
 import { TeamMeetIcon } from "../../../../assets/Icons";
 import { useState } from "react";
@@ -20,7 +20,6 @@ function Step1_TeamBasics({
     });
   };
 
-
   //handle any change in inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,9 +27,6 @@ function Step1_TeamBasics({
 
     setFormData({ ...formData, [name]: value });
   };
-
-  //state for adding new hackthon not in the list
-  const [userCreated, setUserCreated] = useState(false);
 
   //handle change in selecting hackathon
   const handleSelectChange = (selectedOption) => {
@@ -79,8 +75,6 @@ function Step1_TeamBasics({
       setFormData({ ...formData, teamSize: value });
     }
   };
-
-  //validation of the new entered hackthon
    const validateSkill = (inputValue) => {
     const regex = /^[a-zA-Z0-9.#+\-\s]{1,20}$/;
     return regex.test(inputValue);
@@ -137,11 +131,9 @@ function Step1_TeamBasics({
           isClearable={true}
           isValidNewOption={(inputValue) => validateSkill(inputValue)}
           formatCreateLabel={(inputValue) => `Create new event: "${inputValue}"`}
-          onChange={(val , actionMeta) => {
-            setErrors((prev) => ({ ...prev, hackathon: false }));
+          onChange={(val) => {
+            ssetErrors((prev) => ({ ...prev, hackathon: false }));
             handleSelectChange(val);
-            //if user entered new hackthon , action will be "create-option" , so it will be true
-            setUserCreated(actionMeta.action === "create-option");
           }}
           value={
             hackathonList.find((opt) => opt.value === formData.hackathonName) ||

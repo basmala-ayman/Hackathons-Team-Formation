@@ -1,9 +1,7 @@
 import styles from './InterestModal.module.css'
 import { SparkleIcon } from '../../../assets/Icons'
 function InterestModal({ isOpen, onClose, projectTitle }) {
- if (!isOpen) return null;
-    return (
-
+  return (
     <div>
       
     </div>

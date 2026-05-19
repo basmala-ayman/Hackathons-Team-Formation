@@ -137,10 +137,9 @@ function Step1_TeamBasics({
           isClearable={true}
           isValidNewOption={(inputValue) => validateSkill(inputValue)}
           formatCreateLabel={(inputValue) => `Create new event: "${inputValue}"`}
-          onChange={(val , actionMeta) => {
+          onChange={(val) => {
             setErrors((prev) => ({ ...prev, hackathon: false }));
             handleSelectChange(val);
-            //if user entered new hackthon , action will be "create-option" , so it will be true
             setUserCreated(actionMeta.action === "create-option");
           }}
           value={

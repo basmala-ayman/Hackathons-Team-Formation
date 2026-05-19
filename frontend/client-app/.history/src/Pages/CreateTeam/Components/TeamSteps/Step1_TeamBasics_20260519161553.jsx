@@ -140,7 +140,7 @@ function Step1_TeamBasics({
           onChange={(val , actionMeta) => {
             setErrors((prev) => ({ ...prev, hackathon: false }));
             handleSelectChange(val);
-            //if user entered new hackthon , action will be "create-option" , so it will be true
+            //if 
             setUserCreated(actionMeta.action === "create-option");
           }}
           value={

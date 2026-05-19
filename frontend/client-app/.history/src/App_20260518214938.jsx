@@ -52,7 +52,7 @@ function App() {
             <Route path="/explore-Projects" element={<DiscoverProjects />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/user-dashboard" element={<UserDashboard />} />
-            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/userprofile" element={<UserProfile />} />
           </Routes>
         </main>
         <Footer />
