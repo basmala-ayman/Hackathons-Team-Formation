@@ -3,7 +3,7 @@ import { Badge } from "react-bootstrap";
 import { Code2 } from "lucide-react";
 import styles from "./SkillsExpertiseCard.module.css";
 
-export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], interests = [], onAddSkillClick }) {
+export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], interests = [], onAddSkillClick, isOwner }) {
 
   return (
     <div className={styles.skillsMainCard}>
@@ -13,9 +13,10 @@ export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], 
           <Code2 size={20} className={styles.headerIcon} />
           <h4 className={styles.cardTitleText}>Skills & Expertise</h4>
         </div>
-        <button type="button" className={styles.addSkillBtn} onClick={onAddSkillClick}>
+        {isOwner && (<button type="button" className={styles.addSkillBtn} onClick={onAddSkillClick}>
           + Add Skill
-        </button>
+        </button>)}
+
       </div>
 
       <div className={styles.skillsContentBody}>

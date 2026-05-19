@@ -65,9 +65,13 @@ function App() {
             <Route path="/teams/:id" element={<TeamProfile />} />
             <Route path="/explore-Projects" element={<DiscoverProjects />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+<<<<<<< HEAD
+      
+=======
             <Route path="/userdashboard" element={<UserDashboard />} />
             <Route path="/userprofile" element={<UserProfile isOwner={true} />} />
             <Route path="/profile" element={<UserProfile isOwner={false} initialData={externalUserData} />} />
+>>>>>>> 7d98a2e9043817509125f704d5d489ff67cdac2e
           </Routes>
         </main>
         <Footer />

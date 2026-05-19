@@ -5,7 +5,7 @@ import styles from "./ProfileHeaderCard.module.css";
 
 const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-export default function ProfileHeaderCard({ user, onEditClick, setFormData }) {
+export default function ProfileHeaderCard({ user, onEditClick, setFormData, isOnwer }) {
   const fileInputRef = useRef(null);
 
   const handleAvatarClick = (e) => {
@@ -38,15 +38,14 @@ export default function ProfileHeaderCard({ user, onEditClick, setFormData }) {
               alt={user.name}
               className={styles.avatarImg}
             />
-
-            <button
+            {isOnwer && (<button
               type="button"
               className={styles.avatarEditBtn}
               onClick={handleAvatarClick}
               aria-label="Change Avatar"
             >
               <Edit3 size={14} />
-            </button>
+            </button>)}
 
             <input
               type="file"
@@ -70,9 +69,10 @@ export default function ProfileHeaderCard({ user, onEditClick, setFormData }) {
               <h2 className={styles.profileName}>{user.name}</h2>
               <span className={styles.profileUsername}>{user.username}</span>
             </div>
-            <button className={styles.editProfileBtn} onClick={onEditClick}>
+            {isOnwer && (<button className={styles.editProfileBtn} onClick={onEditClick}>
               <Edit3 size={16} className="me-2" /> Edit Profile
-            </button>
+            </button>)}
+
           </div>
 
           <p className={styles.profileBio}>{user.bio}</p>
