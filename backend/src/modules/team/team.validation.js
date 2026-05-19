@@ -7,7 +7,7 @@ const createTeamSchema = Joi.object({
 
     description: Joi.string().max(500).allow("").optional(),
 
-    teamSize: Joi.number().integer().min(2).max(6).required(),
+    teamSize: Joi.number().integer().min(2).max(10).required(),
 
     members: Joi.array()
         .items(Joi.string().uuid())
