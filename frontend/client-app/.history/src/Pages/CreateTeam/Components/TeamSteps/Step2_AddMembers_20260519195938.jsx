@@ -82,18 +82,18 @@ function Step2_AddMembers({
   const handleInvite = () => {
     if (!selectedUser) return;
 
-    setFormData((prev) => {
-      const alreadyAdded = prev.members.includes(selectedUser.value);
+  setFormData((prev) => {
+    const alreadyAdded = prev.members.includes(selectedUser.value);
 
-      if (alreadyAdded) return prev;
+    if (alreadyAdded) return prev;
 
-      return {
-        ...prev,
-        members: [...prev.members, selectedUser.value],
-      };
-    });
+    return {
+      ...prev,
+      members: [...prev.members, selectedUser.value],
+    };
+  });
 
-    setSelectedUser(null);
+  setSelectedUser(null);
     setShowSuccessMsg(true);
     setTimeout(() => {
       setShowSuccessMsg(false);
@@ -142,9 +142,7 @@ function Step2_AddMembers({
         </CustomButton>
       </div>
       {showSuccess && (
-        <div className="my-3 text-success fs-4 fw-semibold">
-          Invite sent successfully!
-        </div>
+        <div className="my-3 text-success fs-4 fw-semibold">Invite sent successfully!</div>
       )}
 
       {/* Member Info */}
@@ -168,26 +166,6 @@ function Step2_AddMembers({
         </div>
 
         {/* Invited Members would be mapped here from formData.members */}
-        {formData.members.map((memberId) => {
-          const user = userOptions.find((u) => u.value === memberId);
-
-          return (
-            <div key={memberId} className={styles.memberCard}>
-              <div className={styles.memberLeft}>
-                <img src={defaultProfile} className={styles.avatar} />
-                <div className={styles.memberInfo}>
-                  <span className={styles.memberName}>
-                    {user?.label || "Unknown user"}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.badge}>
-                <CheckIcon /> Invited
-              </div>
-            </div>
-          );
-        })}
       </div>
 
       {/* Nav Buttons */}

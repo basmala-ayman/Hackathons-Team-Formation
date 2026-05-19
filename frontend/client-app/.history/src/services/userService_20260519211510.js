@@ -37,4 +37,5 @@ export const updateUserProfile = async (updatedData) => {
   } catch (error) {
     throw error.response?.data || "Failed to update user profile!!";
   }
+>>>>>>> 03c8ef8294183c378e0276a5974eb3b03735ed42
 };

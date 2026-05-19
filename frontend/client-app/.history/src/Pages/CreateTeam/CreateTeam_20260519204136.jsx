@@ -10,8 +10,8 @@ import Step4_FinalDetails from "./Components/TeamSteps/Step4_FinalDetails";
 import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import rolesData from "../../Data/roles.json";
 import skillsData from "../../Data/skills.json";
-import { useAuth } from "../../context/AuthContext/useAuth";
-import { getBasicUsers } from "../../services/userService";
+import {}
+import { getBasicUsers } from "../../services/usersService";
 import { getHackathonNames } from "../../services/hackathonService";
 
 import {
@@ -23,9 +23,12 @@ import {
 } from "../../assets/Icons";
 
 function CreateTeam() {
- 
-  //get current user
-  const {user}= useAuth();
+  //dummy data
+  const currentUser = {
+    name: "Zeina",
+    role: "Full-Stack Developer",
+    profilePic: null,
+  };
 
   //get SKills and roles data
   const roleOptions = useMemo(() => {
@@ -188,7 +191,7 @@ const hackathonList = useMemo(() => {
           <Step2_AddMembers
             formData={formData}
             setFormData={setFormData}
-            currentUser={user}
+            currentUser={currentUser}
             userOptions={userOptions}
             onNext={handleNextStep}
             onPrev={handlePrevStep}

@@ -13,6 +13,7 @@ export const getAllHackathons = async () => {
  * getHackathonById: Fetches details for a specific hackathon.
  * @param {string} id - The unique ID of the hackathon.
  */
+
 export const getHackathonById = async (id) => {
   try {
     const response = await api.get(`/hackathons/${id}`);

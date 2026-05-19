@@ -11,7 +11,7 @@ import SuccessPopUp from "./SuccessPopUp/SuccessPopUp";
 import rolesData from "../../Data/roles.json";
 import skillsData from "../../Data/skills.json";
 import { useAuth } from "../../context/AuthContext/useAuth";
-import { getBasicUsers } from "../../services/userService";
+import { getBasicUsers } from "../../services/usersService";
 import { getHackathonNames } from "../../services/hackathonService";
 
 import {
