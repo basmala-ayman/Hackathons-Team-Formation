@@ -8,6 +8,7 @@ const { protect } = require("../../middlewares/auth.middleware");
 
 router.get("/profile", protect, controller.getProfile);
 
+
 router.put(
   "/profile",
   protect,

@@ -108,7 +108,8 @@ model User {
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
-  tachRole                 String?   //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
+  //tachRole                 String?   //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
+  techRole                 String?   //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
