@@ -268,3 +268,42 @@
  *       401:
  *         description: Unauthorized
  */
+/**
+ * @swagger
+ * /user/list/basic:
+ *   get:
+ *     summary: Retrieve lightweight list of all users with names and emails
+ *     description: Returns simplified user records intended for dropdown menus, member selection, invitations, and autocomplete UI components.
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lightweight user list fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "dc389282-5fb8-478b-9b0c-126ea747e084"
+ *                       name:
+ *                         type: string
+ *                         example: "Habiba Adel"
+ *                       email:
+ *                         type: string
+ *                         example: "habiba@gmail.com"
+ *       401:
+ *         description: Unauthorized - Bearer token missing or invalid
+ *       500:
+ *         description: Internal server error
+ */

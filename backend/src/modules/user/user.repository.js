@@ -74,11 +74,28 @@ const searchUsers = async (query, excludeUserId) => {
   });
 };
 
+const getUsersBasicList = async () => {
+  return prisma.user.findMany({
+    where: {
+      deletedAt: null
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true
+    },
+    orderBy: {
+      name: "asc"
+    }
+  });
+};
+
 module.exports = {
   findUserProfile,
   updateUser,
   clearUserSkills,
   upsertSkillByName,
   createUserSkillRelation,
-  searchUsers
+  searchUsers,
+  getUsersBasicList
 };

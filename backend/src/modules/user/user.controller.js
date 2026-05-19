@@ -38,8 +38,22 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
+const getUsersBasicList = async (req, res, next) => {
+  try {
+    const users = await userService.getUsersBasicList();
+
+    res.status(200).json({
+      success: true,
+      data: users
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getProfile,
   updateProfile,
-  searchUsers
+  searchUsers,
+  getUsersBasicList
 };

@@ -38,3 +38,4 @@ Rate limiting per endpoint (auth endpoints especially)
 Websockets for real-time notification push — nice to have post-launch
 
 
+-- make the user getting all its names and emails in list in api 

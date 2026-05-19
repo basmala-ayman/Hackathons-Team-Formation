@@ -110,8 +110,19 @@ const searchUsers = async (query, currentUserId) => {
   return userRepository.searchUsers(query.trim(), currentUserId);
 };
 
+const getUsersBasicList = async () => {
+  const users = await userRepository.getUsersBasicList();
+
+  return users.map(user => ({
+  id: user.id,
+  name: user.name,
+  email: user.email
+}));
+};
+
 module.exports = {
   getProfile,
   updateProfile,
-  searchUsers
+  searchUsers,
+  getUsersBasicList
 };

@@ -9,6 +9,9 @@ const { protect } = require("../../middlewares/auth.middleware");
 // GET current logged-in user profile & step completion states
 router.get("/profile", protect, controller.getProfile);
 
+
+// GET all users names and emails
+router.get("/list/basic", protect, controller.getUsersBasicList);
 // PUT update profile properties (Handles text inputs + hard/soft skills arrays)
 router.put(
   "/profile",
