@@ -11,7 +11,12 @@ const createHackathon = async (data, userId) => {
 };
 
 const getAllHackathons = async () => {
-  return await hackathonRepository.findAllHackathons();
+  const hackathons = await hackathonRepository.findAllHackathons();
+
+  return hackathons.map(h => ({
+    ...h,
+    userCreated: h.source === "USER_CREATED"
+  }));
 };
 
 const getHackathonById = async (id) => {

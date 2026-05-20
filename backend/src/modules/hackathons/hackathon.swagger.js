@@ -85,6 +85,10 @@
  *                       updatedAt:
  *                         type: string
  *                         format: date-time
+ *                       userCreated:
+                           type: boolean
+                           description: Indicates if hackathon was created by a user (true) or scraped from external source (false)
+                           example: true
  */
 
 /**
