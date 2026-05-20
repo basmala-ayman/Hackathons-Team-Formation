@@ -6,6 +6,11 @@ generator client {
   previewFeatures = ["driverAdapters"]
 }
 
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "./ERD.svg"
+// }
+
 datasource db {
   //cause prisma can be dealed in many databases like mysql and even mongodb so you need to metnion 
   provider = "postgresql"
