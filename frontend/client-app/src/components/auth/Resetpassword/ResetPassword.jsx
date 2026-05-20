@@ -44,7 +44,10 @@ export default function ResetPassword() {
 
     try {
       setIsSubmittingLocal(true);
-      await resetPassword({ token, password });
+      await resetPassword({
+        token,
+        newPassword: password,
+      });
       popUp.success("Password updated successfully! Please log in.");
       navigate("/login", { replace: true });
     } catch (err) {

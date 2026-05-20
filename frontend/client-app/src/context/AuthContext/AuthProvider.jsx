@@ -96,12 +96,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const handleResetPassword = async ({ token, password }) => {
+  const handleResetPassword = async ({ token, newPassword }) => {
     setIsSubmitting(true);
     try {
       const data = await resetPasswordService({
         token,
-        newPassword: password
+        newPassword
       });
       return data;
     } catch (err) {
