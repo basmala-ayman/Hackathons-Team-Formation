@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { login as loginService, registerService, resendVerification as resendVerificationService, forgotPassword as forgotPasswordService } from "../../services/authService";
+import { login as loginService, registerService, resendVerification as resendVerificationService, forgotPassword as forgotPasswordService, resetPassword as resetPasswordService } from "../../services/authService";
 import { storeTokens, clearTokens, getAccessToken } from "../../utils/tokenStorage";
-import { useLocalStorage } from "../../CustomeHook/useLocalStorage.js";
+import { useLocalStorage } from "../../hooks/useLocalStorage.js";
 import { AuthContext } from "./AuthContext.jsx";
 
 export const AuthProvider = ({ children }) => {
@@ -60,7 +60,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     clearTokens();
-    // localStorage.removeItem("user");
   };
 
   const isAuthenticated = !!user;
@@ -97,6 +96,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleResetPassword = async ({ token, password }) => {
+    setIsSubmitting(true);
+    try {
+      const data = await resetPasswordService({
+        token,
+        newPassword: password
+      });
+      return data;
+    } catch (err) {
+      throw {
+        message: err.response?.data?.message || err.message || "Failed to update your password.",
+        status: err.response?.status || 500
+      };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -108,7 +125,8 @@ export const AuthProvider = ({ children }) => {
         isSubmitting,
         register: registerUser,
         resendVerification: resendEmail,
-        forgotPassword: handleForgotPassword
+        forgotPassword: handleForgotPassword,
+        resetPassword: handleResetPassword
       }}
     >
       {!loading && children}

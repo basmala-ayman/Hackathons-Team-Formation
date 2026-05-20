@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Container, Spinner, Alert } from "react-bootstrap";
-import { useFormHandler } from '../../CustomeHook/useFormHandler';
+import { useFormHandler } from "../../hooks/useFormHandler";
 import SkillsExpertiseCard from "../../components/UserProfile/SkillsExpertiseCard/SkillsExpertiseCard";
 import InterestedHackathonsCard from "../../components/UserProfile/InterestedHackathonsCard/InterestedHackathonsCard";
 import CompleteProfile from "../../components/UserProfile/CompleteProfile/CompleteProfile";
-import ProfileWizardModal from './../../components/UserProfilePopups/ProfileWizardModal';
+import ProfileWizardModal from "./../../components/UserProfilePopups/ProfileWizardModal";
 import ProfileHeaderCard from "../../components/UserProfile/ProfileHeader/ProfileHeaderCard";
 import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/MyProjectIdeasCard";
 import { getUserProfile, updateUserProfile } from "../../services/userService";
@@ -31,10 +31,11 @@ export default function UserProfile({ isOwner = true, initialData }) {
     githubUrl: "",
     resumeUrl: "",
     resumeFile: null
+
   };
 
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
-    initialData || defaultProfileData
+    initialData || defaultProfileData,
   );
 
   useEffect(() => {
@@ -178,6 +179,7 @@ export default function UserProfile({ isOwner = true, initialData }) {
       {isOwner && (
         <CompleteProfile user={values} onBannerClick={() => setIsWizardOpen(true)} />
       )}
+
 
       <ProfileHeaderCard
         user={values}
