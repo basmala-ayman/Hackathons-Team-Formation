@@ -80,15 +80,15 @@
  *                         type: string
  *                         nullable: true
  *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
- *                       userCreated:
-                           type: boolean
-                           description: Indicates if hackathon was created by a user (true) or scraped from external source (false)
-                           example: true
+*                         type: string
+*                         format: date-time
+*                       updatedAt:
+*                         type: string
+*                         format: date-time
+*                       userCreated:
+*                         type: boolean
+*                         description: Indicates if hackathon was created by a user (true) or scraped from external source (false)
+*                         example: true
  */
 
 /**
