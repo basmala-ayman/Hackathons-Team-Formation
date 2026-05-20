@@ -29,62 +29,56 @@
  *                     properties:
  *                       id:
  *                         type: string
- *                         description: Devpost hackathon ID or system-generated ID for user-created hackathons
- *                         example: "devpost-1234567"
+ *                         description: Internal UUID (user-created) or Devpost ID (scraped source identifier)
+ *                         example: "6c27fba2-92e1-4c12-87ba-df0f398110b4"
+ *                       devpostId:
+ *                         type: string
+ *                         nullable: true
+ *                         description: Original Devpost ID (only for scraped hackathons)
+ *                         example: "1234567"
  *                       title:
  *                         type: string
+ *                         description: Hackathon title (NOT unique)
  *                         example: "Global AI Innovation Hackathon"
  *                       slug:
  *                         type: string
  *                         nullable: true
- *                         example: "global-ai-innovation-hackathon"
  *                       location:
  *                         type: string
  *                         example: "Online"
  *                       applyLink:
  *                         type: string
  *                         nullable: true
- *                         example: "https://devpost.com/software"
  *                       thumbnailUrl:
  *                         type: string
  *                         nullable: true
- *                         example: "https://example.com/banner.png"
  *                       remainingTime:
  *                         type: string
  *                         nullable: true
- *                         example: "12 days left"
  *                       submissionPeriod:
  *                         type: string
  *                         nullable: true
- *                         example: "May 1 - May 25"
  *                       prizeAmount:
  *                         type: number
  *                         example: 5000
  *                       prizesCounts:
  *                         type: integer
- *                         example: 3
  *                       registrationsCount:
  *                         type: integer
- *                         example: 142
  *                       organization:
  *                         type: string
  *                         nullable: true
- *                         example: "AI Lab Global"
  *                       status:
  *                         type: string
  *                         enum: [UPCOMING, ONGOING, ENDED]
- *                         example: "ONGOING"
  *                       source:
  *                         type: string
  *                         enum: [SCRAPED, USER_CREATED]
- *                         example: "SCRAPED"
  *                       interestCount:
  *                         type: integer
- *                         example: 24
  *                       createdBy:
  *                         type: string
  *                         nullable: true
- *                         example: null
  *                       createdAt:
  *                         type: string
  *                         format: date-time
@@ -132,8 +126,8 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Devpost hackathon ID or system-generated ID
- *         example: "devpost-1234567"
+ *         description: Internal UUID or Devpost ID
+ *         example: "1234567"
  *     responses:
  *       200:
  *         description: Hackathon retrieved successfully
@@ -150,7 +144,9 @@
  *                   properties:
  *                     id:
  *                       type: string
- *                       description: Devpost or system ID
+ *                     devpostId:
+ *                       type: string
+ *                       nullable: true
  *                     title:
  *                       type: string
  *                     location:
@@ -187,13 +183,12 @@
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Hackathon title (NOT unique)
  *                 example: "Internal Web3 Sprint"
  *               location:
  *                 type: string
- *                 example: "San Francisco, CA"
  *               applyLink:
  *                 type: string
- *                 example: "https://example.com"
  *               thumbnailUrl:
  *                 type: string
  *               submissionPeriod:
@@ -219,7 +214,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Hackathon ID (Devpost or system-generated)
+ *         description: Internal UUID or Devpost ID
  *     requestBody:
  *       required: true
  *       content:
@@ -253,7 +248,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Hackathon ID (Devpost or system-generated)
+ *         description: Internal UUID or Devpost ID
  *     responses:
  *       204:
  *         description: Deleted successfully
