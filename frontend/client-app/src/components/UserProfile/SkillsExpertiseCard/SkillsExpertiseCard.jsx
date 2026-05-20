@@ -3,7 +3,7 @@ import { Badge } from "react-bootstrap";
 import { Code2 } from "lucide-react";
 import styles from "./SkillsExpertiseCard.module.css";
 
-export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], interests = [], onAddSkillClick, isOwner }) {
+export default function SkillsExpertiseCard({ skills = [], roles = [], interests = [], onAddSkillClick, isOwner }) {
 
   return (
     <div className={styles.skillsMainCard}>
@@ -21,11 +21,11 @@ export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], 
 
       <div className={styles.skillsContentBody}>
 
-        {/* Hard Skills */}
+        {/* Skills */}
         <div className={styles.skillsSection}>
-          <h5 className={styles.sectionTitle}>Hard Skills</h5>
+          <h5 className={styles.sectionTitle}>Hard & Soft Skills</h5>
           <div className={styles.badgesWrapper}>
-            {techSkills.map((skill, index) => (
+            {skills.map((skill, index) => (
               <Badge key={index} className={styles.hardSkillBadge}>
                 {skill}
               </Badge>
@@ -33,13 +33,13 @@ export default function SkillsExpertiseCard({ techSkills = [], softSkills = [], 
           </div>
         </div>
 
-        {/* Soft Skills */}
+        {/* Roles */}
         <div className={styles.skillsSection}>
-          <h5 className={styles.sectionTitle}>Soft Skills</h5>
+          <h5 className={styles.sectionTitle}>Roles</h5>
           <div className={styles.badgesWrapper}>
-            {softSkills.map((skill, index) => (
+            {roles.map((role, index) => (
               <Badge key={index} className={styles.softSkillBadge}>
-                {skill}
+                {role}
               </Badge>
             ))}
           </div>

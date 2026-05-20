@@ -1,203 +1,180 @@
 import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import styles from "./steps.module.css";
 
 export default function Step1Skills({ formData, setFormData, errors, setErrors }) {
-  const [techInput, setTechInput] = useState("");
-  const [softInput, setSoftInput] = useState("");
+  const [skillInput, setSkillInput] = useState("");
+  // const [roleInput, setRoleInput] = useState("");
+  const [showSkillDropdown, setShowSkillDropdown] = useState(false);
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
-  const defaultTechSkills = ["React", "Typescript", "Javascript", "Vuejs", "Angular", "C++", "Go"];
-  const defaultSoftSkills = ["Leadership", "Communication", "Teamwork", "Problem Solving", "Critical Thinking", "Creativity", "Time Management"];
-
-  const [showTechDropdown, setShowTechDropdown] = useState(false);
-  const [showSoftDropdown, setShowSoftDropdown] = useState(false);
+  const allAvailableSkills = ["React", "Typescript", "Javascript", "Vuejs", "Angular", "C++", "Go", "Leadership", "Communication", "Teamwork"];
+  const roles = ["Frontend Developer", "Backend Developer", "Full Stack Developer", "UI/UX Designer", "DevOps Engineer"];
 
   const handleBioChange = (e) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, bio: value }));
-    if (errors.bio && value.trim()) {
-      setErrors((prev) => ({ ...prev, bio: null }));
+    if (errors.bio && value.trim()) setErrors((prev) => ({ ...prev, bio: null }));
+  };
+
+  const handleRoleSelect = (role) => {
+    setFormData((prev) => ({ ...prev, techRoles: role }));
+    if (errors.techRoles) setErrors((prev) => ({ ...prev, techRoles: null }));
+    setShowRoleDropdown(false);
+  };
+
+  const addTag = (value, list, key) => {
+    if (list.includes(value) && !(formData[key] || []).includes(value)) {
+      setFormData((prev) => ({ ...prev, [key]: [...(prev[key] || []), value] }));
+      if (errors[key]) setErrors((prev) => ({ ...prev, [key]: null }));
     }
   };
 
-  const filteredTech = defaultTechSkills.filter(
-    (skill) =>
-      skill.toLowerCase().includes(techInput.toLowerCase()) &&
-      !(formData.technicalSkills || []).includes(skill)
-  );
-
-  const filteredSoft = defaultSoftSkills.filter(
-    (skill) =>
-      skill.toLowerCase().includes(softInput.toLowerCase()) &&
-      !(formData.softSkills || []).includes(skill)
-  );
-
-  const addTechSkill = (skill) => {
-    const trimmed = skill.trim();
-    if (trimmed && !(formData.technicalSkills || []).includes(trimmed)) {
-      setFormData((prev) => ({
-        ...prev,
-        technicalSkills: [...(prev.technicalSkills || []), trimmed],
-      }));
-      if (errors.technicalSkills) {
-        setErrors((prev) => ({ ...prev, technicalSkills: null }));
-      }
-    }
-    setTechInput("");
-    setShowTechDropdown(false);
-  };
-
-  const addSoftSkill = (skill) => {
-    const trimmed = skill.trim();
-    if (trimmed && !(formData.softSkills || []).includes(trimmed)) {
-      setFormData((prev) => ({
-        ...prev,
-        softSkills: [...(prev.softSkills || []), trimmed],
-      }));
-      if (errors.softSkills) {
-        setErrors((prev) => ({ ...prev, softSkills: null }));
-      }
-    }
-    setSoftInput("");
-    setShowSoftDropdown(false);
-  };
-
-  const handleTechKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (techInput.trim()) addTechSkill(techInput);
-    }
-  };
-
-  const handleSoftKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (softInput.trim()) addSoftSkill(softInput);
-    }
-  };
-
-  const removeTechSkill = (skillToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      technicalSkills: prev.technicalSkills.filter((skill) => skill !== skillToRemove),
-    }));
-  };
-
-  const removeSoftSkill = (skillToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      softSkills: prev.softSkills.filter((skill) => skill !== skillToRemove),
-    }));
+  const removeTag = (value, key) => {
+    setFormData((prev) => ({ ...prev, [key]: prev[key].filter((item) => item !== value) }));
   };
 
   return (
     <div className={styles.stepContainer}>
+      {/* UX FIX: Updated copy to say Skills instead of Technical/Soft */}
       <h2 className={styles.stepTitle}>Showcase your Skills</h2>
-      <p className={styles.stepSubtext}>Select your technical/soft skills</p>
+      <p className={styles.stepSubtext}>Select your profile skills and roles</p>
 
-      {/* ------- Technical Skills ------- */}
+      {/* --- Skills Selection --- */}
       <Form.Group className="mb-4 position-relative">
-        <Form.Label className={styles.formLabel}>Technical Skills<span className="text-danger">*</span></Form.Label>
+        <Form.Label className={styles.formLabel}>Skills <span className="text-danger">*</span></Form.Label>
+        <div className={styles.selectWrapper}>
+          <Form.Control
+            type="text"
+            className={`${styles.inputControl} ${errors.skills ? 'is-invalid' : ''}`}
+            placeholder="e.g., React, UI/UX Design, Communication..."
+            value={skillInput}
+            onChange={(e) => { setSkillInput(e.target.value); setShowSkillDropdown(true); }}
+            onFocus={() => setShowSkillDropdown(true)}
+            onBlur={() => setTimeout(() => setShowSkillDropdown(false), 200)}
+          />
+          <ChevronDown
+            onMouseDown={(e) => {
+              e.preventDefault(); // Prevents input from losing focus
+              setShowSkillDropdown((prev) => !prev);
+            }}
+            className={styles.dropdownIcon}
+            size={18}
+          />
+        </div>
 
-        <Form.Control
-          type="text"
-          placeholder="e.g., Figma, Photoshop..."
-          className={`${styles.inputControl} ${errors.technicalSkills ? "border-danger" : ""}`}
-          value={techInput}
-          onChange={(e) => {
-            setTechInput(e.target.value);
-            setShowTechDropdown(true);
-          }}
-          onFocus={() => setShowTechDropdown(true)}
-          onBlur={() => setTimeout(() => setShowTechDropdown(false), 200)}
-          onKeyDown={handleTechKeyDown}
-        />
-        <span className={styles.hintText}>💡 Press Enter or click suggestions to add skills</span>
+        {errors.skills && <div className="text-danger mt-1" >{errors.skills}</div>}
 
-        {showTechDropdown && filteredTech.length > 0 && (
+        {showSkillDropdown && (
           <div className={styles.suggestionsDropdown}>
-            {filteredTech.map((skill) => (
-              <div key={skill} className={styles.suggestionItem} onMouseDown={() => addTechSkill(skill)}>
-                {skill}
-              </div>
-            ))}
+            {allAvailableSkills
+              .filter(s => s.toLowerCase().includes(skillInput.toLowerCase()))
+              .map(skill => (
+                <div
+                  key={skill}
+                  className={styles.suggestionItem}
+                  onMouseDown={() => {
+                    addTag(skill, allAvailableSkills, 'skills');
+                    setSkillInput('');
+                    setShowSkillDropdown(false);
+                  }}
+                >
+                  {skill}
+                </div>
+              ))}
           </div>
         )}
 
         <div className="d-flex flex-wrap gap-2 mt-3">
-          {(formData.technicalSkills || []).map((skill, index) => (
-            <Badge key={index} pill className={styles.skillBadge}>
-              {skill}
-              <X size={14} className="ms-2 cursor-pointer" onClick={() => removeTechSkill(skill)} />
+          {(formData.skills || []).map((skill) => (
+            <Badge key={skill} pill className={styles.skillBadge}>
+              {skill} <X size={14} className="cursor-pointer" onClick={() => removeTag(skill, 'skills')} />
             </Badge>
           ))}
         </div>
-        {errors.technicalSkills && (
-          <span className="text-danger fs-5 mt-1 d-block">{errors.technicalSkills}</span>
-        )}
       </Form.Group>
 
-      {/* ------- Soft Skills ------- */}
+      {/* --- Role Selection --- */}
       <Form.Group className="mb-4 position-relative">
-        <Form.Label className={styles.formLabel}>Soft Skills<span className="text-danger">*</span></Form.Label>
+        <Form.Label className={styles.formLabel}>Preferred Role <span className="text-danger">*</span></Form.Label>
+        <div className={styles.selectWrapper}>
+          <Form.Control
+            type="text"
+            readOnly // Keeps it behaving like a true dropdown pick
+            className={`${styles.inputControl} ${errors.techRoles ? 'is-invalid' : ''} cursor-pointer`}
+            placeholder="Select your role..."
+            value={formData.techRoles || ""} // Displays the single string directly
+            onClick={() => setShowRoleDropdown((prev) => !prev)}
+            onBlur={() => setTimeout(() => setShowRoleDropdown(false), 200)}
+          />
+          <ChevronDown
+            onMouseDown={(e) => {
+              e.preventDefault();
+              setShowRoleDropdown((prev) => !prev);
+            }}
+            className={styles.dropdownIcon}
+            size={18}
+          />
+        </div>
 
-        <Form.Control
-          type="text"
-          placeholder="e.g., Leadership, Communication..."
-          className={`${styles.inputControl} ${errors.softSkills ? "border-danger" : ""}`}
-          value={softInput}
-          onChange={(e) => {
-            setSoftInput(e.target.value);
-            setShowSoftDropdown(true);
-          }}
-          onFocus={() => setShowSoftDropdown(true)}
-          onBlur={() => setTimeout(() => setShowSoftDropdown(false), 200)}
-          onKeyDown={handleSoftKeyDown}
-        />
-        <span className={styles.hintText}>💡 Press Enter or click suggestions to add skills</span>
+        {errors.techRoles && <div className="text-danger mt-1" >{errors.techRoles}</div>}
 
-        {showSoftDropdown && filteredSoft.length > 0 && (
+        {/* {showRoleDropdown && (
           <div className={styles.suggestionsDropdown}>
-            {filteredSoft.map((skill) => (
-              <div key={skill} className={styles.suggestionItem} onMouseDown={() => addSoftSkill(skill)}>
-                {skill}
+            {roles
+              .filter(r => r.toLowerCase().includes(roleInput.toLowerCase()))
+              .map(role => (
+                <div
+                  key={role}
+                  className={styles.suggestionItem}
+                  onMouseDown={() => {
+                    addTag(role, roles, 'techRoles');
+                    setRoleInput('');
+                    setShowRoleDropdown(false);
+                  }}
+                >
+                  {role}
+                </div>
+              ))}
+          </div>
+        )} */}
+        {showRoleDropdown && (
+          <div className={styles.suggestionsDropdown}>
+            {roles.map(role => (
+              <div
+                key={role}
+                className={styles.suggestionItem}
+                onMouseDown={() => handleRoleSelect(role)}
+              >
+                {role}
               </div>
             ))}
           </div>
         )}
-
-        <div className="d-flex flex-wrap gap-2 mt-3">
-          {(formData.softSkills || []).map((skill, index) => (
-            <Badge key={index} pill className={styles.skillBadge}>
-              {skill}
-              <X size={14} className="ms-2 cursor-pointer" onClick={() => removeSoftSkill(skill)} />
+        {/* <div className="d-flex flex-wrap gap-2 mt-3">
+          {(formData.techRoles || []).map((role) => (
+            <Badge key={role} pill className={styles.skillBadge}>
+              {role} <X size={14} className="cursor-pointer" onClick={() => removeTag(role, 'techRoles')} />
             </Badge>
           ))}
-        </div>
-        {errors.softSkills && (
-          <span className="text-danger fs-5 mt-1 d-block">{errors.softSkills}</span>
-        )}
+        </div> */}
       </Form.Group>
 
-      {/* ------- Bio ------- */}
+      {/* --- Bio --- */}
       <Form.Group className="mb-3">
-        <Form.Label className={styles.formLabel}>Bio<span className="text-danger">*</span></Form.Label>
+        <Form.Label className={styles.formLabel}>Bio <span className="text-danger">*</span></Form.Label>
         <Form.Control
           as="textarea"
+          className={`${styles.inputControl} ${errors.bio ? 'is-invalid' : ''}`}
           rows={4}
-          placeholder="Tell us about yourself, your passion, and what drives you..."
-          name="bio"
+          placeholder="Tell us about yourself..."
           value={formData.bio || ""}
           onChange={handleBioChange}
-          className={`${styles.inputControl} ${errors.bio ? "border-danger" : ""}`}
           maxLength={500}
         />
-        {errors.bio ? (
-          <span className="text-danger fs-5 mt-1 d-block">{errors.bio}</span>
-        ) : (
-          <span className={styles.hintText}>{(formData.bio || "").length}/500 characters</span>
-        )}
+        {errors.bio && <div className="text-danger mt-1">{errors.bio}</div>}
+        <span className={styles.hintText}>{(formData.bio || "").length}/500 characters</span>
       </Form.Group>
     </div>
   );

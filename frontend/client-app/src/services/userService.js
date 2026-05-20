@@ -12,29 +12,43 @@ export const getBasicUsers = async () => {
   } catch (error) {
     throw error.response?.data || "Failed to fetch users list!!";
   }
-}
+};
 /**
  * getUserProfile: Fetches the profile data of the currently logged-in user.
  * Requires a valid Authorization token (handled automatically by interceptor).
  */
 export const getUserProfile = async () => {
   try {
-    const response = await api.get("/user/profile");
-    return response.data;
+    const response = await api.get("/users/profile");
+    return response.data?.data;
   } catch (error) {
     throw error.response?.data || "Failed to fetch user profile!!";
   }
 };
 
-/**
- * updateUserProfile: Sends a PUT request to update the current user's profile details.
- * @param {Object} updatedData - Object containing { name, bio, profilePicture, resumeUrl, githubUrl, linkedinUrl }
- */
-export const updateUserProfile = async (updatedData) => {
+export const updateUserProfile = async (profileData) => {
   try {
-    const response = await api.put("/user/profile", updatedData);
-    return response.data;
+    // 🔑 FIX 3: Hit the plural /users/profile endpoint with plain JSON data
+    const response = await api.put("/users/profile", profileData);
+    return response;
   } catch (error) {
     throw error.response?.data || "Failed to update user profile!!";
   }
 };
+
+// /**
+//  * updateUserProfile: Sends a PUT request to update the current user's profile details.
+//  * @param {FormData} formData - The payload box carrying text fields and files
+//  */
+// export const updateUserProfile = async (formData) => {
+//   try {
+//     const response = await api.put("/users/profile", formData, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     });
+//     return response;
+//   } catch (error) {
+//     throw error.response?.data || "Failed to update user profile!!";
+//   }
+// };
