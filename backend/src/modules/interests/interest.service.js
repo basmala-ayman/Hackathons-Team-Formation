@@ -1,5 +1,6 @@
 const interestRepository = require("./interest.repository");
 const AppError = require("../../utils/AppError");
+const matchingService = require("../matching/matching.service");
 
 //this is the thresold that we send it to the ai model when re reach to it
 const POOL_THRESHOLD = 30;//can be updated
@@ -71,6 +72,20 @@ const addProjectInterest = async (userId, projectId) => {
 
     // 5. increment and read new count from the returned record  no extra query
     const updated = await interestRepository.incrementProjectInterestCount(projectId);
+
+
+
+    //here cause in the project each project with just one team so there is no need for
+    //making the matching requests to the project team wait until 10 pm as hackathon
+    //we will need just when the interested count reaches to 30 so we immediately trigger the ai model
+    if (updated.interestsCount >= POOL_THRESHOLD) {
+        matchingService
+            .triggerProjectMatching(projectId)
+            .catch((err) =>
+                console.error("Project matching failed:", err.message)
+            );
+    }
+
 
     return {
         message: "Interest registered successfully.",

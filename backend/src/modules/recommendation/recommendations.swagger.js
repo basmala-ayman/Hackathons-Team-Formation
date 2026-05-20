@@ -1,0 +1,265 @@
+/**
+ * @swagger
+ * tags:
+ *   - name: Recommendations
+ *     description: AI team recommendations — founder view, member view, accept/reject
+ *   - name: Matching
+ *     description: AI matching triggers and status
+ */
+
+/**
+ * @swagger
+ * /api/v1/recommendations:
+ *   get:
+ *     summary: Get recommendations page data
+ *     description: |
+ *       Returns data for all 3 tabs. Use `tab` query param to fetch only what you need.
+ *       - `my-teams` — teams the user owns + AI recommendations for each
+ *       - `join` — invitations the user received
+ *       - `all` — both combined (default)
+ *     tags: [Recommendations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: tab
+ *         schema:
+ *           type: string
+ *           enum: [my-teams, join, all]
+ *           default: all
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             examples:
+ *               my-teams:
+ *                 summary: tab=my-teams response
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     - teamId: "uuid"
+ *                       teamName: "EcoHackers"
+ *                       hackathonName: "AI for Climate Action"
+ *                       description: "Building sustainable solutions"
+ *                       status: "FORMING"
+ *                       maxMembers: 4
+ *                       ownerId: "uuid"
+ *                       requiredSkills: ["Python", "ML", "React"]
+ *                       currentMembers:
+ *                         - userId: "uuid"
+ *                           name: "Sarah Chen"
+ *                           profilePicture: null
+ *                           role: "Team Leader"
+ *                       matchingRound: 1
+ *                       matchingStatus: "COMPLETED"
+ *                       recommendations:
+ *                         - id: "uuid"
+ *                           matchLevel: "High"
+ *                           status: "PENDING"
+ *                           expiresAt: null
+ *                           members:
+ *                             - userId: "uuid"
+ *                               name: "Mike Johnson"
+ *                               profilePicture: null
+ *                               role: "Frontend Developer"
+ *                               tags: ["React", "Frontend"]
+ *                               invitationStatus: "PENDING"
+ *                           progress:
+ *                             total: 3
+ *                             accepted: 0
+ *                             rejected: 0
+ *                             pending: 3
+ *                             acceptedPercent: 0
+ *               join:
+ *                 summary: tab=join response
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     - invitationId: "uuid"
+ *                       status: "PENDING"
+ *                       deadline: "2026-05-21T10:00:00.000Z"
+ *                       team:
+ *                         id: "uuid"
+ *                         teamName: "Neural Green Team"
+ *                         hackathonName: "AI for Climate Action"
+ *                         description: "Developing neural networks"
+ *                         maxMembers: 4
+ *                         ownerId: "uuid"
+ *                         requiredSkills: ["Python", "ML"]
+ *                         currentMembers:
+ *                           - userId: "uuid"
+ *                             name: "Zeina"
+ *                             role: "Backend Developer"
+ */
+
+/**
+ * @swagger
+ * /api/v1/recommendations/{id}/accept:
+ *   patch:
+ *     summary: Founder accepts a recommended team
+ *     description: |
+ *       - Marks this recommendation ACCEPTED
+ *       - Auto-rejects the other 2 recommendations for this matching request
+ *       - Creates 24hr invitations for all recommended members
+ *       - Notifies each recommended member
+ *     tags: [Recommendations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: AIRecommendation ID
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Recommendation accepted. Invitations sent to all recommended members."
+ *       400:
+ *         description: Already responded to
+ *       403:
+ *         description: Not the team owner
+ *       404:
+ *         description: Recommendation not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/recommendations/{id}/reject:
+ *   patch:
+ *     summary: Founder rejects a recommended team
+ *     tags: [Recommendations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Recommendation rejected."
+ */
+
+/**
+ * @swagger
+ * /api/v1/recommendations/invitations/{invitationId}/respond:
+ *   patch:
+ *     summary: Member accepts or rejects an invitation
+ *     description: |
+ *       ACCEPT adds the user to team members and updates the progress bar.
+ *       Enforces one accepted team per hackathon per user.
+ *       Both actions notify the team owner.
+ *     tags: [Recommendations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: invitationId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [action]
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum: [ACCEPT, REJECT]
+ *           examples:
+ *             accept:
+ *               value: { "action": "ACCEPT" }
+ *             reject:
+ *               value: { "action": "REJECT" }
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             examples:
+ *               accepted:
+ *                 value:
+ *                   success: true
+ *                   message: "You have joined the team."
+ *                   data: { message: "You have joined the team.", teamComplete: false }
+ *               rejected:
+ *                 value:
+ *                   success: true
+ *                   message: "Invitation declined."
+ *       400:
+ *         description: Already responded / expired / already accepted another team
+ *       403:
+ *         description: Not the invitation recipient
+ */
+
+/**
+ * @swagger
+ * /api/v1/matching/round2/{teamId}:
+ *   post:
+ *     summary: Founder requests Round 2 AI recommendations
+ *     description: |
+ *       Called when some invitations expired/rejected and team still has open slots.
+ *       Excludes all previously recommended users from new search pool.
+ *       Owner gets notified when results are ready.
+ *     tags: [Matching]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: teamId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "Round 2 is being processed. You will be notified when recommendations are ready."
+ *               data: { matchingRequestId: "uuid" }
+ *       400:
+ *         description: Team already complete / no previous matching found
+ *       403:
+ *         description: Not the team owner
+ *       404:
+ *         description: Team not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/matching/ai-status:
+ *   get:
+ *     summary: Check AI model memory status
+ *     description: Returns whether the HuggingFace space is awake and has data
+ *     tags: [Matching]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 memory_wiped: false
+ *                 total_members: 30
+ *                 total_projects: 5
+ */

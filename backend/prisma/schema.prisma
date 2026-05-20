@@ -348,14 +348,13 @@ model MatchingRequest {
 }
 
 model AIRecommendation {
-  id                 String               @id @default(uuid())
-  matchingRequestId  String
+  id                String               @id @default(uuid())
+  matchingRequestId String
   //this will be snapshot and that to make it faster to be appeared in the front end 
-  teamData           Json // teamData shape: { members: [{ userId, name, skills }], explanation: "" }
-  compatibilityScore Float
-  status             RecommendationStatus @default(PENDING)
-  expiresAt          DateTime? //cause after for example 24 hours that this team was recommended to the owner we will ask if make round 2 or that enough
-  createdAt          DateTime             @default(now())
+  teamData          Json // teamData shape: { members: [{ userId, name, skills }], explanation: "" }
+  status            RecommendationStatus @default(PENDING)
+  expiresAt         DateTime? //cause after for example 24 hours that this team was recommended to the owner we will ask if make round 2 or that enough
+  createdAt         DateTime             @default(now())
 
   // Relations
   matchingRequest         MatchingRequest          @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
@@ -380,21 +379,20 @@ model AIRecommendationMember {
   @@map("ai_recommendation_members")
 }
 
-
 //we need also to save the mapping of each user id that it is stored here as string uuid and the ai expected integer user ids as mapping here
 //we will need also to store the entity type and that cause we hae more than one entity not just user and each one has itwn own uuid which can be similar in the 2 difference entities objects but each one of them is different so the mapping will be different too
 model AIIdentityMap {
   //this is the one will be used when talking to the ai model
-  id        Int    @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   //and this is the real one that it is stored in the db 
-  entityId  String  //cause the user uuid and the project uuid maybe have the same one so we can not making it unique condition 
+  entityId   String //cause the user uuid and the project uuid maybe have the same one so we can not making it unique condition 
   entityType String
-  createdAt DateTime @default(now())
+  createdAt  DateTime @default(now())
 
   @@unique([entityId, entityType])
-
   @@map("ai_identity_maps")
 }
+
 // ─────────────────────────────────────────
 // NOTIFICATIONS
 // ─────────────────────────────────────────

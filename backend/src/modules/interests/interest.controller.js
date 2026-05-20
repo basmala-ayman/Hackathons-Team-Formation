@@ -1,5 +1,6 @@
 const interestService = require("./interest.service");
 
+
 // POST /api/v1/interests/hackathons/:hackathonId
 const addHackathonInterest = async (req, res, next) => {
     try {

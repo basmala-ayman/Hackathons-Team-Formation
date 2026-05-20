@@ -12,7 +12,8 @@ const initCronJobs = () => {
     });
 
     // ── 10pm daily — trigger hackathon matching queue ─────
-    cron.schedule("0 22 * * *", async () => {
+    // cron.schedule("0 22 * * *", async () => {
+        cron.schedule("*/10 * * * * *", async () => {//this is just for testing 
         logger.info("Cron: starting hackathon matching");
         try {
             await matchingService.triggerHackathonMatching();
