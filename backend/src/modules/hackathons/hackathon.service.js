@@ -42,11 +42,20 @@ const getHackathonNames = async () => {
   return hackathons.map(hackathon => hackathon.title);
 };
 
+const getHackathonByDevpostId = async (devpostId) => {
+  const hackathon = await hackathonRepository.findHackathonByDevpostId(devpostId);
+
+  if (!hackathon) throw new AppError('Hackathon not found', 404);
+
+  return hackathon;
+};
+
 module.exports = {
   createHackathon,
   getAllHackathons,
   getHackathonById,
   updateHackathon,
   deleteHackathon,
-  getHackathonNames
+  getHackathonNames,
+  getHackathonByDevpostId
 };

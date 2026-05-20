@@ -57,7 +57,7 @@ const collectDevpostHackathons = async () => {
                 }));
                 
                 await prisma.hackathon.upsert({
-                    where: { id: hack.id.toString() },
+                    where: { devpostId: hack.id.toString() },
                     update: {
                         // status: currentStatus,
                         status: finalStatus,
@@ -66,7 +66,7 @@ const collectDevpostHackathons = async () => {
                         registrationsCount: hack.registrations_count,
                     },
                     create: {
-                        id: hack.id.toString(),
+                        devpostId: hack.id.toString(),
                         slug: slug,
                         title: hack.title,
                         // status: currentStatus,

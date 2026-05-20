@@ -185,6 +185,7 @@ model UserSkill {
 //done 
 model Hackathon {
   id                 String          @id @default(uuid())
+  devpostId     String   @unique
   title              String          @unique
   slug               String?
   location           String?         @default("Online")

@@ -12,6 +12,7 @@ router.get('/:id', hackathonController.getHackathonById);
 router.post('/create', protect, hackathonController.createHackathon);
 router.put('/:id', protect, hackathonController.updateHackathon);
 router.delete('/:id', protect, hackathonController.deleteHackathon);
+router.get('/devpost/:devpostId', hackathonController.getHackathonByDevpostId);
 
 
 

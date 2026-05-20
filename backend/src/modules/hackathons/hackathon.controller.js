@@ -70,11 +70,21 @@ const getHackathonNames = async (req, res, next) => {
   }
 };
 
+const getHackathonByDevpostId = async (req, res, next) => {
+  try {
+    const hackathon = await service.getHackathonByDevpostId(req.params.devpostId);
+    res.status(200).json({ success: true, data: hackathon });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createHackathon,
   getAllHackathons,
   getHackathonById,
   updateHackathon,
   deleteHackathon,
-  getHackathonNames
+  getHackathonNames,
+  getHackathonByDevpostId
 };

@@ -64,6 +64,12 @@ const findHackathonByTitle = async (title) => {
   });
 };
 
+const findHackathonByDevpostId = async (devpostId) => {
+  return prisma.hackathon.findUnique({
+    where: { devpostId }
+  });
+};
+
 module.exports = {
   createHackathon,
   findAllHackathons,
@@ -71,5 +77,6 @@ module.exports = {
   updateHackathon,
   deleteHackathon,
   getHackathonNames,
-  findHackathonByTitle
+  findHackathonByTitle,
+  findHackathonByDevpostId
 };

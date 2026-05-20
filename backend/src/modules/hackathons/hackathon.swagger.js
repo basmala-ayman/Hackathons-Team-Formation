@@ -13,7 +13,7 @@
  *     tags: [Hackathons]
  *     responses:
  *       200:
- *         description: A complete chronological list of all active platform hackathons
+ *         description: A complete chronological list of all hackathons
  *         content:
  *           application/json:
  *             schema:
@@ -29,7 +29,8 @@
  *                     properties:
  *                       id:
  *                         type: string
- *                         example: "6c27fba2-92e1-4c12-87ba-df0f398110b4"
+ *                         description: Devpost hackathon ID or system-generated ID for user-created hackathons
+ *                         example: "devpost-1234567"
  *                       title:
  *                         type: string
  *                         example: "Global AI Innovation Hackathon"
@@ -90,8 +91,6 @@
  *                       updatedAt:
  *                         type: string
  *                         format: date-time
- *       500:
- *         description: Internal server error
  */
 
 /**
@@ -99,7 +98,7 @@
  * /hackathons/names/list:
  *   get:
  *     summary: Retrieve all hackathon names only
- *     description: Returns a lightweight array containing only hackathon title strings for dropdowns, search suggestions, and frontend selection components.
+ *     description: Returns only hackathon titles for dropdowns and search suggestions
  *     tags: [Hackathons]
  *     responses:
  *       200:
@@ -119,15 +118,13 @@
  *                   example:
  *                     - "Global AI Innovation Hackathon"
  *                     - "Hack Cairo 2026"
- *                     - "Web3 Sprint Challenge"
- *       500:
- *         description: Internal server error
  */
+
 /**
  * @swagger
  * /hackathons/{id}:
  *   get:
- *     summary: Retrieve full contextual details for a specific hackathon by ID
+ *     summary: Retrieve hackathon by ID
  *     tags: [Hackathons]
  *     parameters:
  *       - in: path
@@ -135,11 +132,11 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The unique UUID string of the target hackathon
- *         example: "6c27fba2-92e1-4c12-87ba-df0f398110b4"
+ *         description: Devpost hackathon ID or system-generated ID
+ *         example: "devpost-1234567"
  *     responses:
  *       200:
- *         description: Targeted hackathon schema data returned successfully
+ *         description: Hackathon retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -153,6 +150,7 @@
  *                   properties:
  *                     id:
  *                       type: string
+ *                       description: Devpost or system ID
  *                     title:
  *                       type: string
  *                     location:
@@ -167,14 +165,14 @@
  *                       type: string
  *                       nullable: true
  *       404:
- *         description: Hackathon row context could not be matched with provided ID parameters
+ *         description: Hackathon not found
  */
 
 /**
  * @swagger
  * /hackathons:
  *   post:
- *     summary: Submit a new user-created custom hackathon
+ *     summary: Create a new hackathon (user-created)
  *     tags: [Hackathons]
  *     security:
  *       - bearerAuth: []
@@ -189,57 +187,29 @@
  *             properties:
  *               title:
  *                 type: string
- *                 description: Explicit unique name representing the hackathon target
- *                 example: "Internal Team Web3 Sprint"
+ *                 example: "Internal Web3 Sprint"
  *               location:
  *                 type: string
  *                 example: "San Francisco, CA"
  *               applyLink:
  *                 type: string
- *                 example: "https://my-hackathon-portal.io"
+ *                 example: "https://example.com"
  *               thumbnailUrl:
  *                 type: string
- *                 example: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d"
  *               submissionPeriod:
  *                 type: string
- *                 example: "June 10 - June 15"
  *               prizeAmount:
  *                 type: number
- *                 example: 2500
  *     responses:
  *       201:
- *         description: Hackathon initialized successfully; sets default tags source to 'USER_CREATED'
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     title:
- *                       type: string
- *                     source:
- *                       type: string
- *                       example: "USER_CREATED"
- *                     createdBy:
- *                       type: string
- *                       example: "dc389282-5fb8-478b-9b0c-126ea747e084"
- *       401:
- *         description: Unauthorized - Authentication bearer payload missing or invalid
+ *         description: Hackathon created successfully
  */
 
 /**
  * @swagger
  * /hackathons/{id}:
  *   put:
- *     summary: Update an existing hackathon record
- *     description: Restricted modification check. Will validate whether the requesting token user context matches the targeted record's original 'createdBy' id values.
+ *     summary: Update hackathon
  *     tags: [Hackathons]
  *     security:
  *       - bearerAuth: []
@@ -249,7 +219,7 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Unique identity target of the hackathon record to change
+ *         description: Hackathon ID (Devpost or system-generated)
  *     requestBody:
  *       required: true
  *       content:
@@ -259,41 +229,21 @@
  *             properties:
  *               location:
  *                 type: string
- *                 example: "Remote Only"
  *               prizeAmount:
  *                 type: number
- *                 example: 3000
  *               status:
  *                 type: string
  *                 enum: [UPCOMING, ONGOING, ENDED]
- *                 example: "ONGOING"
  *     responses:
  *       200:
- *         description: Hackathon record fields successfully updated
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: object
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden - Requesting user is not the owner (createdBy doesn't match authenticated ID)
- *       404:
- *         description: Hackathon row target matching identity key was not found
+ *         description: Updated successfully
  */
 
 /**
  * @swagger
  * /hackathons/{id}:
  *   delete:
- *     summary: Delete a hackathon instance from the application pool
- *     description: Restricted deletion check. Will validate whether the requesting token user context matches the targeted record's original 'createdBy' id values.
+ *     summary: Delete hackathon
  *     tags: [Hackathons]
  *     security:
  *       - bearerAuth: []
@@ -303,13 +253,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: Hackathon ID (Devpost or system-generated)
  *     responses:
  *       204:
- *         description: Empty structural return showing targeted hackathon record was completely severed
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden - Requesting user context does not retain operational authority over this record
- *       404:
- *         description: Target record entity matching parameters not found
+ *         description: Deleted successfully
  */
