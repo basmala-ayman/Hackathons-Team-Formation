@@ -125,7 +125,7 @@ model User {
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
-  techRole                 String? //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
+  techRoles                 String[]  @default([]) //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
@@ -457,7 +457,7 @@ model HackathonInterest {
   userId      String
   hackathonId String
   createdAt   DateTime @default(now())
-
+  name        String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
 

@@ -1,3 +1,5 @@
+// user.repository.js
+
 const prisma = require("../../config/prisma");
 
 const findUserProfile = (id) => {
@@ -78,7 +80,7 @@ const getUsersBasicList = async (currentUserId) => {
   return prisma.user.findMany({
     where: {
       isVerified: true,
-       id: {
+      id: {
         not: currentUserId,
       },
     },
@@ -93,6 +95,32 @@ const getUsersBasicList = async (currentUserId) => {
   });
 };
 
+const findHackathonByTitle = (title) => {
+  return prisma.hackathon.findFirst({
+    where: {
+      title: {
+        equals: title,
+        mode: "insensitive"
+      }
+    }
+  });
+};
+
+const clearHackathonInterests = (userId) => {
+  return prisma.hackathonInterest.deleteMany({
+    where: { userId }
+  });
+};
+
+const createHackathonInterest = (userId, hackathonId) => {
+  return prisma.hackathonInterest.create({
+    data: {
+      userId,
+      hackathonId
+    }
+  });
+};
+
 module.exports = {
   findUserProfile,
   updateUser,
@@ -100,5 +128,8 @@ module.exports = {
   upsertSkillByName,
   createUserSkillRelation,
   searchUsers,
-  getUsersBasicList
+  getUsersBasicList,
+  findHackathonByTitle,
+  clearHackathonInterests,
+  createHackathonInterest
 };

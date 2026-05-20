@@ -121,10 +121,12 @@
  *               type: string
  *               nullable: true
  *               example: "/uploads/resumes/cv.pdf"
- *             techRole:
- *               type: string
- *               nullable: true
- *               example: "Backend Developer"
+ *             techRoles:
+ *               type: array
+ *               description: List of technical role classifications chosen by the participant
+ *               items:
+ *                 type: string
+ *               example: ["BACKEND", "DESIGNER"]
  *         skills:
  *           type: array
  *           items:
@@ -201,9 +203,12 @@
  *               linkedinUrl:
  *                 type: string
  *                 example: https://linkedin.com/in/esraa
- *               techRole:
- *                 type: string
- *                 example: Backend Developer
+ *               techRoles:
+ *                 type: array
+ *                 description: Array of tech roles to update (can pass multiple instances of the field in form-data or JSON array formats depending on middleware setup)
+ *                 items:
+ *                   type: string
+ *                 example: ["BACKEND", "DESIGNER"]
  *               hardSkills:
  *                 type: array
  *                 items:

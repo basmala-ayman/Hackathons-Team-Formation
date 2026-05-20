@@ -18,27 +18,35 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    // profile picture upload
+    // 1. Handle profile picture upload mapping
     if (req.files?.profilePicture) {
       req.body.profilePicture =
         `/uploads/profile-pictures/${req.files.profilePicture[0].filename}`;
     }
 
-    // resume upload
+    // 2. Handle resume upload mapping
     if (req.files?.resume) {
       req.body.resumeUrl =
         `/uploads/resumes/${req.files.resume[0].filename}`;
     }
 
-    // convert skills if frontend sends strings
-    if (req.body.hardSkills && typeof req.body.hardSkills === "string") {
-      req.body.hardSkills = [req.body.hardSkills];
-    }
+    // 3. Helper function to standardize incoming form-data arrays safely
+    const parseFormArray = (field) => {
+      if (!field) return undefined;
+      if (Array.isArray(field)) return field;
+      if (typeof field === "string") {
+        return field.split(",").map(item => item.trim()).filter(Boolean);
+      }
+      return [field];
+    };
 
-    if (req.body.softSkills && typeof req.body.softSkills === "string") {
-      req.body.softSkills = [req.body.softSkills];
-    }
+    // 4. Transform all multi-option fields safely
+    if (req.body.techRoles) req.body.techRoles = parseFormArray(req.body.techRoles);
+    if (req.body.hardSkills) req.body.hardSkills = parseFormArray(req.body.hardSkills);
+    if (req.body.softSkills) req.body.softSkills = parseFormArray(req.body.softSkills);
+    if (req.body.hackathonInterests) req.body.hackathonInterests = parseFormArray(req.body.hackathonInterests);
 
+    // 5. Fire off service logic
     const updatedProfileData = await userService.updateProfile(
       req.user.userId,
       req.body
@@ -54,12 +62,9 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
-const searchUsers = async (req, res, next) => {
+const getUsersBasicList = async (req, res, next) => {
   try {
-    const users = await userService.searchUsers(
-      req.query.q,
-      req.user.userId
-    );
+    const users = await userService.getUsersBasicList(req.user.userId);
 
     res.status(200).json({
       success: true,
@@ -70,9 +75,10 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
-const getUsersBasicList = async (req, res, next) => {
+const searchUsers = async (req, res, next) => {
   try {
-    const users = await userService.getUsersBasicList(req.user.userId);
+    const { q } = req.query;
+    const users = await userService.searchUsers(q, req.user.userId);
 
     res.status(200).json({
       success: true,

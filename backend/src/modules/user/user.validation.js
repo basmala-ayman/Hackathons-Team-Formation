@@ -1,31 +1,33 @@
 const Joi = require("joi");
 
 const updateProfile = Joi.object({
-  name: Joi.string().min(2).max(50),
+  name: Joi.string().min(2).max(50).optional(),
+  bio: Joi.string().max(500).allow("", null).optional(),
+  githubUrl: Joi.string().uri().allow("", null).optional(),
+  linkedinUrl: Joi.string().uri().allow("", null).optional(),
+  profilePicture: Joi.string().allow("", null).optional(),
+  resumeUrl: Joi.string().allow("", null).optional(),
 
-  bio: Joi.string().max(500).allow("", null),
-
-  githubUrl: Joi.string().uri().allow("", null),
-
-  linkedinUrl: Joi.string().uri().allow("", null),
-
-  // allow local paths OR URLs
-  profilePicture: Joi.string().allow("", null),
-
-  // allow local paths OR URLs
-  resumeUrl: Joi.string().allow("", null),
-
-  techRole: Joi.string().max(50).allow("", null),
+  techRoles: Joi.array()
+    .items(Joi.string().max(50))
+    .unique()
+    .allow(null)
+    .optional(),
 
   hardSkills: Joi.alternatives().try(
     Joi.array().items(Joi.string()),
     Joi.string()
-  ),
+  ).optional(),
 
   softSkills: Joi.alternatives().try(
     Joi.array().items(Joi.string()),
     Joi.string()
-  )
+  ).optional(),
+
+  hackathonInterests: Joi.alternatives().try(
+    Joi.array().items(Joi.string()),
+    Joi.string()
+  ).optional()
 });
 
 module.exports = {
