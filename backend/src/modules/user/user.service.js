@@ -15,7 +15,7 @@ const getProfile = async (id) => {
     user.skills?.map((s) => s.skill.name) || [];
 
   // hackathons
-  const interestedHackathons =
+  const hackathonInterests =
     user.hackathonInterests?.map((hi) => ({
       id: hi.hackathon.id,
       title: hi.hackathon.title,
@@ -53,7 +53,7 @@ const getProfile = async (id) => {
     !!user.bio && skills.length > 0;
 
   const step2Complete =
-    interestedHackathons.length > 0;
+    hackathonInterests.length > 0;
 
   const step3Complete =
     featuredProjects.length > 0;
@@ -101,7 +101,7 @@ const getProfile = async (id) => {
 
     skills,
 
-    interestedHackathons,
+    hackathonInterests,
 
     featuredProjects,
 
