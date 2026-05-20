@@ -9,7 +9,7 @@
  * @swagger
  * components:
  *   schemas:
- *     HackathonMinimal:
+ *     HackathonInterestItem:
  *       type: object
  *       properties:
  *         id:
@@ -27,34 +27,51 @@
  *           example: "Online"
  *         status:
  *           type: string
- *           enum: [UPCOMING, ONGOING, COMPLETED]
  *           example: "UPCOMING"
  * 
- *     UserBasicProfile:
+ *     FeaturedProjectItem:
  *       type: object
  *       properties:
  *         id:
  *           type: string
  *           format: uuid
+ *         title:
+ *           type: string
+ *           example: "DevMatch Platform"
+ *         description:
+ *           type: string
+ *           example: "A matching platform built for global developer team formations."
+ *         interestsCount:
+ *           type: integer
+ *           example: 12
+ * 
+ *     HackathonHistoryItem:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           example: "Web3 Buildathon"
+ *         role:
+ *           type: string
+ *           enum: [OWNER, MEMBER]
+ *           example: "OWNER"
+ *         status:
+ *           type: string
+ *           example: "COMPLETED"
+ * 
+ *     BasicUserListItem:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *           example: "Esraa Developer"
  *         email:
  *           type: string
  *           format: email
- *           example: "user@example.com"
- *         profile:
- *           type: object
- *           nullable: true
- *           properties:
- *             name:
- *               type: string
- *               example: "Test User"
- *             profilePicture:
- *               type: string
- *               nullable: true
- *               example: "/uploads/profile-pictures/pic.png"
- *             techRole:
- *               type: string
- *               nullable: true
- *               example: "Backend Developer"
+ *           example: "esraa@example.com"
  * 
  *     UserProfileData:
  *       type: object
@@ -69,7 +86,8 @@
  *           example: 75
  *         targetModalPopupStep:
  *           type: integer
- *           example: 3
+ *           nullable: true
+ *           example: 4
  *         isProfileComplete:
  *           type: boolean
  *           example: false
@@ -94,12 +112,10 @@
  *             githubUrl:
  *               type: string
  *               nullable: true
- *               pattern: '^https?:\/\/'
  *               example: "https://github.com/esraa"
  *             linkedinUrl:
  *               type: string
  *               nullable: true
- *               pattern: '^https?:\/\/'
  *               example: "https://linkedin.com/in/esraa"
  *             resumeUrl:
  *               type: string
@@ -114,20 +130,18 @@
  *           items:
  *             type: string
  *           example: ["Node.js", "Prisma", "Express", "Communication"]
- *         interestedHackathons:
+ *         hackathonInterests:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/HackathonMinimal'
+ *             $ref: '#/components/schemas/HackathonInterestItem'
  *         featuredProjects:
  *           type: array
  *           items:
- *             type: object
- *           example: []
+ *             $ref: '#/components/schemas/FeaturedProjectItem'
  *         hackathonHistory:
  *           type: array
  *           items:
- *             type: object
- *           example: []
+ *             $ref: '#/components/schemas/HackathonHistoryItem'
  */
 
 /**
@@ -154,6 +168,8 @@
  *                   example: "Profile data fetched successfully"
  *                 data:
  *                   $ref: '#/components/schemas/UserProfileData'
+ *       404:
+ *         description: User not found or account deactivated
  *       401:
  *         description: Unauthorized - Missing or invalid token
  */
@@ -208,7 +224,7 @@
  *                 description: Upload resume file (PDF/DOCX)
  *     responses:
  *       200:
- *         description: Profile updated successfully
+ *         description: Profile updated successfully. Returns updated profile structure.
  *         content:
  *           application/json:
  *             schema:
@@ -223,9 +239,9 @@
  *                 data:
  *                   $ref: '#/components/schemas/UserProfileData'
  *       400:
- *         description: Bad Request - Invalid parameters or unexpected file fields
+ *         description: Bad Request - Invalid fields or file formatting errors
  *       401:
- *         description: Unauthorized - Missing or invalid token
+ *         description: Unauthorized
  */
 
 /**
@@ -261,9 +277,7 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/UserBasicProfile'
- *       400:
- *         description: Bad Request - Missing query parameter 'q'
+ *                     $ref: '#/components/schemas/BasicUserListItem'
  *       401:
  *         description: Unauthorized
  */
@@ -278,7 +292,7 @@
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Collection of basic system users fetched successfully
+ *         description: Basic platform users map tracking keys returned from service layer
  *         content:
  *           application/json:
  *             schema:
@@ -293,7 +307,7 @@
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/UserBasicProfile'
+ *                     $ref: '#/components/schemas/BasicUserListItem'
  *       401:
  *         description: Unauthorized
  */
