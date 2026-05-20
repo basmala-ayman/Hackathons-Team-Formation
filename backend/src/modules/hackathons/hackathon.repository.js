@@ -57,7 +57,7 @@ const getHackathonNames = async () => {
 };
 
 const findHackathonByTitle = async (title) => {
-  return prisma.hackathon.findMany({
+  return prisma.hackathon.findFirst({
     where: {
       title: {
         equals: title,
