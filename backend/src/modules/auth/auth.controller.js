@@ -128,7 +128,7 @@ const googleAuth = async (req, res, next) => {
 // #21 making the forget password logic
 const forgetPassword = async (req, res, next) => {
   try {
-    const result = await authService.forgotPassword(req.body.email);
+    const result = await authService.forgetPassword(req.body.email);
 
     res.status(200).json({
       success: true,
