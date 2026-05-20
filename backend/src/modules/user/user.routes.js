@@ -5,6 +5,7 @@ const controller = require("./user.controller");
 const validate = require("../../middlewares/validate.middleware");
 const schema = require("./user.validation");
 const { protect } = require("../../middlewares/auth.middleware");
+const upload = require("../../middlewares/upload.middleware");
 
 // GET current logged-in user profile & step completion states
 router.get("/profile", protect, controller.getProfile);
@@ -16,6 +17,10 @@ router.get("/list/basic", protect, controller.getUsersBasicList);
 router.put(
   "/profile",
   protect,
+  upload.fields([
+  { name: "profilePicture", maxCount: 1 },
+  { name: "resume", maxCount: 1 }
+]),
   validate(schema.updateProfile),
   controller.updateProfile
 );

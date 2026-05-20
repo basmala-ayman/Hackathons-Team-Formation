@@ -33,6 +33,7 @@ app.use(rateLimit({
     max: 100,
 }));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/v1", routes);
 //routes will go here TODO: put here the entry points to all other routes that follow the api design
