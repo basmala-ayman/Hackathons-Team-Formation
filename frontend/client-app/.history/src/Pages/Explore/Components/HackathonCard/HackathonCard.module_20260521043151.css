@@ -80,7 +80,7 @@
     90deg,
     var(--red, #d91709) 0%,
     #fe225e 76.44%,
-    var(--color-dark-gray) 100%
+    var(--Dark-Gray, #4a5565) 100%
   );
 
   border-radius: 0.4rem;

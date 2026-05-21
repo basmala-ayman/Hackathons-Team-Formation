@@ -59,6 +59,7 @@ function HackathonCard({ hackathon }) {
         </div>
       <div className={styles.progressBarContainer}>
           <div
+            // Conditionally apply the danger class if over 80%
             className={progressPercentage > 80 ? styles.progressBarFillDanger : styles.progressBarFill}
             style={{ width: `${progressPercentage}%` }}
           ></div>

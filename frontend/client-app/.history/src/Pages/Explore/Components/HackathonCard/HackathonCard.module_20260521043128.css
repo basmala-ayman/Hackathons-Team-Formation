@@ -71,18 +71,13 @@
   height: 100%;
   background: var(--gradient-primary);
   border-radius: 0.4rem;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease; 
 }
 
+/* New class for when the bar is filling up fast */
 .progressBarFillDanger {
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--red, #d91709) 0%,
-    #fe225e 76.44%,
-    var(--color-dark-gray) 100%
-  );
-
+  background: var(--color-error-red);
   border-radius: 0.4rem;
   transition: width 0.3s ease;
 }

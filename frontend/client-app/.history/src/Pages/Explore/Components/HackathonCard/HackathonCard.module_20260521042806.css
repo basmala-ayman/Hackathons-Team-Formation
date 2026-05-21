@@ -74,19 +74,6 @@
   transition: width 0.3s ease;
 }
 
-.progressBarFillDanger {
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--red, #d91709) 0%,
-    #fe225e 76.44%,
-    var(--color-dark-gray) 100%
-  );
-
-  border-radius: 0.4rem;
-  transition: width 0.3s ease;
-}
-
 .fillingFastText {
   font-size: 1.1rem;
   color: var(--color-error-red);

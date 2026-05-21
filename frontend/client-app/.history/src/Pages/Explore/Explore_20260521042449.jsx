@@ -79,7 +79,7 @@ function Explore() {
         style={{ minHeight: "40vh" }}
       >
         <p className="fs-3 fw-semibold" style={{ color: "var(--color-primary-dark)" }}>
-          Loading Hackathons...
+          Loading Hackt...
         </p>
       </div>
     );

@@ -13,7 +13,6 @@ import {
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
   const {
-    id,
     title,
     prizeAmount,
     status,
@@ -21,19 +20,9 @@ function HackathonCard({ hackathon }) {
     userCreated = false,
   } = hackathon;
   const navigate = useNavigate();
-  const { registerInterest, loading } = useHackathonInterest();
 
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);
 
-  const handleInterest = async () => {
-  try {
-    const response = await registerInterest(id);
-
-    alert(response.message);
-  } catch (error) {
-    alert(error.message);
-  }
-};
   return (
     <div className={`${styles.hackathonCard} d-flex flex-column rounded-4 p-3`}>
       {/* Dynamic Badge (Absolutely positioned over top-right border) */}
@@ -47,9 +36,7 @@ function HackathonCard({ hackathon }) {
       {/* Interest Level Progress (Now takes full advantage of the left space) */}
       <div className={styles.interestSection}>
         <div className="d-flex justify-content-between align-items-center mb-1">
-          <div
-            className={`d-flex align-items-center gap-2 ${styles.interestLabel}`}
-          >
+          <div className={`d-flex align-items-center gap-2 ${styles.interestLabel}`}>
             <HeartIcon color="var(--color-primary-dark)" size="16" />
             Interest Level
           </div>
@@ -57,9 +44,9 @@ function HackathonCard({ hackathon }) {
             {interestCount}/{maxCapacity}
           </div>
         </div>
-      <div className={styles.progressBarContainer}>
+        <div className={styles.progressBarContainer}>
           <div
-            className={progressPercentage > 80 ? styles.progressBarFillDanger : styles.progressBarFill}
+            className={styles.progressBarFill}
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
@@ -89,12 +76,10 @@ function HackathonCard({ hackathon }) {
 
         {/* Prize Pool */}
         <div className="d-flex align-items-start gap-3 mb-2">
-          <div className={styles.iconCover}>
-            <PrizeIcon size={16} color="var(--color-primary-dark)" />
-          </div>
+          <div className={styles.iconCover}><PrizeIcon size={16} color="var(--color-primary-dark)" /></div>
           <div className="d-flex flex-column">
             <span className={styles.detailLabel}>Prize Pool</span>
-            <span className={styles.detailValue}>$ {prizeAmount}</span>
+            <span className={styles.detailValue}>{prizeAmount}</span>
           </div>
         </div>
       </div>
@@ -105,10 +90,11 @@ function HackathonCard({ hackathon }) {
           variant="primary"
           size="sm"
           className="flex-fill rounded-4 w-100"
-          onClick={handleInterest}
+          onClick={() => navigate("/")}
         >
-          {loading ? "Submitting..." : "I'm Interested"}
+          I'm Interested
         </CustomButton>
+       
       </div>
     </div>
   );

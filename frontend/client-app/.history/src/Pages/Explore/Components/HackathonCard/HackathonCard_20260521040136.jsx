@@ -57,9 +57,9 @@ function HackathonCard({ hackathon }) {
             {interestCount}/{maxCapacity}
           </div>
         </div>
-      <div className={styles.progressBarContainer}>
+        <div className={styles.progressBarContainer}>
           <div
-            className={progressPercentage > 80 ? styles.progressBarFillDanger : styles.progressBarFill}
+            className={styles.progressBarFill}
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
@@ -94,7 +94,7 @@ function HackathonCard({ hackathon }) {
           </div>
           <div className="d-flex flex-column">
             <span className={styles.detailLabel}>Prize Pool</span>
-            <span className={styles.detailValue}>$ {prizeAmount}</span>
+            <span className={styles.detailValue}>{prizeAmount}</span>
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@ function HackathonCard({ hackathon }) {
           variant="primary"
           size="sm"
           className="flex-fill rounded-4 w-100"
-          onClick={handleInterest}
+          onClick={() => navigate("/")}
         >
-          {loading ? "Submitting..." : "I'm Interested"}
+          I'm Interested
         </CustomButton>
       </div>
     </div>

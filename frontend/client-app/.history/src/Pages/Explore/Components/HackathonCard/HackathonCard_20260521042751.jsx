@@ -57,9 +57,9 @@ function HackathonCard({ hackathon }) {
             {interestCount}/{maxCapacity}
           </div>
         </div>
-      <div className={styles.progressBarContainer}>
+        <div className={styles.progressBarContainer}>
           <div
-            className={progressPercentage > 80 ? styles.progressBarFillDanger : styles.progressBarFill}
+            className={styles.progressBarFill}
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>

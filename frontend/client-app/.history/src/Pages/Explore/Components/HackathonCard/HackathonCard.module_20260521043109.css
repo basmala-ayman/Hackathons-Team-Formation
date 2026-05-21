@@ -71,20 +71,16 @@
   height: 100%;
   background: var(--gradient-primary);
   border-radius: 0.4rem;
-  transition: width 0.3s ease;
+  /* Added background to the transition for smooth color changing */
+  transition: width 0.3s ease, background 0.3s ease; 
 }
 
+/* New class for when the bar is filling up fast */
 .progressBarFillDanger {
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--red, #d91709) 0%,
-    #fe225e 76.44%,
-    var(--color-dark-gray) 100%
-  );
-
+  background: var(--color-error-red); /* Uses your existing red variable */
   border-radius: 0.4rem;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, background 0.3s ease;
 }
 
 .fillingFastText {
