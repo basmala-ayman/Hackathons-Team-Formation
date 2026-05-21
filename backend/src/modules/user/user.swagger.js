@@ -44,6 +44,9 @@
  *         creatorName:
  *           type: string
  *           example: "Esraa Developer"
+ *         creatorPicture: 
+ *           type: string
+ *           example: "/uploads/profile-pictures/pic.png"
  *         teamId:
  *           type: string
  *           format: uuid

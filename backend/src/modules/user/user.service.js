@@ -48,6 +48,7 @@ const getProfile = async (id) => {
       description: p.description,
       createdAt: p.createdAt,
       creatorName: user.name,
+      creatorPicture: user.profilePicture,
       teamId: p.teamId,
       teamName: p.team?.name || null,
       teamStatus: p.team?.status || null,
