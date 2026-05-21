@@ -6,11 +6,9 @@ const projectParam = Joi.object({
     .guid({ version: "uuidv4" })
     .required()
     .messages({
-      "string.guid": "The project ID in the path must be a valid UUIDv4",
-      "any.required": "Project ID parameter is missing from the URL path"
+      "string.guid": "The path variable projectId must match a structural UUIDv4 configuration string",
+      "any.required": "Required structural target project identification parameter is missing"
     })
 });
 
-module.exports = { 
-  projectParam 
-};
+module.exports = { projectParam };

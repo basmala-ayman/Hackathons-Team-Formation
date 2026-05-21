@@ -3,7 +3,10 @@ const projectService = require("./project.service");
 
 const getExploreProjects = async (req, res, next) => {
   try {
-    const data = await projectService.getAllExploreProjects();
+    // Extracted safely because protect middleware guarantees user context presence
+    const authUserId = req.user?.id || req.user?.userId || req.user?._id;
+
+    const data = await projectService.getAllExploreProjects(authUserId);
     res.status(200).json({
       success: true,
       message: "All user projects fetched successfully",
@@ -16,14 +19,14 @@ const getExploreProjects = async (req, res, next) => {
 
 const toggleInterest = async (req, res, next) => {
   try {
-    // 💡 Read directly from path parameters instead of the body
-    const { projectId } = req.params; 
-    
-    const result = await projectService.incrementProjectInterest(projectId);
+    const { projectId } = req.params;
+    const authUserId = req.user?.id || req.user?.userId || req.user?._id;
+
+    const result = await projectService.registerProjectInterest(projectId, authUserId);
     
     res.status(200).json({
       success: true,
-      message: "Project interest count incremented successfully",
+      message: "Interest successfully registered for this project",
       data: result
     });
   } catch (error) {

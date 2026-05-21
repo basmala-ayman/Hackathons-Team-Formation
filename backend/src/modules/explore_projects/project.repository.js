@@ -8,36 +8,56 @@ const exploreAllProjects = async () => {
         select: { name: true, profilePicture: true }
       },
       team: {
-        include: { members: true }
+        select: { name: true, status: true, roles: true, members: true }
       },
-      interests: true // Safely reads relation table if present
+      interests: {
+        select: { userId: true }
+      }
     },
     orderBy: { createdAt: "desc" }
   });
 };
 
-const findProjectById = async (projectId) => {
-  return prisma.project.findUnique({
-    where: { id: projectId }
+const findProjectById = async (id) => {
+  return prisma.project.findUnique({ where: { id } });
+};
+
+const findInterestRelation = async (projectId, userId) => {
+  return prisma.projectInterest.findUnique({
+    where: {
+      userId_projectId: { userId, projectId }
+    }
   });
 };
 
-const incrementCounter = async (projectId) => {
-  // Uses Prisma atomic update operation
-  return prisma.project.update({
-    where: { id: projectId },
-    data: {
-      // If you have a specific field name change this to your column counter property key
-      interestsCount: { increment: 1 } 
-    },
-    include: {
-      interests: true
-    }
+const storeInterestOnUserRecord = async (projectId, userId) => {
+  return prisma.$transaction(async (tx) => {
+    
+    // Updates the User record row by adding a line inside the child relation schema array
+    await tx.user.update({
+      where: { id: userId },
+      data: {
+        projectInterests: {
+          create: {
+            projectId: projectId
+          }
+        }
+      }
+    });
+
+    // Simultaneously increment scalar metadata values on parent project context
+    return tx.project.update({
+      where: { id: projectId },
+      data: {
+        interestsCount: { increment: 1 }
+      }
+    });
   });
 };
 
 module.exports = {
   exploreAllProjects,
   findProjectById,
-  incrementCounter
+  findInterestRelation,
+  storeInterestOnUserRecord
 };
