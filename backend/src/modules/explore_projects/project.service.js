@@ -2,42 +2,59 @@
 const projectRepository = require("./project.repository");
 const AppError = require("../../utils/AppError");
 
-const getAllExploreProjects = async () => {
+const getAllExploreProjects = async (authUserId) => {
   const projects = await projectRepository.exploreAllProjects();
 
-  return projects.map((p) => ({
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    createdAt: p.createdAt,
-    creatorId: p.ownerId,
-    creatorName: p.owner?.name || "Unknown",
-    creatorPicture: p.owner?.profilePicture || null,
-    teamId: p.teamId,
-    teamName: p.team?.name || null,
-    teamStatus: p.team?.status || null,
-    requiredSkillsOrRoles: p.team?.roles || [],
-    totalTeamMembersCount: p.team?.members?.length || 0,
-    
-    // Fallback reading: pulls relation table length or a raw counter property if it exists
-    totalInterestsCount: p.interests?.length || p.interestsCount || 0
-  }));
+  return projects.map((p) => {
+    // Returns true if current logged in user has an active relation entry
+    const isInterested = p.interests.some((interest) => interest.userId === authUserId);
+
+    return {
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      createdAt: p.createdAt,
+      creatorId: p.ownerId,
+      creatorName: p.owner?.name || "Unknown",
+      creatorPicture: p.owner?.profilePicture || null,
+      teamId: p.teamId,
+      teamName: p.team?.name || null,
+      teamStatus: p.team?.status || null,
+      requiredSkillsOrRoles: p.team?.roles || [],
+      totalTeamMembersCount: p.team?.members?.length || 0,
+      totalInterestsCount: p.interestsCount,
+      isInterested
+    };
+  });
 };
 
-const incrementProjectInterest = async (projectId) => {
-  const projectExists = await projectRepository.findProjectById(projectId);
-  if (!projectExists) throw new AppError("Project not found", 404);
+const registerProjectInterest = async (projectId, userId) => {
+  const project = await projectRepository.findProjectById(projectId);
+  if (!project) throw new AppError("Project not found", 404);
 
-  // Increments the count structural metrics safely inside the database
-  const updatedProject = await projectRepository.incrementCounter(projectId);
+  // Prevent creators from signing up for their own projects
+  if (project.ownerId === userId) {
+    throw new AppError("You cannot express interest in your own project", 400);
+  }
+
+  // Prevent duplicate interactions
+  const existingRelation = await projectRepository.findInterestRelation(projectId, userId);
+  if (existingRelation) {
+    throw new AppError("You have already registered interest for this project", 409);
+  }
+
+  // Updates user relationship and increments counter column atomically
+  const updatedProject = await projectRepository.storeInterestOnUserRecord(projectId, userId);
 
   return {
     projectId: updatedProject.id,
-    totalInterestsCount: updatedProject.interests?.length || updatedProject.interestsCount || 0
+    userId: userId,
+    totalInterestsCount: updatedProject.interestsCount,
+    isInterested: true
   };
 };
 
 module.exports = {
   getAllExploreProjects,
-  incrementProjectInterest
+  registerProjectInterest
 };
