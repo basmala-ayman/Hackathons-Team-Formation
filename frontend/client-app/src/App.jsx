@@ -5,6 +5,7 @@ import Login from "./components/auth/Login/Login";
 import Home from './Pages/Home/Home'
 import Register from "./components/auth/Register/Register";
 import ForgetPassword from "./components/auth/ForgetPassword/ForgetPassword";
+import ResetPassword from './components/auth/Resetpassword/ResetPassword';
 import EmailSent from "./components/auth/EmailSent/EmailSent";
 import NoticationsPage from "./Pages/NotificationPage/NotificationsPage"
 import AdminDashboard from "./Pages/AdminDashboard/AdminDashboard";
@@ -56,6 +57,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/email-sent" element={<EmailSent />} />
             <Route path="/notifications" element={<NoticationsPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />

@@ -97,6 +97,10 @@
   max-width: 650px;
 }
 
+.infoItem{
+  font-size: var(--fs-v-small);
+}
+
 .profileLink {
   color: var(--color-dark-gray);
   text-decoration: none;

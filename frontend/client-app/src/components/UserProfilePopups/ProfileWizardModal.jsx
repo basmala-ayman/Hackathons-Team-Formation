@@ -1,28 +1,26 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Alert } from "react-bootstrap";
 import { X } from "lucide-react";
 import styles from "./ProfileWizardModal.module.css";
 import CustomButton from "../../shared/CustomButton/CustomButton.jsx";
+import { useAuth } from "../../context/AuthContext/useAuth.js";
 
-// Import Steps
 import Step1Skills from "./steps/Step1Skills.jsx";
 import Step2Interests from "./steps/Step2Interests";
-import Step3Project from "./steps/Step3Project";
 import Step4Final from "./steps/Step4Final.jsx";
-
-// Import Success Popup
 import SuccessPopup from "./Success&WarningPopups/SuccessPopup.jsx";
 
-export default function ProfileWizardModal({ show, handleClose, values, setValues, handleChange, errors, setErrors }) {
+export default function ProfileWizardModal({ show, handleClose, values, setValues, handleChange, errors, setErrors, onSave }) {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
 
+  // FIX 1: Updated Validation to track unified 'skills' instead of splitting them
   const validateStep1 = () => {
     const step1Errors = {};
-    if (!values.technicalSkills || values.technicalSkills.length === 0) {
-      step1Errors.technicalSkills = "Technical skills are required.";
-    }
-    if (!values.softSkills || values.softSkills.length === 0) {
-      step1Errors.softSkills = "Soft skills are required.";
+
+    if (!values.skills || values.skills.length === 0) {
+      step1Errors.skills = "At least one skill is required.";
     }
     if (!values.bio || !values.bio.trim()) {
       step1Errors.bio = "Bio is required.";
@@ -35,11 +33,54 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
     return true;
   };
 
+  const handleModalClose = () => {
+    setCurrentStep(1);
+    setErrors({});
+    handleClose();
+  };
+
+  const handleFinish = async () => {
+    setIsSubmitting(true);
+    setErrors({});
+
+    try {
+      const flattenToStrings = (skillsArray) => {
+        if (!skillsArray) return [];
+        return skillsArray.map(item => {
+          if (typeof item === "string") return item;
+          if (item && typeof item === "object") return item.value || item.name || "";
+          return "";
+        }).filter(Boolean);
+      };
+
+      const finalPayload = {
+        name: values.name || user?.name || "Hafsa Hikal",
+        bio: values.bio || "",
+        techRoles: values.techRoles || [],
+        profilePicture: values.avatar || values.profilePicture || null,
+        githubUrl: values.githubUrl || "",
+        linkedinUrl: values.linkedinUrl || "",
+        resumeUrl: values.resumeUrl || values.resume || "",
+        skills: flattenToStrings(values.skills)
+      };
+
+      console.log("Submitting clean transactional Wizard layout payload:", finalPayload);
+
+      await onSave(finalPayload);
+      setCurrentStep("success");
+    } catch (error) {
+      console.error("Profile wizard submission pipeline execution exception:", error);
+      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred while saving your profile.";
+      setErrors((prev) => ({ ...prev, apiError: errorMessage }));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleNext = () => {
     if (currentStep === 1 && !validateStep1()) return;
-
     if (currentStep === 3) {
-      setCurrentStep("success");
+      handleFinish();
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -47,7 +88,7 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
 
   const handleSkip = () => {
     if (currentStep === 3) {
-      setCurrentStep("success");
+      handleFinish();
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -58,6 +99,7 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
   };
 
   const handleTabClick = (targetStep) => {
+    if (isSubmitting) return;
     if (currentStep === 1 && targetStep > 1) {
       if (!validateStep1()) return;
     }
@@ -75,7 +117,7 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
                 onClick={() => handleTabClick(step)}
                 className={`${styles.stepTab} ${currentStep === step ? styles.activeTab : ""} ${styles.clickableTab}`}
               >
-                Step{step}{step === 1 ? "*" : ""}
+                Step {step}{step === 1 ? "*" : ""}
               </div>
             ))}
           </div>
@@ -83,12 +125,17 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
       )}
 
       <Modal.Body className="p-5">
+        {errors.apiError && (
+          <Alert variant="danger" className="mb-4">
+            {errors.apiError}
+          </Alert>
+        )}
+
         {currentStep === 1 && <Step1Skills formData={values} setFormData={setValues} errors={errors} setErrors={setErrors} />}
         {currentStep === 2 && <Step2Interests formData={values} setFormData={setValues} />}
-        {/* {currentStep === 3 && <Step3Project formData={values} setFormData={setValues} handleChange={handleChange} />} */}
         {currentStep === 3 && <Step4Final formData={values} setFormData={setValues} handleChange={handleChange} />}
 
-        {currentStep === "success" && <SuccessPopup handleClose={handleClose} />}
+        {currentStep === "success" && <SuccessPopup handleClose={handleModalClose} />}
 
         {typeof currentStep === "number" && (
           <div className="d-flex justify-content-between align-items-center mt-5">
@@ -104,8 +151,8 @@ export default function ProfileWizardModal({ show, handleClose, values, setValue
                   Skip
                 </CustomButton>
               )}
-              <CustomButton variant="primary" size="sm" onClick={handleNext}>
-                {currentStep === 3 ? "Finish" : "Next Step"}
+              <CustomButton variant="primary" size="sm" onClick={handleNext} disabled={isSubmitting}>
+                {currentStep === 3 ? (isSubmitting ? "Saving..." : "Finish") : "Next Step"}
               </CustomButton>
             </div>
           </div>

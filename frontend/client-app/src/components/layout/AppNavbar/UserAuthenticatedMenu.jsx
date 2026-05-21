@@ -53,7 +53,7 @@ function UserAuthenticatedMenu({ onLogout }) {
           </span>
         </Dropdown.Toggle>
         <Dropdown.Menu className={styles.customMenu}>
-          <Dropdown.Item as={Link} to="/profile" className={styles.menuItem}>
+          <Dropdown.Item as={Link} to="/userprofile" className={styles.menuItem}>
             <span className={styles.icon}>
               {/* <ProfileIcon></ProfileIcon> */}
             </span>{" "}
