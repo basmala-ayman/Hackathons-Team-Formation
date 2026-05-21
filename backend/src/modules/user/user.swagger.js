@@ -18,10 +18,6 @@
  *         title:
  *           type: string
  *           example: "Global AI Hackathon 2026"
- *         thumbnailUrl:
- *           type: string
- *           nullable: true
- *           example: "/uploads/thumbnails/ai-hack.png"
  *         location:
  *           type: string
  *           example: "Online"
@@ -29,7 +25,7 @@
  *           type: string
  *           example: "UPCOMING"
  * 
- *     FeaturedProjectItem:
+ *     OwnedProjectItem:
  *       type: object
  *       properties:
  *         id:
@@ -41,23 +37,36 @@
  *         description:
  *           type: string
  *           example: "A matching platform built for global developer team formations."
- *         interestsCount:
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2026-05-21T02:10:00.000Z"
+ *         creatorName:
+ *           type: string
+ *           example: "Esraa Developer"
+ *         teamId:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *         teamName:
+ *           type: string
+ *           nullable: true
+ *           example: "Alpha-Centauri-Team"
+ *         teamStatus:
+ *           type: string
+ *           nullable: true
+ *           example: "FORMING"
+ *         requiredSkillsOrRoles:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["Backend Developer", "UI Designer"]
+ *         totalTeamMembersCount:
  *           type: integer
- *           example: 12
- * 
- *     HackathonHistoryItem:
- *       type: object
- *       properties:
- *         title:
- *           type: string
- *           example: "Web3 Buildathon"
- *         role:
- *           type: string
- *           enum: [OWNER, MEMBER]
- *           example: "OWNER"
- *         status:
- *           type: string
- *           example: "COMPLETED"
+ *           example: 3
+ *         totalInterestsCount:
+ *           type: integer
+ *           example: 14
  * 
  *     BasicUserListItem:
  *       type: object
@@ -84,19 +93,12 @@
  *           minimum: 0
  *           maximum: 100
  *           example: 75
- *         targetModalPopupStep:
- *           type: integer
- *           nullable: true
- *           example: 4
- *         isProfileComplete:
- *           type: boolean
- *           example: false
  *         profile:
  *           type: object
  *           properties:
  *             name:
  *               type: string
- *               example: "Test User"
+ *               example: "Esraa Developer"
  *             email:
  *               type: string
  *               format: email
@@ -105,10 +107,6 @@
  *               type: string
  *               nullable: true
  *               example: "Full Stack Developer passionate about hackathons"
- *             profilePicture:
- *               type: string
- *               nullable: true
- *               example: "/uploads/profile-pictures/pic.png"
  *             githubUrl:
  *               type: string
  *               nullable: true
@@ -117,16 +115,19 @@
  *               type: string
  *               nullable: true
  *               example: "https://linkedin.com/in/esraa"
+ *             profilePicture:
+ *               type: string
+ *               nullable: true
+ *               example: "/uploads/profile-pictures/pic.png"
  *             resumeUrl:
  *               type: string
  *               nullable: true
  *               example: "/uploads/resumes/cv.pdf"
- *             techRoles:
- *               type: array
- *               description: List of technical role classifications chosen by the participant
- *               items:
- *                 type: string
- *               example: ["BACKEND", "DESIGNER"]
+ *         techRoles:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["BACKEND", "DESIGNER"]
  *         skills:
  *           type: array
  *           items:
@@ -136,14 +137,15 @@
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/HackathonInterestItem'
- *         featuredProjects:
+ *         intrestes:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/FeaturedProjectItem'
- *         hackathonHistory:
+ *             type: string
+ *           example: ["AI", "Web3"]
+ *         ownedProjects:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/HackathonHistoryItem'
+ *             $ref: '#/components/schemas/OwnedProjectItem'
  */
 
 /**
@@ -170,10 +172,10 @@
  *                   example: "Profile data fetched successfully"
  *                 data:
  *                   $ref: '#/components/schemas/UserProfileData'
- *       404:
- *         description: User not found or account deactivated
  *       401:
  *         description: Unauthorized - Missing or invalid token
+ *       404:
+ *         description: User not found or account deactivated
  */
 
 /**
@@ -205,20 +207,26 @@
  *                 example: https://linkedin.com/in/esraa
  *               techRoles:
  *                 type: array
- *                 description: Array of tech roles to update (can pass multiple instances of the field in form-data or JSON array formats depending on middleware setup)
  *                 items:
  *                   type: string
  *                 example: ["BACKEND", "DESIGNER"]
- *               hardSkills:
+ *               skills:
+ *                 type: array
+ *                 description: Combined array of user hard and soft skills
+ *                 items:
+ *                   type: string
+ *                 example: ["Node.js", "Prisma", "Communication"]
+ *               intrestes:
  *                 type: array
  *                 items:
  *                   type: string
- *                 example: ["Node.js", "Prisma", "Express"]
- *               softSkills:
+ *                 example: ["AI", "Web3"]
+ *               hackathonInterests:
  *                 type: array
+ *                 description: List of targeted hackathon titles to track
  *                 items:
  *                   type: string
- *                 example: ["Communication", "Leadership"]
+ *                 example: ["Global AI Hackathon 2026"]
  *               profilePicture:
  *                 type: string
  *                 format: binary

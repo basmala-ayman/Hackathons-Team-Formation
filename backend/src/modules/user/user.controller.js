@@ -1,5 +1,3 @@
-// user.controller.js
-
 const userService = require("./user.service");
 
 const getProfile = async (req, res, next) => {
@@ -18,21 +16,22 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    // 1. Handle profile picture upload mapping
-    if (req.files?.profilePicture) {
-      req.body.profilePicture =
-        `/uploads/profile-pictures/${req.files.profilePicture[0].filename}`;
+   
+    if (req.files?.profilePicture?.[0]) {
+      req.body.profilePicture = `/uploads/profile-pictures/${req.files.profilePicture[0].filename}`;
+    } else if (req.body.profilePicture === "" || req.body.profilePicture === "null") {
+      delete req.body.profilePicture;
+    }
+    const resumeFile = req.files?.resume?.[0] || req.files?.resumeUrl?.[0];
+    if (resumeFile) {
+      req.body.resumeUrl = `/uploads/resumes/${resumeFile.filename}`;
+    } else if (req.body.resumeUrl === "" || req.body.resumeUrl === "null") {
+      delete req.body.resumeUrl;
     }
 
-    // 2. Handle resume upload mapping
-    if (req.files?.resume) {
-      req.body.resumeUrl =
-        `/uploads/resumes/${req.files.resume[0].filename}`;
-    }
-
-    // 3. Helper function to standardize incoming form-data arrays safely
+    delete req.body.resume;
     const parseFormArray = (field) => {
-      if (!field) return undefined;
+      if (!field || field === "null") return undefined;
       if (Array.isArray(field)) return field;
       if (typeof field === "string") {
         return field.split(",").map(item => item.trim()).filter(Boolean);
@@ -40,13 +39,11 @@ const updateProfile = async (req, res, next) => {
       return [field];
     };
 
-    // 4. Transform all multi-option fields safely
     if (req.body.techRoles) req.body.techRoles = parseFormArray(req.body.techRoles);
-    if (req.body.hardSkills) req.body.hardSkills = parseFormArray(req.body.hardSkills);
-    if (req.body.softSkills) req.body.softSkills = parseFormArray(req.body.softSkills);
+    if (req.body.skills) req.body.skills = parseFormArray(req.body.skills);
+    if (req.body.intrestes) req.body.intrestes = parseFormArray(req.body.intrestes);
     if (req.body.hackathonInterests) req.body.hackathonInterests = parseFormArray(req.body.hackathonInterests);
 
-    // 5. Fire off service logic
     const updatedProfileData = await userService.updateProfile(
       req.user.userId,
       req.body
@@ -75,6 +72,19 @@ const getUsersBasicList = async (req, res, next) => {
   }
 };
 
+const getHackathonInterests = async (req, res, next) => {
+  try {
+    const data = await userService.getHackathonInterests(req.user.userId);
+
+    res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const searchUsers = async (req, res, next) => {
   try {
     const { q } = req.query;
@@ -93,5 +103,6 @@ module.exports = {
   getProfile,
   updateProfile,
   searchUsers,
-  getUsersBasicList
+  getUsersBasicList,
+  getHackathonInterests
 };

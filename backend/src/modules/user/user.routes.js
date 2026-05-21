@@ -1,5 +1,3 @@
-// user.routes.js
-
 const express = require("express");
 const router = express.Router();
 
@@ -21,7 +19,8 @@ router.put(
   protect,
   upload.fields([
     { name: "profilePicture", maxCount: 1 },
-    { name: "resume", maxCount: 1 }
+    { name: "resume", maxCount: 1 },   
+    { name: "resumeUrl", maxCount: 1 } 
   ]),
   validate(schema.updateProfile),
   controller.updateProfile

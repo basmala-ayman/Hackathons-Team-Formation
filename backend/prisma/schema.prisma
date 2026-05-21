@@ -84,6 +84,15 @@ enum HackathonSource {
   USER_CREATED
 }
 
+enum InterestType {
+  AI
+  HEALTHCARE
+  FINTECH
+  EDUCATION
+  GAMING
+  OTHER
+}
+
 //--------------------------------------------------
 //USERS
 //--------------------------------------------------
@@ -125,6 +134,7 @@ model User {
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
+  intrestes                 InterestType[]
   techRoles                 String[]  @default([]) //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations

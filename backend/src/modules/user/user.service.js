@@ -1,196 +1,170 @@
-// user.service.js
-
 const userRepository = require("./user.repository");
 const AppError = require("../../utils/AppError");
+const prisma = require("../../config/prisma");
 
-
-const resolveInternalUserId = async (uuidOrId) => {
-  if (!isNaN(uuidOrId)) {
-    return parseInt(uuidOrId, 10);
-  }
-
-  const user = await userRepository.findUserProfile(uuidOrId);
-  if (!user) {
-    throw new AppError("User account not found", 404);
-  }
-  
-  return user.id; 
+const resolveInternalUserId = async (id) => {
+  const user = await userRepository.findUserProfile(id);
+  if (!user) throw new AppError("User not found", 404);
+  return user.id;
 };
 
 const getProfile = async (id) => {
-  const user = await userRepository.findUserProfile(id);
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      skills: { include: { skill: true } },
+      hackathonInterests: { include: { hackathon: true } },
+      ownedProjects: {
+        include: {
+          team: {
+            include: {
+              members: true
+            }
+          },
+          interests: true
+        }
+      }
+    }
+  });
 
   if (!user || user.deletedAt) {
-    throw new AppError("User not found or account deactivated", 404);
+    throw new AppError("User not found", 404);
   }
 
   const skills = user.skills?.map((s) => s.skill.name) || [];
 
-  const hackathonInterests = user.hackathonInterests?.map((hi) => {
-    if (hi.hackathon) {
-      return {
-        id: hi.hackathon.id,
-        title: hi.hackathon.title,
-        thumbnailUrl: hi.hackathon.thumbnailUrl,
-        location: hi.hackathon.location,
-        status: hi.hackathon.status
-      };
-    }
-    return {
-      id: hi.hackathonId || null,
-      title: hi.name || "Unknown Hackathon",
-      thumbnailUrl: null,
-      location: "Unknown",
-      status: "UNKNOWN"
-    };
-  }) || [];
+  const hackathonInterests =
+    user.hackathonInterests?.map((hi) => ({
+      id: hi.hackathon?.id,
+      title: hi.hackathon?.title,
+      location: hi.hackathon?.location,
+      status: hi.hackathon?.status
+    })) || [];
 
-  const featuredProjects = user.ownedProjects?.map((p) => ({
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    interestsCount: p.interestsCount
-  })) || [];
+  const ownedProjects =
+    user.ownedProjects?.map((p) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      createdAt: p.createdAt,
+      creatorName: user.name,
+      teamId: p.teamId,
+      teamName: p.team?.name || null,
+      teamStatus: p.team?.status || null,
+      requiredSkillsOrRoles: p.team?.roles || [],
+      totalTeamMembersCount: p.team?.members?.length || 0,
+      totalInterestsCount: p.interests?.length || 0
+    })) || [];
 
-  const hackathonHistory = [
-    ...(user.ownedTeams?.map((t) => ({
-      title: t.hackathon?.title || "Unknown Hackathon",
-      role: "OWNER",
-      status: t.status
-    })) || []),
-
-    ...(user.teamMemberships?.map((m) => ({
-      title: m.team.hackathon?.title || "Unknown Hackathon",
-      role: "MEMBER",
-      status: m.team.status
-    })) || [])
-  ];
-
-  const step1Complete = !!user.bio && skills.length > 0;
-  const step2Complete = hackathonInterests.length > 0;
-  const step3Complete = featuredProjects.length > 0;
-  const step4Complete = !!user.resumeUrl && !!user.linkedinUrl && !!user.githubUrl;
+  const step1 = !!user.bio && skills.length > 0;
+  const step2 = hackathonInterests.length > 0 || user.techRoles?.length > 0;
+  const step3 = ownedProjects.length > 0;
+  const step4 = !!user.resumeUrl && !!user.githubUrl && !!user.linkedinUrl;
 
   let percentage = 0;
-  if (step1Complete) percentage += 25;
-  if (step2Complete) percentage += 25;
-  if (step3Complete) percentage += 25;
-  if (step4Complete) percentage += 25;
-
-  let targetModalPopupStep = null;
-  if (!step1Complete) targetModalPopupStep = 1;
-  else if (!step2Complete) targetModalPopupStep = 2;
-  else if (!step3Complete) targetModalPopupStep = 3;
-  else if (!step4Complete) targetModalPopupStep = 4;
+  if (step1) percentage += 25;
+  if (step2) percentage += 25;
+  if (step3) percentage += 25;
+  if (step4) percentage += 25;
 
   return {
     id: user.id,
     profileCompletionPercentage: percentage,
-    targetModalPopupStep,
-    isProfileComplete: percentage === 100,
     profile: {
       name: user.name,
       email: user.email,
       bio: user.bio,
-      profilePicture: user.profilePicture,
       githubUrl: user.githubUrl,
       linkedinUrl: user.linkedinUrl,
-      resumeUrl: user.resumeUrl,
-      techRoles: user.techRoles || [] 
+      profilePicture: user.profilePicture,
+      resumeUrl: user.resumeUrl
     },
+    techRoles: user.techRoles || [],
     skills,
     hackathonInterests,
-    featuredProjects,
-    hackathonHistory
+    interests: user.interests || user.intrestes || [],
+    ownedProjects
   };
 };
 
 const updateProfile = async (id, data) => {
-  const forbiddenFields = [
-    "id",
-    "role",
-    "password",
-    "isVerified",
-    "email",
-    "createdAt",
-    "updatedAt"
-  ];
+  const targetUserId = await resolveInternalUserId(id);
 
-  forbiddenFields.forEach((field) => delete data[field]);
+  const { skills, interests, intrestes, hackathonInterests, ...flatProfileData } = data;
+  const targetInterests = interests || intrestes;
 
-  Object.keys(data).forEach((key) => {
-    if (data[key] === undefined) {
-      delete data[key];
-    }
+  const forbidden = ["id", "email", "password", "role", "createdAt", "updatedAt"];
+  forbidden.forEach((f) => delete flatProfileData[f]);
+
+  Object.keys(flatProfileData).forEach((k) => {
+    if (flatProfileData[k] === undefined) delete flatProfileData[k];
   });
 
-  if (data.techRole && !data.techRoles) {
-    data.techRoles = Array.isArray(data.techRole) ? data.techRole : [data.techRole];
-    delete data.techRole;
-  }
+  
+  if (skills) {
+    await userRepository.clearUserSkills(targetUserId);
+    const skillsList = Array.isArray(skills) ? skills : [skills];
 
-  const numericUserId = await resolveInternalUserId(id);
-
-  if (data.hardSkills || data.softSkills) {
-    await userRepository.clearUserSkills(numericUserId);
-
-    const allSkills = [
-      ...(data.hardSkills || []),
-      ...(data.softSkills || [])
-    ];
-
-    for (const name of allSkills) {
-      if (!name.trim()) continue;
-
-      const skill = await userRepository.upsertSkillByName(name.trim());
-      await userRepository.createUserSkillRelation(numericUserId, skill.id);
+    for (const s of skillsList) {
+      if (!s?.trim()) continue;
+      const skill = await userRepository.upsertSkillByName(s.trim());
+      await userRepository.createUserSkillRelation(targetUserId, skill.id);
     }
-
-    delete data.hardSkills;
-    delete data.softSkills;
   }
 
-  if (data.hackathonInterests) {
-    await userRepository.clearHackathonInterests(numericUserId);
+  const dbTitles = [].concat(hackathonInterests || []).filter(Boolean);
+  const enumList = [].concat(targetInterests || []).filter(Boolean);
 
-    const interests = Array.isArray(data.hackathonInterests)
-      ? data.hackathonInterests
-      : [data.hackathonInterests];
+  await prisma.$transaction(async (tx) => {
+    await tx.hackathonInterest.deleteMany({
+      where: { userId: targetUserId }
+    });
 
-    for (const title of interests) {
-      if (!title || !title.trim()) continue;
-      
-      const hackathon = await userRepository.findHackathonByTitle(title.trim());
-      
-      if (hackathon) {
-        await userRepository.createHackathonInterest(numericUserId, hackathon.id);
+    if (dbTitles.length > 0) {
+      const matchedHackathons = await tx.hackathon.findMany({
+        where: {
+          OR: dbTitles.map((title) => ({
+            title: { contains: title.trim(), mode: "insensitive" }
+          }))
+        }
+      });
+
+      if (matchedHackathons.length > 0) {
+        const uniqueMap = new Map();
+        matchedHackathons.forEach((h) => {
+          const lowerTitle = h.title.toLowerCase().trim();
+          if (!uniqueMap.has(lowerTitle)) uniqueMap.set(lowerTitle, h);
+        });
+
+        await tx.hackathonInterest.createMany({
+          data: Array.from(uniqueMap.values()).map((h) => ({
+            userId: targetUserId,
+            hackathonId: h.id,
+            name: h.title 
+          }))
+        });
       }
     }
 
-    delete data.hackathonInterests;
-  }
+    const updatePayload = { ...flatProfileData };
+    if (enumList.length > 0) {
+      if ('intrestes' in prisma.user.fields) {
+        updatePayload.intrestes = enumList;
+      } else {
+        updatePayload.interests = enumList;
+      }
+    }
 
-  await userRepository.updateUser(id, data);
-  return getProfile(id);
-};
+    await tx.user.update({
+      where: { id: targetUserId },
+      data: updatePayload
+    });
+  });
 
-const searchUsers = async (query, currentUserId) => {
-  if (!query || query.trim() === "") return [];
-  return userRepository.searchUsers(query.trim(), currentUserId);
-};
-
-const getUsersBasicList = async (currentUserId) => {
-  const users = await userRepository.getUsersBasicList(currentUserId);
-  return users.map((user) => ({
-    id: user.id,
-    name: user.name,
-    email: user.email
-  }));
+  return getProfile(targetUserId);
 };
 
 module.exports = {
   getProfile,
-  updateProfile,
-  searchUsers,
-  getUsersBasicList
+  updateProfile
 };

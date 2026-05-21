@@ -1,123 +1,115 @@
-// user.repository.js
-
 const prisma = require("../../config/prisma");
 
-const findUserProfile = (id) => {
+const findUserProfile = async (id) => {
   return prisma.user.findUnique({
     where: { id },
     include: {
-      skills: { 
-        include: { skill: true } 
+      skills: {
+        include: { skill: true }
       },
-      hackathonInterests: { 
-        include: { hackathon: true } 
+      hackathonInterests: {
+        include: { hackathon: true }
       },
-      ownedProjects: true,
-      ownedTeams: { 
-        include: { hackathon: true } 
-      },
-      teamMemberships: { 
-        include: { 
-          team: { include: { hackathon: true } } 
-        } 
+      ownedProjects: {
+        include: {
+          team: {
+            include: {
+              members: true 
+            }
+          },
+          interests: true 
+        }
       }
     }
   });
 };
 
-const updateUser = (id, data) => {
+const updateUser = async (id, data) => {
   return prisma.user.update({
     where: { id },
     data
   });
 };
 
-const clearUserSkills = (userId) => {
-  return prisma.userSkill.deleteMany({
-    where: { userId }
-  });
+const clearUserSkills = async (userId) => {
+  return prisma.userSkill.deleteMany({ where: { userId } });
 };
 
-const upsertSkillByName = (name) => {
+const upsertSkillByName = async (name) => {
   return prisma.skill.upsert({
     where: { name },
-    update: {}, 
+    update: {},
     create: { name }
   });
 };
 
-const createUserSkillRelation = (userId, skillId) => {
+const createUserSkillRelation = async (userId, skillId) => {
   return prisma.userSkill.create({
-    data: { userId, skillId }
+    data: {
+      userId,
+      skillId
+    }
   });
 };
 
-const searchUsers = async (query, excludeUserId) => {
-  return prisma.user.findMany({
+const clearHackathonInterests = async (userId) => {
+  return prisma.hackathonInterest.deleteMany({ where: { userId } });
+};
+
+const findHackathonByTitle = async (title) => {
+  return prisma.hackathon.findFirst({
     where: {
-      AND: [
-        { id: { not: excludeUserId } },
-        { deletedAt: null },
-        {
-          OR: [
-            { name: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
-          ],
-        },
-      ],
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      profilePicture: true,
-    },
-    take: 10,
+      title: { equals: title, mode: "insensitive" }
+    }
+  });
+};
+
+const createHackathonInterest = async (userId, hackathonId, name) => {
+  return prisma.hackathonInterest.create({
+    data: {
+      userId,
+      hackathonId,
+      name
+    }
   });
 };
 
 const getUsersBasicList = async (currentUserId) => {
   return prisma.user.findMany({
     where: {
-      isVerified: true,
-      id: {
-        not: currentUserId,
-      },
+      id: { not: currentUserId }
     },
     select: {
       id: true,
       name: true,
       email: true
-    },
-    orderBy: {
-      name: "asc"
     }
   });
 };
 
-const findHackathonByTitle = (title) => {
-  return prisma.hackathon.findFirst({
+const searchUsers = async (query, excludeUserId) => {
+  return prisma.user.findMany({
     where: {
-      title: {
-        equals: title,
-        mode: "insensitive"
-      }
-    }
+      id: { not: excludeUserId },
+      OR: [
+        { name: { contains: query, mode: "insensitive" } },
+        { email: { contains: query, mode: "insensitive" } }
+      ]
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      profilePicture: true
+    },
+    take: 10
   });
 };
 
-const clearHackathonInterests = (userId) => {
-  return prisma.hackathonInterest.deleteMany({
-    where: { userId }
-  });
-};
-
-const createHackathonInterest = (userId, hackathonId) => {
-  return prisma.hackathonInterest.create({
-    data: {
-      userId,
-      hackathonId
-    }
+const getUserHackathonInterests = async (userId) => {
+  return prisma.hackathonInterest.findMany({
+    where: { userId },
+    include: { hackathon: true }
   });
 };
 
@@ -127,9 +119,10 @@ module.exports = {
   clearUserSkills,
   upsertSkillByName,
   createUserSkillRelation,
-  searchUsers,
-  getUsersBasicList,
-  findHackathonByTitle,
   clearHackathonInterests,
-  createHackathonInterest
+  findHackathonByTitle,
+  createHackathonInterest,
+  getUsersBasicList,
+  searchUsers,
+  getUserHackathonInterests
 };
