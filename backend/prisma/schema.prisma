@@ -457,7 +457,7 @@ model HackathonInterest {
   userId      String
   hackathonId String
   createdAt   DateTime @default(now())
-  name        String
+ // name        String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
 

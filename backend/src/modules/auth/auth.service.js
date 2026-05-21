@@ -182,6 +182,13 @@ const login = async (data) => {
 
     //and then return the response back
 
+
+    console.log("LOGIN DEBUG:", {
+        email,
+        userFound: !!user,
+        user,
+    });
+
     return {
         accessToken,
         refreshToken,

@@ -10,10 +10,13 @@ const POOL_THRESHOLD = 30;//can be updated
 const addHackathonInterest = async (userId, hackathonId) => {
     // 1. mutual exclusion  block if already a team owner for this hackathon
     //and that will be blocked too if the hackathon this user whoe created it
+
+    console.log("Checking interest for userId:", userId, "hackathonId:", hackathonId);
     const existingTeam = await interestRepository.findUserTeamForHackathon(userId, hackathonId);
     if (existingTeam) {
         throw new AppError("You already created a team for this hackathon. You cannot also mark yourself as interested.", 400);
     }
+    console.log("existingTeam:", existingTeam);
 
     // 2. block if already interested
     const existing = await interestRepository.findHackathonInterest(userId, hackathonId);
