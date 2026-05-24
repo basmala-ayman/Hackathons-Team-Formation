@@ -38,7 +38,8 @@ const getProfile = async (id) => {
       id: hi.hackathon?.id,
       title: hi.hackathon?.title,
       location: hi.hackathon?.location,
-      status: hi.hackathon?.status
+      status: hi.hackathon?.status,
+     interestCount: hi.hackathon?.interestCount
     })) || [];
 
   const ownedProjects =
@@ -91,7 +92,14 @@ const getProfile = async (id) => {
 const updateProfile = async (id, data) => {
   const targetUserId = await resolveInternalUserId(id);
 
-  const { skills, interests, intrestes, hackathonInterests, ...flatProfileData } = data;
+  const {
+    skills,
+    interests,
+    intrestes,
+    hackathonInterests,
+    ...flatProfileData
+  } = data;
+
   const targetInterests = interests || intrestes;
 
   const forbidden = ["id", "email", "password", "role", "createdAt", "updatedAt"];
@@ -101,55 +109,66 @@ const updateProfile = async (id, data) => {
     if (flatProfileData[k] === undefined) delete flatProfileData[k];
   });
 
-  
+  // ---------------- SKILLS ----------------
   if (skills) {
     await userRepository.clearUserSkills(targetUserId);
+
     const skillsList = Array.isArray(skills) ? skills : [skills];
 
     for (const s of skillsList) {
       if (!s?.trim()) continue;
+
       const skill = await userRepository.upsertSkillByName(s.trim());
       await userRepository.createUserSkillRelation(targetUserId, skill.id);
     }
   }
 
-  const dbTitles = [].concat(hackathonInterests || []).filter(Boolean);
-  const enumList = [].concat(targetInterests || []).filter(Boolean);
+  // ---------------- INTERESTS + HACKATHONS ----------------
+  const dbTitles = (hackathonInterests || [])
+    .map(t => t?.trim())
+    .filter(Boolean);
+
+  const enumList = (targetInterests || [])
+    .filter(Boolean);
 
   await prisma.$transaction(async (tx) => {
+
     await tx.hackathonInterest.deleteMany({
       where: { userId: targetUserId }
     });
 
     if (dbTitles.length > 0) {
+
       const matchedHackathons = await tx.hackathon.findMany({
         where: {
           OR: dbTitles.map((title) => ({
-            title: { contains: title.trim(), mode: "insensitive" }
+            title: {
+              contains: title,
+              mode: "insensitive"
+            }
           }))
         }
       });
 
-      if (matchedHackathons.length > 0) {
-        const uniqueMap = new Map();
-        matchedHackathons.forEach((h) => {
-          const lowerTitle = h.title.toLowerCase().trim();
-          if (!uniqueMap.has(lowerTitle)) uniqueMap.set(lowerTitle, h);
-        });
+      const validHackathons = matchedHackathons.filter(h => h?.id);
 
+      const dataToInsert = validHackathons.map(h => ({
+        userId: targetUserId,
+        hackathonId: h.id
+      }));
+
+      if (dataToInsert.length > 0) {
         await tx.hackathonInterest.createMany({
-          data: Array.from(uniqueMap.values()).map((h) => ({
-            userId: targetUserId,
-            hackathonId: h.id,
-            name: h.title 
-          }))
+          data: dataToInsert,
+          skipDuplicates: true
         });
       }
     }
 
     const updatePayload = { ...flatProfileData };
+
     if (enumList.length > 0) {
-      if ('intrestes' in prisma.user.fields) {
+      if ("intrestes" in tx.user.fields) {
         updatePayload.intrestes = enumList;
       } else {
         updatePayload.interests = enumList;

@@ -69,7 +69,7 @@ const createHackathonInterest = async (userId, hackathonId, name) => {
     data: {
       userId,
       hackathonId,
-      name
+      // name
     }
   });
 };
