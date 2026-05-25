@@ -28,7 +28,6 @@ export const getUserProfile = async () => {
 
 export const updateUserProfile = async (profileData) => {
   try {
-    // 🔑 FIX 3: Hit the plural /users/profile endpoint with plain JSON data
     const response = await api.put("/users/profile", profileData);
     return response;
   } catch (error) {
@@ -36,19 +35,3 @@ export const updateUserProfile = async (profileData) => {
   }
 };
 
-// /**
-//  * updateUserProfile: Sends a PUT request to update the current user's profile details.
-//  * @param {FormData} formData - The payload box carrying text fields and files
-//  */
-// export const updateUserProfile = async (formData) => {
-//   try {
-//     const response = await api.put("/users/profile", formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     });
-//     return response;
-//   } catch (error) {
-//     throw error.response?.data || "Failed to update user profile!!";
-//   }
-// };

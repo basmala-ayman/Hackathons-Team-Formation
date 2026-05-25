@@ -12,7 +12,7 @@
 }
 
 .subTitle {
-  color: var(--color-gray);
+  color: var(--color-dark-gray);
   font-size: var(--fs-v-small);
   margin-bottom: 3rem;
 }

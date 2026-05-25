@@ -23,20 +23,20 @@ import TeamProfile from "./Pages/RecommendedTeams/TeamProfile/TeamProfile";
 import DiscoverProjects from "./Pages/DiscoverProjects/DiscoverProjects";
 function App() {
   const { isAuthenticated, logout } = useAuth();
-  const externalUserData = {
-    name: "Sarah T.",
-    username: "@SarahT",
-    bio: "UI/UX Designer...",
-    technicalSkills: ["Figma", "React"],
-    softSkills: ["Problem Solving"],
-    interests: ["Product Design"],
-    location: "Egypt, Giza",
-    email: "omarhaitham@gmail.com",
-    website: "omarhaitham.dev",
-    joinedDate: "Joined Oct 2026",
-    linkedin: "",
-    github: ""
-  };
+  // const externalUserData = {
+  //   name: "Sarah T.",
+  //   username: "@SarahT",
+  //   bio: "UI/UX Designer...",
+  //   technicalSkills: ["Figma", "React"],
+  //   softSkills: ["Problem Solving"],
+  //   interests: ["Product Design"],
+  //   location: "Egypt, Giza",
+  //   email: "omarhaitham@gmail.com",
+  //   website: "omarhaitham.dev",
+  //   joinedDate: "Joined Oct 2026",
+  //   linkedin: "",
+  //   github: ""
+  // };
   return (
     <BrowserRouter>
       <Toaster
@@ -69,7 +69,7 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/userdashboard" element={<UserDashboard />} />
             <Route path="/userprofile" element={<UserProfile isOwner={true} />} />
-            <Route path="/profile" element={<UserProfile isOwner={false} initialData={externalUserData} />} />
+            <Route path="/profile" element={<UserProfile isOwner={false} />} />
           </Routes>
         </main>
         <Footer />
