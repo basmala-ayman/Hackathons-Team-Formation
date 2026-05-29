@@ -15,6 +15,7 @@ export const getRecommendations = async (tab = "all") => {
   }
 };
 
+
 export const acceptRecommendation = async (teamId) => {
   return await api.patch(
     `/recommendations/${teamId}/accept`

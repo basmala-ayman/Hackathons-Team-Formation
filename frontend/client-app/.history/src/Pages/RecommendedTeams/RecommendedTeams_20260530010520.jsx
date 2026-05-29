@@ -195,14 +195,14 @@ function RecommendedTeams() {
                             invitationId,
                           })
                         }
-                        // onReject={() =>
-                        //   handleReject({
-                        //     isOwner,
-                        //     recommendationId:
-                        //       recommendation.id,
-                        //     invitationId,
-                        //   })
-                        // }
+                        onReject={() =>
+                          handleReject({
+                            isOwner,
+                            recommendationId:
+                              recommendation.id,
+                            invitationId,
+                          })
+                        }
                         onView={() =>
                           handleViewTeam(
                             team.teamId

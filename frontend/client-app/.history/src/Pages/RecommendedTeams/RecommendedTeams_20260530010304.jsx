@@ -148,74 +148,27 @@ function RecommendedTeams() {
         {displayedTeams.length > 0 ? (
           displayedTeams.map((team) => {
             const isOwner = team.ownerId === user?.id;
-           return (
-              <div key={team.teamId}>
-                {team.recommendations?.map(
-                  (recommendation) => {
-                    // find current user invitation
-                    const currentInvitation =
-                      recommendation.members?.find(
-                        (member) =>
-                          member.userId ===
-                          user?.id
-                      );
+            return(
+            const buttonLabel = isOwner
+              ? "Accept Recommended Members"
+              : "Accept to Join Team";
 
-                    const invitationId =
-                      currentInvitation?.invitationId;
-
-                    const buttonLabel =
-                      isOwner
-                        ? "Accept Recommended Members"
-                        : "Accept to Join Team";
-
-                    return (
-                      <TeamCard
-                        key={recommendation.id}
-                        teamName={team.teamName}
-                        hackathonName={
-                          team.hackathonName
-                        }
-                        description={
-                          team.description
-                        }
-                        members={
-                          recommendation.members
-                        }
-                        maxMembers={
-                          team.maxMembers
-                        }
-                        acceptLabel={
-                          buttonLabel
-                        }
-                        onAccept={() =>
-                          handleAccept({
-                            isOwner,
-                            recommendationId:
-                              recommendation.id,
-                            invitationId,
-                          })
-                        }
-                        // onReject={() =>
-                        //   handleReject({
-                        //     isOwner,
-                        //     recommendationId:
-                        //       recommendation.id,
-                        //     invitationId,
-                        //   })
-                        // }
-                        onView={() =>
-                          handleViewTeam(
-                            team.teamId
-                          )
-                        }
-                      />
-                    );
-                  }
-                )}
-              </div>
+            return (
+              <TeamCard
+                key={team.teamId}
+                teamName={team.teamName}
+                hackathonName={team.hackathonName}
+                description={team.description}
+                members={team.currentMembers}
+                maxMembers={team.maxMembers}
+                acceptLabel={buttonLabel}
+                onAccept={() => handleAccept(team)}
+                onView={() => handleViewTeam(team.teamId)}
+              />
             );
-          })
-        ): (
+          }
+        )
+        ) : (
           <div className="text-center py-5 text-muted fs-2">
             No recommended teams match your search criteria.
           </div>
