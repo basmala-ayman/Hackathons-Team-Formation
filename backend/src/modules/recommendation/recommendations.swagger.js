@@ -14,9 +14,17 @@
  *     summary: Get recommendations page data
  *     description: |
  *       Returns data for all 3 tabs. Use `tab` query param to fetch only what you need.
+ *
  *       - `my-teams` — teams the user owns + AI recommendations for each
  *       - `join` — invitations the user received
  *       - `all` — both combined (default)
+ *
+ *       IMPORTANT FLOW:
+ *       - When founder accepts a recommendation, the system creates TeamInvitation records
+ *       - Each recommended member receives an invitation
+ *       - `invitationId` is required for responding to invitation
+ *       - Use: `/api/v1/recommendations/invitations/{invitationId}/respond`
+ *
  *     tags: [Recommendations]
  *     security:
  *       - bearerAuth: []
@@ -65,18 +73,20 @@
  *                               role: "Frontend Developer"
  *                               tags: ["React", "Frontend"]
  *                               invitationStatus: "PENDING"
+ *                               invitationId: "uuid"   # 👈 IMPORTANT
  *                           progress:
  *                             total: 3
  *                             accepted: 0
  *                             rejected: 0
  *                             pending: 3
  *                             acceptedPercent: 0
+ *
  *               join:
  *                 summary: tab=join response
  *                 value:
  *                   success: true
  *                   data:
- *                     - invitationId: "uuid"
+ *                     - invitationId: "uuid"   # 👈 THIS is TeamInvitation.id
  *                       status: "PENDING"
  *                       deadline: "2026-05-21T10:00:00.000Z"
  *                       team:
@@ -100,9 +110,9 @@
  *     summary: Founder accepts a recommended team
  *     description: |
  *       - Marks this recommendation ACCEPTED
- *       - Auto-rejects the other 2 recommendations for this matching request
- *       - Creates 24hr invitations for all recommended members
- *       - Notifies each recommended member
+ *       - Auto-rejects other recommendations
+ *       - Creates TeamInvitation records for all recommended members
+ *       - Each member receives an invitationId
  *     tags: [Recommendations]
  *     security:
  *       - bearerAuth: []
@@ -159,9 +169,15 @@
  *   patch:
  *     summary: Member accepts or rejects an invitation
  *     description: |
- *       ACCEPT adds the user to team members and updates the progress bar.
- *       Enforces one accepted team per hackathon per user.
- *       Both actions notify the team owner.
+ *       - invitationId = TeamInvitation.id
+ *       - Used after recommendation is accepted by founder
+ *       - Adds user to team if ACCEPTED
+ *       - Updates team progress and notifies owner
+ *
+ *       IMPORTANT:
+ *       You get invitationId from:
+ *       - `/api/v1/recommendations?tab=join`
+ *
  *     tags: [Recommendations]
  *     security:
  *       - bearerAuth: []
@@ -183,11 +199,6 @@
  *               action:
  *                 type: string
  *                 enum: [ACCEPT, REJECT]
- *           examples:
- *             accept:
- *               value: { "action": "ACCEPT" }
- *             reject:
- *               value: { "action": "REJECT" }
  *     responses:
  *       200:
  *         content:
@@ -197,7 +208,8 @@
  *                 value:
  *                   success: true
  *                   message: "You have joined the team."
- *                   data: { message: "You have joined the team.", teamComplete: false }
+ *                   data:
+ *                     teamComplete: false
  *               rejected:
  *                 value:
  *                   success: true
@@ -214,9 +226,7 @@
  *   post:
  *     summary: Founder requests Round 2 AI recommendations
  *     description: |
- *       Called when some invitations expired/rejected and team still has open slots.
- *       Excludes all previously recommended users from new search pool.
- *       Owner gets notified when results are ready.
+ *       Called when team still needs members after first round.
  *     tags: [Matching]
  *     security:
  *       - bearerAuth: []
@@ -233,14 +243,7 @@
  *           application/json:
  *             example:
  *               success: true
- *               message: "Round 2 is being processed. You will be notified when recommendations are ready."
- *               data: { matchingRequestId: "uuid" }
- *       400:
- *         description: Team already complete / no previous matching found
- *       403:
- *         description: Not the team owner
- *       404:
- *         description: Team not found
+ *               message: "Round 2 is being processed."
  */
 
 /**
@@ -248,7 +251,6 @@
  * /api/v1/matching/ai-status:
  *   get:
  *     summary: Check AI model memory status
- *     description: Returns whether the HuggingFace space is awake and has data
  *     tags: [Matching]
  *     security:
  *       - bearerAuth: []
