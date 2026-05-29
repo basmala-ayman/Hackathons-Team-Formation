@@ -12,7 +12,7 @@ const findOwnerTeamsWithRecommendations = (userId) => {
             members: {
                 include: {
                     user: {
-                        select: { id: true, name: true, profilePicture: true, techRole: true },
+                        select: { id: true, name: true, profilePicture: true, techRoles: true },
                     },
                 },
             },
@@ -31,7 +31,7 @@ const findOwnerTeamsWithRecommendations = (userId) => {
                                             id: true,
                                             name: true,
                                             profilePicture: true,
-                                            techRole: true,
+                                            techRoles: true,
                                         },
                                     },
                                 },
@@ -59,7 +59,7 @@ const findReceivedInvitations = (userId) => {
                     members: {
                         include: {
                             user: {
-                                select: { id: true, name: true, profilePicture: true, techRole: true },
+                                select: { id: true, name: true, profilePicture: true, techRoles: true },
                             },
                         },
                     },
