@@ -9,20 +9,18 @@ function RecommendedTeams() {
   const navigate = useNavigate();
   const { user } = useAuth();
   console.log(user);
-  //states
+   //states
   //'all' | 'owned' | 'suggested'
   const [activeTab, setActiveTab] = useState("all");
-  const { recommendations, loading, error } = useRecommendations();
-  const allTeams=[...recommendations.myTeams, ...recommendations.join];
-
-  const displayedTeams =
+  const { recommendations, loading, error } = useRecommendations(
     activeTab === "owned"
-      ? recommendations.myTeams
+      ? "my-teams"
       : activeTab === "suggested"
-        ? recommendations.join
-        : allTeams;
-        
-  console.log(displayedTeams);
+        ? "join"
+        : "all",
+  );
+ 
+  console.log(recommendations)
 
   const handleAcceptTeam = (isOwner) => {
     //will be implemented later
@@ -105,8 +103,8 @@ function RecommendedTeams() {
           </button>
         </div>
 
-        {displayedTeams.length > 0 ? (
-          displayedTeams.map((team) => {
+        {recommendations.length > 0 ? (
+          recommendations.map((team) => {
             const isOwner = team.ownerId === user?.id;
             const buttonLabel = isOwner
               ? "Accept Recommended Members"
@@ -127,7 +125,7 @@ function RecommendedTeams() {
             );
           })
         ) : (
-          <div className="text-center py-5 text-muted fs-2">
+          <div className="text-center py-5 text-muted fs-4">
             No recommended teams match your search criteria.
           </div>
         )}

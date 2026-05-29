@@ -13,15 +13,14 @@ function RecommendedTeams() {
   //'all' | 'owned' | 'suggested'
   const [activeTab, setActiveTab] = useState("all");
   const { recommendations, loading, error } = useRecommendations();
-  const allTeams=[...recommendations.myTeams, ...recommendations.join];
+  const allTeams=
 
   const displayedTeams =
     activeTab === "owned"
       ? recommendations.myTeams
       : activeTab === "suggested"
         ? recommendations.join
-        : allTeams;
-        
+        : [...recommendations.myTeams, ...recommendations.join];
   console.log(displayedTeams);
 
   const handleAcceptTeam = (isOwner) => {

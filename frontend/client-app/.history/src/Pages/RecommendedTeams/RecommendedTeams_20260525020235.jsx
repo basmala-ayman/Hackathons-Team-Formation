@@ -8,21 +8,22 @@ import useRecommendations from "./hooks/useRecommendations";
 function RecommendedTeams() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(user);
+  const { recommendations, loading, error } = useRecommendations("all");
+
   //states
   //'all' | 'owned' | 'suggested'
   const [activeTab, setActiveTab] = useState("all");
-  const { recommendations, loading, error } = useRecommendations();
-  const allTeams=[...recommendations.myTeams, ...recommendations.join];
 
-  const displayedTeams =
-    activeTab === "owned"
-      ? recommendations.myTeams
-      : activeTab === "suggested"
-        ? recommendations.join
-        : allTeams;
-        
-  console.log(displayedTeams);
+  //filter based on chosen tab
+  const filteredTeams = recommendations.filter((team) => {
+    if (activeTab === "owned") {
+      return team.ownerId === currentUserId;
+    }
+    if (activeTab === "suggested") {
+      return team.ownerId !== currentUserId;
+    }
+    return true; //return all teams
+  });
 
   const handleAcceptTeam = (isOwner) => {
     //will be implemented later
@@ -33,26 +34,25 @@ function RecommendedTeams() {
   };
   if (loading) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center w-100"
+      <div 
+        className="d-flex justify-content-center align-items-center w-100" 
         style={{ minHeight: "40vh" }}
       >
-        <p
-          className="fs-3 fw-semibold"
-          style={{ color: "var(--color-primary-dark)" }}
-        >
+        <p className="fs-3 fw-semibold" style={{ color: "var(--color-primary-dark)" }}>
           Loading recommendations...
         </p>
       </div>
     );
   }
-  if (error) {
+   if (error) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center w-100"
+      <div 
+        className="d-flex justify-content-center align-items-center w-100" 
         style={{ minHeight: "40vh" }}
       >
-        <p className="fs-3 fw-semibold text-secondary">No Teams found</p>
+        <p className="fs-3 fw-semibold text-secondary">
+          No hackathons found
+        </p>
       </div>
     );
   }
@@ -105,29 +105,29 @@ function RecommendedTeams() {
           </button>
         </div>
 
-        {displayedTeams.length > 0 ? (
-          displayedTeams.map((team) => {
-            const isOwner = team.ownerId === user?.id;
+        {filteredTeams.length > 0 ? (
+          filteredTeams.map((team) => {
+            const isOwner = team.ownerId === currentUserId;
             const buttonLabel = isOwner
               ? "Accept Recommended Members"
               : "Accept to Join Team";
 
             return (
               <TeamCard
-                key={team.teamId}
+                key={team.id}
                 teamName={team.teamName}
                 hackathonName={team.hackathonName}
                 description={team.description}
-                members={team.currentMembers}
+                members={team.members}
                 maxMembers={team.maxMembers}
                 acceptLabel={buttonLabel}
                 onAccept={() => handleAcceptTeam(isOwner)}
-                onView={() => handleViewTeam(team.teamId)}
+                onView={() => handleViewTeam(team.id)}
               />
             );
           })
         ) : (
-          <div className="text-center py-5 text-muted fs-2">
+          <div className="text-center py-5 text-muted fs-4">
             No recommended teams match your search criteria.
           </div>
         )}

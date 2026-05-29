@@ -21,7 +21,6 @@ function RecommendedTeams() {
       : activeTab === "suggested"
         ? recommendations.join
         : allTeams;
-        
   console.log(displayedTeams);
 
   const handleAcceptTeam = (isOwner) => {
