@@ -54,8 +54,8 @@ export default function VerifyEmail() {
 
         <p className={styles.footerText}>
           Entered the wrong email?{" "}
-          <Link to="/register" className={styles.backLink}>
-            Go back
+          <Link to="/login" className={styles.backLink}>
+            Login
           </Link>
         </p>
       </div>
