@@ -154,7 +154,8 @@ const updateProfile = async (id, data) => {
 
       const dataToInsert = validHackathons.map(h => ({
         userId: targetUserId,
-        hackathonId: h.id
+        hackathonId: h.id,
+        name: h.title
       }));
 
       if (dataToInsert.length > 0) {
