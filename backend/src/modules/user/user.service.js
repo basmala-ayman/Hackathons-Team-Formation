@@ -39,7 +39,7 @@ const getProfile = async (id) => {
       title: hi.hackathon?.title,
       location: hi.hackathon?.location,
       status: hi.hackathon?.status,
-     interestCount: hi.hackathon?.interestCount
+      interestCount: hi.hackathon?.interestCount
     })) || [];
 
   const ownedProjects =
