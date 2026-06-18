@@ -21,9 +21,10 @@ const findOwnerTeamsWithRecommendations = (userId) => {
                 take: 1,
                 include: {
                     recommendations: {
-                        // orderBy createdAt — compatibilityScore removed from schema
                         orderBy: { createdAt: "asc" },
+
                         include: {
+
                             airecommendationMembers: {
                                 include: {
                                     user: {
@@ -34,6 +35,14 @@ const findOwnerTeamsWithRecommendations = (userId) => {
                                             techRoles: true,
                                         },
                                     },
+                                },
+                            },
+
+                            invitations: {
+                                select: {
+                                    id: true,
+                                    receiverId: true,
+                                    status: true,
                                 },
                             },
                         },
@@ -169,6 +178,61 @@ const findTeamById = (teamId) => prisma.team.findUnique({
     select: { id: true, name: true, ownerId: true, size: true, hackathonId: true },
 });
 
+
+
+
+// now i will need to return back the information about the view team things but rather than sending it in the same endpoint of the sending the recommended teams
+//it will be better to send them in a seperate function to not making the load in the network very high and to make the things more faster
+const findRecommendationFullDetails = (id) => {
+    return prisma.aIRecommendation.findUnique({
+        where: { id },
+        include: {
+            matchingRequest: {
+                include: {
+                    team: {
+                        include: {
+                            hackathon: true,
+                            skills: {
+                                include: {
+                                    skill: {
+                                        select: {
+                                            name: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+
+            airecommendationMembers: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            bio: true,
+                            profilePicture: true,
+                            techRoles: true,
+
+                            skills: {
+                                include: {
+                                    skill: {
+                                        select: {
+                                            name: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+};
+
 module.exports = {
     findOwnerTeamsWithRecommendations,
     findReceivedInvitations,
@@ -185,4 +249,5 @@ module.exports = {
     countTeamMembers,
     updateTeamStatus,
     findTeamById,
+    findRecommendationFullDetails,
 };

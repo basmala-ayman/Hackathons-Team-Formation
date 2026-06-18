@@ -2,7 +2,7 @@
 //later in dealing with the database and there is cases where you may need more than one provider like when dealing with graphicql
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   //previewFeatures = ["driverAdapters"]
 }
 
@@ -118,24 +118,24 @@ enum InterestType {
 
 //done
 model User {
-  id                       String    @id @default(uuid())
-  email                    String    @unique
+  id                       String         @id @default(uuid())
+  email                    String         @unique
   password                 String?
   name                     String
   bio                      String?
-  role                     Role      @default(PARTICIPANT)
-  isVerified               Boolean   @default(false)
+  role                     Role           @default(PARTICIPANT)
+  isVerified               Boolean        @default(false)
   profilePicture           String?
   resumeUrl                String?
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
   deletedAt                DateTime? //that means can be null
   verificationToken        String?
   verificationTokenExpires DateTime?
   githubUrl                String?
   linkedinUrl              String?
-  intrestes                 InterestType[]
-  techRoles                 String[]  @default([]) //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
+  intrestes                InterestType[]
+  techRoles                String[]       @default([]) //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
 
   // Relations
   //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
@@ -330,9 +330,10 @@ model TeamInvitation {
   deadline   DateTime
 
   // Relations
-  team     Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  sender   User @relation("InvitationSender", fields: [senderId], references: [id])
-  receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id])
+  team                 Team                    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sender               User                    @relation("InvitationSender", fields: [senderId], references: [id])
+  receiver             User                    @relation("InvitationReceiver", fields: [receiverId], references: [id])
+  recommendationMember AIRecommendationMember?
 
   @@map("team_invitations")
 }
@@ -385,11 +386,13 @@ model AIRecommendationMember {
   id               String           @id @default(uuid())
   recommendationId String
   userId           String
+  invitationId     String?          @unique
   status           InvitationStatus @default(PENDING)
   createdAt        DateTime         @default(now())
 
   recommendation AIRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invitation     TeamInvitation?  @relation(fields: [invitationId], references: [id])
 
   @@unique([recommendationId, userId])
   @@map("ai_recommendation_members")
@@ -466,10 +469,10 @@ model HackathonInterest {
   //so we store here each user and the hackathon he interested on it cause we will send them for the model
   userId      String
   hackathonId String
-  createdAt   DateTime @default(now())
-  name        String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  // name        String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, hackathonId])
   @@map("hackathon_interests")

@@ -265,3 +265,87 @@
  *                 total_members: 30
  *                 total_projects: 5
  */
+
+
+/**
+ * @swagger
+ * /api/v1/recommendations/{id}:
+ *   get:
+ *     summary: Get recommendation details
+ *     description: |
+ *       Returns detailed information about a recommendation when the user clicks
+ *       "View Team" from the recommendations page.
+ *
+ *       Includes:
+ *       - Target team information
+ *       - Hackathon information
+ *       - Required skills
+ *       - Recommended members
+ *       - Member bios, roles, skills and profile pictures
+ *
+ *     tags: [Recommendations]
+ *     security:
+ *       - bearerAuth: []
+ *
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: AIRecommendation ID
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *
+ *     responses:
+ *       200:
+ *         description: Recommendation details
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 recommendationId: "uuid"
+ *                 status: "PENDING"
+ *                 expiresAt: null
+ *
+ *                 targetTeam:
+ *                   id: "uuid"
+ *                   teamName: "Eco Hackers"
+ *                   description: "Building AI solutions for climate change"
+ *                   maxMembers: 4
+ *
+ *                   requiredSkills:
+ *                     - "Node.js"
+ *                     - "React"
+ *                     - "Python"
+ *
+ *                   hackathon:
+ *                     id: "uuid"
+ *                     title: "AI For Climate Action"
+ *
+ *                 recommendedMembers:
+ *                   - userId: "uuid"
+ *                     name: "Ahmed Hassan"
+ *                     profilePicture: null
+ *                     bio: "Backend developer passionate about scalable systems."
+ *                     role: "Backend Developer"
+ *                     skills:
+ *                       - "Node.js"
+ *                       - "PostgreSQL"
+ *                       - "Docker"
+ *                     invitationStatus: "PENDING"
+ *
+ *                   - userId: "uuid"
+ *                     name: "Sara Mohamed"
+ *                     profilePicture: null
+ *                     bio: "Frontend engineer focused on React."
+ *                     role: "Frontend Developer"
+ *                     skills:
+ *                       - "React"
+ *                       - "TypeScript"
+ *                       - "Next.js"
+ *                     invitationStatus: "PENDING"
+ *
+ *       404:
+ *         description: Recommendation not found
+ */

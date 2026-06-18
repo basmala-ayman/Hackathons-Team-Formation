@@ -70,9 +70,32 @@ const respondToInvitation = async (req, res, next) => {
     }
 };
 
+
+const getRecommendationDetails = async (
+    req,
+    res,
+    next
+) => {
+    try {
+        const data =
+            await recommendationService.getRecommendationDetails(
+                req.params.id,
+                req.user.userId
+            );
+
+        res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     getRecommendations,
     acceptRecommendation,
     rejectRecommendation,
     respondToInvitation,
+    getRecommendationDetails,
 };
