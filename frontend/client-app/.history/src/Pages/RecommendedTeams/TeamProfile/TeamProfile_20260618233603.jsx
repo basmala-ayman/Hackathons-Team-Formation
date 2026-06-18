@@ -7,10 +7,9 @@ import useRecommendationDetails from "../hooks/useRecommendationDetails";
 
 function TeamProfile() {
   const { id } = useParams();
-    const { user } = useAuth();
   const { teamData, loading, error } = useRecommendationDetails(id);
   const navigate = useNavigate();
-
+  const currentUserId = "user-123";
 
   if (loading) {
     return (
@@ -43,7 +42,7 @@ function TeamProfile() {
     );
   }
 
-  const isOwner = teamData.ownerId === user?.id;
+  const isOwner = teamData.ownerId === currentUserId;
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
@@ -115,7 +114,7 @@ function TeamProfile() {
               >
                 <div className={styles.avatarWrapper}>
                   <img
-                    src={member.profilePicture || defaultProfile}
+                    src={member.avatar || defaultProfile}
                     alt={member.name}
                     className={styles.memberAvatar}
                   />
@@ -154,7 +153,7 @@ function TeamProfile() {
             <div
               className={styles.progressFillLine}
               style={{
-                width: `${(teamData.recommendedMembers.length / teamData.targetTeam.maxMembers) * 100}%`,
+                width: `${(teamData.members.length / teamData.targetTeam.maxMembers) * 100}%`,
               }}
             ></div>
           </div>

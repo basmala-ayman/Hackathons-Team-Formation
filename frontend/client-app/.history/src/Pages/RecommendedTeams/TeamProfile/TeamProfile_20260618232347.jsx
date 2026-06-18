@@ -3,47 +3,21 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { TeamIcon, CrownIcon } from "../../../assets/Icons";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
-import useRecommendationDetails from "../hooks/useRecommendationDetails";
 
 function TeamProfile() {
   const { id } = useParams();
-    const { user } = useAuth();
-  const { teamData, loading, error } = useRecommendationDetails(id);
   const navigate = useNavigate();
+  const currentUserId = "user-123";
 
+  const teamData = allTeamsDatabase.find((team) => team.id === id);
 
-  if (loading) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center w-100"
-        style={{ minHeight: "40vh" }}
-      >
-        <p
-          className="fs-3 fw-semibold"
-          style={{ color: "var(--color-primary-dark)" }}
-        >
-          Loading recommendations...
-        </p>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center w-100"
-        style={{ minHeight: "40vh" }}
-      >
-        <p className="fs-3 fw-semibold text-secondary">No Teams found</p>
-      </div>
-    );
-  }
   if (!teamData) {
     return (
       <div className="container py-5 text-center fs-3">Team not found!</div>
     );
   }
 
-  const isOwner = teamData.ownerId === user?.id;
+  const isOwner = teamData.ownerId === currentUserId;
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
@@ -86,13 +60,13 @@ function TeamProfile() {
 
         {/* Header */}
         <h1 className={`fw-bolder mb-2 ${styles.teamTitle}`}>
-          {teamData.targetTeam.teamName || "New Team"}
+          {teamData.teamName || "New Team"}
         </h1>
 
         <p className={`mb-2 ${styles.hackathonLine}`}>
-          {teamData.targetTeam.hackathon.title}
+          {teamData.hackathonName}
         </p>
-        <p className={`mb-5 ${styles.description}`}>{teamData.targetTeam.description}</p>
+        <p className={`mb-5 ${styles.description}`}>{teamData.description}</p>
 
         <div className="d-flex align-items-center gap-2 mb-4">
           <span>
@@ -104,18 +78,18 @@ function TeamProfile() {
         </div>
 
         <div className="row g-4 mb-4">
-          {teamData.recommendedMembers.map((member, index) => (
+          {teamData.members.map((member, index) => (
             <div key={index} className="col-md-6">
               <div
                 className={`p-4 d-flex align-items-center gap-4 ${styles.memberCard}`}
                 //TO BE CHANGED TO CORRECT URL
-                onClick={() => navigate(`/users/${member.userId}`)}
+                onClick={() => navigate(`/users/${member.id}`)}
                 role="button" /* Tell assistive screen readers this is interactive */
                 tabIndex={0} /* Allow keyboard accessibility navigating */
               >
                 <div className={styles.avatarWrapper}>
                   <img
-                    src={member.profilePicture || defaultProfile}
+                    src={member.avatar || defaultProfile}
                     alt={member.name}
                     className={styles.memberAvatar}
                   />
@@ -131,9 +105,9 @@ function TeamProfile() {
                   </h5>
                   <p className={`mb-3 ${styles.memberRole}`}>{member.role}</p>
                   <div className="d-flex gap-2 flex-wrap">
-                    {member.skills.map((skill, sIdx) => (
-                      <span key={sIdx} className={styles.skillTag}>
-                        {skill}
+                    {member.tags.map((tag, tIdx) => (
+                      <span key={tIdx} className={styles.skillTag}>
+                        {tag}
                       </span>
                     ))}
                   </div>
@@ -147,14 +121,14 @@ function TeamProfile() {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <span className={styles.progressLabel}>Team Progress</span>
             <span className={`fw-bold ${styles.progressValue}`}>
-              {teamData.recommendedMembers.length}/{teamData.targetTeam.maxMembers} Members
+              {teamData.members.length}/{teamData.maxMembers} Members
             </span>
           </div>
           <div className={styles.progressTrackLine}>
             <div
               className={styles.progressFillLine}
               style={{
-                width: `${(teamData.recommendedMembers.length / teamData.targetTeam.maxMembers) * 100}%`,
+                width: `${(teamData.members.length / teamData.maxMembers) * 100}%`,
               }}
             ></div>
           </div>

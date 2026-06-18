@@ -43,7 +43,7 @@ function TeamProfile() {
     );
   }
 
-  const isOwner = teamData.ownerId === user?.id;
+  const isOwner = teamData.ownerId === currentUserId;
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner

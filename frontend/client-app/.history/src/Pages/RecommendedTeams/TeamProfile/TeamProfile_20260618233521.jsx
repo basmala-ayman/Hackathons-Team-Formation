@@ -7,10 +7,9 @@ import useRecommendationDetails from "../hooks/useRecommendationDetails";
 
 function TeamProfile() {
   const { id } = useParams();
-    const { user } = useAuth();
   const { teamData, loading, error } = useRecommendationDetails(id);
   const navigate = useNavigate();
-
+  const currentUserId = "user-123";
 
   if (loading) {
     return (
@@ -43,7 +42,7 @@ function TeamProfile() {
     );
   }
 
-  const isOwner = teamData.ownerId === user?.id;
+  const isOwner = teamData.ownerId === currentUserId;
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
@@ -115,7 +114,7 @@ function TeamProfile() {
               >
                 <div className={styles.avatarWrapper}>
                   <img
-                    src={member.profilePicture || defaultProfile}
+                    src={member.avatar || defaultProfile}
                     alt={member.name}
                     className={styles.memberAvatar}
                   />
@@ -132,7 +131,7 @@ function TeamProfile() {
                   <p className={`mb-3 ${styles.memberRole}`}>{member.role}</p>
                   <div className="d-flex gap-2 flex-wrap">
                     {member.skills.map((skill, sIdx) => (
-                      <span key={sIdx} className={styles.skillTag}>
+                      <span key={tIdx} className={styles.skillTag}>
                         {skill}
                       </span>
                     ))}
@@ -147,14 +146,14 @@ function TeamProfile() {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <span className={styles.progressLabel}>Team Progress</span>
             <span className={`fw-bold ${styles.progressValue}`}>
-              {teamData.recommendedMembers.length}/{teamData.targetTeam.maxMembers} Members
+              {teamData.members.length}/{teamData.targetTeam.maxMembers} Members
             </span>
           </div>
           <div className={styles.progressTrackLine}>
             <div
               className={styles.progressFillLine}
               style={{
-                width: `${(teamData.recommendedMembers.length / teamData.targetTeam.maxMembers) * 100}%`,
+                width: `${(teamData.members.length / teamData.targetTeam.maxMembers) * 100}%`,
               }}
             ></div>
           </div>

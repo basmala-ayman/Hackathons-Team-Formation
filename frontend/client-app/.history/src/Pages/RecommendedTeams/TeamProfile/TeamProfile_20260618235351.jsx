@@ -7,7 +7,6 @@ import useRecommendationDetails from "../hooks/useRecommendationDetails";
 
 function TeamProfile() {
   const { id } = useParams();
-    const { user } = useAuth();
   const { teamData, loading, error } = useRecommendationDetails(id);
   const navigate = useNavigate();
 
@@ -43,7 +42,7 @@ function TeamProfile() {
     );
   }
 
-  const isOwner = teamData.ownerId === user?.id;
+  const isOwner = teamData.ownerId === currentUserId;
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
