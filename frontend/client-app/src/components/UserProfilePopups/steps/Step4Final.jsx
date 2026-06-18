@@ -9,25 +9,45 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
   const avatarInputRef = useRef(null);
   const cvInputRef = useRef(null);
 
-  const handleAvatarChange = (e) => {
+  // Compress image before saving to speed up the saving task
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 800; 
+          const scale = MAX_WIDTH / img.width;
+          canvas.width = MAX_WIDTH;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.7); 
+        };
+      };
+    });
+  };
+
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const localImageUrl = URL.createObjectURL(file);
-      setFormData((prev) => ({
-        ...prev,
-        avatar: localImageUrl,
-        avatarFile: file
-      }));
+      const compressedFile = await compressImage(file);
+      const localImageUrl = URL.createObjectURL(compressedFile);
+      setFormData((prev) => ({ ...prev, avatar: localImageUrl, avatarFile: compressedFile }));
     }
   };
+
 
   const handleCvChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        cvFile: file,
-        cvName: file.name
+        resumeFile: file,
+        resumeUrl: file.name
       }));
     }
   };
@@ -73,10 +93,10 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
           >
             <CloudUploadIcon size={32} className="mb-2" style={{ color: "var(--color-primary-dark)" }} />
 
-            {formData.cvName ? (
+            {formData.resumeUrl ? (
               <div className="d-flex align-items-center gap-2 text-success justify-content-center">
                 <FileText size={18} />
-                <span className="fw-semibold text-truncate" style={{ maxWidth: "180px" }}>{formData.cvName}</span>
+                <span className="fw-semibold text-truncate" style={{ maxWidth: "180px" }}>{formData.resumeUrl}</span>
               </div>
             ) : (
               <>
@@ -104,15 +124,15 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
           <Form.Control
             type="url"
             placeholder="https://linkedin.com/in/yourprofile"
-            name="linkedin"
-            value={formData.linkedin || ""}
-            onChange={handleChange("linkedin", null)}
+            name="linkedinUrl"
+            value={formData.linkedinUrl || formData.linkedin || ""}
+            onChange={handleChange}
             className={styles.innerBlankInput}
           />
         </div>
       </Form.Group>
 
-      {/* ------- GitHub URL ------- */}
+      {/* ------- Github URL ------- */}
       <Form.Group className="mb-3">
         <Form.Label className={styles.formLabel}>Github URL</Form.Label>
         <div className={styles.inputIconWrapper}>
@@ -120,9 +140,9 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
           <Form.Control
             type="url"
             placeholder="https://github.com/yourusername"
-            name="github"
-            value={formData.github || ""}
-            onChange={handleChange("github", null)}
+            name="githubUrl"
+            value={formData.githubUrl || formData.github || ""}
+            onChange={handleChange}
             className={styles.innerBlankInput}
           />
         </div>

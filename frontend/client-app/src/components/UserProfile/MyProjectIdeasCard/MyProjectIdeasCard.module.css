@@ -186,3 +186,23 @@
   color: var(--color-light-red);
   fill: var(--color-light-red);
 }
+
+.emptyStateContainer {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background-color: var(--color-primary-light-3);
+  border: 0.15rem dashed var(--color-primary-light-2);
+  border-radius: 1rem;
+}
+
+.emptyStateTitle {
+  color: var(--color-dark-gray);
+  font-weight: 600;
+  font-size: var(--fs-small);
+  margin: 0 0 0.4rem 0;
+}
+
+.emptyStateSubtext {
+  color: var(--color-gray);
+  font-size: var(--fs-v-small);
+}

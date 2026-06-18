@@ -1,24 +1,31 @@
 import React, { useRef } from "react";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "../../../shared/Icons/GoogleGithubIcons.jsx";
-import { MapPin, Mail, Link2, Calendar, Edit3 } from "lucide-react";
+import { MapPin, Mail, Link2, Calendar, Edit3, FileText } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext/useAuth.js";
 import styles from "./ProfileHeaderCard.module.css";
 
 const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner }) {
   const fileInputRef = useRef(null);
   const { user: authUser } = useAuth();
 
+  const finalAvatar = detailedUser?.avatar || ANONYMOUS_AVATAR;
+
+  const avatarSrc = finalAvatar.startsWith("http") || finalAvatar.startsWith("blob:")
+    ? finalAvatar
+    : `${BACKEND_URL}${finalAvatar}`;
+
   const user = {
     name: detailedUser?.name || authUser?.name || "Loading Name...",
     email: detailedUser?.email || authUser?.email || "No email available",
-    avatar: detailedUser?.profilePicture || detailedUser?.avatar || authUser?.profilePicture || null,
+    avatar: finalAvatar,
     bio: detailedUser?.bio || "No bio added yet.",
     githubUrl: detailedUser?.github || detailedUser?.githubUrl || "",
     linkedinUrl: detailedUser?.linkedin || detailedUser?.linkedinUrl || "",
-    website: detailedUser?.website || "portfolio.com",
     joinedDate: detailedUser?.joinedDate || "Recently",
+    resumeUrl: detailedUser?.resumeUrl
   };
 
   const handleAvatarClick = (e) => {
@@ -40,6 +47,23 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
     }
   };
 
+  const getAvatarSource = () => {
+    if (detailedUser?.avatarFile) {
+      return URL.createObjectURL(detailedUser.avatarFile);
+    }
+
+    if (detailedUser?.avatar) {
+      let path = detailedUser.avatar;
+      if (path.includes("/api/v1")) {
+        path = path.replace("/api/v1", "");
+      }
+      return path.startsWith("http") ? path : `${BACKEND_URL}${path}`;
+    }
+
+    return ANONYMOUS_AVATAR;
+  };
+  console.log(getAvatarSource())
+
   return (
     <div className={styles.profileMainCard}>
       <div className="d-flex flex-column flex-md-row gap-4 align-items-start position-relative">
@@ -48,9 +72,10 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
           <div className={styles.avatarWrapper}>
             {user.avatar ? (
               <img
-                src={user.avatar}
+                src={getAvatarSource()}
                 alt={`${user.name}'s avatar`}
                 className={styles.avatarImg}
+                crossOrigin="anonymous"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = ANONYMOUS_AVATAR;
@@ -127,9 +152,13 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
             </div>
             <div className={styles.infoItem}>
               <Link2 size={16} className={styles.infoIcon} />
-              <a href={user.website.startsWith('http') ? user.website : `https://${user.website}`} target="_blank" rel="noreferrer" className={styles.profileLink}>
-                {user.website}
-              </a>
+              {user.githubUrl ? (
+                <a href={user.githubUrl.startsWith('http') ? user.githubUrl : `https://${user.githubUrl}`} target="_blank" rel="noreferrer" className={styles.profileLink}>
+                  {user.githubUrl}
+                </a>
+              ) : (
+                <span className="text-muted">No GitHub link uploaded</span>
+              )}
             </div>
             <div className={styles.infoItem}>
               <Calendar size={16} className={styles.infoIcon} /> {user.joinedDate}

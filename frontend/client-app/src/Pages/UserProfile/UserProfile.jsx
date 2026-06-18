@@ -9,10 +9,13 @@ import ProfileHeaderCard from "../../components/UserProfile/ProfileHeader/Profil
 import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/MyProjectIdeasCard";
 import { getUserProfile, updateUserProfile } from "../../services/userService";
 
-export default function UserProfile({ isOwner = true, initialData }) {
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
+
+export default function UserProfile({ isOwner = true }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(!initialData && isOwner);
+  const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
+  const [completionPercentage, setCompletionPercentage] = useState(0);
 
   const defaultProfileData = {
     avatar: "",
@@ -20,69 +23,76 @@ export default function UserProfile({ isOwner = true, initialData }) {
     name: "",
     username: "@user",
     bio: "No bio added yet.",
-    location: "Egypt, Giza",
     email: "",
     website: "",
     joinedDate: "Joined recently",
     skills: [],
     techRoles: [],
-    interests: [],
+    intrestes: [],
     linkedinUrl: "",
     githubUrl: "",
     resumeUrl: "",
     resumeFile: null
-
   };
 
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
-    initialData || defaultProfileData,
+    defaultProfileData,
   );
 
   useEffect(() => {
-    if (initialData) return;
-
     if (isOwner) {
       setIsLoading(true);
       getUserProfile()
         .then((response) => {
           const profileData = response.data?.data || response.data || response;
-          const coreProfile = profileData.profile || profileData;
+          const coreProfile = profileData.profile || {};
 
-          let parsedSkills = [];
-          if (Array.isArray(profileData.skills)) {
-            parsedSkills = profileData.skills;
-          } else if (typeof profileData.skills === 'string') {
-            try {
-              parsedSkills = JSON.parse(profileData.skills);
-            } catch (e) {
-              parsedSkills = profileData.skills.split(",").map(s => s.trim());
-            }
+          console.log("Raw Profile Response on Refresh:", profileData);
+
+          let parsedSkills = Array.isArray(profileData.skills) ? profileData.skills : [];
+          let parsedRoles = Array.isArray(profileData.techRoles) ? profileData.techRoles : [];
+
+          if (profileData.profileCompletionPercentage) {
+            setCompletionPercentage(profileData.profileCompletionPercentage);
           }
 
-          // let parsedRoles = [];
-          let parsedRoles = "";
-          if (coreProfile.techRole) {
-            parsedRoles = Array.isArray(coreProfile.techRole)
-              ? coreProfile.techRole
-              : [coreProfile.techRole];
+          let rawAvatar = coreProfile.profilePicture;
+
+          if (rawAvatar) {
+            rawAvatar = rawAvatar.startsWith("http")
+              ? rawAvatar
+              : `${BACKEND_URL}${rawAvatar.startsWith("/") ? "" : "/"}${rawAvatar}`;
+          } else {
+            rawAvatar = "";
+          }
+
+          let parsedInterests = [];
+          if (Array.isArray(profileData.interests)) {
+            parsedInterests = profileData.interests;
+          } else if (Array.isArray(profileData.intrestes)) {
+            parsedInterests = profileData.intrestes;
+          } else if (Array.isArray(profileData.hackathonInterests)) {
+            parsedInterests = profileData.hackathonInterests.map(i => typeof i === 'string' ? i : (i.title || i.name || i));
           }
 
           setValues({
-            avatar: coreProfile.profilePicture || "",
+            avatar: rawAvatar,
             avatarFile: null,
             name: coreProfile.name || "",
-            username: coreProfile.username || `@${(coreProfile.name || "").replace(/\s+/g, '')}`,
+            username: coreProfile.username || coreProfile.email?.split("@")[0] || "user",
             bio: coreProfile.bio || "",
             email: coreProfile.email || "",
             website: coreProfile.websiteUrl || "",
-            joinedDate: profileData.createdAt ? `Joined ${new Date(profileData.createdAt).toLocaleDateString()}` : "Joined recently",
-            skills: Array.isArray(parsedSkills) ? parsedSkills : [],
+            joinedDate: coreProfile.createdAt ? `Joined ${new Date(coreProfile.createdAt).toLocaleDateString()}` : "Joined recently",
+            skills: parsedSkills,
             techRoles: parsedRoles,
-            interests: profileData.hackathonInterests || [],
+            intrestes: parsedInterests,
             linkedinUrl: coreProfile.linkedinUrl || "",
             githubUrl: coreProfile.githubUrl || "",
             resumeUrl: coreProfile.resumeUrl || "",
-            resumeFile: null
+            resumeFile: null,
+            hackathonInterests: profileData.hackathonInterests || [],
+            ownedProjects: profileData.ownedProjects || []
           });
         })
         .catch((err) => {
@@ -93,73 +103,67 @@ export default function UserProfile({ isOwner = true, initialData }) {
           setIsLoading(false);
         });
     }
-  }, [isOwner, initialData, setValues]);
+  }, [isOwner, setValues]);
 
-
-
-  const handleProfileUpdate = async (updatedValues) => {
+  const handleProfileUpdate = async (payload, isFinal = false) => {
     try {
       setApiError(null);
 
-      // const selectedRole = Array.isArray(updatedValues.techRoles) && updatedValues.techRoles.length > 0
-      //   ? updatedValues.techRoles[0]
-      //   : [];
+      let finalPayload = payload;
 
-      const selectedRole = typeof updatedValues.techRoles === "string"
-        ? updatedValues.techRoles
-        : (Array.isArray(updatedValues.techRoles) ? updatedValues.techRoles[0] : "");
+      if (!(payload instanceof FormData)) {
+        finalPayload = new FormData();
 
-      const flattenToStrings = (arr) => {
-        if (!arr) return [];
-        return arr.map(item => typeof item === "string" ? item : (item?.value || item?.name || "")).filter(Boolean);
-      };
+        finalPayload.append("name", payload.name || values.name || "User");
+        finalPayload.append("bio", payload.bio || "");
+        finalPayload.append("githubUrl", payload.githubUrl || "");
+        finalPayload.append("linkedinUrl", payload.linkedinUrl || "");
 
-      const cleanSkills = flattenToStrings(updatedValues.skills);
+        if (Array.isArray(payload.skills)) {
+          payload.skills.forEach(skill => finalPayload.append("skills[]", skill));
+        }
+        if (Array.isArray(payload.techRoles)) {
+          payload.techRoles.forEach(role => finalPayload.append("techRoles[]", role));
+        }
+        const interestsToSubmit = payload.intrestes || payload.interests;
+        if (Array.isArray(interestsToSubmit)) {
+          interestsToSubmit.forEach(interest => finalPayload.append("intrestes[]", interest));
+        }
 
-      const payload = {
-        bio: updatedValues.bio || "",
-        techRole: selectedRole,
-        githubUrl: updatedValues.githubUrl || updatedValues.github || "",
-        linkedinUrl: updatedValues.linkedinUrl || updatedValues.linkedin || "",
-        resumeUrl: updatedValues.resumeUrl || updatedValues.resume || "",
-        profilePicture: updatedValues.profilePicture || "",
-        skills: cleanSkills || []
-      };
-
-      const response = await updateUserProfile(payload);
-      const serverData = response?.data?.data || response?.data || response;
-
-      const updatedProfile = serverData.profile || serverData;
-
-      let parsedSkills = [];
-      if (Array.isArray(serverData.skills)) {
-        parsedSkills = serverData.skills;
+        if (payload.avatarFile) finalPayload.append("profilePicture", payload.avatarFile);
+        if (payload.resumeFile) finalPayload.append("resume", payload.resumeFile);
+      } else {
+        if (!payload.has("name")) {
+          payload.append("name", values.name || "User");
+        }
       }
 
-      // let savedRoles = [];
-      // if (updatedProfile.techRole) {
-      //   savedRoles = Array.isArray(updatedProfile.techRole)
-      //     ? updatedProfile.techRole
-      //     : [updatedProfile.techRole];
-      // }
+      const response = await updateUserProfile(finalPayload);
+
+      const responseData = response?.data?.data || response?.data || response;
+      const updatedProfile = responseData.profile || {};
 
       setValues(prev => ({
         ...prev,
-        bio: updatedProfile.bio || payload.bio,
-        techRole: updatedProfile.techRole || payload.techRole,
-        githubUrl: updatedProfile.githubUrl || payload.githubUrl,
-        linkedinUrl: updatedProfile.linkedinUrl || payload.linkedinUrl,
-        resumeUrl: updatedProfile.resumeUrl || payload.resumeUrl,
-        avatar: updatedProfile.profilePicture,
-        skills: parsedSkills.length > 0 ? parsedSkills : (updatedValues.skills || []),
-        // techRoles: savedRoles.length > 0 ? savedRoles : (updatedValues.techRoles || [])
-        techRoles: selectedRole
+        ...payload,
+        name: updatedProfile.name || prev.name,
+        bio: updatedProfile.bio !== undefined ? updatedProfile.bio : prev.bio,
+        githubUrl: payload.githubUrl || prev.githubUrl,
+        linkedinUrl: payload.linkedinUrl || prev.linkedinUrl,
+        avatar: updatedProfile.profilePicture
+          ? `${BACKEND_URL}${updatedProfile.profilePicture.startsWith('/') ? '' : '/'}${updatedProfile.profilePicture}`
+          : prev.avatar,
+        skills: updatedProfile.skills || prev.skills,
+        techRoles: updatedProfile.techRoles || prev.techRoles,
+        intrestes: updatedProfile.interests || updatedProfile.intrestes || prev.intrestes
       }));
 
-      setIsWizardOpen(false);
+      setApiError(null);
+      if (isFinal) setIsWizardOpen(false);
+      return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
-      setApiError(err.response?.data?.message || "Failed to update profile changes.");
+      throw err;
     }
   };
 
@@ -177,9 +181,8 @@ export default function UserProfile({ isOwner = true, initialData }) {
       {apiError && <Alert variant="danger">{apiError}</Alert>}
 
       {isOwner && (
-        <CompleteProfile user={values} onBannerClick={() => setIsWizardOpen(true)} />
+        <CompleteProfile user={{ ...values, profileCompletionPercentage: completionPercentage }} onBannerClick={() => setIsWizardOpen(true)} />
       )}
-
 
       <ProfileHeaderCard
         user={values}
@@ -203,13 +206,13 @@ export default function UserProfile({ isOwner = true, initialData }) {
 
       <SkillsExpertiseCard
         skills={values.skills || []}
-        roles={values.techRoles || []}
-        interests={Array.isArray(values.interests) ? values.interests.map(i => i.title || i) : []}
+        roles={Array.isArray(values.techRoles) ? values.techRoles : (values.techRoles ? [values.techRoles] : [])}
+        interests={values.interests || values.intrestes || []}
         onAddSkillClick={() => setIsWizardOpen(true)}
         isOwner={isOwner}
       />
-      <InterestedHackathonsCard />
-      <MyProjectIdeasCard userAvatar={values.avatar} />
+      <InterestedHackathonsCard hackathons={values.hackathonInterests || []} />
+      <MyProjectIdeasCard projects={values.ownedProjects || []} userAvatar={values.avatar} />
     </Container>
   );
 }

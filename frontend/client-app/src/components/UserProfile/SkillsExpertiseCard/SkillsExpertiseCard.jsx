@@ -14,7 +14,7 @@ export default function SkillsExpertiseCard({ skills = [], roles = [], interests
           <h4 className={styles.cardTitleText}>Skills & Expertise</h4>
         </div>
         {isOwner && (<button type="button" className={styles.addSkillBtn} onClick={onAddSkillClick}>
-          + Add Skill
+          + Add Skill & Expertise
         </button>)}
 
       </div>

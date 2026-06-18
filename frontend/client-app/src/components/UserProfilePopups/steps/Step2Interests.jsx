@@ -1,26 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
 import styles from "./steps.module.css";
 
 export default function Step2Interests({ formData, setFormData }) {
-  const interests = formData?.interests || [];
+  const [customInput, setCustomInput] = useState("");
+  const interests = formData?.intrestes || [];
 
-  const predefinedInterests = [
-    "HealthTech", "AI/ML", "AR/VR", "DevOps",
-    "Blockchain", "IOT", "FinTech", "EdTech"
-  ];
+  const predefinedInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
 
   const toggleInterest = (interest) => {
     const isSelected = interests.includes(interest);
-
     const updatedInterests = isSelected
       ? interests.filter((i) => i !== interest)
       : [...interests, interest];
 
     setFormData((prev) => ({
       ...prev,
-      interests: updatedInterests
+      // interests: updatedInterests,
+      intrestes: updatedInterests
     }));
+  };
+
+  const handleCustomKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const value = customInput.trim().toUpperCase();
+      if (value && !interests.includes(value)) {
+        const updated = [...interests, value];
+        setFormData((prev) => ({ ...prev, interests: updated }));
+        setCustomInput("");
+      }
+    }
   };
 
   return (
@@ -56,8 +66,11 @@ export default function Step2Interests({ formData, setFormData }) {
         <Form.Label className={styles.formLabel}>Add Custom Hackathon Interest</Form.Label>
         <Form.Control
           type="text"
-          placeholder="e.g., Cloud Computing"
+          placeholder="e.g., Cloud Computing (Press Enter to add)"
           className={styles.inputControl}
+          value={customInput}
+          onChange={(e) => setCustomInput(e.target.value)}
+          onKeyDown={handleCustomKeyDown}
         />
         <span className={styles.hintText}>
           💡 Press Enter or click suggestions to add hackathon interest
