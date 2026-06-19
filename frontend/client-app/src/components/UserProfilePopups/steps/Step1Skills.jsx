@@ -5,7 +5,7 @@ import styles from "./steps.module.css";
 
 export default function Step1Skills({ formData, setFormData, errors, setErrors }) {
   const [skillInput, setSkillInput] = useState("");
-  // const [roleInput, setRoleInput] = useState("");
+  const [roleInput, setRoleInput] = useState("");
   const [showSkillDropdown, setShowSkillDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
@@ -18,12 +18,6 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
     if (errors.bio && value.trim()) setErrors((prev) => ({ ...prev, bio: null }));
   };
 
-  const handleRoleSelect = (role) => {
-    setFormData((prev) => ({ ...prev, techRoles: role }));
-    if (errors.techRoles) setErrors((prev) => ({ ...prev, techRoles: null }));
-    setShowRoleDropdown(false);
-  };
-
   const addTag = (value, list, key) => {
     if (list.includes(value) && !(formData[key] || []).includes(value)) {
       setFormData((prev) => ({ ...prev, [key]: [...(prev[key] || []), value] }));
@@ -32,12 +26,11 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
   };
 
   const removeTag = (value, key) => {
-    setFormData((prev) => ({ ...prev, [key]: prev[key].filter((item) => item !== value) }));
+    setFormData((prev) => ({ ...prev, [key]: (prev[key] || []).filter((item) => item !== value) }));
   };
 
   return (
     <div className={styles.stepContainer}>
-      {/* UX FIX: Updated copy to say Skills instead of Technical/Soft */}
       <h2 className={styles.stepTitle}>Showcase your Skills</h2>
       <p className={styles.stepSubtext}>Select your profile skills and roles</p>
 
@@ -56,7 +49,7 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
           />
           <ChevronDown
             onMouseDown={(e) => {
-              e.preventDefault(); // Prevents input from losing focus
+              e.preventDefault();
               setShowSkillDropdown((prev) => !prev);
             }}
             className={styles.dropdownIcon}
@@ -64,7 +57,7 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
           />
         </div>
 
-        {errors.skills && <div className="text-danger mt-1" >{errors.skills}</div>}
+        {errors.skills && <div className="text-danger mt-1">{errors.skills}</div>}
 
         {showSkillDropdown && (
           <div className={styles.suggestionsDropdown}>
@@ -97,15 +90,15 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
 
       {/* --- Role Selection --- */}
       <Form.Group className="mb-4 position-relative">
-        <Form.Label className={styles.formLabel}>Preferred Role <span className="text-danger">*</span></Form.Label>
+        <Form.Label className={styles.formLabel}>Preferred Roles <span className="text-danger">*</span></Form.Label>
         <div className={styles.selectWrapper}>
           <Form.Control
             type="text"
-            readOnly // Keeps it behaving like a true dropdown pick
-            className={`${styles.inputControl} ${errors.techRoles ? 'is-invalid' : ''} cursor-pointer`}
-            placeholder="Select your role..."
-            value={formData.techRoles || ""} // Displays the single string directly
-            onClick={() => setShowRoleDropdown((prev) => !prev)}
+            className={`${styles.inputControl} ${errors.techRoles ? 'is-invalid' : ''}`}
+            placeholder="Type or select your role(s)..."
+            value={roleInput}
+            onChange={(e) => { setRoleInput(e.target.value); setShowRoleDropdown(true); }}
+            onFocus={() => setShowRoleDropdown(true)}
             onBlur={() => setTimeout(() => setShowRoleDropdown(false), 200)}
           />
           <ChevronDown
@@ -118,9 +111,9 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
           />
         </div>
 
-        {errors.techRoles && <div className="text-danger mt-1" >{errors.techRoles}</div>}
+        {errors.techRoles && <div className="text-danger mt-1">{errors.techRoles}</div>}
 
-        {/* {showRoleDropdown && (
+        {showRoleDropdown && (
           <div className={styles.suggestionsDropdown}>
             {roles
               .filter(r => r.toLowerCase().includes(roleInput.toLowerCase()))
@@ -138,27 +131,15 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
                 </div>
               ))}
           </div>
-        )} */}
-        {showRoleDropdown && (
-          <div className={styles.suggestionsDropdown}>
-            {roles.map(role => (
-              <div
-                key={role}
-                className={styles.suggestionItem}
-                onMouseDown={() => handleRoleSelect(role)}
-              >
-                {role}
-              </div>
-            ))}
-          </div>
         )}
-        {/* <div className="d-flex flex-wrap gap-2 mt-3">
+
+        <div className="d-flex flex-wrap gap-2 mt-3">
           {(formData.techRoles || []).map((role) => (
             <Badge key={role} pill className={styles.skillBadge}>
               {role} <X size={14} className="cursor-pointer" onClick={() => removeTag(role, 'techRoles')} />
             </Badge>
           ))}
-        </div> */}
+        </div>
       </Form.Group>
 
       {/* --- Bio --- */}
