@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./NotificationsPage.module.css";
 import NotificationFilter from "../../components/Notifications/NotificationFilter/NotificationFilter";
 import NotificationList from "../../components/Notifications/NotificationList/NotificationList";
 import CustomButton from "../../shared/CustomButton/CustomButton";
+import { getUnreadCount } from "../../services/notificationService";
 
 export default function NoticationsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [unreadCount, setUnreadCount] = useState(0);
+  useEffect(() => {
+    getUnreadCount().then(setUnreadCount);
+  }, []);
+  
   return (
     <div className="container py-5">
       <header className={styles.header}>

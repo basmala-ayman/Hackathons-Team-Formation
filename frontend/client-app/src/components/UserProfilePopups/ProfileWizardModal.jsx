@@ -107,6 +107,7 @@ export default function ProfileWizardModal({
     const interestsArray = currentValues.interests || currentValues.intrestes || [];
     const cleanInterests = interestsArray.map(i => cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest")).filter(Boolean);
 
+    appendIfChanged("skills", currentValues.skills);
     appendIfChanged("bio", currentValues.bio);
     appendIfChanged("techRoles", cleanRoles);
 

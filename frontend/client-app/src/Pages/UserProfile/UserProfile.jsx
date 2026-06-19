@@ -69,11 +69,12 @@ export default function UserProfile({ isOwner = true }) {
           let parsedInterests = [];
           if (Array.isArray(profileData.interests)) {
             parsedInterests = profileData.interests;
-          } else if (Array.isArray(profileData.intrestes)) {
-            parsedInterests = profileData.intrestes;
-          } else if (Array.isArray(profileData.hackathonInterests)) {
-            parsedInterests = profileData.hackathonInterests.map(i => typeof i === 'string' ? i : (i.title || i.name || i));
-          }
+          } else
+            if (Array.isArray(profileData.intrestes)) {
+              parsedInterests = profileData.intrestes;
+            } else if (Array.isArray(profileData.hackathonInterests)) {
+              parsedInterests = profileData.hackathonInterests.map(i => typeof i === 'string' ? i : (i.title || i.name || i));
+            }
 
           setValues({
             avatar: rawAvatar,
@@ -140,22 +141,22 @@ export default function UserProfile({ isOwner = true }) {
 
       const response = await updateUserProfile(finalPayload);
 
-      const responseData = response?.data?.data || response?.data || response;
-      const updatedProfile = responseData.profile || {};
+      const responseData =  response?.data?.data || response?.data || response;
+      const profileData = responseData.profile || {};
 
       setValues(prev => ({
         ...prev,
         ...payload,
-        name: updatedProfile.name || prev.name,
-        bio: updatedProfile.bio !== undefined ? updatedProfile.bio : prev.bio,
-        githubUrl: payload.githubUrl || prev.githubUrl,
-        linkedinUrl: payload.linkedinUrl || prev.linkedinUrl,
-        avatar: updatedProfile.profilePicture
-          ? `${BACKEND_URL}${updatedProfile.profilePicture.startsWith('/') ? '' : '/'}${updatedProfile.profilePicture}`
+        name: profileData.name || prev.name,
+        bio: profileData.bio !== undefined ? profileData.bio : prev.bio,
+        githubUrl: profileData.githubUrl || payload.githubUrl || prev.githubUrl,
+        linkedinUrl: profileData.linkedinUrl || payload.linkedinUrl || prev.linkedinUrl,
+        avatar: profileData.profilePicture
+          ? `${BACKEND_URL}${profileData.profilePicture.startsWith('/') ? '' : '/'}${profileData.profilePicture}`
           : prev.avatar,
-        skills: updatedProfile.skills || prev.skills,
-        techRoles: updatedProfile.techRoles || prev.techRoles,
-        intrestes: updatedProfile.interests || updatedProfile.intrestes || prev.intrestes
+        skills: profileData.skills || prev.skills,
+        techRoles: profileData.techRoles || prev.techRoles,
+        intrestes: profileData.interests || prev.intrestes,
       }));
 
       setApiError(null);
