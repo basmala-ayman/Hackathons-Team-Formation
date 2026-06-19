@@ -1,5 +1,5 @@
 import styles from "./Explore.module.css";
-import { useState} from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
 import SearchBar from "../../shared/SearchBar/SearchBar";
 import FilterSideBar from "./Components/FilterSideBar/FilterSideBar";

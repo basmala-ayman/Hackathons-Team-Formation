@@ -8,7 +8,7 @@ function HackathonGrid({hackathons}) {
     <Container>
         <Row className="g-4">
             {hackathons.map((hackathon)=>(
-                <Col xs={12} md={6} lg={4} key={hackathon.id} >
+                <Col xs={12} md={6} lg={4} key={hackathon.id} className="d-flex">
                 <HackathonCard hackathon={hackathon}/>
                 </Col>
             ))}

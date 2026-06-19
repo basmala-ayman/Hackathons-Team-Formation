@@ -1,23 +1,17 @@
 import styles from "./Explore.module.css";
-import { useState} from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
 import SearchBar from "../../shared/SearchBar/SearchBar";
 import FilterSideBar from "./Components/FilterSideBar/FilterSideBar";
 import HackathonGrid from "./Components/HackathonGrid/HackathonGrid";
 import { FilterIcon } from "../../assets/Icons";
 import useHackathons from "./hooks/useHackathons";
+import useHackathons from "./hooks/useHackathons";
 import useHackathonFilters from "./hooks/useHackathonFilters";
 
 
 function Explore() {
   const { hackathons, loading, error } = useHackathons();
-  const { 
-    filters, 
-    handleSearch, 
-    handleFilter, 
-    filteredHackathons 
-  } = useHackathonFilters(hackathons);
-
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
   const handleOpenedFilters = () => {
@@ -27,6 +21,60 @@ function Explore() {
     setOpenMobileFilter(false);
   };
 
+  // handle Search logic
+  const [searchWord, setSearchWord] = useState("");
+  const handleSearch = (word) => {
+    setSearchWord(word);
+  };
+
+  //handle filter part
+  const [filters, setFilters] = useState({
+    tags: [],
+    prizeAmount: [],
+  });
+  const handleFilter = useCallback((filterType, selectedValue) => {
+    setFilters((prevFilterState) => {
+      const currentList = prevFilterState[filterType];
+      const isValueIncluded = currentList.includes(selectedValue);
+      //if the selected filter value included already remove it , else add in the filter list under its category
+      const updatedList = isValueIncluded
+        ? currentList.filter((item) => item !== selectedValue)
+        : [...currentList, selectedValue];
+
+      //return the filter but edit the filter type which its list is changed
+      return {
+        ...prevFilterState,
+        [filterType]: updatedList,
+      };
+    });
+  }, []);
+
+  //Memo is used to cash result
+  //if searchWord or hackathons changed -> refilter
+  const filteredHackathons = useMemo(() => {
+    return hackathons.filter((hackathon) => {
+      //check if search word matches hackthon title
+      const lowerSearchWord = searchWord.toLowerCase();
+      const isSearchMatch = hackathon.title
+        .toLowerCase()
+        .includes(lowerSearchWord); //if search bar is empty -> return true
+
+      //check if hackthon properties matches filter
+      //no filter in date or the date value matches date of hackathon
+      const isTagsMatch =
+        filters.tags.length === 0 ||
+        (hackathon.tags &&
+          filters.tags.some((selectedTag) =>
+            hackathon.tags.includes(selectedTag),
+          ));
+      const isPrizeAmountMatch =
+        filters.prizeAmount.length === 0 ||
+        filters.prizeAmount.includes(hackathon.prizeAmount);
+
+      //only return hackathon if all conditions are matched
+      return isSearchMatch && isTagsMatch && isPrizeAmountMatch;
+    });
+  }, [searchWord, filters, hackathons]);
 
  if (loading) {
     return (

@@ -1,5 +1,4 @@
 import styles from "./HackathonCard.module.css";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useHackathonInterest from "../../hooks/useHackathonInterest";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
@@ -11,32 +10,28 @@ import {
   LocationIcon,
   LevelIcon,
 } from "../../../../assets/Icons";
-
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
   const {
     id,
     title,
-    prizeAmount=0,
+    prizeAmount,
     status,
     interestCount = 0,
     userCreated = false,
   } = hackathon;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { registerInterest, loading } = useHackathonInterest();
 
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);
 
   const handleInterest = async () => {
-     if (loading) return; // prevent double click
     try {
       const response = await registerInterest(id);
-      console.log(response.message);
 
-      toast.success( "Interest submitted");
+      alert(response.message);
     } catch (error) {
-       toast.error( "Something went wrong");
-      console.error(error.message);
+      alert(error.message);
     }
   };
   return (

@@ -44,7 +44,7 @@ function App() {
         reverseOrder={false}
         toastOptions={{
           //  ensures the popup toaster is always on top of other elements
-          style: { zIndex: 99999 , fontSize:"1.6rem" },
+          style: { zIndex: 99999 , fontSize: },
         }}
       />
       <div className="min-vh-100 d-flex flex-column">

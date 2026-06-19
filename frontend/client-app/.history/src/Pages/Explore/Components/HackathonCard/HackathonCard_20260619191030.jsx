@@ -11,7 +11,6 @@ import {
   LocationIcon,
   LevelIcon,
 } from "../../../../assets/Icons";
-
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
   const {

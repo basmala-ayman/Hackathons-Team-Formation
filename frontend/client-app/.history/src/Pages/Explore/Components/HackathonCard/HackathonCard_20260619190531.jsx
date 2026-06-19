@@ -11,7 +11,6 @@ import {
   LocationIcon,
   LevelIcon,
 } from "../../../../assets/Icons";
-
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
   const {
@@ -31,12 +30,10 @@ function HackathonCard({ hackathon }) {
      if (loading) return; // prevent double click
     try {
       const response = await registerInterest(id);
-      console.log(response.message);
 
-      toast.success( "Interest submitted");
+      toast.success(response.message || "Interest submitted 🎉");
     } catch (error) {
-       toast.error( "Something went wrong");
-      console.error(error.message);
+      alert(error.message);
     }
   };
   return (

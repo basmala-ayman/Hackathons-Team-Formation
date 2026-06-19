@@ -11,7 +11,6 @@ import {
   LocationIcon,
   LevelIcon,
 } from "../../../../assets/Icons";
-
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
   const {
@@ -28,15 +27,12 @@ function HackathonCard({ hackathon }) {
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);
 
   const handleInterest = async () => {
-     if (loading) return; // prevent double click
     try {
       const response = await registerInterest(id);
-      console.log(response.message);
 
-      toast.success( "Interest submitted");
+      alert(response.message);
     } catch (error) {
-       toast.error( "Something went wrong");
-      console.error(error.message);
+      alert(error.message);
     }
   };
   return (
