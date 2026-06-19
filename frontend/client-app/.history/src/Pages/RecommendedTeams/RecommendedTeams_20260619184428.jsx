@@ -44,13 +44,11 @@ function RecommendedTeams() {
       }
       
       toast.success("Team accepted successfully");
-      console.log("Team accepted successfully");
+      console.log("Accepted successfully");
     } catch (error) {
       toast.error("Failed to Accept")
       console.error(error);
-    }finally {
-    setLoadingId(null);
-  }
+    }
   };
   // =========================
   // REJECT LOGIC

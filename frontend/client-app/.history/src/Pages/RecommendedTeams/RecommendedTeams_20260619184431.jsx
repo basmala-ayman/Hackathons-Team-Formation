@@ -48,9 +48,7 @@ function RecommendedTeams() {
     } catch (error) {
       toast.error("Failed to Accept")
       console.error(error);
-    }finally {
-    setLoadingId(null);
-  }
+    }
   };
   // =========================
   // REJECT LOGIC

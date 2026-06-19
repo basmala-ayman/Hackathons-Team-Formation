@@ -19,7 +19,7 @@ function RecommendedTeams() {
   //'all' | 'owned' | 'suggested'
   const [activeTab, setActiveTab] = useState("all");
   const { recommendations, loading, error } = useRecommendations();
-  const [loadingId, setLoadingId] = useState(null); //to disable more than one click on acceptance/rejection for a recommendation
+  const [loadingId, setLoadingId] = useState(null); //to disable 
 
   const displayedTeams =
     activeTab === "owned"
@@ -32,25 +32,17 @@ function RecommendedTeams() {
 
   //accept logic
   const handleAccept = async ({ isOwner, recommendationId, invitationId }) => {
-      if (loadingId === recommendationId) return;
-
     try {
-          setLoadingId(recommendationId);
-
       if (isOwner) {
         await acceptRecommendation(recommendationId);
       } else {
         await respondToInvitation(invitationId, "ACCEPT");
       }
-      
-      toast.success("Team accepted successfully");
-      console.log("Team accepted successfully");
+
+      console.log("Accepted successfully");
     } catch (error) {
-      toast.error("Failed to Accept")
       console.error(error);
-    }finally {
-    setLoadingId(null);
-  }
+    }
   };
   // =========================
   // REJECT LOGIC
@@ -182,7 +174,6 @@ function RecommendedTeams() {
                       members={recommendation.members}
                       maxMembers={team.maxMembers}
                       acceptLabel={buttonLabel}
-                      isLoading={loadingId === recommendation.id}
                       onAccept={() =>
                         handleAccept({
                           isOwner,
@@ -199,7 +190,6 @@ function RecommendedTeams() {
                       //   })
                       // }
                       onView={() => handleViewTeam(recommendation.id)}
-                      
                     />
                   );
                 })}

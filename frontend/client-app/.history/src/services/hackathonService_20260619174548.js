@@ -29,8 +29,8 @@ export const getHackathonById = async (id) => {
 export const getHackathonNames = async () => {
   try {
     const response = await api.get("/hackathons/names/list");
-    console.log("hackathon names:", response.data);
-    return response.data?.data || [];
+    console.log("hackthons names", response.data);
+    return response.data.data || [];
   } catch (error) {
     throw error.response?.data || "Failed to fetch hackathon names!!";
   }

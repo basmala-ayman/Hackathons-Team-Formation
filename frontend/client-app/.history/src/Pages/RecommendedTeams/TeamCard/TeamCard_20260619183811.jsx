@@ -91,7 +91,7 @@ function TeamCard({
                 onClick={onAccept}
                 disabled={isLoading}
               >
-                 {isLoading ? "Processing..." : acceptLabel}
+                {acceptLabel}
               </CustomButton>
             </div>
             <div className="col-3">

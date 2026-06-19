@@ -1,6 +1,5 @@
 import styles from "./TeamProfile.module.css";
 import toast from "react-hot-toast";
-import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { TeamIcon, CrownIcon } from "../../../assets/Icons";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
@@ -14,7 +13,6 @@ import {
 } from "../../../services/recommendationService";
 
 function TeamProfile() {
-  const [loadingAction, setLoadingAction] = useState(false); //for preventing multiple clicks on buttons
   const navigate = useNavigate();
 
   const { recommendationId } = useParams(); //get recommendation id from url
@@ -72,47 +70,21 @@ function TeamProfile() {
     : "Decline Suggestion";
 
   const handleAccept = async () => {
-    if (loadingAction) return;
-
     try {
-      setLoadingAction(true);
-
       if (isOwner) {
         await acceptRecommendation(teamData.recommendationId);
       } else {
         await respondToInvitation(invitationId, "ACCEPT");
       }
-      toast.success("Team accepted successfully");
-      setTimeout(() => {
-        navigate("/recommendedTeams");
-      }, 800);
+      toast.success("Accepted successfully 🎉");
+      // navigate("/recommendedTeams");
     } catch (error) {
-      toast.error("Failed to accept , Try again!");
       console.error(error);
-    } finally {
-      setLoadingAction(false);
     }
   };
 
-  const handleDecline = async () => {
-    if (loadingAction) return;
-    try {
-      setLoadingAction(true);
-      if (isOwner) {
-        await rejectRecommendation(teamData.recommendationId);
-      } else {
-        await respondToInvitation(invitationId, "REJECT");
-      }
-
-      toast.success("Rejected successfully");
-
-      navigate("/recommendedTeams");
-    } catch (error) {
-      toast.error("Failed to reject. Try again.");
-      console.error(error);
-    } finally {
-      setLoadingAction(false);
-    }
+  const handleDecline = () => {
+    //ADD REJECTION LOGIC
   };
 
   return (
@@ -223,9 +195,8 @@ function TeamProfile() {
             size="sm"
             className={` fw-semibold ${styles.btnDecline}`}
             onClick={handleDecline}
-             disabled={loadingAction}
           >
-             {loadingAction ? "Processing..." : declineLabel}
+            {declineLabel}
           </CustomButton>
 
           <CustomButton
@@ -233,9 +204,8 @@ function TeamProfile() {
             size="sm"
             className={`fw-semibold text-white ${styles.btnAccept}`}
             onClick={handleAccept}
-             disabled={loadingAction}
           >
-            {loadingAction ? "Processing..." : acceptLabel}
+            {acceptLabel}
           </CustomButton>
         </div>
       </div>

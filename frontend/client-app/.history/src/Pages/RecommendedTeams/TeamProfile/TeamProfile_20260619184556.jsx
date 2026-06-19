@@ -72,10 +72,10 @@ function TeamProfile() {
     : "Decline Suggestion";
 
   const handleAccept = async () => {
-    if (loadingAction) return;
+      if (loadingAction) return;
 
     try {
-      setLoadingAction(true);
+          setLoadingAction(true);
 
       if (isOwner) {
         await acceptRecommendation(teamData.recommendationId);
@@ -89,15 +89,16 @@ function TeamProfile() {
     } catch (error) {
       toast.error("Failed to accept , Try again!");
       console.error(error);
-    } finally {
-      setLoadingAction(false);
-    }
+    }finally {
+    setLoadingAction(false);
+  }
   };
 
   const handleDecline = async () => {
     if (loadingAction) return;
     try {
-      setLoadingAction(true);
+          setLoadingAction(true);
+
       if (isOwner) {
         await rejectRecommendation(teamData.recommendationId);
       } else {
@@ -110,8 +111,6 @@ function TeamProfile() {
     } catch (error) {
       toast.error("Failed to reject. Try again.");
       console.error(error);
-    } finally {
-      setLoadingAction(false);
     }
   };
 
@@ -223,9 +222,8 @@ function TeamProfile() {
             size="sm"
             className={` fw-semibold ${styles.btnDecline}`}
             onClick={handleDecline}
-             disabled={loadingAction}
           >
-             {loadingAction ? "Processing..." : declineLabel}
+            {declineLabel}
           </CustomButton>
 
           <CustomButton
@@ -233,9 +231,8 @@ function TeamProfile() {
             size="sm"
             className={`fw-semibold text-white ${styles.btnAccept}`}
             onClick={handleAccept}
-             disabled={loadingAction}
           >
-            {loadingAction ? "Processing..." : acceptLabel}
+            {acceptLabel}
           </CustomButton>
         </div>
       </div>

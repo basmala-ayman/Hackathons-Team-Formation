@@ -43,14 +43,11 @@ function RecommendedTeams() {
         await respondToInvitation(invitationId, "ACCEPT");
       }
       
-      toast.success("Team accepted successfully");
-      console.log("Team accepted successfully");
+      toast.success("Accepted successfully 🎉");
+      console.log("Accepted successfully");
     } catch (error) {
-      toast.error("Failed to Accept")
       console.error(error);
-    }finally {
-    setLoadingId(null);
-  }
+    }
   };
   // =========================
   // REJECT LOGIC
@@ -182,7 +179,6 @@ function RecommendedTeams() {
                       members={recommendation.members}
                       maxMembers={team.maxMembers}
                       acceptLabel={buttonLabel}
-                      isLoading={loadingId === recommendation.id}
                       onAccept={() =>
                         handleAccept({
                           isOwner,
@@ -199,7 +195,6 @@ function RecommendedTeams() {
                       //   })
                       // }
                       onView={() => handleViewTeam(recommendation.id)}
-                      
                     />
                   );
                 })}

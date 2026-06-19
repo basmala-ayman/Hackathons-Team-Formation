@@ -153,8 +153,8 @@ function Step1_TeamBasics({
           Hackathon Name <span className={styles.asterisk}>*</span>
         </label>
         <CreatableSelect
-          key={hackathonList.length}
-          options={hackathonList}
+           key={hackathonList.length}
+  options={hackathonList || []}
           styles={selectStyles}
           placeholder="Select or type a hackathon name"
           isSearchable={true}

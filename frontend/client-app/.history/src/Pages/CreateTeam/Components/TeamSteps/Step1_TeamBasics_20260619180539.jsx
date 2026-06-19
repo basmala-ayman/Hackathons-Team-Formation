@@ -154,7 +154,7 @@ function Step1_TeamBasics({
         </label>
         <CreatableSelect
           key={hackathonList.length}
-          options={hackathonList}
+          options={hackathonList || []}
           styles={selectStyles}
           placeholder="Select or type a hackathon name"
           isSearchable={true}

@@ -1,36 +1,18 @@
 import styles from "./TeamProfile.module.css";
-import toast from "react-hot-toast";
-import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { TeamIcon, CrownIcon } from "../../../assets/Icons";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import useRecommendationDetails from "../hooks/useRecommendationDetails";
-import { useAuth } from "../../../context/AuthContext/useAuth";
-import {
-  acceptRecommendation,
-  rejectRecommendation,
-  respondToInvitation,
-} from "../../../services/recommendationService";
+import { useAuth } from "../../context/AuthContext/useAuth";
+
 
 function TeamProfile() {
-  const [loadingAction, setLoadingAction] = useState(false); //for preventing multiple clicks on buttons
+  const { recommendationId } = useParams(); //get recommendation id from url
+    const { user } = useAuth();
+  const { teamData, loading, error } = useRecommendationDetails(recommendationId);
   const navigate = useNavigate();
 
-  const { recommendationId } = useParams(); //get recommendation id from url
-
-  //get recommended team details from api
-  const { teamData, loading, error } =
-    useRecommendationDetails(recommendationId);
-  console.log(teamData);
-
-  const { user } = useAuth();
-  const isOwner = teamData.targetTeam.ownerId === user?.id; //check if the logged in user is the owner or not
-  const currentUserInfo = teamData.recommendedMembers.find(
-    (member) => member.userId === user?.id,
-  ); //get the user's info (will be needed if he is not the owner)
-
-  const invitationId = currentUserInfo?.invitationId; //get the invitaion id that will be used in acceptance and rejection logic
 
   if (loading) {
     return (
@@ -63,6 +45,8 @@ function TeamProfile() {
     );
   }
 
+  const isOwner = teamData.ownerId === user?.id;
+
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
     ? "Accept Recommended Members"
@@ -71,48 +55,12 @@ function TeamProfile() {
     ? "Dismiss Recommendations"
     : "Decline Suggestion";
 
-  const handleAccept = async () => {
-    if (loadingAction) return;
-
-    try {
-      setLoadingAction(true);
-
-      if (isOwner) {
-        await acceptRecommendation(teamData.recommendationId);
-      } else {
-        await respondToInvitation(invitationId, "ACCEPT");
-      }
-      toast.success("Team accepted successfully");
-      setTimeout(() => {
-        navigate("/recommendedTeams");
-      }, 800);
-    } catch (error) {
-      toast.error("Failed to accept , Try again!");
-      console.error(error);
-    } finally {
-      setLoadingAction(false);
-    }
+  const handleAccept = () => {
+    //ADD ACCEPTANCE LOGIC
   };
 
-  const handleDecline = async () => {
-    if (loadingAction) return;
-    try {
-      setLoadingAction(true);
-      if (isOwner) {
-        await rejectRecommendation(teamData.recommendationId);
-      } else {
-        await respondToInvitation(invitationId, "REJECT");
-      }
-
-      toast.success("Rejected successfully");
-
-      navigate("/recommendedTeams");
-    } catch (error) {
-      toast.error("Failed to reject. Try again.");
-      console.error(error);
-    } finally {
-      setLoadingAction(false);
-    }
+  const handleDecline = () => {
+    //ADD REJECTION LOGIC
   };
 
   return (
@@ -146,9 +94,7 @@ function TeamProfile() {
         <p className={`mb-2 ${styles.hackathonLine}`}>
           {teamData.targetTeam.hackathon.title}
         </p>
-        <p className={`mb-5 ${styles.description}`}>
-          {teamData.targetTeam.description}
-        </p>
+        <p className={`mb-5 ${styles.description}`}>{teamData.targetTeam.description}</p>
 
         <div className="d-flex align-items-center gap-2 mb-4">
           <span>
@@ -203,8 +149,7 @@ function TeamProfile() {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <span className={styles.progressLabel}>Team Progress</span>
             <span className={`fw-bold ${styles.progressValue}`}>
-              {teamData.recommendedMembers.length}/
-              {teamData.targetTeam.maxMembers} Members
+              {teamData.recommendedMembers.length}/{teamData.targetTeam.maxMembers} Members
             </span>
           </div>
           <div className={styles.progressTrackLine}>
@@ -223,9 +168,8 @@ function TeamProfile() {
             size="sm"
             className={` fw-semibold ${styles.btnDecline}`}
             onClick={handleDecline}
-             disabled={loadingAction}
           >
-             {loadingAction ? "Processing..." : declineLabel}
+            {declineLabel}
           </CustomButton>
 
           <CustomButton
@@ -233,9 +177,8 @@ function TeamProfile() {
             size="sm"
             className={`fw-semibold text-white ${styles.btnAccept}`}
             onClick={handleAccept}
-             disabled={loadingAction}
           >
-            {loadingAction ? "Processing..." : acceptLabel}
+            {acceptLabel}
           </CustomButton>
         </div>
       </div>

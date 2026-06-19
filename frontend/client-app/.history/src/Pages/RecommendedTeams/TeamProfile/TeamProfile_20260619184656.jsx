@@ -225,7 +225,7 @@ function TeamProfile() {
             onClick={handleDecline}
              disabled={loadingAction}
           >
-             {loadingAction ? "Processing..." : declineLabel}
+            {declineLabel}
           </CustomButton>
 
           <CustomButton
@@ -235,7 +235,7 @@ function TeamProfile() {
             onClick={handleAccept}
              disabled={loadingAction}
           >
-            {loadingAction ? "Processing..." : acceptLabel}
+            {acceptLabel}
           </CustomButton>
         </div>
       </div>
