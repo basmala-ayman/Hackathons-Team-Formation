@@ -40,10 +40,15 @@ function TeamProfile() {
 }
   if (error || !teamData) {
     return (
-    <EmptyState message="Team not found!" />
+    <EmptyState message="No Teams found" />
   );
   }
-
+  
+  if (!teamData) {
+    return (
+      <div className="container py-5 text-center fs-3">Team not found!</div>
+    );
+  }
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner

@@ -30,10 +30,20 @@ function Explore() {
 }
   if (error) {
     return (
-    <EmptyState message="No hackathons found" />
+    <EmptyState message="No Teams found" />
   );
   }
-
+ 
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">No hackathons found</p>
+      </div>
+    );
+  }
   return (
     <div className={styles.pageBackground}>
       <Container className="my-5">

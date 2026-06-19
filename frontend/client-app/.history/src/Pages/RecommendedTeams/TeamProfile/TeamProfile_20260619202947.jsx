@@ -38,12 +38,41 @@ function TeamProfile() {
     <LoadingState message="Loading recommendations..." />
   );
 }
-  if (error || !teamData) {
+  if (error) {
     return (
-    <EmptyState message="Team not found!" />
+    <EmptyState message="No Teams found" />
   );
   }
-
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p
+          className="fs-3 fw-semibold"
+          style={{ color: "var(--color-primary-dark)" }}
+        >
+          Loading recommendations...
+        </p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">No Teams found</p>
+      </div>
+    );
+  }
+  if (!teamData) {
+    return (
+      <div className="container py-5 text-center fs-3">Team not found!</div>
+    );
+  }
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner

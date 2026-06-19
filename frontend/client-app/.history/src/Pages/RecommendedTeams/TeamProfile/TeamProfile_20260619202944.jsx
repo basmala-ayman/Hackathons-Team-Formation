@@ -33,17 +33,37 @@ function TeamProfile() {
 
   const invitationId = currentUserInfo?.invitationId; //get the invitaion id that will be used in acceptance and rejection logic
 
-   if (loading) {
-  return (
-    <LoadingState message="Loading recommendations..." />
-  );
-}
-  if (error || !teamData) {
+  
+  if (loading) {
     return (
-    <EmptyState message="Team not found!" />
-  );
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p
+          className="fs-3 fw-semibold"
+          style={{ color: "var(--color-primary-dark)" }}
+        >
+          Loading recommendations...
+        </p>
+      </div>
+    );
   }
-
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">No Teams found</p>
+      </div>
+    );
+  }
+  if (!teamData) {
+    return (
+      <div className="container py-5 text-center fs-3">Team not found!</div>
+    );
+  }
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
