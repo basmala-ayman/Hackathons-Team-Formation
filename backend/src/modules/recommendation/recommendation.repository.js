@@ -207,7 +207,10 @@ const findRecommendationFullDetails = (id) => {
             },
 
             airecommendationMembers: {
-                include: {
+                select: {
+                    invitationId: true,
+                    status: true,
+
                     user: {
                         select: {
                             id: true,

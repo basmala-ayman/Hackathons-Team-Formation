@@ -278,10 +278,11 @@
  *
  *       Includes:
  *       - Target team information
+ *       - team owner information
  *       - Hackathon information
  *       - Required skills
  *       - Recommended members
- *       - Member bios, roles, skills and profile pictures
+ *       - Member bios, roles, skills and profile pictures and invitation ids and status 
  *
  *     tags: [Recommendations]
  *     security:
@@ -313,6 +314,8 @@
  *                   teamName: "Eco Hackers"
  *                   description: "Building AI solutions for climate change"
  *                   maxMembers: 4
+ *                   ownerId: "uuid"
+ * 
  *
  *                   requiredSkills:
  *                     - "Node.js"
@@ -333,6 +336,8 @@
  *                       - "Node.js"
  *                       - "PostgreSQL"
  *                       - "Docker"
+ * 
+ *                     invitationId: null
  *                     invitationStatus: "PENDING"
  *
  *                   - userId: "uuid"
@@ -344,6 +349,8 @@
  *                       - "React"
  *                       - "TypeScript"
  *                       - "Next.js"
+ *                    
+ *                     invitationId: null
  *                     invitationStatus: "PENDING"
  *
  *       404:
