@@ -91,8 +91,13 @@ function RecommendedTeams() {
 }
   if (error) {
     return (
-    <EmptyState message="No Teams found" />
-  );
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">No Teams found</p>
+      </div>
+    );
   }
 
   return (

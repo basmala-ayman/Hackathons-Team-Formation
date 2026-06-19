@@ -415,7 +415,7 @@ export const ChevronIconDown = () => (
     viewBox="0 0 24 24"
     fill="none"
   >
-    <g clipPath="url(#clip0_1124_4881)">
+    <g clip-path="url(#clip0_1124_4881)">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -438,7 +438,7 @@ export const ChevronIconUp = () => (
     viewBox="0 0 24 24"
     fill="none"
   >
-    <g clipPath="url(#clip0_495_6538)">
+    <g clip-path="url(#clip0_495_6538)">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -549,7 +549,7 @@ export const TeamMeetIcon = ({ color = "#6B46C1", size = 24 }) => (
     viewBox="0 0 24 24"
     fill="none"
   >
-    <g clipPath="url(#clip0_1724_1330)">
+    <g clip-path="url(#clip0_1724_1330)">
       <path
         d="M1.87402 17.625C1.87402 18.3212 2.15059 18.9889 2.64287 19.4812C3.13515 19.9734 3.80283 20.25 4.49902 20.25C5.19522 20.25 5.8629 19.9734 6.35518 19.4812C6.84746 18.9889 7.12402 18.3212 7.12402 17.625C7.12402 16.9288 6.84746 16.2611 6.35518 15.7688C5.8629 15.2766 5.19522 15 4.49902 15C3.80283 15 3.13515 15.2766 2.64287 15.7688C2.15059 16.2611 1.87402 16.9288 1.87402 17.625Z"
         stroke={color}

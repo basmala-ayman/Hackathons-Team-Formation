@@ -1,5 +1,5 @@
 import styles from "./Explore.module.css";
-import { useState } from "react";
+import { useState} from "react";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
 import SearchBar from "../../shared/SearchBar/SearchBar";
 import FilterSideBar from "./Components/FilterSideBar/FilterSideBar";
@@ -7,12 +7,18 @@ import HackathonGrid from "./Components/HackathonGrid/HackathonGrid";
 import { FilterIcon } from "../../assets/Icons";
 import useHackathons from "./hooks/useHackathons";
 import useHackathonFilters from "./hooks/useHackathonFilters";
-import { LoadingState, EmptyState } from "../../shared/States";
+import { LoadingState,
+  EmptyState}
+
 
 function Explore() {
   const { hackathons, loading, error } = useHackathons();
-  const { filters, handleSearch, handleFilter, filteredHackathons } =
-    useHackathonFilters(hackathons);
+  const { 
+    filters, 
+    handleSearch, 
+    handleFilter, 
+    filteredHackathons 
+  } = useHackathonFilters(hackathons);
 
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
@@ -23,17 +29,32 @@ function Explore() {
     setOpenMobileFilter(false);
   };
 
-   if (loading) {
-  return (
-    <LoadingState message=" Loading Hackathons..." />
-  );
-}
-  if (error) {
+
+ if (loading) {
     return (
-    <EmptyState message="No hackathons found" />
-  );
+      <div 
+        className="d-flex justify-content-center align-items-center w-100" 
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold" style={{ color: "var(--color-primary-dark)" }}>
+          Loading Hackathons...
+        </p>
+      </div>
+    );
   }
 
+  if (error) {
+    return (
+      <div 
+        className="d-flex justify-content-center align-items-center w-100" 
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">
+          No hackathons found
+        </p>
+      </div>
+    );
+  }
   return (
     <div className={styles.pageBackground}>
       <Container className="my-5">
@@ -75,9 +96,7 @@ function Explore() {
                 <p className="fs-4 fw-medium mb-0">Filter</p>
               </div>
 
-              <h5 className="fs-2 fw-medium ms-3">
-                {hackathons.length} Hackathons found
-              </h5>
+              <h5 className="fs-2 fw-medium ms-3">{hackathons.length} Hackathons found</h5>
             </div>
             {/* <HackathonGrid hackathons={hackathons}></HackathonGrid> */}
             {filteredHackathons.length > 0 ? (

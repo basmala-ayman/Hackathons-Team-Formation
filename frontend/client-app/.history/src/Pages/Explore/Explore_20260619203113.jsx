@@ -25,15 +25,40 @@ function Explore() {
 
    if (loading) {
   return (
-    <LoadingState message=" Loading Hackathons..." />
+    <LoadingState message="Loading recommendations..." />
   );
 }
   if (error) {
     return (
-    <EmptyState message="No hackathons found" />
+    <EmptyState message="No Teams found" />
   );
   }
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p
+          className="fs-3 fw-semibold"
+          style={{ color: "var(--color-primary-dark)" }}
+        >
+          Loading Hackathons...
+        </p>
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center w-100"
+        style={{ minHeight: "40vh" }}
+      >
+        <p className="fs-3 fw-semibold text-secondary">No hackathons found</p>
+      </div>
+    );
+  }
   return (
     <div className={styles.pageBackground}>
       <Container className="my-5">

@@ -125,9 +125,6 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
             >
               <LinkedinIcon size={18} className="m-0" />
             </a>
-            <a href="#" className={styles.socialIconBtn}>
-              <TwitterIcon size={18} className="m-0" />
-            </a>
           </div>
         </div>
 
@@ -150,6 +147,7 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
             <div className={styles.infoItem}>
               <Mail size={16} className={styles.infoIcon} /> {user.email}
             </div>
+            {/* GitHub */}
             <div className={styles.infoItem}>
               <Link2 size={16} className={styles.infoIcon} />
               {user.githubUrl ? (
@@ -160,9 +158,22 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
                 <span className="text-muted">No GitHub link uploaded</span>
               )}
             </div>
+
+            {/*   LinkedIn  */}
             <div className={styles.infoItem}>
-              <Calendar size={16} className={styles.infoIcon} /> {user.joinedDate}
+              <Link2 size={16} className={styles.infoIcon} />
+              {user.linkedinUrl ? (
+                <a href={user.linkedinUrl.startsWith('http') ? user.linkedinUrl : `https://${user.linkedinUrl}`} target="_blank" rel="noreferrer" className={styles.profileLink}>
+                  {user.linkedinUrl}
+                </a>
+              ) : (
+                <span className="text-muted">No LinkedIn link uploaded</span>
+              )}
             </div>
+            {/* Joined Date */}
+            {/* <div className={styles.infoItem}>
+              <Calendar size={16} className={styles.infoIcon} /> {user.joinedDate}
+            </div> */}
           </div>
         </div>
 

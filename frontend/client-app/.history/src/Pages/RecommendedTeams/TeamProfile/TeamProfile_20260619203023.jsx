@@ -43,7 +43,12 @@ function TeamProfile() {
     <EmptyState message="Team not found!" />
   );
   }
-
+  
+  if (!teamData) {
+    return (
+      <div className="container py-5 text-center fs-3">Team not found!</div>
+    );
+  }
 
   // Custom Dynamic Text Options
   const acceptLabel = isOwner
