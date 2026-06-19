@@ -1,15 +1,12 @@
-// project.controller.js
 const projectService = require("./project.service");
 
 const getExploreProjects = async (req, res, next) => {
   try {
-    // Extracted safely because protect middleware guarantees user context presence
-    const authUserId = req.user?.id || req.user?.userId || req.user?._id;
+    const data = await projectService.getAllExploreProjects();
 
-    const data = await projectService.getAllExploreProjects(authUserId);
     res.status(200).json({
       success: true,
-      message: "All user projects fetched successfully",
+      message: "All projects fetched successfully",
       data
     });
   } catch (error) {
@@ -20,10 +17,16 @@ const getExploreProjects = async (req, res, next) => {
 const toggleInterest = async (req, res, next) => {
   try {
     const { projectId } = req.params;
-    const authUserId = req.user?.id || req.user?.userId || req.user?._id;
+    const authUserId =
+      req.user?.id ||
+      req.user?.userId ||
+      req.user?._id;
 
-    const result = await projectService.registerProjectInterest(projectId, authUserId);
-    
+    const result = await projectService.registerProjectInterest(
+      projectId,
+      authUserId
+    );
+
     res.status(200).json({
       success: true,
       message: "Interest successfully registered for this project",
