@@ -14,4 +14,13 @@ router.post("/round2/:teamId", matchingController.requestRound2);
 // GET /api/v1/matching/ai-status
 router.get("/ai-status", matchingController.getAIStatus);
 
+router.post("/trigger-hackathon", async (req, res) => {
+    try {
+        await matchingService.triggerHackathonMatching();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 module.exports = router;

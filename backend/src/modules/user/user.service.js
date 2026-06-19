@@ -185,7 +185,12 @@ const updateProfile = async (id, data) => {
   return getProfile(targetUserId);
 };
 
+const getUsersBasicList = async (currentUserId) => {
+  return userRepository.getUsersBasicList(currentUserId);
+};
+
 module.exports = {
   getProfile,
-  updateProfile
+  updateProfile,
+  getUsersBasicList
 };

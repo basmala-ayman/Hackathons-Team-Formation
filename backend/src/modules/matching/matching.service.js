@@ -60,8 +60,10 @@ const saveRecommendationsAndNotify = async ({
     hackathonTitle,
     roundNumber,
 }) => {
+    console.log(`📝 Saving ${convertedTeams.length} teams for request ${matchingRequestId}`);
     const recommendationRows = await Promise.all(
         convertedTeams.map(async (memberIds) => {
+            console.log(`📝 Enriching members: ${memberIds.length} members`);
             const enrichedMembers = await enrichMembers(memberIds);
             return {
                 matchingRequestId,

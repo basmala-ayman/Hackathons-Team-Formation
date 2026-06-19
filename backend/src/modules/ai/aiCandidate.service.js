@@ -84,6 +84,7 @@ const rehydrateIfNeeded = async () => {
 
 //here we prepare the candidate pool before calling the sync ai endpoint to make it is updated 
 const prepareHackathonCandidates = async (hackathonId) => {
+    console.log("🔍 Preparing candidates for hackathon:", hackathonId);
     const interests = await prisma.hackathonInterest.findMany({
         where: { hackathonId },
         include: {
@@ -96,10 +97,27 @@ const prepareHackathonCandidates = async (hackathonId) => {
         },
     });
 
+    console.log(`🔍 Found ${interests.length} interests`);
+    if (interests.length > 0) {
+        console.log('First interest:', JSON.stringify(interests[0], null, 2));
+    }
+
     const preparedMembers = [];
 
     for (const interest of interests) {
+        if (!interest) {
+            console.warn("⚠️ interest is null/undefined");
+            continue;
+        }
+        if (!interest.user) {
+            console.warn("⚠️ interest.user is null/undefined for interest:", interest);
+            continue;
+        }
         const user = interest.user;
+        if (!user) {
+            console.warn(`❌ Interest has no user! Interest:`, interest);
+            continue;
+        }
         const aiId = await getOrCreateAIId(user.id, "USER");
         const skills = user.skills.map((s) => s.skill.name);
         const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
@@ -132,17 +150,25 @@ const generateHackathonRecommendations = async ({
     await rehydrateIfNeeded();
 
     const candidates = await prepareHackathonCandidates(hackathonId);
+    console.log(`✅ Candidates prepared: ${candidates.length}`);
 
     // exclude already invited users (round 2)
     const filteredCandidates = candidates.filter(
         (c) => !excludeUserIds.includes(c.realUserId)
     );
 
+    console.log(`✅ Filtered candidates: ${filteredCandidates.length}`);
+
+
     const searchMemberIds = filteredCandidates.map((c) => c.aiId);
+    console.log(`✅ Search member IDs: ${searchMemberIds.length}`);
 
     // sync hackathon as a "project" entity to AI
     const aiProjectId = await getOrCreateAIId(hackathonAiEntityId, "PROJECT");
+    console.log(`✅ AI project ID: ${aiProjectId}`);
+
     await aiService.syncProject({ id: aiProjectId, tags });
+    console.log(`📤 Calling AI with teamSize: ${teamSize}, tags: ${tags}`);
 
     const result = await aiService.getRecommendations({
         projectId: aiProjectId,
@@ -151,6 +177,7 @@ const generateHackathonRecommendations = async ({
         teamSize,
         pinnedMemberIds,
     });
+    console.log(`✅ AI result:`, JSON.stringify(result, null, 2));
 
     // convert AI integer ids back to real UUIDs
     const convertedTeams = [];
@@ -162,7 +189,8 @@ const generateHackathonRecommendations = async ({
         }
         convertedTeams.push(realMembers);
     }
-
+    
+    console.log(`✅ Converted teams: ${convertedTeams.length}`);
     return convertedTeams;
 };
 
