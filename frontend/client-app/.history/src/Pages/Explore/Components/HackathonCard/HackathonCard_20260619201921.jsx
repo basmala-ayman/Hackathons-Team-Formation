@@ -130,7 +130,7 @@ function HackathonCard({ hackathon }) {
           {loading
             ? "Submitting..."
             : isInterested
-              ? "Interested"
+              ? "Interested ✓"
               : "I'm Interested"}
         </CustomButton>
       </div>

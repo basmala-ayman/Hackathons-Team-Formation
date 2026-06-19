@@ -125,13 +125,8 @@ function HackathonCard({ hackathon }) {
           size="sm"
           className="flex-fill rounded-4 w-100"
           onClick={handleInterest}
-          disabled={loading || isInterested}
         >
-          {loading
-            ? "Submitting..."
-            : isInterested
-              ? "Interested"
-              : "I'm Interested"}
+          {loading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

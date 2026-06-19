@@ -32,8 +32,8 @@ function HackathonCard({ hackathon }) {
     if (loading || isInterested) return; // prevent double click
     try {
       const response = await registerInterest(id);
-      setIsInterested(true);
       console.log(response.message);
+
       toast.success("Interest submitted");
     } catch (error) {
       const backendMessage = error.message;
@@ -125,13 +125,8 @@ function HackathonCard({ hackathon }) {
           size="sm"
           className="flex-fill rounded-4 w-100"
           onClick={handleInterest}
-          disabled={loading || isInterested}
         >
-          {loading
-            ? "Submitting..."
-            : isInterested
-              ? "Interested"
-              : "I'm Interested"}
+          {loading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import styles from "./HackathonCard.module.css";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import useHackathonInterest from "../../hooks/useHackathonInterest";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
 import defaultHackathonImg from "../../../../assets/defaultHackathonImg.png";
@@ -15,7 +14,6 @@ import {
 
 function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
-  const [isInterested, setIsInterested] = useState(false);
   const {
     id,
     title,
@@ -29,20 +27,18 @@ function HackathonCard({ hackathon }) {
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);
 
   const handleInterest = async () => {
-    if (loading || isInterested) return; // prevent double click
+    if (loading) return; // prevent double click
     try {
       const response = await registerInterest(id);
-      setIsInterested(true);
       console.log(response.message);
+
       toast.success("Interest submitted");
     } catch (error) {
-      const backendMessage = error.message;
-
-      if (backendMessage) {
-        toast.error(backendMessage);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
+     toast.error(
+      error.response?.data?.message ||
+      error.message ||
+      "Failed to register interest"
+    );
       console.log(error);
     }
   };
@@ -125,13 +121,8 @@ function HackathonCard({ hackathon }) {
           size="sm"
           className="flex-fill rounded-4 w-100"
           onClick={handleInterest}
-          disabled={loading || isInterested}
         >
-          {loading
-            ? "Submitting..."
-            : isInterested
-              ? "Interested"
-              : "I'm Interested"}
+          {loading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>
