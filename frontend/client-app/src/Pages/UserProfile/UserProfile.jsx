@@ -141,22 +141,22 @@ export default function UserProfile({ isOwner = true }) {
 
       const response = await updateUserProfile(finalPayload);
 
-      const responseData =  response?.data?.data || response?.data || response;
+      const responseData = response?.data?.data || response?.data || response;
       const profileData = responseData.profile || {};
 
       setValues(prev => ({
         ...prev,
-        ...payload,
         name: profileData.name || prev.name,
         bio: profileData.bio !== undefined ? profileData.bio : prev.bio,
-        githubUrl: profileData.githubUrl || payload.githubUrl || prev.githubUrl,
-        linkedinUrl: profileData.linkedinUrl || payload.linkedinUrl || prev.linkedinUrl,
+        githubUrl: profileData.githubUrl || prev.githubUrl,
+        linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
         avatar: profileData.profilePicture
-          ? `${BACKEND_URL}${profileData.profilePicture.startsWith('/') ? '' : '/'}${profileData.profilePicture}`
+          ? `${BACKEND_URL}${profileData.profilePicture.startsWith('/') ? '' : '/'}${profileData.profilePicture}?t=${new Date().getTime()}`
           : prev.avatar,
         skills: profileData.skills || prev.skills,
         techRoles: profileData.techRoles || prev.techRoles,
         intrestes: profileData.interests || prev.intrestes,
+        avatarFile: null
       }));
 
       setApiError(null);

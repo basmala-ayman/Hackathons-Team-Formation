@@ -90,6 +90,13 @@ export default function ProfileWizardModal({
     const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
     payload.append("name", nameToSubmit);
 
+    if (currentValues.githubUrl) {
+      payload.append("githubUrl", currentValues.githubUrl);
+    }
+    if (currentValues.linkedinUrl) {
+      payload.append("linkedinUrl", currentValues.linkedinUrl);
+    }
+
     const appendIfChanged = (key, value) => {
       if (value !== undefined && value !== null) {
         if (Array.isArray(value)) {
@@ -101,6 +108,7 @@ export default function ProfileWizardModal({
         }
       }
     };
+
     const rolesArray = currentValues.techRoles || [];
     const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
 
@@ -113,8 +121,13 @@ export default function ProfileWizardModal({
 
     cleanInterests.forEach(interest => payload.append("intrestes[]", interest));
 
-    if (currentValues.avatarFile instanceof File) payload.append("avatarFile", currentValues.avatarFile);
-    if (currentValues.resumeFile instanceof File) payload.append("resumeFile", currentValues.resumeFile);
+    if (currentValues.avatarFile instanceof File) {
+      payload.append("profilePicture", currentValues.avatarFile);
+    }
+
+    if (currentValues.resumeFile instanceof File) {
+      payload.append("resume", currentValues.resumeFile);
+    }
 
     return payload;
   };
@@ -123,8 +136,6 @@ export default function ProfileWizardModal({
     generatePayload(localValues, externalValues),
     [localValues, externalValues]
   );
-
-
 
 
 
