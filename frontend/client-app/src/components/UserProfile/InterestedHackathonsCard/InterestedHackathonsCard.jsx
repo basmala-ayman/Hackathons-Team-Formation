@@ -28,19 +28,18 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
       ) : (
         <div className={styles.hackathonsGrid}>
           {hackathons.map((hackathon) => {
-            const countString = hackathon.interestCount || "0/30";
-            const [current, max] = countString.split("/").map(Number);
-            const computedProgress = max > 0 ? (current / max) * 100 : 0;
-
+            const currentCount = hackathon.interestCount || 0;
+            const maxCount = 30;
+            const computedProgress = (currentCount / maxCount) * 100;
+            const countString = `${currentCount}/${maxCount}`;
             return (
               <div key={hackathon.id || hackathon.title} className={styles.hackathonMiniCard}>
                 <div className={styles.cardContent}>
-
                   <div className={styles.interestRow}>
                     <span className={styles.interestLabel}>
                       <Heart size={14} className={styles.heartIcon} /> Interest Level
                     </span>
-                    <span className={styles.interestValue}>{countString}</span>
+                    <span className={styles.interestValue}>{currentCount}/{maxCount}</span>
                   </div>
 
                   <div className={styles.progressTrack}>
