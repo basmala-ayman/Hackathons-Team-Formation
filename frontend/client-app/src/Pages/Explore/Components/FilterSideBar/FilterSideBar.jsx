@@ -1,5 +1,6 @@
 import styles from "./FIlterSideBar.module.css";
 import { FilterIcon } from "../../../../assets/Icons";
+import { HACKATHON_TAGS } from "../../../../Data/hackathonTags";
 import { useState } from "react";
 
 function FilterSideBar({ onFilterChange, activeFilters }) {
@@ -10,36 +11,7 @@ function FilterSideBar({ onFilterChange, activeFilters }) {
     {
       id: "tags",
       title: "Tags",
-      options: [
-        "AR/VR",
-        "Beginner Friendly",
-        "Blockchain",
-        "Communication",
-        "Cybersecurity",
-        "Databases",
-        "Design",
-        "DevOps",
-        "E-commerce/Retail",
-        "Education",
-        "Enterprise",
-        "Fintech",
-        "Gaming",
-        "Health",
-        "IoT",
-        "Lifehacks",
-        "Low/No Code",
-        "Machine Learning/AI",
-        "Mobile",
-        "Music/Art",
-        "Open Ended",
-        "Productivity",
-        "Quantum",
-        "Robotic Process Automation",
-        "Serverless",
-        "Social Good",
-        "Voice skills",
-        "Web",
-      ],
+      options: HACKATHON_TAGS,
     },
     // {
     //   id: "prizeAmount",

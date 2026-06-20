@@ -1,9 +1,11 @@
 import styles from "./FIlterSideBar.module.css";
 import { FilterIcon } from "../../../../assets/Icons";
+import { HACKATHON_TAGS } from "../../../../Data/hackathonTags";
+import { useState } from "react";
 
 function FilterSideBar({ onFilterChange, activeFilters }) {
   // Put this outside your component function!
-  const INITIAL_VISIBLE_COUNT = 5;
+  const INITIAL_VISIBLE_COUNT = 15;
   const [expandedSections, setExpandedSections] = useState({});
   const filterSections = [
     {
@@ -40,11 +42,11 @@ function FilterSideBar({ onFilterChange, activeFilters }) {
         "Web",
       ],
     },
-    {
-      id: "prizeAmount",
-      title: "Prize Amount",
-      options: ["Under $5k", "$5k-$10k", "$10k+"],
-    },
+    // {
+    //   id: "prizeAmount",
+    //   title: "Prize Amount",
+    //   options: ["Under $5k", "$5k-$10k", "$10k+"],
+    // },
   ];
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) => ({
@@ -67,19 +69,16 @@ function FilterSideBar({ onFilterChange, activeFilters }) {
       {filterSections.map((section, index) => {
         // Determine if this section is expanded
         const isExpanded = expandedSections[section.id];
-        
-        // Slice the options array to show either all or just the first few
-        const visibleOptions = isExpanded 
-          ? section.options 
+        const visibleOptions = isExpanded
+          ? section.options
           : section.options.slice(0, INITIAL_VISIBLE_COUNT);
 
-        // Check if we need the button at all
         const hasMoreOptions = section.options.length > INITIAL_VISIBLE_COUNT;
         return (
           <div key={section.id} className="mb-4">
             <h6 className="fw-bold fs-4 mb-3">{section.title}</h6>
             {/* inner loop */}
-            {section.options.map((option) => (
+            {visibleOptions.map((option) => (
               <div
                 className="mb-2 d-flex align-items-center gap-4"
                 key={option}
@@ -100,6 +99,15 @@ function FilterSideBar({ onFilterChange, activeFilters }) {
                 </label>
               </div>
             ))}
+            {hasMoreOptions && (
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="btn btn-link p-0 text-decoration-none mt-2 fs-4 fw-semibold"
+                style={{ color: "var(--color-primary-dark)" }}
+              >
+                {isExpanded ? "Show less" : `Show ${section.options.length - INITIAL_VISIBLE_COUNT} more`}
+              </button>
+            )}
             {index !== filterSections.length - 1 && (
               <hr className={`${styles.divider} mt-4 mb-0`} />
             )}
