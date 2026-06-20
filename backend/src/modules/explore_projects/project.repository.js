@@ -11,26 +11,16 @@ const exploreAllProjects = async () => {
         }
       },
 
-      hackathon: {
-        select: {
-          id: true,
-          title: true,
-          status: true
-        }
-      },
-
-     team: {
+    team: {
         include: {
-          hackathon: {        
+          hackathon: { 
             select: {
               id: true,
               title: true,
               status: true
             }
           },
-
           members: true,
-
           skills: {
             include: {
               skill: {
