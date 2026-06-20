@@ -16,6 +16,10 @@
   font-size: var(--fs-small);
 }
 
+.filterHeader span {
+  color:var(--color-text)
+}
+
 .filterList {
   list-style: none;
   padding: 0;

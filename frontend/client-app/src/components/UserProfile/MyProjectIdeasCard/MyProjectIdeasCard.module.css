@@ -206,3 +206,43 @@
   color: var(--color-gray);
   font-size: var(--fs-v-small);
 }
+
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 1px solid var(--color-dark-gray);
+}
+
+.paginationControls button {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px;
+  background-color: var(--color-white);
+  color: var(--color-dark-gray);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationControls button:hover:not(:disabled) {
+  background-color: var(--color-white);
+  border-color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
+}
+
+.paginationControls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: var(--color-light-gray);
+}
+
+.paginationControls span {
+  font-size: 0.9rem;
+  color: var(--color-dark-gray);
+  font-weight: 500;
+}

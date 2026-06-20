@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import rolesData from "../Data/roles.json";
 import skillsData from "../Data/skills.json";
+import { HACKATHON_TAGS } from "../Data/hackathonTags";
 
 export function useStaticData() {
   //get SKills and roles data
@@ -17,6 +18,14 @@ export function useStaticData() {
       value: value,
     }));
   }, []);
+
+  const hackathonOptions = useMemo(() => {
+    return HACKATHON_TAGS.map((tag) => ({
+      label: tag,
+      value: tag.toLowerCase().replace(/[\s/]+/g, "_"),
+    }));
+  }, []);
+
   //to display the key not the value of roles and skills data when needed
   const reverseRolesMap = useMemo(() => {
     const map = {};
@@ -38,5 +47,6 @@ export function useStaticData() {
     skillsOptions,
     reverseRolesMap,
     reverseSkillsMap,
+    hackathonOptions,
   };
 }
