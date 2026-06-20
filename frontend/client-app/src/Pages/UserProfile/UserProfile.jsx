@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Container, Spinner, Alert } from "react-bootstrap";
 import { useFormHandler } from "../../hooks/useFormHandler";
 import SkillsExpertiseCard from "../../components/UserProfile/SkillsExpertiseCard/SkillsExpertiseCard";
@@ -11,29 +11,30 @@ import { getUserProfile, updateUserProfile } from "../../services/userService";
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
+const defaultProfileData = {
+  avatar: "",
+  avatarFile: null,
+  name: "",
+  username: "@user",
+  bio: "No bio added yet.",
+  email: "",
+  website: "",
+  joinedDate: "Joined recently",
+  skills: [],
+  techRoles: [],
+  intrestes: [],
+  linkedinUrl: "",
+  githubUrl: "",
+  resumeUrl: "",
+  resumeFile: null
+};
+
 export default function UserProfile({ isOwner = true }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [wizardMode, setWizardMode] = useState("full");
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [completionPercentage, setCompletionPercentage] = useState(0);
-
-  const defaultProfileData = {
-    avatar: "",
-    avatarFile: null,
-    name: "",
-    username: "@user",
-    bio: "No bio added yet.",
-    email: "",
-    website: "",
-    joinedDate: "Joined recently",
-    skills: [],
-    techRoles: [],
-    intrestes: [],
-    linkedinUrl: "",
-    githubUrl: "",
-    resumeUrl: "",
-    resumeFile: null
-  };
 
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
     defaultProfileData,
@@ -106,7 +107,7 @@ export default function UserProfile({ isOwner = true }) {
     }
   }, [isOwner, setValues]);
 
-  const handleProfileUpdate = async (payload, isFinal = false) => {
+  const handleProfileUpdate = useCallback(async (payload, isFinal = false) => {
     try {
       setApiError(null);
 
@@ -141,22 +142,22 @@ export default function UserProfile({ isOwner = true }) {
 
       const response = await updateUserProfile(finalPayload);
 
-      const responseData =  response?.data?.data || response?.data || response;
+      const responseData = response?.data?.data || response?.data || response;
       const profileData = responseData.profile || {};
 
       setValues(prev => ({
         ...prev,
-        ...payload,
         name: profileData.name || prev.name,
         bio: profileData.bio !== undefined ? profileData.bio : prev.bio,
-        githubUrl: profileData.githubUrl || payload.githubUrl || prev.githubUrl,
-        linkedinUrl: profileData.linkedinUrl || payload.linkedinUrl || prev.linkedinUrl,
+        githubUrl: profileData.githubUrl || prev.githubUrl,
+        linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
         avatar: profileData.profilePicture
-          ? `${BACKEND_URL}${profileData.profilePicture.startsWith('/') ? '' : '/'}${profileData.profilePicture}`
+          ? `${BACKEND_URL}${profileData.profilePicture}?t=${new Date().getTime()}`
           : prev.avatar,
         skills: profileData.skills || prev.skills,
         techRoles: profileData.techRoles || prev.techRoles,
         intrestes: profileData.interests || prev.intrestes,
+        avatarFile: null
       }));
 
       setApiError(null);
@@ -166,8 +167,10 @@ export default function UserProfile({ isOwner = true }) {
       console.error("Error updating profile:", err);
       throw err;
     }
-  };
+  }, [values, setValues]);
 
+
+  // When Loading
   if (isLoading) {
     return (
       <Container className="py-5 text-center">
@@ -187,9 +190,12 @@ export default function UserProfile({ isOwner = true }) {
 
       <ProfileHeaderCard
         user={values}
-        onEditClick={isOwner ? () => setIsWizardOpen(true) : null}
         setFormData={isOwner ? setValues : null}
         isOwner={isOwner}
+        onEditClick={isOwner ? () => {
+          setWizardMode("full");
+          setIsWizardOpen(true);
+        } : null}
       />
 
       {isOwner && (
@@ -202,6 +208,7 @@ export default function UserProfile({ isOwner = true }) {
           errors={errors}
           setErrors={setErrors}
           onSave={handleProfileUpdate}
+          mode={wizardMode}
         />
       )}
 
@@ -209,8 +216,11 @@ export default function UserProfile({ isOwner = true }) {
         skills={values.skills || []}
         roles={Array.isArray(values.techRoles) ? values.techRoles : (values.techRoles ? [values.techRoles] : [])}
         interests={values.interests || values.intrestes || []}
-        onAddSkillClick={() => setIsWizardOpen(true)}
         isOwner={isOwner}
+        onAddSkillClick={() => {
+          setWizardMode("skillsOnly");
+          setIsWizardOpen(true);
+        }}
       />
       <InterestedHackathonsCard hackathons={values.hackathonInterests || []} />
       <MyProjectIdeasCard projects={values.ownedProjects || []} userAvatar={values.avatar} />

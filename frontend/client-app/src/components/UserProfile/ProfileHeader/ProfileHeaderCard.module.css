@@ -97,12 +97,15 @@
   max-width: 650px;
 }
 
-.infoItem{
+.infoItem {
   font-size: var(--fs-v-small);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .profileLink {
-  color: var(--color-dark-gray);
+  color: var(--color-text);
   text-decoration: none;
   transition: color 0.2s ease;
 }

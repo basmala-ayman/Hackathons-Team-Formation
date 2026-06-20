@@ -6,7 +6,7 @@ const FILTER_CATEGORIES = [
   { id: "all", label: "All Notifications", count: 8, icon: <Bell size={18} /> },
   { id: "requests", label: "Team Requests", count: 2, icon: <Users size={18} /> },
   { id: "accepted", label: "Accepted", count: 1, icon: <CheckCircle size={18} /> },
-  { id: "messages", label: "Messages", count: 1, icon: <MessageSquare size={18} /> },
+  // { id: "messages", label: "Messages", count: 1, icon: <MessageSquare size={18} /> },
 ];
 
 export default function NotificationFilter({ activeFilter, onFilterChange }) {

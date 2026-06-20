@@ -15,11 +15,11 @@ export default function NotificationList({ filter }) {
     setLoading(true);
     getMyNotifications(1, 20)
       .then((res) => {
-        setNotifications(res.data || []);
+        setNotifications(res.notifications || []);
       })
       .catch((err) => console.error("Error fetching:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [filter]);
 
   const handleMarkAsRead = async (id) => {
     try {

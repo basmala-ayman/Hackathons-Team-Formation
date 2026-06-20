@@ -5,9 +5,9 @@ import { CheckIcon, XIcon, ElectricIcon } from "../../../../assets/Icons";
 
 
 
-function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOptions , skillsOptions , reverseRolesMap , reverseSkillsMap }) {
- 
- 
+function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev, roleOptions, skillsOptions, reverseRolesMap, reverseSkillsMap }) {
+
+
 
   const handleAddValue = (field, selectedValue) => {
     if (
@@ -29,7 +29,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOpti
     });
   };
 
- 
+
 
   const selectStyles = {
     control: (base) => ({
@@ -70,7 +70,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOpti
           styles={selectStyles}
           placeholder="Search roles..."
 
-          //   value={null}
+        //   value={null}
         />
       </div>
 
@@ -87,7 +87,7 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOpti
           ignoreAccents={false}
           ignoreCase={true}
           maxMenuHeight={300}
-          // value={null}
+        // value={null}
         />
       </div>
 
@@ -153,9 +153,9 @@ function Step3_RequiredSkills({ formData, setFormData, onNext, onPrev , roleOpti
             <button
               key={popSkill}
               className={styles.popularChip}
-              //   onClick={() =>
-              //     handleAddSkill({ value: popSkill, label: popSkill })
-              //   }
+            //   onClick={() =>
+            //     handleAddSkill({ value: popSkill, label: popSkill })
+            //   }
             >
               #{popSkill}
             </button>

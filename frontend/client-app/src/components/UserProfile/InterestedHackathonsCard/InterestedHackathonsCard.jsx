@@ -58,7 +58,7 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
                     </div>
                     <div className={styles.metaItem}>
                       <DollarSign size={15} className={styles.metaIcon} />
-                      <span className={styles.prizeText}>Prizes available</span>
+                      <span className={styles.prizeText}>{hackathon.prizeAmount ? `$${hackathon.prizeAmount.toLocaleString()}` : "Prizes available"}</span>
                     </div>
                   </div>
 

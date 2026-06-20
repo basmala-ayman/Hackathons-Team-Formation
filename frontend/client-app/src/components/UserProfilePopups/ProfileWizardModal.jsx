@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Modal, Alert } from "react-bootstrap";
 import { X } from "lucide-react";
 import styles from "./ProfileWizardModal.module.css";
@@ -8,187 +8,143 @@ import { useAuth } from "../../context/AuthContext/useAuth.js";
 import Step1Skills from "./steps/Step1Skills.jsx";
 import Step2Interests from "./steps/Step2Interests";
 import Step4Final from "./steps/Step4Final.jsx";
-import SuccessPopup from "./Success&WarningPopups/SuccessPopup.jsx";
+import SuccessPopup from "./successModal/SuccessPopup.jsx";
 
-export default function ProfileWizardModal({
-  show,
-  handleClose,
-  values: externalValues,
-  setValues: setExternalValues,
-  errors,
-  setErrors,
-  onSave
-}) {
+const cleanAndMapToEnum = (text, type) => {
+  if (!text) return "";
+  let normalized = text.toUpperCase().trim();
+  if (type === "role") {
+    if (normalized.includes("FRONTEND")) return "FRONTEND";
+    if (normalized.includes("BACKEND")) return "BACKEND";
+    if (normalized.includes("FULL STACK") || normalized.includes("FULLSTACK")) return "FULLSTACK";
+    if (normalized.includes("DESIGNER") || normalized.includes("UI")) return "DESIGNER";
+    if (normalized.includes("DEVOPS")) return "DEVOPS";
+  }
+  if (type === "interest") {
+    const validInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
+    if (validInterests.includes(normalized)) return normalized;
+    return null;
+  }
+  return normalized.replace(/[\s/-]+/g, "_");
+};
+
+const generatePayload = (currentValues, originalValues, user) => {
+  const payload = new FormData();
+  const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
+  payload.append("name", nameToSubmit);
+
+  if (currentValues.githubUrl) payload.append("githubUrl", currentValues.githubUrl);
+  if (currentValues.linkedinUrl) payload.append("linkedinUrl", currentValues.linkedinUrl);
+
+
+  const appendIfChanged = (key, value) => {
+    if (value !== undefined && value !== null) {
+      if (Array.isArray(value)) {
+        value.forEach(item => payload.append(`${key}[]`, item));
+      } else {
+        payload.append(key, value);
+      }
+    }
+  };
+
+  const rolesArray = currentValues.techRoles || [];
+  const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
+  const interestsArray = currentValues.interests || currentValues.intrestes || [];
+  const cleanInterests = interestsArray.map(i => cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest")).filter(Boolean);
+
+  appendIfChanged("skills", currentValues.skills);
+  appendIfChanged("bio", currentValues.bio);
+  appendIfChanged("techRoles", cleanRoles);
+  cleanInterests.forEach(interest => payload.append("intrestes[]", interest));
+
+  if (currentValues.avatarFile instanceof File) {
+    payload.append("profilePicture", currentValues.avatarFile);
+  }
+  if (currentValues.resumeFile instanceof File) payload.append("resume", currentValues.resumeFile);
+  return payload;
+};
+
+export default React.memo(function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeAction, setActiveAction] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
-  const { user } = useAuth();
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
+  const { user } = useAuth();
+  const isSkillsOnly = mode === "skillsOnly";
 
   useEffect(() => {
     if (show) {
       setCurrentStep(1);
       setShowSuccessScreen(false);
       setLocalValues({ ...externalValues });
+      setErrors({});
     }
-  }, [show, externalValues]);
+  }, [show, externalValues, setErrors]);
 
-  const updateLocalValuesWithTracking = (updater) => {
-    setLocalValues(updater);
-  };
+  const updateLocalValuesWithTracking = useCallback((updater) => {
+    setLocalValues((prev) => typeof updater === "function" ? updater(prev) : { ...prev, ...updater });
+  }, []);
 
-  const handleLocalChange = (e) => {
+  const handleLocalChange = useCallback((e) => {
     const { name, value } = e.target;
-    setLocalValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    setLocalValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
-  const validateStep1 = () => {
+  const validateStep1 = useCallback(() => {
     const step1Errors = {};
-    if (!localValues.skills || localValues.skills.length === 0) {
-      step1Errors.skills = "At least one skill is required.";
-    }
-    if (!localValues.bio || !localValues.bio.trim()) {
-      step1Errors.bio = "Bio is required.";
-    }
+    if (!localValues.skills || localValues.skills.length === 0) step1Errors.skills = "At least one skill is required.";
+    if (!localValues.techRoles || localValues.techRoles.length === 0) step1Errors.techRoles = "At least one role is required.";
+
     if (Object.keys(step1Errors).length > 0) {
       setErrors(step1Errors);
       return false;
     }
+    setErrors({});
     return true;
-  };
+  }, [localValues, setErrors]);
 
-  const cleanAndMapToEnum = (text, type) => {
-    if (!text) return "";
-    let normalized = text.toUpperCase().trim();
+  const handleFinish = async (actionType) => {
+    if (currentStep === 1 && !validateStep1()) return;
 
-    if (type === "role") {
-      if (normalized.includes("FRONTEND")) return "FRONTEND";
-      if (normalized.includes("BACKEND")) return "BACKEND";
-      if (normalized.includes("FULL STACK") || normalized.includes("FULLSTACK")) return "FULLSTACK";
-      if (normalized.includes("DESIGNER") || normalized.includes("UI")) return "DESIGNER";
-      if (normalized.includes("DEVOPS")) return "DEVOPS";
-    }
-
-    if (type === "interest") {
-      const validInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
-
-      if (validInterests.includes(normalized)) return normalized;
-
-      return null;
-    }
-
-    return normalized.replace(/[\s/-]+/g, "_");
-  };
-
-
-
-  const generatePayload = (currentValues, originalValues) => {
-    const payload = new FormData();
-    const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
-    payload.append("name", nameToSubmit);
-
-    const appendIfChanged = (key, value) => {
-      if (value !== undefined && value !== null) {
-        if (Array.isArray(value)) {
-          value.forEach(item => {
-            payload.append(`${key}[]`, item);
-          });
-        } else {
-          payload.append(key, value);
-        }
-      }
-    };
-    const rolesArray = currentValues.techRoles || [];
-    const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
-
-    const interestsArray = currentValues.interests || currentValues.intrestes || [];
-    const cleanInterests = interestsArray.map(i => cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest")).filter(Boolean);
-
-    appendIfChanged("skills", currentValues.skills);
-    appendIfChanged("bio", currentValues.bio);
-    appendIfChanged("techRoles", cleanRoles);
-
-    cleanInterests.forEach(interest => payload.append("intrestes[]", interest));
-
-    if (currentValues.avatarFile instanceof File) payload.append("avatarFile", currentValues.avatarFile);
-    if (currentValues.resumeFile instanceof File) payload.append("resumeFile", currentValues.resumeFile);
-
-    return payload;
-  };
-
-  const payload = useMemo(() =>
-    generatePayload(localValues, externalValues),
-    [localValues, externalValues]
-  );
-
-
-
-
-
-  const handleModalClose = () => {
-    setCurrentStep(1);
-    setShowSuccessScreen(false);
+    setActiveAction(actionType);
     setErrors({});
-    handleClose();
-  };
-
-
-  const handleFinish = async () => {
-    setIsSubmitting(true);
-    setErrors({});
-
     try {
-      const finalPayload = generatePayload(localValues, externalValues);
+      const finalPayload = generatePayload(localValues, externalValues, user);
       await onSave(finalPayload, true);
       setExternalValues((prev) => ({ ...prev, ...localValues }));
       setShowSuccessScreen(true);
-      setCurrentStep("success");
     } catch (error) {
-      console.error("Profile validation block exception:", error);
-      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred while saving your profile.";
+      const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred.";
       setErrors((prev) => ({ ...prev, apiError: errorMessage }));
     } finally {
-      setIsSubmitting(false);
+      setActiveAction(null);
     }
   };
 
   const handleNext = async () => {
     if (currentStep === 1 && !validateStep1()) return;
-    if (currentStep === 3) {
-      await handleFinish();
-    } else {
-      // setCurrentStep((prev) => prev + 1);
-      setTimeout(() => setCurrentStep((prev) => prev + 1), 0);
-    }
+    if (currentStep === 3 || isSkillsOnly) await handleFinish('next');
+    else setCurrentStep((prev) => prev + 1);
   };
 
-
-  const handleBack = () => {
-    setCurrentStep((prev) => prev - 1);
-  };
-
-  const handleTabClick = (targetStep) => {
-    if (isSubmitting || showSuccessScreen) return;
-    if (currentStep === 1 && targetStep > 1) {
-      if (!validateStep1()) return;
-    }
-    setCurrentStep(targetStep);
+  const handleModalClose = () => {
+    handleClose();
+    setTimeout(() => {
+      setCurrentStep(1);
+      setShowSuccessScreen(false);
+      setErrors({});
+      setActiveAction(null);
+    }, 300);
   };
 
   return (
-    <Modal show={show || showSuccessScreen} onHide={handleModalClose} centered size="lg" className={styles.wizardModal}>
-      {typeof currentStep === "number" && !showSuccessScreen && (
+    <Modal show={show || showSuccessScreen} onHide={showSuccessScreen ? null : handleModalClose}
+      backdrop={showSuccessScreen ? "static" : true} centered size="lg" className={styles.wizardModal}>
+      {typeof currentStep === "number" && !showSuccessScreen && !isSkillsOnly && (
         <div className={styles.wizardHeaderContainer}>
           <div className="d-flex w-100">
             {[1, 2, 3].map((step) => (
-              <div
-                key={step}
-                onClick={() => handleTabClick(step)}
-                className={`${styles.stepTab} ${currentStep === step ? styles.activeTab : ""} ${styles.clickableTab}`}
-              >
+              <div key={step} className={`${styles.stepTab} ${currentStep === step ? styles.activeTab : ""}`}>
                 Step {step}{step === 1 ? "*" : ""}
               </div>
             ))}
@@ -197,49 +153,39 @@ export default function ProfileWizardModal({
       )}
 
       <Modal.Body className="p-5">
-        {errors.apiError && (
-          <Alert variant="danger" className="mb-4">
-            {errors.apiError}
-          </Alert>
-        )}
+        {errors.apiError && <Alert variant="danger" className="mb-4">{errors.apiError}</Alert>}
 
-        {!showSuccessScreen && currentStep === 1 && (
-          <Step1Skills formData={localValues} setFormData={updateLocalValuesWithTracking} errors={errors} setErrors={setErrors} />
-        )}
-        {!showSuccessScreen && currentStep === 2 && (
-          <Step2Interests formData={localValues} setFormData={updateLocalValuesWithTracking} />
-        )}
-        {!showSuccessScreen && currentStep === 3 && (
-          <Step4Final formData={localValues} setFormData={updateLocalValuesWithTracking} handleChange={handleLocalChange} />
-        )}
+        {showSuccessScreen ? (
+          <SuccessPopup handleClose={handleModalClose} />
+        ) : (
+          <>
+            {currentStep === 1 && <Step1Skills formData={localValues} setFormData={updateLocalValuesWithTracking} errors={errors} setErrors={setErrors} mode={mode} />}
+            {currentStep === 2 && <Step2Interests formData={localValues} setFormData={updateLocalValuesWithTracking} />}
+            {currentStep === 3 && <Step4Final formData={localValues} setFormData={updateLocalValuesWithTracking} handleChange={handleLocalChange} />}
 
-        {showSuccessScreen && <SuccessPopup handleClose={handleModalClose} />}
-
-        {typeof currentStep === "number" && !showSuccessScreen && (
-          <div className="d-flex justify-content-between align-items-center mt-5">
-            {currentStep > 1 ? (
-              <CustomButton variant="secondary" size="sm" onClick={handleBack}>
-                &larr; Back
-              </CustomButton>
-            ) : <div />}
-
-            <div className="d-flex gap-3">
-              {currentStep > 1 && (
-                <CustomButton variant="secondary" size="sm" onClick={() => handleClose}>
-                  Skip
+            <div className="d-flex justify-content-between align-items-center mt-5">
+              {currentStep > 1 ? (
+                <CustomButton variant="secondary" size="sm" onClick={() => setCurrentStep(p => p - 1)}>
+                  &larr; Back
                 </CustomButton>
-              )}
-              <CustomButton variant="primary" size="sm" onClick={handleNext} disabled={isSubmitting}>
-                {currentStep === 3 ? (isSubmitting ? "Saving..." : "Save") : "Next Step"}
-              </CustomButton>
+              ) : <div />}
+
+              <div className="d-flex gap-3">
+                {!isSkillsOnly && currentStep !== 3 && (
+                  <CustomButton variant="secondary" size="sm" onClick={() => handleFinish('save')} disabled={!!activeAction}>
+                    {activeAction === 'save' ? "Saving..." : "Save"}
+                  </CustomButton>
+                )}
+                <CustomButton variant="primary" size="sm" onClick={handleNext} disabled={!!activeAction}>
+                  {activeAction === 'next' ? "Saving..." : (isSkillsOnly || currentStep === 3) ? "Save" : "Next Step"}
+                </CustomButton>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </Modal.Body>
-
-      <button onClick={handleModalClose} className={styles.modalCloseBtn} aria-label="Close">
-        <X size={20} />
-      </button>
+      <button onClick={handleModalClose} className={styles.modalCloseBtn}><X size={20} /></button>
     </Modal>
   );
 }
+)

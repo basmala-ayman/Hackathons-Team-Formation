@@ -16,6 +16,7 @@ function Explore() {
 
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
+
   const handleOpenedFilters = () => {
     setOpenMobileFilter(true);
   };
@@ -23,15 +24,15 @@ function Explore() {
     setOpenMobileFilter(false);
   };
 
-   if (loading) {
-  return (
-    <LoadingState message=" Loading Hackathons..." />
-  );
-}
+  if (loading) {
+    return (
+      <LoadingState message=" Loading Hackathons..." />
+    );
+  }
   if (error) {
     return (
-    <EmptyState message="No hackathons found" />
-  );
+      <EmptyState message="No hackathons found" />
+    );
   }
 
   return (

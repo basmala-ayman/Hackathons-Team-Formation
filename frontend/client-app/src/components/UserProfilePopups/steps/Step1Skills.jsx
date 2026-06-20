@@ -2,31 +2,43 @@ import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
 import { X, ChevronDown } from "lucide-react";
 import styles from "./steps.module.css";
+import { useStaticData } from "../../../hooks/useStaticData.js";
 
-export default function Step1Skills({ formData, setFormData, errors, setErrors }) {
+export default function Step1Skills({ formData, setFormData, errors, setErrors, mode = "full" }) {
+  const { roleOptions, skillsOptions } = useStaticData();
   const [skillInput, setSkillInput] = useState("");
   const [roleInput, setRoleInput] = useState("");
   const [showSkillDropdown, setShowSkillDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
-  const allAvailableSkills = ["React", "Typescript", "Javascript", "Vuejs", "Angular", "C++", "Go", "Leadership", "Communication", "Teamwork"];
-  const roles = ["Frontend Developer", "Backend Developer", "Full Stack Developer", "UI/UX Designer", "DevOps Engineer"];
+  const allAvailableSkills = skillsOptions.map(s => s.label);
+  const roles = roleOptions.map(r => r.label);
+  const hackathonInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
 
   const handleBioChange = (e) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, bio: value }));
-    if (errors.bio && value.trim()) setErrors((prev) => ({ ...prev, bio: null }));
   };
 
   const addTag = (value, list, key) => {
     if (list.includes(value) && !(formData[key] || []).includes(value)) {
       setFormData((prev) => ({ ...prev, [key]: [...(prev[key] || []), value] }));
-      if (errors[key]) setErrors((prev) => ({ ...prev, [key]: null }));
+      if (errors[key]) {
+        setErrors((prev) => ({ ...prev, [key]: null }));
+      }
     }
   };
 
   const removeTag = (value, key) => {
     setFormData((prev) => ({ ...prev, [key]: (prev[key] || []).filter((item) => item !== value) }));
+  };
+
+  const toggleInterest = (interest) => {
+    const current = formData.intrestes || [];
+    const updated = current.includes(interest)
+      ? current.filter((i) => i !== interest)
+      : [...current, interest];
+    setFormData((prev) => ({ ...prev, intrestes: updated }));
   };
 
   return (
@@ -142,21 +154,45 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors }
         </div>
       </Form.Group>
 
+      {/* --- Hackathon Interests Section --- */}
+      {mode === 'skillsOnly' && (
+        <Form.Group className="mb-4">
+          <Form.Label className={styles.formLabel}>Hackathon Interests</Form.Label>
+          <div className="d-flex flex-wrap gap-2 mt-2">
+            {hackathonInterests.map((interest) => {
+              const isSelected = (formData.intrestes || []).includes(interest);
+              return (
+                <Badge
+                  key={interest}
+                  pill
+                  onClick={() => toggleInterest(interest)}
+                  className={`${styles.interestTag} ${isSelected ? styles.tagSelected : ""}`}
+                  style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.6 }}
+                >
+                  {interest}
+                </Badge>
+              );
+            })}
+          </div>
+        </Form.Group>
+      )}
+
       {/* --- Bio --- */}
-      <Form.Group className="mb-3">
-        <Form.Label className={styles.formLabel}>Bio <span className="text-danger">*</span></Form.Label>
-        <Form.Control
-          as="textarea"
-          className={`${styles.inputControl} ${errors.bio ? 'is-invalid' : ''}`}
-          rows={4}
-          placeholder="Tell us about yourself..."
-          value={formData.bio || ""}
-          onChange={handleBioChange}
-          maxLength={500}
-        />
-        {errors.bio && <div className="text-danger mt-1">{errors.bio}</div>}
-        <span className={styles.hintText}>{(formData.bio || "").length}/500 characters</span>
-      </Form.Group>
+      {mode === "full" && (
+        <Form.Group className="mb-3">
+          <Form.Label className={styles.formLabel}>Bio</Form.Label>
+          <Form.Control
+            as="textarea"
+            className={`${styles.inputControl} ${errors.bio ? 'is-invalid' : ''}`}
+            rows={4}
+            placeholder="Tell us about yourself..."
+            value={formData.bio || ""}
+            onChange={handleBioChange}
+            maxLength={500}
+          />
+          <span className={styles.hintText}>{(formData.bio || "").length}/500 characters</span>
+        </Form.Group>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Badge } from "react-bootstrap";
 import { Code2 } from "lucide-react";
 import styles from "./SkillsExpertiseCard.module.css";
 
-export default function SkillsExpertiseCard({ skills = [], roles = [], interests = [], onAddSkillClick, isOwner }) {
+export default React.memo(function SkillsExpertiseCard({ skills = [], roles = [], interests = [], onAddSkillClick, isOwner }) {
 
   return (
     <div className={styles.skillsMainCard}>
@@ -61,4 +61,4 @@ export default function SkillsExpertiseCard({ skills = [], roles = [], interests
     </div>
 
   )
-}
+})

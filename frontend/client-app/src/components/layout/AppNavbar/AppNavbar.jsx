@@ -33,7 +33,7 @@ function AppNavbar({ isLoggedIn, onLogout }) {
               >
                 Create a team
               </Nav.Link>
-             
+
               <Nav.Link
                 as={Link}
                 to="/explore-Projects"
