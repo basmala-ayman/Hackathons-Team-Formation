@@ -3,11 +3,9 @@ import ProjectCard from "./ProjectCard/ProjectCard";
 import styles from "./DiscoverProjects.module.css";
 import { useExploreProjects } from "./hooks/useExploreProjects";
 import { LoadingState, EmptyState } from "../../shared/States";
-import { formatDate } from "../../utils/formateDate";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log(projects)
 
   const handleInterestToggle = (projectId) => {
     //Add to interests logic
@@ -45,20 +43,14 @@ function DiscoverProjects() {
             <ProjectCard
               title={project.title}
               description={project.description}
-              hackathonName={project.hackathonTitle}
-              createdAt={formatDate(project.createdAt)}
-              maxTeamSize={project.totalTeamSize}
-              currentTeamSize={project.totalTeamMembersCount}
-              interestedCount={project.totalInterestsCount}
-              skills={project.requiredSkills}
-              roles={project.requiredRoles}
-              creator={{
-                name: project.creatorName,
-                avatarUrl: project.creatorPicture,
-                role:project.creatorRole,
-              }}
+              hackathonName={project.hackathonName}
+              // dateRange={project.dateRange}
+              maxTeamSize={project.totalTeamMembersCount}
+              interestedCount={project.v}
+              skills={project.skills}
+              roles={project.roles}
+              creator={project.creator}
               onInterestToggle={() => handleInterestToggle(project.id)}
-              isInterested={project.isInterested}
             ></ProjectCard>
           ))}
         </div>

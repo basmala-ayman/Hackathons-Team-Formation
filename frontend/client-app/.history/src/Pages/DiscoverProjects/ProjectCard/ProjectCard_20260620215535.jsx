@@ -18,13 +18,13 @@ function ProjectCard({
   hackathonName,
   createdAt,
   maxTeamSize = 4,
-  currentTeamSize = 0,
+  currentTeamSize=0,
   interestedCount = 0,
   skills = [],
   roles = [],
   creator,
-  onInterestToggle,
-  isInterested,
+    onInterestToggle,
+  isInterested
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -41,22 +41,24 @@ function ProjectCard({
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
-    if (!titleElement || !descElement) return;
+    if (titleElement && descElement) {
       // is  real hight > the height that user see
       const isTitleClipped =
         titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
+      if (
         isTitleClipped ||
         isDescClipped ||
         hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+        hasHiddenRoles
+      ) {
+        setCanExpand(true);
+      } else {
+        setCanExpand(false);
+      }
     }
-  , [title, description, skills, roles]);
+  }, [title, description, skills, roles]);
 
   return (
     <div
@@ -70,8 +72,8 @@ function ProjectCard({
           className={styles.creatorAvatar}
         />
         <div>
-          <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name }</h6>
+          <small className={styles.creatorLabel}>Project Creator</small>
         </div>
       </div>
 
@@ -96,7 +98,7 @@ function ProjectCard({
         </div>
         <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
           <CalenderIcon />
-          <span>{createdAt}</span>
+          <span className="text-uppercase">{dateRange}</span>
         </div>
       </div>
 
@@ -171,7 +173,7 @@ function ProjectCard({
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
           >
             <TeamIcon size={20} />
-            <span> Team {currentTeamSize}/{maxTeamSize}</span>
+            <span>Team of {maxTeamSize}</span>
           </div>
           <div
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}

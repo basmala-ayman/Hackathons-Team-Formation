@@ -53,7 +53,7 @@ function ProjectCard({
         hasHiddenSkills ||
         hasHiddenRoles;
        
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
+        
       
     }
   , [title, description, skills, roles]);

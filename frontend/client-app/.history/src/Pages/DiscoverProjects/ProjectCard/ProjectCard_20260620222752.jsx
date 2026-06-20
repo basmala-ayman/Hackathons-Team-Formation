@@ -51,10 +51,12 @@ function ProjectCard({
         isTitleClipped ||
         isDescClipped ||
         hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+        hasHiddenRoles
+      ) {
+        setCanExpand(true);
+      } else {
+        setCanExpand(false);
+      }
     }
   , [title, description, skills, roles]);
 

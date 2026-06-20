@@ -1,5 +1,5 @@
 import styles from "./ProjectCard.module.css";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import {
@@ -13,18 +13,16 @@ import {
   HeartIcon,
 } from "../../../assets/Icons";
 function ProjectCard({
+  creatorPicture,
   title,
   description,
   hackathonName,
-  createdAt,
-  maxTeamSize = 4,
-  currentTeamSize = 0,
-  interestedCount = 0,
+  dateRange,
   skills = [],
   roles = [],
-  creator,
+  maxTeamSize = 4,
+  interestedCount = 0,
   onInterestToggle,
-  isInterested,
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -37,26 +35,28 @@ function ProjectCard({
   const descRef = useRef(null);
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
-    if (!titleElement || !descElement) return;
+    if (titleElement && descElement) {
       // is  real hight > the height that user see
       const isTitleClipped =
         titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
+      if (
         isTitleClipped ||
         isDescClipped ||
         hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+        hasHiddenRoles
+      ) {
+        setCanExpand(true);
+      } else {
+        setCanExpand(false);
+      }
     }
-  , [title, description, skills, roles]);
+  }, [title, description, skills, roles]);
 
   return (
     <div
@@ -65,13 +65,13 @@ function ProjectCard({
       {/* Header Profile */}
       <div className="d-flex align-items-center gap-3 mb-3">
         <img
-          src={creator?.avatarUrl || defaultProfile}
-          alt={creator?.name || "Creator"}
+          src={creator.avatarUrl || defaultProfile}
+          alt={creator.name}
           className={styles.creatorAvatar}
         />
         <div>
-          <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <h6 className={`fw-bold fs-4 mb-0`}>{creator.name}</h6>
+          <small className={styles.creatorLabel}>Project Creator</small>
         </div>
       </div>
 
@@ -96,7 +96,7 @@ function ProjectCard({
         </div>
         <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
           <CalenderIcon />
-          <span>{createdAt}</span>
+          <span className="text-uppercase">{dateRange}</span>
         </div>
       </div>
 
@@ -148,8 +148,8 @@ function ProjectCard({
           <button
             type="button"
             className={`btn p-0 border-0 ${styles.readMoreContainer}`}
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
+            onClick={() => setIsExpanded(!isExpanded)}>
+
             {isExpanded ? (
               <span className={styles.toggleText}>
                 Show Less
@@ -171,7 +171,7 @@ function ProjectCard({
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
           >
             <TeamIcon size={20} />
-            <span> Team {currentTeamSize}/{maxTeamSize}</span>
+            <span>Team of {maxTeamSize}</span>
           </div>
           <div
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
@@ -188,7 +188,7 @@ function ProjectCard({
           onClick={onInterestToggle}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
-          <span>{isInterested ? "Interested" : "I'm Interested"}</span>
+          <span>I'm Interested</span>
         </CustomButton>
       </div>
     </div>

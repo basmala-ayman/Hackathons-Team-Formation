@@ -1,23 +1,16 @@
 import React from "react";
 import ProjectCard from "./ProjectCard/ProjectCard";
 import styles from "./DiscoverProjects.module.css";
-import { useExploreProjects } from "./hooks/useExploreProjects";
-import { LoadingState, EmptyState } from "../../shared/States";
-import { formatDate } from "../../utils/formateDate";
+import { useExploreProjects } from "./";
+import { useState } from "react";
 
 function DiscoverProjects() {
-  const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log(projects)
+  
+  const [projects, setProjects] = useState(mockProjects);
 
   const handleInterestToggle = (projectId) => {
     //Add to interests logic
   };
-  if (loading) {
-    return <LoadingState message="Loading Projects..." />;
-  }
-  if (error) {
-    return <EmptyState message="No Projects found" />;
-  }
 
   return (
     <div className={`min-vh-100 ${styles.pageBackground}`}>
@@ -45,20 +38,14 @@ function DiscoverProjects() {
             <ProjectCard
               title={project.title}
               description={project.description}
-              hackathonName={project.hackathonTitle}
-              createdAt={formatDate(project.createdAt)}
-              maxTeamSize={project.totalTeamSize}
-              currentTeamSize={project.totalTeamMembersCount}
-              interestedCount={project.totalInterestsCount}
-              skills={project.requiredSkills}
-              roles={project.requiredRoles}
-              creator={{
-                name: project.creatorName,
-                avatarUrl: project.creatorPicture,
-                role:project.creatorRole,
-              }}
+              hackathonName={project.hackathonName}
+              dateRange={project.dateRange}
+              maxTeamSize={project.maxTeamSize}
+              interestedCount={project.interestedCount}
+              skills={project.skills}
+              roles={project.roles}
+              creator={project.creator}
               onInterestToggle={() => handleInterestToggle(project.id)}
-              isInterested={project.isInterested}
             ></ProjectCard>
           ))}
         </div>

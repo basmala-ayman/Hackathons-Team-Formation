@@ -46,7 +46,7 @@ function DiscoverProjects() {
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
-              createdAt={formatDate(project.createdAt)}
+              createdAt={project.createdAt}
               maxTeamSize={project.totalTeamSize}
               currentTeamSize={project.totalTeamMembersCount}
               interestedCount={project.totalInterestsCount}

@@ -47,14 +47,16 @@ function ProjectCard({
         titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
+      const shouldExpand
         isTitleClipped ||
         isDescClipped ||
         hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+        hasHiddenRoles
+      ) {
+        setCanExpand(true);
+      } else {
+        setCanExpand(false);
+      }
     }
   , [title, description, skills, roles]);
 

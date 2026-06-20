@@ -3,7 +3,6 @@ import ProjectCard from "./ProjectCard/ProjectCard";
 import styles from "./DiscoverProjects.module.css";
 import { useExploreProjects } from "./hooks/useExploreProjects";
 import { LoadingState, EmptyState } from "../../shared/States";
-import { formatDate } from "../../utils/formateDate";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
@@ -46,16 +45,14 @@ function DiscoverProjects() {
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
-              createdAt={formatDate(project.createdAt)}
+              // dateRange={project.dateRange}
               maxTeamSize={project.totalTeamSize}
-              currentTeamSize={project.totalTeamMembersCount}
               interestedCount={project.totalInterestsCount}
               skills={project.requiredSkills}
               roles={project.requiredRoles}
               creator={{
                 name: project.creatorName,
                 avatarUrl: project.creatorPicture,
-                role:project.creatorRole,
               }}
               onInterestToggle={() => handleInterestToggle(project.id)}
               isInterested={project.isInterested}

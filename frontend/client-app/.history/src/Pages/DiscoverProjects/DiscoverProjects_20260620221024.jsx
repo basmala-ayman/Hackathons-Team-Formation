@@ -3,7 +3,7 @@ import ProjectCard from "./ProjectCard/ProjectCard";
 import styles from "./DiscoverProjects.module.css";
 import { useExploreProjects } from "./hooks/useExploreProjects";
 import { LoadingState, EmptyState } from "../../shared/States";
-import { formatDate } from "../../utils/formateDate";
+import 
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
@@ -46,7 +46,7 @@ function DiscoverProjects() {
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
-              createdAt={formatDate(project.createdAt)}
+              createdAt={project.createdAt}
               maxTeamSize={project.totalTeamSize}
               currentTeamSize={project.totalTeamMembersCount}
               interestedCount={project.totalInterestsCount}

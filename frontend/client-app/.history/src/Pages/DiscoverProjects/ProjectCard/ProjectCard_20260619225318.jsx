@@ -1,5 +1,5 @@
 import styles from "./ProjectCard.module.css";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import {
@@ -12,17 +12,17 @@ import {
   ChevronIconDown,
   HeartIcon,
 } from "../../../assets/Icons";
+
 function ProjectCard({
+  creator,
   title,
   description,
   hackathonName,
-  createdAt,
-  maxTeamSize = 4,
-  currentTeamSize = 0,
-  interestedCount = 0,
+  dateRange,
   skills = [],
   roles = [],
-  creator,
+  maxTeamSize = 4,
+  interestedCount = 0,
   onInterestToggle,
   isInterested,
 }) {
@@ -32,36 +32,40 @@ function ProjectCard({
   const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
   const hasHiddenRoles = roles.length > 3;
 
-  //condition to show (show more) or not
   const titleRef = useRef(null);
   const descRef = useRef(null);
-  const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
+  
+  // 1. Calculate prop-based expansion synchronously during render
+  const needsPropExpansion = hasHiddenSkills || hasHiddenRoles;
+  
+  // 2. Only track DOM clipping in state
+  const [isDomClipped, setIsDomClipped] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // If props already dictate we need the "Show More" button, 
+    // skip the expensive DOM measurements entirely.
+    if (needsPropExpansion) return;
+
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
-    if (!titleElement || !descElement) return;
-      // is  real hight > the height that user see
-      const isTitleClipped =
-        titleElement.scrollHeight > titleElement.clientHeight;
+    if (titleElement && descElement) {
+      const isTitleClipped = titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
-        isTitleClipped ||
-        isDescClipped ||
-        hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+      // Only update state if it actually needs to change to avoid infinite loops
+      const currentlyClipped = isTitleClipped || isDescClipped;
+      if (currentlyClipped !== isDomClipped) {
+        setIsDomClipped(currentlyClipped);
+      }
     }
-  , [title, description, skills, roles]);
+  }, [title, description, needsPropExpansion, isDomClipped]);
+
+  // 3. Final boolean determines if the button shows
+  const canExpand = needsPropExpansion || isDomClipped;
 
   return (
-    <div
-      className={`p-4 d-flex flex-column justify-content-between ${styles.cardWrapper}`}
-    >
+    <div className={`p-4 d-flex flex-column justify-content-between ${styles.cardWrapper}`}>
       {/* Header Profile */}
       <div className="d-flex align-items-center gap-3 mb-3">
         <img
@@ -70,8 +74,8 @@ function ProjectCard({
           className={styles.creatorAvatar}
         />
         <div>
-          <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <h6 className={`fw-bold fs-4 mb-0`}>{creator.name}</h6>
+          <small className={styles.creatorLabel}>Project Creator</small>
         </div>
       </div>
 
@@ -89,14 +93,14 @@ function ProjectCard({
       </p>
 
       {/* hackathon name & date */}
-      <div className="d-flex align-items-center  gap-5 flex-wrap mb-4">
+      <div className="d-flex align-items-center gap-5 flex-wrap mb-4">
         <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
           <PrizeIcon size={20} color="var(--color-primary-dark)" />
           <span>{hackathonName}</span>
         </div>
         <div className={`d-flex align-items-center gap-2 ${styles.metaText}`}>
           <CalenderIcon />
-          <span>{createdAt}</span>
+          <span className="text-uppercase">{dateRange}</span>
         </div>
       </div>
 
@@ -142,7 +146,6 @@ function ProjectCard({
       </div>
 
       {/* show more part */}
-
       {canExpand && (
         <div className="d-flex justify-content-start mt-2 mb-4">
           <button
@@ -167,15 +170,11 @@ function ProjectCard({
       {/* Card Footer*/}
       <div className="mt-2">
         <div className="d-flex align-items-center gap-5 mb-3 pt-3 border-top">
-          <div
-            className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
-          >
+          <div className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}>
             <TeamIcon size={20} />
-            <span> Team {currentTeamSize}/{maxTeamSize}</span>
+            <span>Team of {maxTeamSize}</span>
           </div>
-          <div
-            className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
-          >
+          <div className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}>
             <HeartIcon color="red" />
             <span>{interestedCount} interested</span>
           </div>

@@ -41,22 +41,24 @@ function ProjectCard({
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
-    if (!titleElement || !descElement) return;
+    if (titleElement && descElement) {
       // is  real hight > the height that user see
       const isTitleClipped =
         titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
+      if (
         isTitleClipped ||
         isDescClipped ||
         hasHiddenSkills ||
-        hasHiddenRoles;
-       
-        setCanExpand((prev)=>(prev!== shouldExpand? shouldExpand:prev))
-      
+        hasHiddenRoles
+      ) {
+        setCanExpand(true);
+      } else {
+        setCanExpand(false);
+      }
     }
-  , [title, description, skills, roles]);
+  }, [title, description, skills, roles]);
 
   return (
     <div
@@ -71,7 +73,7 @@ function ProjectCard({
         />
         <div>
           <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <small className={styles.creatorLabel}>Project Creator</small>
         </div>
       </div>
 
