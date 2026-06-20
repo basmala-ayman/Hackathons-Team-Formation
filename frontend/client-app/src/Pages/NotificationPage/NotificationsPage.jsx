@@ -24,6 +24,7 @@ export default function NoticationsPage() {
           <NotificationFilter
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
+            unreadCount={unreadCount}
           />
         </aside>
         <main className="col-lg-9">

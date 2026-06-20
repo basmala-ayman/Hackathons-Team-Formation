@@ -13,7 +13,7 @@ import {
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function NotificationItem({ data, onRead }) {
-  const { metadata } = data; // Destructure for metadata inside data
+  const { metadata } = data;
 
   return (
     <div
@@ -41,7 +41,6 @@ export default function NotificationItem({ data, onRead }) {
 
             <p className={styles.message}>{data.message}</p>
 
-            {/* POPULATED METADATA SECTION */}
             <div className={styles.meta}>
               {metadata.team && (
                 <span className={styles.metaItem}>
@@ -66,7 +65,6 @@ export default function NotificationItem({ data, onRead }) {
               </span>
             </div>
 
-            {/* ACTION AREA */}
             {data.type === "JOIN_REQUEST" && (
               <div className={styles.actions}>
                 <button className={styles.btnAccept} >

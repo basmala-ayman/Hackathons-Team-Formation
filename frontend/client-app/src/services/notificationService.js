@@ -8,9 +8,12 @@ export const getMyNotifications = async (page = 1, limit = 20) => {
     const response = await api.get(
       `/notifications?page=${page}&limit=${limit}`,
     );
-    return response.data;
+    return {
+      notifications: response.data.data,
+      pagination: response.data.pagination,
+    };
   } catch (error) {
-    throw error.response?.data || "Failed to fetch notifications!";
+    throw error.response?.data?.message || "Failed to fetch notifications!";
   }
 };
 
@@ -25,8 +28,6 @@ export const getUnreadCount = async () => {
     throw error.response?.data || "Failed to fetch unread count!";
   }
 };
-
-
 
 /**
  * Mark a specific notification as read
