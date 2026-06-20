@@ -13,6 +13,7 @@ const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
 export default function UserProfile({ isOwner = true }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [wizardMode, setWizardMode] = useState("full");
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [completionPercentage, setCompletionPercentage] = useState(0);
@@ -151,7 +152,7 @@ export default function UserProfile({ isOwner = true }) {
         githubUrl: profileData.githubUrl || prev.githubUrl,
         linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
         avatar: profileData.profilePicture
-          ? `${BACKEND_URL}${profileData.profilePicture.startsWith('/') ? '' : '/'}${profileData.profilePicture}?t=${new Date().getTime()}`
+          ? `${BACKEND_URL}${profileData.profilePicture}?t=${new Date().getTime()}`
           : prev.avatar,
         skills: profileData.skills || prev.skills,
         techRoles: profileData.techRoles || prev.techRoles,
@@ -187,9 +188,12 @@ export default function UserProfile({ isOwner = true }) {
 
       <ProfileHeaderCard
         user={values}
-        onEditClick={isOwner ? () => setIsWizardOpen(true) : null}
         setFormData={isOwner ? setValues : null}
         isOwner={isOwner}
+        onEditClick={isOwner ? () => {
+          setWizardMode("full");
+          setIsWizardOpen(true);
+        } : null}
       />
 
       {isOwner && (
@@ -202,6 +206,7 @@ export default function UserProfile({ isOwner = true }) {
           errors={errors}
           setErrors={setErrors}
           onSave={handleProfileUpdate}
+          mode={wizardMode}
         />
       )}
 
@@ -211,6 +216,10 @@ export default function UserProfile({ isOwner = true }) {
         interests={values.interests || values.intrestes || []}
         onAddSkillClick={() => setIsWizardOpen(true)}
         isOwner={isOwner}
+        onAddSkillClick={() => {
+          setWizardMode("skillsOnly");
+          setIsWizardOpen(true);
+        }}
       />
       <InterestedHackathonsCard hackathons={values.hackathonInterests || []} />
       <MyProjectIdeasCard projects={values.ownedProjects || []} userAvatar={values.avatar} />

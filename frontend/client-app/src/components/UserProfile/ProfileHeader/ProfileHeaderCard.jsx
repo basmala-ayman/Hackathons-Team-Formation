@@ -13,9 +13,6 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
 
   const finalAvatar = detailedUser?.avatar || ANONYMOUS_AVATAR;
 
-  const avatarSrc = finalAvatar.startsWith("http") || finalAvatar.startsWith("blob:")
-    ? finalAvatar
-    : `${BACKEND_URL}${finalAvatar}`;
 
   const user = {
     name: detailedUser?.name || authUser?.name || "Loading Name...",
