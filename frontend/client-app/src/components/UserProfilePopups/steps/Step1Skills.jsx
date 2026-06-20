@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
 import { X, ChevronDown } from "lucide-react";
 import styles from "./steps.module.css";
+import { useStaticData } from "../../../hooks/useStaticData.js";
 
 export default function Step1Skills({ formData, setFormData, errors, setErrors, mode = "full" }) {
+  const { roleOptions, skillsOptions } = useStaticData();
   const [skillInput, setSkillInput] = useState("");
   const [roleInput, setRoleInput] = useState("");
   const [showSkillDropdown, setShowSkillDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
 
-  const allAvailableSkills = ["React", "Typescript", "Javascript", "Vuejs", "Angular", "C++", "Go", "Leadership", "Communication", "Teamwork"];
-  const roles = ["Frontend Developer", "Backend Developer", "Full Stack Developer", "UI/UX Designer", "DevOps Engineer"];
-  const hackathonOptions = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
+  const allAvailableSkills = skillsOptions.map(s => s.label);
+  const roles = roleOptions.map(r => r.label);
+  const hackathonInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
 
   const handleBioChange = (e) => {
     const value = e.target.value;
@@ -157,7 +159,7 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
         <Form.Group className="mb-4">
           <Form.Label className={styles.formLabel}>Hackathon Interests</Form.Label>
           <div className="d-flex flex-wrap gap-2 mt-2">
-            {hackathonOptions.map((interest) => {
+            {hackathonInterests.map((interest) => {
               const isSelected = (formData.intrestes || []).includes(interest);
               return (
                 <Badge

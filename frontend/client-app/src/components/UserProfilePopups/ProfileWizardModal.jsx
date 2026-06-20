@@ -138,7 +138,7 @@ export default function ProfileWizardModal({ show, handleClose, values: external
   };
 
   return (
-    <Modal show={show} onHide={showSuccessScreen ? null : handleModalClose}
+    <Modal show={show || showSuccessScreen} onHide={showSuccessScreen ? null : handleModalClose}
       backdrop={showSuccessScreen ? "static" : true} centered size="lg" className={styles.wizardModal}>
       {typeof currentStep === "number" && !showSuccessScreen && !isSkillsOnly && (
         <div className={styles.wizardHeaderContainer}>
