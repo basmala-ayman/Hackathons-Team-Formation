@@ -16,13 +16,14 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
   const handleBioChange = (e) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, bio: value }));
-    if (errors.bio && value.trim()) setErrors((prev) => ({ ...prev, bio: null }));
   };
 
   const addTag = (value, list, key) => {
     if (list.includes(value) && !(formData[key] || []).includes(value)) {
       setFormData((prev) => ({ ...prev, [key]: [...(prev[key] || []), value] }));
-      if (errors[key]) setErrors((prev) => ({ ...prev, [key]: null }));
+      if (errors[key]) {
+        setErrors((prev) => ({ ...prev, [key]: null }));
+      }
     }
   };
 
@@ -177,7 +178,7 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
       {/* --- Bio --- */}
       {mode === "full" && (
         <Form.Group className="mb-3">
-          <Form.Label className={styles.formLabel}>Bio <span className="text-danger">*</span></Form.Label>
+          <Form.Label className={styles.formLabel}>Bio</Form.Label>
           <Form.Control
             as="textarea"
             className={`${styles.inputControl} ${errors.bio ? 'is-invalid' : ''}`}
@@ -187,7 +188,6 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
             onChange={handleBioChange}
             maxLength={500}
           />
-          {errors.bio && <div className="text-danger mt-1">{errors.bio}</div>}
           <span className={styles.hintText}>{(formData.bio || "").length}/500 characters</span>
         </Form.Group>
       )}

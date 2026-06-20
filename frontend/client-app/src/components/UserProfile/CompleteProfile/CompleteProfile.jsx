@@ -4,38 +4,43 @@ import { X, ArrowRight } from "lucide-react";
 import { ProgressBar } from "react-bootstrap";
 
 export default function CompleteProfile({ onBannerClick, user }) {
-  const [isDisplayed, setIsDisplayed] = useState(true);
+  const [isDismissed, setIsDismissed] = useState(false);
 
   const calculateCompletion = () => {
-    if (!user) return 20;
+     // Default score if user data is not available
+    if (!user) return 10;
 
-    let stepsCompleted = 0;
-    const totalSteps = 5;
+    let score = 10;
 
-    if (user.name && user.name.trim() !== "") stepsCompleted++;
-    if (user.bio && user.bio.trim() !== "") stepsCompleted++;
+    if (user.bio?.trim()) score += 15;
 
-    const hasTechSkills = Array.isArray(user.technicalSkills) ? user.technicalSkills.length > 0 : !!user.technicalSkills;
-    if (hasTechSkills) stepsCompleted++;
+    // Skills
+    if (user.technicalSkills?.length > 0 || user.skills?.length > 0) score += 20;
 
-    if (user.linkedin || user.linkedinUrl) stepsCompleted++;
-    if (user.avatar || user.profilePicture) stepsCompleted++;
+    // Links
+    if (user.linkedin || user.linkedinUrl || user.githubUrl) score += 15;
 
-    const percentage = Math.round((stepsCompleted / totalSteps) * 100);
+    // Avatar
+    if (user.avatar || user.profilePicture) score += 20;
 
-    return Math.max(20, Math.min(percentage, 100));
+    // Roles
+    if (user.techRoles?.length > 0 || user.roles?.length > 0) score += 10;
+
+    // Interests
+    if (user.interests?.length > 0 || user.intrestes?.length > 0) score += 10;
+
+    return Math.min(score, 100);
   };
-
   const completionPercentage = calculateCompletion();
 
-  if (!isDisplayed || completionPercentage === 100) return null;
+  if (isDismissed || completionPercentage === 100) return null;
 
   return (
     <div className={styles.bannerContainer}>
       <button
         type="button"
         className={styles.closeBtn}
-        onClick={() => setIsDisplayed(false)}
+        onClick={() => setIsDismissed(true)}
         aria-label="Close banner"
       >
         <X size={18} />

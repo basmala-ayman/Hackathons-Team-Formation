@@ -67,7 +67,7 @@ const generatePayload = (currentValues, originalValues, user) => {
 export default function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittingAction, setSubmittingAction] = useState(null);
+  const [activeAction, setActiveAction] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
   const { user } = useAuth();
@@ -92,17 +92,26 @@ export default function ProfileWizardModal({ show, handleClose, values: external
 
   const validateStep1 = useCallback(() => {
     const step1Errors = {};
-    if (!localValues.skills || localValues.skills.length === 0) step1Errors.skills = "At least one skill is required.";
-    if (!localValues.bio || !localValues.bio.trim()) step1Errors.bio = "Bio is required.";
+
+    if (!localValues.skills || localValues.skills.length === 0) {
+      step1Errors.skills = "At least one skill is required.";
+    }
+
+    if (!localValues.techRoles || localValues.techRoles.length === 0) {
+      step1Errors.techRoles = "At least one role is required.";
+    }
+
     if (Object.keys(step1Errors).length > 0) {
       setErrors(step1Errors);
       return false;
     }
+
+    setErrors({});
     return true;
   }, [localValues, setErrors]);
 
-  const handleFinish = async (actionType = 'save') => {
-    setSubmittingAction(actionType)
+  const handleFinish = async (actionType) => {
+    setActiveAction(actionType);
     setIsSubmitting(true);
     setErrors({});
     try {
@@ -117,6 +126,7 @@ export default function ProfileWizardModal({ show, handleClose, values: external
       setErrors((prev) => ({ ...prev, apiError: errorMessage }));
     } finally {
       setIsSubmitting(false);
+      setActiveAction(null);
     }
   };
 
@@ -131,6 +141,12 @@ export default function ProfileWizardModal({ show, handleClose, values: external
     setShowSuccessScreen(false);
     setErrors({});
     handleClose();
+    setTimeout(() => {
+      setCurrentStep(1);
+      setShowSuccessScreen(false);
+      setErrors({});
+      setActiveAction(null);
+    }, 300);
   };
 
   return (
@@ -165,28 +181,26 @@ export default function ProfileWizardModal({ show, handleClose, values: external
             ) : <div />}
 
             <div className="d-flex gap-3">
-              {/* زر Save */}
               {!isSkillsOnly && currentStep !== 3 && (
                 <CustomButton
                   variant="secondary"
                   size="sm"
                   onClick={() => handleFinish('save')}
-                  disabled={!!submittingAction}
+                  disabled={activeAction !== null}
                 >
-                  {submittingAction === 'save' ? "Saving..." : "Save"}
+                  {activeAction === 'save' ? "Saving..." : "Save"}
                 </CustomButton>
               )}
 
               <CustomButton
                 variant="primary"
                 size="sm"
-                onClick={isSkillsOnly ? () => handleFinish('next') : handleNext}
-                disabled={!!submittingAction}
+                onClick={() => (isSkillsOnly || currentStep === 3) ? handleFinish('next') : handleNext()}
+                disabled={activeAction !== null}
               >
-                {submittingAction === 'next'
+                {activeAction === 'next'
                   ? "Saving..."
-                  : (isSkillsOnly || currentStep === 3) ? "Save" : "Next Step"
-                }
+                  : (isSkillsOnly || currentStep === 3) ? "Save" : "Next Step"}
               </CustomButton>
             </div>
           </div>
