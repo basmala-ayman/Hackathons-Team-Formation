@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Container, Spinner, Alert } from "react-bootstrap";
 import { useFormHandler } from "../../hooks/useFormHandler";
 import SkillsExpertiseCard from "../../components/UserProfile/SkillsExpertiseCard/SkillsExpertiseCard";
@@ -11,30 +11,30 @@ import { getUserProfile, updateUserProfile } from "../../services/userService";
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
+const defaultProfileData = {
+  avatar: "",
+  avatarFile: null,
+  name: "",
+  username: "@user",
+  bio: "No bio added yet.",
+  email: "",
+  website: "",
+  joinedDate: "Joined recently",
+  skills: [],
+  techRoles: [],
+  intrestes: [],
+  linkedinUrl: "",
+  githubUrl: "",
+  resumeUrl: "",
+  resumeFile: null
+};
+
 export default function UserProfile({ isOwner = true }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [wizardMode, setWizardMode] = useState("full");
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [completionPercentage, setCompletionPercentage] = useState(0);
-
-  const defaultProfileData = {
-    avatar: "",
-    avatarFile: null,
-    name: "",
-    username: "@user",
-    bio: "No bio added yet.",
-    email: "",
-    website: "",
-    joinedDate: "Joined recently",
-    skills: [],
-    techRoles: [],
-    intrestes: [],
-    linkedinUrl: "",
-    githubUrl: "",
-    resumeUrl: "",
-    resumeFile: null
-  };
 
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
     defaultProfileData,
@@ -107,7 +107,7 @@ export default function UserProfile({ isOwner = true }) {
     }
   }, [isOwner, setValues]);
 
-  const handleProfileUpdate = async (payload, isFinal = false) => {
+  const handleProfileUpdate = useCallback(async (payload, isFinal = false) => {
     try {
       setApiError(null);
 
@@ -167,8 +167,10 @@ export default function UserProfile({ isOwner = true }) {
       console.error("Error updating profile:", err);
       throw err;
     }
-  };
+  }, [values, setValues]);
 
+
+  // When Loading
   if (isLoading) {
     return (
       <Container className="py-5 text-center">
@@ -214,7 +216,6 @@ export default function UserProfile({ isOwner = true }) {
         skills={values.skills || []}
         roles={Array.isArray(values.techRoles) ? values.techRoles : (values.techRoles ? [values.techRoles] : [])}
         interests={values.interests || values.intrestes || []}
-        onAddSkillClick={() => setIsWizardOpen(true)}
         isOwner={isOwner}
         onAddSkillClick={() => {
           setWizardMode("skillsOnly");

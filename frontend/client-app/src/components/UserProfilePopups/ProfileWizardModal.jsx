@@ -64,7 +64,7 @@ const generatePayload = (currentValues, originalValues, user) => {
   return payload;
 };
 
-export default function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
+export default React.memo(function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [activeAction, setActiveAction] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
@@ -188,3 +188,4 @@ export default function ProfileWizardModal({ show, handleClose, values: external
     </Modal>
   );
 }
+)

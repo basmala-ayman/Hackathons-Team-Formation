@@ -23,10 +23,12 @@ function UserAuthenticatedMenu({ onLogout }) {
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">
       <div>
+        <Link to="/notifications"> 
         <span className={styles.bellIcon}>
           <BellIcon />
         </span>
         <span className={styles.badge}></span>
+        </Link>
       </div>
 
       <Dropdown
