@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { markInterestInProject } from "../../../services/projectService";
 
-export const useProjectInterest=()=> {
+export function useProjectInterest() {
   const [loadingId, setLoadingId] = useState(null);
   const [error, setError] = useState("");
 
@@ -28,3 +28,4 @@ export const useProjectInterest=()=> {
   };
 }
 
+export default useProjectInterest;
