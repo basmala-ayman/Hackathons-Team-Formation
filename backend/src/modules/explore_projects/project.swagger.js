@@ -8,11 +8,6 @@
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  *   schemas:
  *     ExploreProjectItem:
  *       type: object
@@ -20,38 +15,63 @@
  *         id:
  *           type: string
  *           format: uuid
+ *
  *         title:
  *           type: string
+ *
  *         description:
  *           type: string
+ *
  *         createdAt:
  *           type: string
  *           format: date-time
+ *
  *         creatorId:
  *           type: string
  *           format: uuid
+ *
  *         creatorName:
  *           type: string
+ *
+ *         creatorRole:
+ *           type: string
+ *
  *         creatorPicture:
  *           type: string
  *           nullable: true
+ *
+ *         hackathonTitle:
+ *           type: string
+ *           nullable: true
+ *
  *         teamId:
  *           type: string
  *           format: uuid
+ *
  *         teamName:
  *           type: string
  *           nullable: true
+ *
  *         teamStatus:
  *           type: string
  *           nullable: true
- *         requiredSkillsOrRoles:
+ *
+ *         requiredRoles:
  *           type: array
  *           items:
  *             type: string
+ *
+ *         requiredSkills:
+ *           type: array
+ *           items:
+ *             type: string
+ *
  *         totalTeamMembersCount:
  *           type: integer
+ *
  *         totalInterestsCount:
  *           type: integer
+ *
  *         isInterested:
  *           type: boolean
  */
