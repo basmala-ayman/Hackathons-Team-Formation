@@ -11,7 +11,7 @@ export default function SuccessPopup({ handleClose }) {
       <div className={styles.iconWrapper}>
         <CheckCircle size={64} strokeWidth={1.5} className={styles.successIcon} />
       </div>
-      <h3 className={`${styles.title} fw-bold mb-3`}>Profile Completed Successfully!</h3>
+      <h3 className={`${styles.title} fw-bold mb-3`}>Profile Updated Successfully!</h3>
       <p className={`${styles.subText} text-muted fs-5 mb-0`}>
         Your professional links and portfolio have been saved. You're all set to get started!
       </p>

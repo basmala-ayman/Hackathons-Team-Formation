@@ -8,7 +8,7 @@ import { useAuth } from "../../context/AuthContext/useAuth.js";
 import Step1Skills from "./steps/Step1Skills.jsx";
 import Step2Interests from "./steps/Step2Interests";
 import Step4Final from "./steps/Step4Final.jsx";
-import SuccessPopup from "./Success&WarningPopups/SuccessPopup.jsx";
+import SuccessPopup from "./successModal/SuccessPopup.jsx";
 
 const cleanAndMapToEnum = (text, type) => {
   if (!text) return "";
@@ -66,7 +66,6 @@ const generatePayload = (currentValues, originalValues, user) => {
 
 export default function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeAction, setActiveAction] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
@@ -78,8 +77,9 @@ export default function ProfileWizardModal({ show, handleClose, values: external
       setCurrentStep(1);
       setShowSuccessScreen(false);
       setLocalValues({ ...externalValues });
+      setErrors({});
     }
-  }, [show, externalValues]);
+  }, [show, externalValues, setErrors]);
 
   const updateLocalValuesWithTracking = useCallback((updater) => {
     setLocalValues((prev) => typeof updater === "function" ? updater(prev) : { ...prev, ...updater });
@@ -92,54 +92,42 @@ export default function ProfileWizardModal({ show, handleClose, values: external
 
   const validateStep1 = useCallback(() => {
     const step1Errors = {};
-
-    if (!localValues.skills || localValues.skills.length === 0) {
-      step1Errors.skills = "At least one skill is required.";
-    }
-
-    if (!localValues.techRoles || localValues.techRoles.length === 0) {
-      step1Errors.techRoles = "At least one role is required.";
-    }
+    if (!localValues.skills || localValues.skills.length === 0) step1Errors.skills = "At least one skill is required.";
+    if (!localValues.techRoles || localValues.techRoles.length === 0) step1Errors.techRoles = "At least one role is required.";
 
     if (Object.keys(step1Errors).length > 0) {
       setErrors(step1Errors);
       return false;
     }
-
     setErrors({});
     return true;
   }, [localValues, setErrors]);
 
   const handleFinish = async (actionType) => {
+    if (currentStep === 1 && !validateStep1()) return;
+
     setActiveAction(actionType);
-    setIsSubmitting(true);
     setErrors({});
     try {
-      // Generate only when clicking Save
       const finalPayload = generatePayload(localValues, externalValues, user);
       await onSave(finalPayload, true);
       setExternalValues((prev) => ({ ...prev, ...localValues }));
       setShowSuccessScreen(true);
-      setCurrentStep("success");
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred.";
       setErrors((prev) => ({ ...prev, apiError: errorMessage }));
     } finally {
-      setIsSubmitting(false);
       setActiveAction(null);
     }
   };
 
   const handleNext = async () => {
     if (currentStep === 1 && !validateStep1()) return;
-    if (currentStep === 3) await handleFinish('next');
+    if (currentStep === 3 || isSkillsOnly) await handleFinish('next');
     else setCurrentStep((prev) => prev + 1);
   };
 
   const handleModalClose = () => {
-    setCurrentStep(1);
-    setShowSuccessScreen(false);
-    setErrors({});
     handleClose();
     setTimeout(() => {
       setCurrentStep(1);
@@ -150,13 +138,13 @@ export default function ProfileWizardModal({ show, handleClose, values: external
   };
 
   return (
-    <Modal show={show || showSuccessScreen} onHide={handleModalClose} centered size="lg" className={styles.wizardModal}>
+    <Modal show={show} onHide={showSuccessScreen ? null : handleModalClose}
+      backdrop={showSuccessScreen ? "static" : true} centered size="lg" className={styles.wizardModal}>
       {typeof currentStep === "number" && !showSuccessScreen && !isSkillsOnly && (
         <div className={styles.wizardHeaderContainer}>
           <div className="d-flex w-100">
             {[1, 2, 3].map((step) => (
-              <div key={step} onClick={() => { if (!isSubmitting && !showSuccessScreen) { if (step === 1 || validateStep1()) setCurrentStep(step); } }}
-                className={`${styles.stepTab} ${currentStep === step ? styles.activeTab : ""} ${styles.clickableTab}`}>
+              <div key={step} className={`${styles.stepTab} ${currentStep === step ? styles.activeTab : ""}`}>
                 Step {step}{step === 1 ? "*" : ""}
               </div>
             ))}
@@ -167,43 +155,33 @@ export default function ProfileWizardModal({ show, handleClose, values: external
       <Modal.Body className="p-5">
         {errors.apiError && <Alert variant="danger" className="mb-4">{errors.apiError}</Alert>}
 
-        {!showSuccessScreen && currentStep === 1 && <Step1Skills formData={localValues} setFormData={updateLocalValuesWithTracking} errors={errors} setErrors={setErrors} mode={mode} />}
-        {!showSuccessScreen && currentStep === 2 && <Step2Interests formData={localValues} setFormData={updateLocalValuesWithTracking} />}
-        {!showSuccessScreen && currentStep === 3 && <Step4Final formData={localValues} setFormData={updateLocalValuesWithTracking} handleChange={handleLocalChange} />}
-        {showSuccessScreen && <SuccessPopup handleClose={handleModalClose} />}
+        {showSuccessScreen ? (
+          <SuccessPopup handleClose={handleModalClose} />
+        ) : (
+          <>
+            {currentStep === 1 && <Step1Skills formData={localValues} setFormData={updateLocalValuesWithTracking} errors={errors} setErrors={setErrors} mode={mode} />}
+            {currentStep === 2 && <Step2Interests formData={localValues} setFormData={updateLocalValuesWithTracking} />}
+            {currentStep === 3 && <Step4Final formData={localValues} setFormData={updateLocalValuesWithTracking} handleChange={handleLocalChange} />}
 
-        {typeof currentStep === "number" && !showSuccessScreen && (
-          <div className="d-flex justify-content-between align-items-center mt-5">
-            {currentStep > 1 ? (
-              <CustomButton variant="secondary" size="sm" onClick={() => setCurrentStep(p => p - 1)}>
-                &larr; Back
-              </CustomButton>
-            ) : <div />}
-
-            <div className="d-flex gap-3">
-              {!isSkillsOnly && currentStep !== 3 && (
-                <CustomButton
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleFinish('save')}
-                  disabled={activeAction !== null}
-                >
-                  {activeAction === 'save' ? "Saving..." : "Save"}
+            <div className="d-flex justify-content-between align-items-center mt-5">
+              {currentStep > 1 ? (
+                <CustomButton variant="secondary" size="sm" onClick={() => setCurrentStep(p => p - 1)}>
+                  &larr; Back
                 </CustomButton>
-              )}
+              ) : <div />}
 
-              <CustomButton
-                variant="primary"
-                size="sm"
-                onClick={() => (isSkillsOnly || currentStep === 3) ? handleFinish('next') : handleNext()}
-                disabled={activeAction !== null}
-              >
-                {activeAction === 'next'
-                  ? "Saving..."
-                  : (isSkillsOnly || currentStep === 3) ? "Save" : "Next Step"}
-              </CustomButton>
+              <div className="d-flex gap-3">
+                {!isSkillsOnly && currentStep !== 3 && (
+                  <CustomButton variant="secondary" size="sm" onClick={() => handleFinish('save')} disabled={!!activeAction}>
+                    {activeAction === 'save' ? "Saving..." : "Save"}
+                  </CustomButton>
+                )}
+                <CustomButton variant="primary" size="sm" onClick={handleNext} disabled={!!activeAction}>
+                  {activeAction === 'next' ? "Saving..." : (isSkillsOnly || currentStep === 3) ? "Save" : "Next Step"}
+                </CustomButton>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </Modal.Body>
       <button onClick={handleModalClose} className={styles.modalCloseBtn}><X size={20} /></button>
