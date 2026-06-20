@@ -3,9 +3,9 @@
 }
 
 .header h1 {
-  font-size: var(--fs-h2);
+  font-size: var(--fs-h3);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-primary-dark);
   line-height: 6.4rem;
 }
 
