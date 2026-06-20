@@ -5,7 +5,7 @@ import styles from "./steps.module.css";
 import { useStaticData } from "../../../hooks/useStaticData.js";
 
 export default function Step1Skills({ formData, setFormData, errors, setErrors, mode = "full" }) {
-  const { roleOptions, skillsOptions } = useStaticData();
+  const { roleOptions, skillsOptions, hackathonOptions} = useStaticData();
   const [skillInput, setSkillInput] = useState("");
   const [roleInput, setRoleInput] = useState("");
   const [showSkillDropdown, setShowSkillDropdown] = useState(false);
@@ -13,7 +13,8 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
 
   const allAvailableSkills = skillsOptions.map(s => s.label);
   const roles = roleOptions.map(r => r.label);
-  const hackathonInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
+  const hackathonInterests = hackathonOptions.map(h=>h.label)
+  console.log(hackathonOptions)
 
   const handleBioChange = (e) => {
     const value = e.target.value;

@@ -21,8 +21,7 @@ export default function NotificationFilter({ activeFilter, onFilterChange }) {
         {FILTER_CATEGORIES.map((category) => (
           <li
             key={category.id}
-            className={`${styles.filterItem} ${activeFilter === category.id ? styles.active : ""
-              }`}
+            className={`${styles.filterItem} ${activeFilter === category.id ? styles.active : ""}`}
             onClick={() => onFilterChange(category.id)}
           >
             <div className={styles.itemContent}>

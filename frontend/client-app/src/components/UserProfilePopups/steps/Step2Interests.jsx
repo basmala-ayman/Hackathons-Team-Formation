@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Form, Badge } from "react-bootstrap";
 import styles from "./steps.module.css";
+import { useStaticData } from "../../../hooks/useStaticData.js";
 
 export default function Step2Interests({ formData, setFormData }) {
-  const [customInput, setCustomInput] = useState("");
+  // const [customInput, setCustomInput] = useState("");
+  const { hackathonOptions } = useStaticData();
   const interests = formData?.intrestes || [];
 
-  const predefinedInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
+  const predefinedInterests = hackathonOptions.map(h => h.label);
 
   const toggleInterest = (interest) => {
     const isSelected = interests.includes(interest);
@@ -21,17 +23,17 @@ export default function Step2Interests({ formData, setFormData }) {
     }));
   };
 
-  const handleCustomKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const value = customInput.trim().toUpperCase();
-      if (value && !interests.includes(value)) {
-        const updated = [...interests, value];
-        setFormData((prev) => ({ ...prev, interests: updated }));
-        setCustomInput("");
-      }
-    }
-  };
+  // const handleCustomKeyDown = (e) => {
+  //   if (e.key === 'Enter') {
+  //     e.preventDefault();
+  //     const value = customInput.trim().toUpperCase();
+  //     if (value && !interests.includes(value)) {
+  //       const updated = [...interests, value];
+  //       setFormData((prev) => ({ ...prev, interests: updated }));
+  //       setCustomInput("");
+  //     }
+  //   }
+  // };
 
   return (
     <div className={styles.stepContainer}>
@@ -62,7 +64,7 @@ export default function Step2Interests({ formData, setFormData }) {
         </div>
       </Form.Group>
 
-      <Form.Group className="mb-3">
+      {/* <Form.Group className="mb-3">
         <Form.Label className={styles.formLabel}>Add Custom Hackathon Interest</Form.Label>
         <Form.Control
           type="text"
@@ -75,7 +77,7 @@ export default function Step2Interests({ formData, setFormData }) {
         <span className={styles.hintText}>
           💡 Press Enter or click suggestions to add hackathon interest
         </span>
-      </Form.Group>
+      </Form.Group> */}
     </div>
   );
 }
