@@ -25,7 +25,6 @@ function ProjectCard({
   creator,
   onInterestToggle,
   isInterested,
-  isLoading
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -33,21 +32,17 @@ function ProjectCard({
   const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
   const hasHiddenRoles = roles.length > 3;
 
-  //used to measure the real heights in the dom
+  //condition to show (show more) or not
   const titleRef = useRef(null);
   const descRef = useRef(null);
-
-  //state used to show (show more) or not
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
   useEffect(() => {
-    //get the real elements after render
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
     if (!titleElement || !descElement) return;
-      //scroll height -> real height 
-      // client height-> the height that user see
+      // is  real hight > the height that user see
       const isTitleClipped =
         titleElement.scrollHeight > titleElement.clientHeight;
       const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
@@ -58,10 +53,10 @@ function ProjectCard({
         hasHiddenSkills ||
         hasHiddenRoles;
        
-
+if (shouldExpand !== canExpand) {
   // eslint-disable-next-line
     setCanExpand(shouldExpand);
-      
+  }      
     }
   , [title, description, skills, roles]);
 
@@ -193,7 +188,6 @@ function ProjectCard({
           size="sm"
           className="w-100"
           onClick={onInterestToggle}
-          disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           <span>{isInterested ? "Interested" : "I'm Interested"}</span>

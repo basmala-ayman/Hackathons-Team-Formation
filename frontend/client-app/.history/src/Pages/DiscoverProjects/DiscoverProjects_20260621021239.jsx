@@ -27,10 +27,9 @@ function DiscoverProjects() {
             : project,
         ),
       );
-      console.log(response.message);
+      console.log(response.message)
       toast.sucess("Interest submitted")
     } catch (err) {
-       toast.error("Something went wrong. Please try again.");
       console.error(err);
     }
   };

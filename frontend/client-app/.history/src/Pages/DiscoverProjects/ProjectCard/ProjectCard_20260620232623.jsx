@@ -25,7 +25,6 @@ function ProjectCard({
   creator,
   onInterestToggle,
   isInterested,
-  isLoading
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -193,7 +192,6 @@ function ProjectCard({
           size="sm"
           className="w-100"
           onClick={onInterestToggle}
-          disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           <span>{isInterested ? "Interested" : "I'm Interested"}</span>

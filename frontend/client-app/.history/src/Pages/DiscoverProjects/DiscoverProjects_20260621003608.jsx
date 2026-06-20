@@ -2,37 +2,16 @@ import React from "react";
 import ProjectCard from "./ProjectCard/ProjectCard";
 import styles from "./DiscoverProjects.module.css";
 import { useExploreProjects } from "./hooks/useExploreProjects";
-import { useProjectInterest } from "./hooks/useProjectInterest";
 import { LoadingState, EmptyState } from "../../shared/States";
 import { formatDate } from "../../utils/formateDate";
-import { toast } from "react-toastify";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log('projects' , projects);
-  const { registerInterest, loadingId } = useProjectInterest();
+  // console.log(projects)
+  const { toggleInterest,loadingId   } = useProjectInterest();
 
-  const handleInterestToggle = async (projectId) => {
-    try {
-      
-      const response = await registerInterest(projectId);
-      setProjects((prev) =>
-        prev.map((project) =>
-          project.id === projectId
-            ? {
-                ...project,
-                isInterested: response.isInterested,
-                totalInterestsCount: response.totalInterestsCount,
-              }
-            : project,
-        ),
-      );
-      console.log(response.message);
-      toast.sucess("Interest submitted")
-    } catch (err) {
-       toast.error("Something went wrong. Please try again.");
-      console.error(err);
-    }
+  const handleInterestToggle = async(projectId) => {
+    //Add to interests logic
   };
   if (loading) {
     return <LoadingState message="Loading Projects..." />;
@@ -65,7 +44,6 @@ function DiscoverProjects() {
         <div className="d-flex flex-column mt-4 gap-5">
           {projects.map((project) => (
             <ProjectCard
-            key={project.id}
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
@@ -78,11 +56,10 @@ function DiscoverProjects() {
               creator={{
                 name: project.creatorName,
                 avatarUrl: project.creatorPicture,
-                role: project.creatorRole,
+                role:project.creatorRole,
               }}
               onInterestToggle={() => handleInterestToggle(project.id)}
               isInterested={project.isInterested}
-              isLoading={loadingId===project.id}
             ></ProjectCard>
           ))}
         </div>

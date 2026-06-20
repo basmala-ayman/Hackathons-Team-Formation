@@ -2,7 +2,7 @@ import api from "./axiosInstance";
 
 export const markInterestInHackathon = async (hackathonId) => {
   try {
-    const response = await api.post(
+    const res = await api.post(
       `/interests/hackathons/${hackathonId}`
     );
 

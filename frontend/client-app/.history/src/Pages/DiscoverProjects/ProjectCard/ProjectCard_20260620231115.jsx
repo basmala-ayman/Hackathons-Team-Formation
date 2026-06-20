@@ -1,5 +1,5 @@
 import styles from "./ProjectCard.module.css";
-import { useState, useEffect, useRef } from "react";
+import { useState,  useMemo, useRef } from "react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import {
@@ -25,7 +25,6 @@ function ProjectCard({
   creator,
   onInterestToggle,
   isInterested,
-  isLoading
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -33,37 +32,21 @@ function ProjectCard({
   const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
   const hasHiddenRoles = roles.length > 3;
 
-  //used to measure the real heights in the dom
+  //condition to show (show more) or not
   const titleRef = useRef(null);
   const descRef = useRef(null);
 
-  //state used to show (show more) or not
-  const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
+const canExpand = useMemo(() => {
+  const titleElement = titleRef.current;
+  const descElement = descRef.current;
 
-  useEffect(() => {
-    //get the real elements after render
-    const titleElement = titleRef.current;
-    const descElement = descRef.current;
+  if (!titleElement || !descElement) return false;
 
-    if (!titleElement || !descElement) return;
-      //scroll height -> real height 
-      // client height-> the height that user see
-      const isTitleClipped =
-        titleElement.scrollHeight > titleElement.clientHeight;
-      const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
+  const isTitleClipped = titleElement.scrollHeight > titleElement.clientHeight;
+  const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
-        isTitleClipped ||
-        isDescClipped ||
-        hasHiddenSkills ||
-        hasHiddenRoles;
-       
-
-  // eslint-disable-next-line
-    setCanExpand(shouldExpand);
-      
-    }
-  , [title, description, skills, roles]);
+  return isTitleClipped || isDescClipped || hasHiddenSkills || hasHiddenRoles;
+}, [title, description, skills, roles, hasHiddenSkills, hasHiddenRoles]);
 
   return (
     <div
@@ -193,7 +176,6 @@ function ProjectCard({
           size="sm"
           className="w-100"
           onClick={onInterestToggle}
-          disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           <span>{isInterested ? "Interested" : "I'm Interested"}</span>

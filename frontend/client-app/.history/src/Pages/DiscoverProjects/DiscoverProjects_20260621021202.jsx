@@ -21,16 +21,14 @@ function DiscoverProjects() {
           project.id === projectId
             ? {
                 ...project,
-                isInterested: response.isInterested,
-                totalInterestsCount: response.totalInterestsCount,
+                isInterested: result.isInterested,
+                totalInterestsCount: result.totalInterestsCount,
               }
             : project,
         ),
       );
-      console.log(response.message);
       toast.sucess("Interest submitted")
     } catch (err) {
-       toast.error("Something went wrong. Please try again.");
       console.error(err);
     }
   };

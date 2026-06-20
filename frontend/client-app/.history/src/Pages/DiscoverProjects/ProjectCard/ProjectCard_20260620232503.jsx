@@ -25,7 +25,6 @@ function ProjectCard({
   creator,
   onInterestToggle,
   isInterested,
-  isLoading
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -33,15 +32,12 @@ function ProjectCard({
   const visibleRoles = isExpanded ? roles : roles.slice(0, 3);
   const hasHiddenRoles = roles.length > 3;
 
-  //used to measure the real heights in the dom
   const titleRef = useRef(null);
   const descRef = useRef(null);
-
-  //state used to show (show more) or not
+  //condition to show (show more) or not
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
   useEffect(() => {
-    //get the real elements after render
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
@@ -193,7 +189,6 @@ function ProjectCard({
           size="sm"
           className="w-100"
           onClick={onInterestToggle}
-          disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           <span>{isInterested ? "Interested" : "I'm Interested"}</span>

@@ -5,7 +5,7 @@ import { useExploreProjects } from "./hooks/useExploreProjects";
 import { useProjectInterest } from "./hooks/useProjectInterest";
 import { LoadingState, EmptyState } from "../../shared/States";
 import { formatDate } from "../../utils/formateDate";
-import { toast } from "react-toastify";
+import { registerInterest } from "./hooks/useProjectInterest";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
@@ -14,23 +14,19 @@ function DiscoverProjects() {
 
   const handleInterestToggle = async (projectId) => {
     try {
-      
-      const response = await registerInterest(projectId);
+      const result = await registerInterest(projectId);
       setProjects((prev) =>
-        prev.map((project) =>
-          project.id === projectId
+        prev.map((p) =>
+          p.id === projectId
             ? {
-                ...project,
-                isInterested: response.isInterested,
-                totalInterestsCount: response.totalInterestsCount,
+                ...p,
+                isInterested: result.isInterested,
+                totalInterestsCount: result.totalInterestsCount,
               }
-            : project,
+            : p,
         ),
       );
-      console.log(response.message);
-      toast.sucess("Interest submitted")
     } catch (err) {
-       toast.error("Something went wrong. Please try again.");
       console.error(err);
     }
   };
@@ -65,7 +61,6 @@ function DiscoverProjects() {
         <div className="d-flex flex-column mt-4 gap-5">
           {projects.map((project) => (
             <ProjectCard
-            key={project.id}
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
@@ -82,7 +77,6 @@ function DiscoverProjects() {
               }}
               onInterestToggle={() => handleInterestToggle(project.id)}
               isInterested={project.isInterested}
-              isLoading={loadingId===project.id}
             ></ProjectCard>
           ))}
         </div>

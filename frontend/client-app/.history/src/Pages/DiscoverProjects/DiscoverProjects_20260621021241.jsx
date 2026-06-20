@@ -30,7 +30,6 @@ function DiscoverProjects() {
       console.log(response.message);
       toast.sucess("Interest submitted")
     } catch (err) {
-       toast.error("Something went wrong. Please try again.");
       console.error(err);
     }
   };

@@ -2,11 +2,11 @@ import api from "./axiosInstance";
 
 export const markInterestInHackathon = async (hackathonId) => {
   try {
-    const response = await api.post(
+    const res = await api.post(
       `/interests/hackathons/${hackathonId}`
     );
 
-    return response.data;
+    return res.data;
   } catch (error) {
     throw error.response?.data || {
       message: "Failed to register interest",

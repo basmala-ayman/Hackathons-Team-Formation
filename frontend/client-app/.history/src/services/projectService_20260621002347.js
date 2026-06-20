@@ -2,7 +2,7 @@ import api from "./axiosInstance";
 export const getExploreProjects = async () => {
   try {
     const respnose = await api.get("/project/explore");
-    return respnose.data.data;
+    return res.data.data;
   } catch (error) {
     throw error.response?.data || { message: "Failed to fetch projects" };
   }
@@ -10,8 +10,8 @@ export const getExploreProjects = async () => {
 
 export const markInterestInProject = async (projectId) => {
   try {
-    const respnose = await api.post(`/project/interest/${projectId}`);
-    return respnose.data;
+    const res = await api.post(`/project/interest/${projectId}`);
+    return res.data;
   } catch (error) {
     throw error.response?.data || { message: "Failed to register interest" };
   }

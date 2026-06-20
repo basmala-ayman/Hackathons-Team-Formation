@@ -13,24 +13,22 @@ function DiscoverProjects() {
   const { registerInterest, loadingId } = useProjectInterest();
 
   const handleInterestToggle = async (projectId) => {
+    if(loadingId===projectId) return;
     try {
       
-      const response = await registerInterest(projectId);
+      const result = await registerInterest(projectId);
       setProjects((prev) =>
         prev.map((project) =>
           project.id === projectId
             ? {
                 ...project,
-                isInterested: response.isInterested,
-                totalInterestsCount: response.totalInterestsCount,
+                isInterested: result.isInterested,
+                totalInterestsCount: result.totalInterestsCount,
               }
             : project,
         ),
       );
-      console.log(response.message);
-      toast.sucess("Interest submitted")
     } catch (err) {
-       toast.error("Something went wrong. Please try again.");
       console.error(err);
     }
   };
