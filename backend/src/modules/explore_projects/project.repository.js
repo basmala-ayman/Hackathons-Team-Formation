@@ -46,7 +46,11 @@ const exploreAllProjects = async () => {
   });
 };
 
-
+const findProjectById = async (id) => {
+  return prisma.project.findUnique({
+    where: { id }
+  });
+};
 
 const findInterestRelation = async (projectId, userId) => {
   return prisma.projectInterest.findUnique({
@@ -84,5 +88,6 @@ const storeInterestOnUserRecord = async (projectId, userId) => {
 module.exports = {
   exploreAllProjects,
   findInterestRelation,
+  findProjectById,
   storeInterestOnUserRecord
 };
