@@ -90,6 +90,34 @@ enum InterestType {
   FINTECH
   EDUCATION
   GAMING
+  AR/VR
+  Beginner Friendly
+  Blockchain
+  Communication
+  Cybersecurity
+  Databases
+  Design
+  DevOps
+  E-commerce/Retail
+  Education
+  Enterprise
+  Fintech
+  Gaming
+  Health
+  IoT
+  Lifehacks
+  Low/No Code
+  Machine Learning/AI
+  Mobile
+  Music/Art
+  Open Ended
+  Productivity
+  Quantum
+  Robotic Process Automation
+  Serverless
+  Social Good
+  Voice skills
+  Web
   OTHER
 }
 
