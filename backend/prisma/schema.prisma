@@ -118,7 +118,6 @@ enum InterestType {
   Social Good
   Voice skills
   Web
-  OTHER
 }
 
 //--------------------------------------------------
