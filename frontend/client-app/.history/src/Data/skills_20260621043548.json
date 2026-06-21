@@ -593,5 +593,14 @@
   "Yolo": "yolo",
   "Zapier": "zapier",
   "Zbrush": "zbrush",
-  "Zenml": "zenml"
+  "Zenml": "zenml",
+ 
+  "Zod": "zod",
+  "Zoho": "zoho",
+  "Zokrates": "zokrates",
+  "Zoom": "zoom",
+  "Zsh": "zsh",
+  "Zustand": "zustand",
+  "iOS": "ios",
+  "iOSdevelopment": "iosdevelopment"
 }
