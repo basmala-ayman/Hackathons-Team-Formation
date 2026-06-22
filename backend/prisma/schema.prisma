@@ -85,11 +85,6 @@ enum HackathonSource {
 }
 
 enum InterestType {
-  AI
-  HEALTHCARE
-  FINTECH
-  EDUCATION
-  GAMING
   AR/VR
   Beginner Friendly
   Blockchain
