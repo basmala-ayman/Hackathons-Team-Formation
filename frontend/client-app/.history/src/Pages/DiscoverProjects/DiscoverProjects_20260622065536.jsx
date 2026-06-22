@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  // console.log('projects' , projects);
+  console.log('projects' , projects);
   const { registerInterest, loadingId } = useProjectInterest();
 
   const handleInterestToggle = async (projectId) => {
@@ -21,22 +21,17 @@ function DiscoverProjects() {
           project.id === projectId
             ? {
                 ...project,
-                isInterested: response.data.isInterested,
-                totalInterestsCount: response.data.totalInterestsCount,
+                isInterested: response.isInterested,
+                totalInterestsCount: response.totalInterestsCount,
               }
             : project,
         ),
       );
-      // console.log(response.message);
+      console.log(response.message);
        toast.success("Interest submitted")
-    } catch (error) {
-      const backendMessage = error.message;
-      if (backendMessage) {
-        toast.error(backendMessage);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-      // console.error(error);
+    } catch (err) {
+       toast.error("Something went wrong. Please try again.");
+      console.error(err);
     }
   };
   if (loading) {

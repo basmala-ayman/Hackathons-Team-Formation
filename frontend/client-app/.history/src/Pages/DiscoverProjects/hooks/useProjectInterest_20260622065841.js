@@ -11,12 +11,12 @@ export const useProjectInterest=()=> {
       setError("");
 
       const response = await markInterestInProject(projectId);
-      // console.log("response:" , response)
+      console.log("response")
 
       return response;
     } catch (err) {
-      // console.log(err);
-      // throw err;
+      console.log(err);
+      throw err;
     } finally {
       setLoadingId(null);
     }

@@ -43,7 +43,7 @@ function HackathonCard({ hackathon }) {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      // console.log(error);
+      console.log(error);
     }
   };
 

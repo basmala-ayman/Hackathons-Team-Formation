@@ -5,7 +5,6 @@
   "Audio Engineer": "audioengineering",
   "Azure DevOps Engineer": "azure-devops",
   "Backend Developer": "backend",
-  "Blockchain Developer": "blockchain",
   "Cloud Architect": "cloud-architecture",
   "Computer Architect": "computer-architecture",
   "Cybersecurity Engineer": "cyber-security",
@@ -13,7 +12,6 @@
   "Data Analyst": "data-analysis",
   "Data Scientist": "data-scientist",
   "DevOps Engineer": "devops",
-  "Embedded Systems Engineer": "embedded-systems",
   "Frontend Developer": "frontend",
   "Fullstack Developer": "fullstack-development",
   "Game Developer": "game-developer",
@@ -23,6 +21,7 @@
   "Interaction Designer (TouchDesigner)": "touchdesigner",
   "Machine Learning Engineer": "machine-learning",
   "Mobile App Developer": "mobile-developer",
+  NLP Engineer
   "Product Manager": "product-manager",
   "Project Manager": "project-manager",
   "Prompt Engineer": "promptengineering",

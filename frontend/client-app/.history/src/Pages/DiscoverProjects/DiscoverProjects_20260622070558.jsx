@@ -27,17 +27,16 @@ function DiscoverProjects() {
             : project,
         ),
       );
-      // console.log(response.message);
+      console.log(response.message);
        toast.success("Interest submitted")
-    } catch (error) {
+    } catch (err) {
       const backendMessage = error.message;
       if (backendMessage) {
         toast.error(backendMessage);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      // console.error(error);
-    }
+      console.error(err);}
   };
   if (loading) {
     return <LoadingState message="Loading Projects..." />;

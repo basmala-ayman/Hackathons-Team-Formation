@@ -197,11 +197,7 @@ function ProjectCard({
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           
-          <span>{isLoading
-            ? "Submitting..."
-            : isInterested
-              ? "Interested"
-              : "I'm Interested"}</span>
+          <span>{isInterested ? "Interested" : "I'm Interested"}</span>
         </CustomButton>
       </div>
     </div>

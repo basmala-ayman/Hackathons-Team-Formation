@@ -36,7 +36,7 @@ function DiscoverProjects() {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      // console.error(error);
+      console.error(error);
     }
   };
   if (loading) {

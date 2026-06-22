@@ -5,7 +5,6 @@
   "Audio Engineer": "audioengineering",
   "Azure DevOps Engineer": "azure-devops",
   "Backend Developer": "backend",
-  "Blockchain Developer": "blockchain",
   "Cloud Architect": "cloud-architecture",
   "Computer Architect": "computer-architecture",
   "Cybersecurity Engineer": "cyber-security",
@@ -14,6 +13,7 @@
   "Data Scientist": "data-scientist",
   "DevOps Engineer": "devops",
   "Embedded Systems Engineer": "embedded-systems",
+
   "Frontend Developer": "frontend",
   "Fullstack Developer": "fullstack-development",
   "Game Developer": "game-developer",

@@ -27,16 +27,16 @@ function DiscoverProjects() {
             : project,
         ),
       );
-      // console.log(response.message);
+      console.log(response.message);
        toast.success("Interest submitted")
     } catch (error) {
-      const backendMessage = error.message;
+      const backendMessage = err.message;
       if (backendMessage) {
         toast.error(backendMessage);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-      // console.error(error);
+      console.error(err);
     }
   };
   if (loading) {

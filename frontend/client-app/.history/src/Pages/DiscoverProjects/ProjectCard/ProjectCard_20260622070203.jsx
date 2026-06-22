@@ -197,7 +197,7 @@ function ProjectCard({
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
           
-          <span>{isLoading
+          <span>{loading
             ? "Submitting..."
             : isInterested
               ? "Interested"

@@ -11,7 +11,7 @@ export const useProjectInterest=()=> {
       setError("");
 
       const response = await markInterestInProject(projectId);
-      // console.log("response:" , response)
+      console.log("response:" , response)
 
       return response;
     } catch (err) {
