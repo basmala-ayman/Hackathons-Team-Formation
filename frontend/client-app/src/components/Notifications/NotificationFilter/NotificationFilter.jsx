@@ -1,15 +1,36 @@
 import React from "react";
 import styles from "./NotificationFilter.module.css";
-import { Bell, Users, CheckCircle, MessageSquare, Filter } from "lucide-react";
+import { Zap, Bell, Users, CheckCircle, Filter } from "lucide-react";
 
-const FILTER_CATEGORIES = [
-  { id: "all", label: "All Notifications", count: 8, icon: <Bell size={18} /> },
-  { id: "requests", label: "Team Requests", count: 2, icon: <Users size={18} /> },
-  { id: "accepted", label: "Accepted", count: 1, icon: <CheckCircle size={18} /> },
-  // { id: "messages", label: "Messages", count: 1, icon: <MessageSquare size={18} /> },
-];
+export default function NotificationFilter({ activeFilter, onFilterChange, counts }) {
+  const safeCounts = counts || {};
+  const FILTER_CATEGORIES = [
+    {
+      id: "all",
+      label: "All Notifications",
+      icon: <Bell size={18} />,
+      count: safeCounts.all || 0
+    },
+    {
+      id: "team",
+      label: "Team Requests",
+      icon: <Users size={18} />,
+      count: safeCounts.requests || 0
+    },
+    {
+      id: "accepted",
+      label: "Accepted",
+      icon: <CheckCircle size={18} />,
+      count: safeCounts.accepted || 0
+    },
+    {
+      id: "matches",
+      label: "Matches",
+      icon: <Zap size={18} />,
+      count: safeCounts.matches || 0
+    },
+  ];
 
-export default function NotificationFilter({ activeFilter, onFilterChange }) {
   return (
     <div className={styles.filterCard}>
       <div className={styles.filterHeader}>

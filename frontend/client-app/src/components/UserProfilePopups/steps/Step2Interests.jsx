@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Badge } from "react-bootstrap";
 import styles from "./steps.module.css";
 import { useStaticData } from "../../../hooks/useStaticData.js";

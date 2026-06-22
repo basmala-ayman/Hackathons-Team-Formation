@@ -21,7 +21,7 @@
   align-items: flex-start;
 }
 
-/* Icon / Avatar Area */
+/* Icon */
 .iconArea {
   position: relative;
 }
@@ -40,7 +40,7 @@
 .dot {
   position: absolute;
   top: 0;
-  right:0;
+  right: 0;
   width: 1.4rem;
   height: 1.4rem;
   background-color: var(--color-primary-dark);
