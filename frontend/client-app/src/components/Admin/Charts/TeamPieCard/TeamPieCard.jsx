@@ -46,7 +46,7 @@ export default function TeamPieChart() {
   };
 
   return (
-    <div style={{ height: '320px', position: 'relative' }}>
+    <div style={{ height: '300px', position: 'relative' }}>
       <Doughnut data={data} options={options} />
 
       <div style={{

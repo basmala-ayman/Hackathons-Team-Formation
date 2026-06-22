@@ -1,3 +1,4 @@
+import React from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -13,23 +14,25 @@ import { getCSSVariable } from '../../../../utils/getColors';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 
-export default function GrowthChart() {
+export default function GrowthChart({ data }) {
   const primaryDark = getCSSVariable('--color-primary-dark') || '#6366f1';
   const primaryLight = getCSSVariable('--color-primary-light-3') || 'rgba(99, 102, 241, 0.1)';
   const textColor = getCSSVariable('--color-text') || '#333';
 
-  const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [{
-      label: 'Registrations',
-      data: [120, 190, 250, 320, 430, 480],
-      borderColor: primaryDark,
-      backgroundColor: primaryLight,
-      fill: true,
-      tension: 0.4,
-      pointRadius: 4,
-      pointBackgroundColor: primaryDark,
-    }],
+  const chartData = {
+    labels: data?.map((item) => item.date) || [],
+    datasets: [
+      {
+        label: 'Registrations',
+        data: data?.map((item) => item.count) || [],
+        borderColor: primaryDark,
+        backgroundColor: primaryLight,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: primaryDark,
+      },
+    ],
   };
 
   const options = {
@@ -42,8 +45,8 @@ export default function GrowthChart() {
         titleColor: '#fff',
         bodyColor: '#fff',
         cornerRadius: 8,
-        padding: 12
-      }
+        padding: 12,
+      },
     },
     scales: {
       y: {
@@ -51,22 +54,22 @@ export default function GrowthChart() {
         grid: { borderDash: [5, 5], color: '#eef0f2' },
         ticks: {
           color: textColor,
-          font: { family: 'inherit', size: 12 }
-        }
+          font: { family: 'inherit', size: 12 },
+        },
       },
       x: {
         grid: { display: false },
         ticks: {
           color: textColor,
-          font: { family: 'inherit', size: 12 }
-        }
-      }
-    }
+          font: { family: 'inherit', size: 12 },
+        },
+      },
+    },
   };
 
   return (
     <div style={{ height: '300px' }}>
-      <Line data={data} options={options} />
+      <Line data={chartData} options={options} />
     </div>
   );
 }
