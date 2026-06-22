@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Spinner, Alert } from "react-bootstrap";
 import styles from "./UserDashboard.module.css";
 import StatCard from '../../components/StatCard/StatCard.jsx';
@@ -11,6 +12,7 @@ export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getUserDashboard()
@@ -114,8 +116,9 @@ export default function UserDashboard() {
           <section className="col-lg-8">
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h2 className="h3 fw-bold m-0">My Active Teams</h2>
-              <CustomButton variant="primary" size="sm" className={styles.joinBtnOverride}>
-                <Plus size={18} /> Join team
+              <CustomButton variant="primary" size="sm" className={styles.joinBtnOverride} onClick={() => navigate("/create-team")}
+              >
+                <Plus size={18} /> Create a Team
               </CustomButton>
             </div>
 
@@ -148,14 +151,14 @@ export default function UserDashboard() {
             {/* Recent Activity Card */}
             <div className={`card ${styles.sidebarCard} mb-4 border-0 shadow-sm p-4`} style={{ borderRadius: "1.5rem" }}>
               <h3 className={`${styles.sidebarTitle} h5 fw-bold mb-4 d-flex align-items-center gap-2`}>
-                <Bell size={18} className="text-primary" /> Recent Activity
+                Recent Activities
               </h3>
 
               {recentActivities.length === 0 ? (
                 <p className="text-muted small text-center py-3">No recent activities found.</p>
               ) : (
                 <ul className={`${styles.activityList} list-unstyled m-0 p-0`}>
-                  {recentActivities.map((activity, index) => (
+                  {recentActivities.slice(0, 4).map((activity, index) => (
                     <li key={activity.id || index} className={`${styles.activityItem} d-flex gap-3 mb-3`}>
                       <span className={`${styles.dot} ${getActivityDotClass(activity.type)} mt-1.5`}></span>
                       <div>
@@ -168,19 +171,39 @@ export default function UserDashboard() {
               )}
             </div>
 
+            {/* {recentActivities.length > 3 && (
+              <div className="text-center mt-3">
+                <button className="btn btn-link btn-sm text-decoration-none" onClick={() => navigate("/activities")}>
+                  View All Activities
+                </button>
+              </div>
+            )} */}
+
             {/* Quick Actions Card */}
             <div className="card border-0 shadow-sm p-4 mb-4" style={{ borderRadius: "1.5rem", backgroundColor: "var(--color-white)" }}>
-              <h3 className="h5 fw-bold mb-4">Quick Actions</h3>
+              <h3 className={`${styles.sidebarTitle} h5 fw-bold mb-4 d-flex align-items-center gap-2`}>Quick Actions</h3>
               <div className="d-grid gap-3">
-                <CustomButton variant="primary" size="md">Find New Teams</CustomButton>
-                <CustomButton variant="secondary" size="md">Create Team</CustomButton>
-                <CustomButton variant="secondary" size="md">Explore Hackathons</CustomButton>
+                <CustomButton
+                  variant="primary"
+                  size="sm"
+                  onClick={() => navigate("/recommended-teams")}
+                >
+                  Recommended Teams
+                </CustomButton>
+
+                <CustomButton
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate("/explore-hackathons")}
+                >
+                  Explore Hackathons
+                </CustomButton>
               </div>
             </div>
 
           </aside>
         </div>
-      </div>
+      </div >
     </div >
   );
 }
