@@ -24,8 +24,8 @@ export default function AdminDashboard() {
   if (isLoading) return <div className="text-center py-5"><Spinner animation="border" /></div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
 
-  const sys = data.systemOverview;
-  const teamStats = data.teamFormationStats;
+  const sys = data?.systemOverview || { totalUsers: 0, totalTeams: 0, completeTeams: 0 };
+  const teamStats = data?.teamFormationStats || { autoMatched: 0, manual: 0, invited: 0 }
 
   const stats = [
     { id: 1, title: "Total Users", value: sys.totalUsers, icon: <Users size={22} /> },

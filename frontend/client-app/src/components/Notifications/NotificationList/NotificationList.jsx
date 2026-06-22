@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./NotificationList.module.css";
 import NotificationItem from "../NotificationItem/NotificationItem";
+import { BellOff } from "lucide-react";
 import {
   getMyNotifications,
   markNotificationAsRead,
@@ -8,23 +9,36 @@ import {
 } from "../../../services/notificationService";
 
 export default function NotificationList({ filter }) {
-  const [notifications, setNotifications] = useState([]);
+  const [allNotifications, setAllNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const FILTER_CATEGORIES = [
+    { id: "all", label: "All", types: [] },
+    { id: "team", label: "Team Requests", types: ["TEAM_INVITE", "INVITE_ACCEPTED", "INVITE_REJECTED"] },
+    { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+    { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED", "ROUND2_AVAILABLE"] },
+  ];
+
+  const filteredNotifications = useMemo(() => {
+    const category = FILTER_CATEGORIES.find(c => c.id === filter);
+    if (!category || category.id === "all") return allNotifications;
+    return allNotifications.filter(n => category.types.includes(n.type));
+  }, [allNotifications, filter]);
 
   useEffect(() => {
     setLoading(true);
     getMyNotifications(1, 20)
-      .then((res) => {
-        setNotifications(res.notifications || []);
-      })
+      .then((res) => setAllNotifications(res.notifications || []))
       .catch((err) => console.error("Error fetching:", err))
       .finally(() => setLoading(false));
-  }, [filter]);
+  }, []);
+
+  console.log(allNotifications)
 
   const handleMarkAsRead = async (id) => {
     try {
       await markNotificationAsRead(id);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+      setAllNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     } catch (err) {
       console.error("Failed to mark as read", err);
     }
@@ -33,20 +47,33 @@ export default function NotificationList({ filter }) {
   const handleMarkAllAsRead = async () => {
     try {
       await markAllNotificationsAsRead();
-      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      setAllNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     } catch (err) {
       console.error("Failed to mark all as read", err);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-
+  if (loading) return (
+    <div
+      className="text-center mt-4"
+      style={{
+        color: "var(--color-primary-dark)",
+        padding: "40px",
+        fontSize: "var(--fs-regular)",
+        fontWeight: "600"
+      }}
+    >
+      Loading notifications...
+    </div>
+  );
   return (
     <div className={styles.wrapper}>
       <div className={styles.listHeader}>
         <div className={styles.titleInfo}>
-          <h2>{filter === "all" ? "All Notifications" : filter}</h2>
-          <span className={styles.badge}>{notifications.filter(n => !n.isRead).length} unread</span>
+          <h2>{FILTER_CATEGORIES.find(c => c.id === filter)?.label || "Notifications"}</h2>
+          <span className={styles.badge}>
+            {filteredNotifications.filter(n => !n.isRead).length} unread
+          </span>
         </div>
         <button className={styles.markAllBtn} onClick={handleMarkAllAsRead}>
           Mark all as read
@@ -54,10 +81,8 @@ export default function NotificationList({ filter }) {
       </div>
 
       <div className={styles.itemsStack}>
-        {loading ? (
-          <div className="text-center py-4">Loading...</div>
-        ) : notifications.length > 0 ? (
-          notifications.map((item) => (
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((item) => (
             <NotificationItem
               key={item.id}
               data={{ ...item, isUnread: !item.isRead }}
@@ -66,7 +91,11 @@ export default function NotificationList({ filter }) {
           ))
         ) : (
           <div className={styles.emptyState}>
-            <p>No notifications found.</p>
+            <div className={styles.emptyIcon}>
+              <BellOff size={48} />
+            </div>
+            <h3>No notifications yet</h3>
+            <p>When you have new updates, they will appear here.</p>
           </div>
         )}
       </div>

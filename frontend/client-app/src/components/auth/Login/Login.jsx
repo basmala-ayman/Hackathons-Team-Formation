@@ -58,15 +58,19 @@ export default function Login() {
         navigate("/", { replace: true });
       }
     } catch (err) {
-      const { status, message } = err;
-      console.log("Detailed Error:", status, message);
-      if (
-        status === 401 ||
-        status === 404 ||
-        message === "Something went wrong"
-      ) {
+      // Check the error status or response message
+      const status = err.status || err.response?.status;
+
+      // If the backend returns 401 (Unauthorized), it's usually bad credentials
+      if (status === 401) {
+        popUp.error("Incorrect email or password.");
+      }
+      // Handle "Account not found" 
+      else if (status === 404) {
         popUp.warn("We couldn't find your account, please register first.");
-      } else {
+      }
+      // Default fallback
+      else {
         popUp.error("Incorrect email or password.");
       }
     }

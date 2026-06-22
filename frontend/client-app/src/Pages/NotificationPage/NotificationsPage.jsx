@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./NotificationsPage.module.css";
 import NotificationFilter from "../../components/Notifications/NotificationFilter/NotificationFilter";
 import NotificationList from "../../components/Notifications/NotificationList/NotificationList";
-import CustomButton from "../../shared/CustomButton/CustomButton";
-import { getUnreadCount } from "../../services/notificationService";
 
-export default function NoticationsPage() {
+export default function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [unreadCount, setUnreadCount] = useState(0);
-  useEffect(() => {
-    getUnreadCount().then(setUnreadCount);
-  }, []);
-  
+  const [allNotifications, setAllNotifications] = useState([]);
+
+  // Calculate dynamic counts based on the notification types
+  const counts = useMemo(() => ({
+    all: allNotifications.length,
+    requests: allNotifications.filter(n =>
+      ["TEAM_INVITE", "INVITE_ACCEPTED", "INVITE_REJECTED"].includes(n.type)
+    ).length,
+    accepted: allNotifications.filter(n => n.type === "INVITE_ACCEPTED").length,
+    matches: allNotifications.filter(n =>
+      ["MATCH_FOUND", "RECOMMENDATION_RECEIVED", "ROUND2_AVAILABLE"].includes(n.type)
+    ).length,
+  }), [allNotifications]);
+
   return (
     <div className="container py-5">
       <header className={styles.header}>
@@ -24,11 +31,15 @@ export default function NoticationsPage() {
           <NotificationFilter
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
-            unreadCount={unreadCount}
+            counts={counts}
           />
         </aside>
         <main className="col-lg-9">
-          <NotificationList filter={activeFilter} />
+          <NotificationList
+            filter={activeFilter}
+            allNotifications={allNotifications}
+            setAllNotifications={setAllNotifications}
+          />
         </main>
       </div>
     </div>

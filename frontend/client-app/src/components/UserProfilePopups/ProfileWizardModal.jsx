@@ -4,13 +4,15 @@ import { X } from "lucide-react";
 import styles from "./ProfileWizardModal.module.css";
 import CustomButton from "../../shared/CustomButton/CustomButton.jsx";
 import { useAuth } from "../../context/AuthContext/useAuth.js";
-
 import Step1Skills from "./steps/Step1Skills.jsx";
 import Step2Interests from "./steps/Step2Interests";
 import Step4Final from "./steps/Step4Final.jsx";
 import SuccessPopup from "./successModal/SuccessPopup.jsx";
+import { useStaticData } from "../../hooks/useStaticData.js";
 
-const cleanAndMapToEnum = (text, type) => {
+
+
+const cleanAndMapToEnum = (text, type, hackathonOptions = []) => {
   if (!text) return "";
   let normalized = text.toUpperCase().trim();
   if (type === "role") {
@@ -21,14 +23,15 @@ const cleanAndMapToEnum = (text, type) => {
     if (normalized.includes("DEVOPS")) return "DEVOPS";
   }
   if (type === "interest") {
-    const validInterests = ["AI", "HEALTHCARE", "FINTECH", "EDUCATION", "GAMING", "OTHER"];
+    const validInterests = hackathonOptions.map(h => h.label);
     if (validInterests.includes(normalized)) return normalized;
     return null;
   }
   return normalized.replace(/[\s/-]+/g, "_");
 };
 
-const generatePayload = (currentValues, originalValues, user) => {
+
+const generatePayload = (currentValues, originalValues, user, hackathonOptions) => {
   const payload = new FormData();
   const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
   payload.append("name", nameToSubmit);
@@ -50,7 +53,9 @@ const generatePayload = (currentValues, originalValues, user) => {
   const rolesArray = currentValues.techRoles || [];
   const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
   const interestsArray = currentValues.interests || currentValues.intrestes || [];
-  const cleanInterests = interestsArray.map(i => cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest")).filter(Boolean);
+  const cleanInterests = interestsArray.map(i =>
+    cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest", hackathonOptions)
+  ).filter(Boolean);
 
   appendIfChanged("skills", currentValues.skills);
   appendIfChanged("bio", currentValues.bio);
@@ -70,6 +75,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
   const { user } = useAuth();
+  const { hackathonOptions } = useStaticData();
   const isSkillsOnly = mode === "skillsOnly";
 
   useEffect(() => {
@@ -109,7 +115,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     setActiveAction(actionType);
     setErrors({});
     try {
-      const finalPayload = generatePayload(localValues, externalValues, user);
+      const finalPayload = generatePayload(localValues, externalValues, user, hackathonOptions);
       await onSave(finalPayload, true);
       setExternalValues((prev) => ({ ...prev, ...localValues }));
       setShowSuccessScreen(true);

@@ -59,6 +59,7 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
 
     return ANONYMOUS_AVATAR;
   };
+  
   console.log(getAvatarSource())
 
   return (

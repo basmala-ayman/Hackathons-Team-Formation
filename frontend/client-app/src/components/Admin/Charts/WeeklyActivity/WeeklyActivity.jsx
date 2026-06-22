@@ -1,3 +1,4 @@
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -11,28 +12,29 @@ import { getCSSVariable } from '../../../../utils/getColors';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-export default function WeeklyActivity() {
-  // 3. Grab your variables
-  const primaryDark = getCSSVariable('--color-primary-dark') || '#4f46e5';
-  const primaryMid = getCSSVariable('--color-primary-light') || '#a5a6f6';
-  const textColor = getCSSVariable('--color-text') || '#333';
+export default function WeeklyActivity({ data }) {
+  const primaryDark = getCSSVariable('--color-primary-dark');
+  const primaryMid = getCSSVariable('--color-primary-light') ;
+  const textColor = getCSSVariable('--color-text');
 
-  const data = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  // Assuming data comes as { newUsers: number, newTeams: number }
+  // We map them to the 7-day structure or represent them as weekly totals
+  const chartData = {
+    labels: ['Weekly Activity'],
     datasets: [
       {
         label: 'Teams',
-        data: [40, 50, 45, 60, 55, 30, 40],
+        data: [data?.newTeams || 0],
         backgroundColor: primaryDark,
         borderRadius: 6,
-        barThickness: 32,
+        barThickness: 40,
       },
       {
-        label: 'Participants',
-        data: [120, 140, 130, 160, 150, 90, 110],
+        label: 'Users',
+        data: [data?.newUsers || 0],
         backgroundColor: primaryMid,
         borderRadius: 6,
-        barThickness: 32,
+        barThickness: 40,
       }
     ],
   };
@@ -75,7 +77,7 @@ export default function WeeklyActivity() {
 
   return (
     <div style={{ height: '300px' }}>
-      <Bar data={data} options={options} />
+      <Bar data={chartData} options={options} />
     </div>
   );
 }

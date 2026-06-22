@@ -43,7 +43,6 @@ export default function StatCard({ data, role = "user" }) {
 
   // If the role is user
   return (
-    // تعديل: استخدمنا variant المحسوبة بدل data.variant
     <div className={`${styles.card} ${styles.userCard} ${styles[variant]}`}>
       <div className="d-flex justify-content-between align-items-start w-100">
         <div className={styles.leftContent}>
