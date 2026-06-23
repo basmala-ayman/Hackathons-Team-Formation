@@ -21,7 +21,7 @@ function DiscoverProjects() {
           project.id === projectId
             ? {
                 ...project,
-                isInterested: response.data?.isInterested,
+                isInterested: response?.data?.isInterested,
                 totalInterestsCount: response.data?.totalInterestsCount,
               }
             : project,

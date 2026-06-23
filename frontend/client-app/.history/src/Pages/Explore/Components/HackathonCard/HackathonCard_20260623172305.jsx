@@ -23,6 +23,8 @@ function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
     location,
     interestCount = 0,
     userCreated = false,
+    remainingTime,
+    
   } = hackathon;
   // const navigate = useNavigate();
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);

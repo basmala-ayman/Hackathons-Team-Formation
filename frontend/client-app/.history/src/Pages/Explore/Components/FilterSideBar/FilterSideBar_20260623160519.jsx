@@ -5,7 +5,7 @@ import { useState } from "react";
 
 function FilterSideBar({ onFilterChange, activeFilters }) {
   // Put this outside your component function!
-  const INITIAL_VISIBLE_COUNT = 15;
+  const INITIAL_VISIBLE_COUNT = 10;
   const [expandedSections, setExpandedSections] = useState({});
   const filterSections = [
     {
@@ -18,7 +18,11 @@ function FilterSideBar({ onFilterChange, activeFilters }) {
       title: "Type",
       options: ["Official", "User Created"], // Matches the translated hackathonType
     },
-   
+    // {
+    //   id: "prizeAmount",
+    //   title: "Prize Amount",
+    //   options: ["Under $5k", "$5k-$10k", "$10k+"],
+    // },
   ];
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) => ({

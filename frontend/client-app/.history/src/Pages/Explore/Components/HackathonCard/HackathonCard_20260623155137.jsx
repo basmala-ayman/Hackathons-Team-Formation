@@ -17,7 +17,6 @@ function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
     id,
     title,
     prizeAmount = 0,
-    status,
     applyLink,
     thumbnailUrl,
     location,

@@ -15,9 +15,6 @@ export const filterHackathons = (hackathons, searchWord, filters) => {
         filters.tags.some((selectedTag) =>
           hackathon.tags.includes(selectedTag),
         ));
-        const hackathonType = hackathon.userCreated ? "User Created" : "Official";
-        const isTypeMatch =
-          filters.type.length === 0 || filters.type.includes(hackathonType);
 
     // const isStatusMatch =
     //   filters.status.length === 0 || filters.status.includes(hackathon.status);
@@ -25,12 +22,15 @@ export const filterHackathons = (hackathons, searchWord, filters) => {
     //   filters.location.length === 0 ||
     //   filters.location.includes(hackathon.location);
 
+    const hackathonType = hackathon.userCreated ? "User Created" : "Official";
+    const isTypeMatch =
+      filters.type.length === 0 || filters.type.includes(hackathonType);
 
-    // const isPrizeAmountMatch =
-    //   filters.prizeAmount.length === 0 ||
-    //   filters.prizeAmount.includes(hackathon.prizeAmount);
+    const isPrizeAmountMatch =
+      filters.prizeAmount.length === 0 ||
+      filters.prizeAmount.includes(hackathon.prizeAmount);
 
     // Only return if all conditions match
-    return isSearchMatch && isTagsMatch && isTypeMatch ;
+    return isSearchMatch && isTagsMatch && isTypeMatch && isPrizeAmountMatch;
   });
 };

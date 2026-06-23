@@ -31,6 +31,6 @@ export const filterHackathons = (hackathons, searchWord, filters) => {
     //   filters.prizeAmount.includes(hackathon.prizeAmount);
 
     // Only return if all conditions match
-    return isSearchMatch && isTagsMatch && isTypeMatch ;
+    return isSearchMatch && isTagsMatch && isTypeMatch && isPrizeAmountMatch;
   });
 };

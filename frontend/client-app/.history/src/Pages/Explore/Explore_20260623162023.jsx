@@ -20,7 +20,7 @@ function Explore() {
 
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
-  console.log(hackathons);
+  console.log(hackathons)
 
   const handleInterest = async (hackathonId) => {
     try {

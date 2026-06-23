@@ -22,7 +22,7 @@ function DiscoverProjects() {
             ? {
                 ...project,
                 isInterested: response.data?.isInterested,
-                totalInterestsCount: response.data?.totalInterestsCount,
+                totalInterestsCount: response.data.totalInterestsCount,
               }
             : project,
         ),

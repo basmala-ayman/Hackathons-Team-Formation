@@ -26,11 +26,11 @@ export const filterHackathons = (hackathons, searchWord, filters) => {
     //   filters.location.includes(hackathon.location);
 
 
-    // const isPrizeAmountMatch =
-    //   filters.prizeAmount.length === 0 ||
-    //   filters.prizeAmount.includes(hackathon.prizeAmount);
+    const isPrizeAmountMatch =
+      filters.prizeAmount.length === 0 ||
+      filters.prizeAmount.includes(hackathon.prizeAmount);
 
     // Only return if all conditions match
-    return isSearchMatch && isTagsMatch && isTypeMatch ;
+    return isSearchMatch && isTagsMatch && isTypeMatch && isPrizeAmountMatch;
   });
 };

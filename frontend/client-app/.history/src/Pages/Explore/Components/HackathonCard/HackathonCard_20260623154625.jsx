@@ -81,7 +81,7 @@ function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
             href={applyLink}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.titleLink}
+            className=title-link"
           >
             {title}
           </a>
