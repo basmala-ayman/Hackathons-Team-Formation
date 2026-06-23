@@ -19,13 +19,13 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
         img.src = event.target.result;
         img.onload = () => {
           const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 800; 
+          const MAX_WIDTH = 800;
           const scale = MAX_WIDTH / img.width;
           canvas.width = MAX_WIDTH;
           canvas.height = img.height * scale;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.7); 
+          canvas.toBlob((blob) => resolve(blob), "image/jpeg", 0.7);
         };
       };
     });
@@ -33,23 +33,27 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
 
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const compressedFile = await compressImage(file);
-      const localImageUrl = URL.createObjectURL(compressedFile);
-      setFormData((prev) => ({ ...prev, avatar: localImageUrl, avatarFile: compressedFile }));
-    }
-  };
+    if (!file) return;
 
+    const compressedFile = await compressImage(file);
+    const localImageUrl = URL.createObjectURL(compressedFile);
+
+    setFormData((prev) => ({
+      ...prev,
+      avatar: localImageUrl,
+      avatarFile: compressedFile,
+    }));
+  };
 
   const handleCvChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        resumeFile: file,
-        resumeUrl: file.name
-      }));
-    }
+    if (!file) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      resumeFile: file,
+      resumeUrl: file.name,
+    }));
   };
 
   return (

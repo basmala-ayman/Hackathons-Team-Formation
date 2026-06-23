@@ -60,9 +60,17 @@ export default function UserProfile({ isOwner = true }) {
           let rawAvatar = coreProfile.profilePicture;
 
           if (rawAvatar) {
-            rawAvatar = rawAvatar.startsWith("http")
-              ? rawAvatar
-              : `${BACKEND_URL}${rawAvatar.startsWith("/") ? "" : "/"}${rawAvatar}`;
+            let cleanPath = rawAvatar;
+            if (cleanPath.includes("/api/v1")) {
+              cleanPath = cleanPath.replace("/api/v1", "");
+            }
+
+            if (!cleanPath.startsWith("/uploads")) {
+              cleanPath = cleanPath.startsWith("/") ? `/uploads${cleanPath}` : `/uploads/${cleanPath}`;
+            }
+
+            const baseUrl = BACKEND_URL.replace("/api/v1", "");
+            rawAvatar = `${baseUrl}${cleanPath.startsWith("/") ? "" : "/"}${cleanPath}?t=${new Date().getTime()}`;
           } else {
             rawAvatar = "";
           }
@@ -107,68 +115,86 @@ export default function UserProfile({ isOwner = true }) {
     }
   }, [isOwner, setValues]);
 
+
   const handleProfileUpdate = useCallback(async (payload, isFinal = false) => {
     try {
       setApiError(null);
 
-      let finalPayload = payload;
+      let finalPayload;
 
-      if (!(payload instanceof FormData)) {
-        finalPayload = new FormData();
-
-        finalPayload.append("name", payload.name || values.name || "User");
-        finalPayload.append("bio", payload.bio || "");
-        finalPayload.append("githubUrl", payload.githubUrl || "");
-        finalPayload.append("linkedinUrl", payload.linkedinUrl || "");
-
-        if (Array.isArray(payload.skills)) {
-          payload.skills.forEach(skill => finalPayload.append("skills[]", skill));
+      if (payload instanceof FormData) {
+        if (!payload.get('profilePicture') && values.avatarFile) {
+          payload.append('profilePicture', values.avatarFile);
         }
-        if (Array.isArray(payload.techRoles)) {
-          payload.techRoles.forEach(role => finalPayload.append("techRoles[]", role));
-        }
-        const interestsToSubmit = payload.intrestes || payload.interests;
-        if (Array.isArray(interestsToSubmit)) {
-          interestsToSubmit.forEach(interest => finalPayload.append("intrestes[]", interest));
-        }
-
-        if (payload.avatarFile) finalPayload.append("profilePicture", payload.avatarFile);
-        if (payload.resumeFile) finalPayload.append("resume", payload.resumeFile);
+        finalPayload = payload;
       } else {
-        if (!payload.has("name")) {
-          payload.append("name", values.name || "User");
+        finalPayload = new FormData();
+        finalPayload.append("name", payload.name || values.name || "User");
+        finalPayload.append("bio", payload.bio || values.bio || "");
+        finalPayload.append("githubUrl", payload.githubUrl || values.githubUrl || "");
+        finalPayload.append("linkedinUrl", payload.linkedinUrl || values.linkedinUrl || "");
+
+        const fileToUpload = payload.avatarFile || values.avatarFile;
+        if (fileToUpload) {
+          finalPayload.append("profilePicture", fileToUpload);
         }
+
+        const skills = payload.skills || values.skills || [];
+        skills.forEach(s => finalPayload.append("skills[]", s));
+
+        const roles = payload.techRoles || values.techRoles || [];
+        roles.forEach(r => finalPayload.append("techRoles[]", r));
+
+        const interests = payload.intrestes || payload.interests || values.intrestes || [];
+        interests.forEach(i => finalPayload.append("intrestes[]", i));
       }
 
       const response = await updateUserProfile(finalPayload);
-
       const responseData = response?.data?.data || response?.data || response;
       const profileData = responseData.profile || {};
+
+      let newAvatar = values.avatar;
+      if (profileData.profilePicture) {
+        const baseUrl = BACKEND_URL.replace("/api/v1", "");
+        let picPath = profileData.profilePicture;
+
+        if (picPath.startsWith("http")) {
+          // راجع full URL من السيرفر
+          newAvatar = `${picPath}?t=${Date.now()}`;
+        } else {
+          // relative path
+          if (picPath.includes("/api/v1")) picPath = picPath.replace("/api/v1", "");
+          if (!picPath.startsWith("/")) picPath = `/${picPath}`;
+          newAvatar = `${baseUrl}${picPath}?t=${Date.now()}`;
+        }
+      }
 
       setValues(prev => ({
         ...prev,
         name: profileData.name || prev.name,
-        bio: profileData.bio !== undefined ? profileData.bio : prev.bio,
+        bio: profileData.bio || prev.bio,
         githubUrl: profileData.githubUrl || prev.githubUrl,
         linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
-        avatar: profileData.profilePicture
-          ? `${BACKEND_URL}${profileData.profilePicture}?t=${new Date().getTime()}`
-          : prev.avatar,
-        skills: profileData.skills || prev.skills,
-        techRoles: profileData.techRoles || prev.techRoles,
-        intrestes: profileData.interests || prev.intrestes,
-        avatarFile: null
+        resumeUrl: profileData.resumeUrl || prev.resumeUrl,
+        avatar: newAvatar,
+        avatarFile: null,
       }));
 
-      setApiError(null);
       if (isFinal) setIsWizardOpen(false);
       return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
+      const msg = err.response?.data?.message || err.message || "Update failed.";
+      setApiError(msg);
       throw err;
     }
   }, [values, setValues]);
 
+  useEffect(() => {
+    if (values.avatarFile) {
+      handleProfileUpdate({ avatarFile: values.avatarFile });
+    }
+  }, [values.avatarFile]);
 
   // When Loading
   if (isLoading) {
@@ -179,6 +205,7 @@ export default function UserProfile({ isOwner = true }) {
       </Container>
     );
   }
+
 
   return (
     <Container className="py-4 d-flex flex-column gap-4">
