@@ -43,6 +43,13 @@ function Footer() {
             </Link>
           </Col>
 
+          {/* <Col xs={12} md={6} lg={3} className="d-flex flex-column gap-3 align-items-center ">
+            <h6  className={`fw-bold text-dark mb-3 ${styles.footerSections} `}>Resources</h6>
+            <Link to="/" className={styles.footerLink}>How It Works</Link>
+            <Link to="/" className={styles.footerLink}>Features</Link>
+            <Link to="/" className={styles.footerLink}>Blog</Link>
+          </Col> */}
+
           <Col
             xs={12}
             md={6}

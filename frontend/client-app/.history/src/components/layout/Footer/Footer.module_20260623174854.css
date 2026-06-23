@@ -9,7 +9,7 @@ footer {
   color: var(--color-text);
   text-decoration: none;
   font-size: var(--fs-regular);
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
   display: inline-block;
   font-weight: 500;
 }

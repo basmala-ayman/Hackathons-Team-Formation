@@ -2,14 +2,14 @@ footer {
   background-color: var(--color-primary-light-2);
 }
 .footerSlogan {
-  font-size: var(--fs-regular);
-  font-weight: 500;
+  font-size: var(--fs-small);
+  font-weight: 400;
 }
 .footerLink {
   color: var(--color-text);
   text-decoration: none;
   font-size: var(--fs-regular);
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
   display: inline-block;
   font-weight: 500;
 }
