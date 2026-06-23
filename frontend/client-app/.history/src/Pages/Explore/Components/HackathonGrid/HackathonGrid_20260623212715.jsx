@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
 import HackathonCard from "../HackathonCard/HackathonCard";
-function HackathonGrid({ hackathons, onInterestClick, loadingId }) {
+function HackathonGrid({ hackathons, onInterestClick, isInterestLoading }) {
   //   if (!hackathons || hackathons.length === 0) {
   //   return <p className="text-center mt-5">No hackathons available at the moment.</p>;
   // }
@@ -12,7 +12,7 @@ function HackathonGrid({ hackathons, onInterestClick, loadingId }) {
             <HackathonCard
               hackathon={hackathon}
               onInterestClick={onInterestClick}
-              loadingId={loadingId}
+              loadingId={isInterestLoading}
             />
           </Col>
         ))}

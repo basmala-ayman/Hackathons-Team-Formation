@@ -17,14 +17,13 @@ function Explore() {
   const { filters, handleSearch, handleFilter, filteredHackathons } =
     useHackathonFilters(hackathons);
   const { registerInterest} = useHackathonInterest();
-  const [loadingId, setLoadingId] = useState(null);
+  
 
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
   console.log(hackathons);
 
   const handleInterest = async (hackathonId) => {
-    setLoadingId(hackathonId);
     try {
       const response = await registerInterest(hackathonId);
       console.log(response);
@@ -49,8 +48,6 @@ function Explore() {
         toast.error("Something went wrong. Please try again.");
       }
       // console.log(error);
-    }finally{
-      setLoadingId(null);
     }
   };
   const handleOpenedFilters = () => {
@@ -117,7 +114,7 @@ function Explore() {
               <HackathonGrid
                 hackathons={filteredHackathons}
                 onInterestClick={handleInterest}
-                loadingId={loadingId}
+                isInterestLoading={loadingInterest}
               />
             ) : (
               <div className="text-center mt-5">

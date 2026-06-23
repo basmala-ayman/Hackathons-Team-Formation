@@ -12,7 +12,7 @@ function HackathonGrid({ hackathons, onInterestClick, loadingId }) {
             <HackathonCard
               hackathon={hackathon}
               onInterestClick={onInterestClick}
-              loadingId={loadingId}
+              loadingId={isInterestLoading}
             />
           </Col>
         ))}

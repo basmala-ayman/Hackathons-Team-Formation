@@ -49,8 +49,6 @@ function Explore() {
         toast.error("Something went wrong. Please try again.");
       }
       // console.log(error);
-    }finally{
-      setLoadingId(null);
     }
   };
   const handleOpenedFilters = () => {
@@ -117,7 +115,7 @@ function Explore() {
               <HackathonGrid
                 hackathons={filteredHackathons}
                 onInterestClick={handleInterest}
-                loadingId={loadingId}
+                isInterestLoading={loadingInterest}
               />
             ) : (
               <div className="text-center mt-5">

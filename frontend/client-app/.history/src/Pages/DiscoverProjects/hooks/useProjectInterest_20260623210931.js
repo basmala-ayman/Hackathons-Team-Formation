@@ -14,10 +14,9 @@ export const useProjectInterest=()=> {
       // console.log("response:" , response)
 
       return response;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    } finally {
+    } 
+      throw (err);
+     finally {
       setLoadingId(null);
     }
   };

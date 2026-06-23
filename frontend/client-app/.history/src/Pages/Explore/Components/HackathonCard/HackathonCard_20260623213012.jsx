@@ -132,7 +132,7 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
               ? "Interested"
               : "I'm Interested"} */}
 
-          {isThisCardLoading ? "Submitting..." : "I'm Interested"}
+          {isInterestLoading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

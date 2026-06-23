@@ -124,7 +124,7 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
           className="flex-fill rounded-4 w-100"
           onClick={() => onInterestClick(id)}
           // disabled={isInterestLoading || isInterested}
-          disabled={isThisCardLoading}
+          disabled={isInterestLoading}
         >
           {/* {isInterestLoading
             ? "Submitting..."
@@ -132,7 +132,7 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
               ? "Interested"
               : "I'm Interested"} */}
 
-          {isThisCardLoading ? "Submitting..." : "I'm Interested"}
+          {isInterestLoading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

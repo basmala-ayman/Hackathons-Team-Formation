@@ -117,7 +117,7 @@ function Explore() {
               <HackathonGrid
                 hackathons={filteredHackathons}
                 onInterestClick={handleInterest}
-                loadingId={loadingId}
+                isInterestLoading={loadingId}
               />
             ) : (
               <div className="text-center mt-5">
