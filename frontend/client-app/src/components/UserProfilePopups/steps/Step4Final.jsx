@@ -35,7 +35,24 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    const compressedFile = await compressImage(file);
+    // const compressedFile = await compressImage(file);
+    // const localImageUrl = URL.createObjectURL(compressedFile);
+
+    // setFormData((prev) => ({
+    //   ...prev,
+    //   avatar: localImageUrl,
+    //   avatarFile: compressedFile,
+    // }));
+    const compressedBlob = await compressImage(file);
+
+    const compressedFile = new File(
+      [compressedBlob],
+      file.name,
+      {
+        type: "image/jpeg",
+      }
+    );
+
     const localImageUrl = URL.createObjectURL(compressedFile);
 
     setFormData((prev) => ({

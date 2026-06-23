@@ -24,6 +24,18 @@ function UserAuthenticatedMenu({ onLogout }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const displayName = user?.name || "User";
 
+  const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+  const avatarUrl = (() => {
+    const pic = user?.profilePicture || user?.avatar;
+    if (!pic) return ANONYMOUS_AVATAR;
+    if (pic.startsWith("http")) return pic;
+    const baseUrl = BACKEND_URL.replace("/api/v1", "");
+    const path = pic.startsWith("/") ? pic : `/${pic}`;
+    return `${baseUrl}${path}`;
+  })();
+
   useEffect(() => {
     getUnreadCount()
       .then((count) => setUnreadCount(count))
@@ -32,14 +44,14 @@ function UserAuthenticatedMenu({ onLogout }) {
 
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">
-        <Link to="/notifications" className="position-relative">
-          <span className={styles.bellIcon}>
-            <BellIcon />
-          </span>
-          {unreadCount > 0 && (
-            <span className={styles.badge}>{unreadCount > 9 ? "9+" : unreadCount}</span>
-          )}
-        </Link>
+      <Link to="/notifications" className="position-relative">
+        <span className={styles.bellIcon}>
+          <BellIcon />
+        </span>
+        {unreadCount > 0 && (
+          <span className={styles.badge}>{unreadCount > 9 ? "9+" : unreadCount}</span>
+        )}
+      </Link>
 
       <Dropdown
         className={`${styles.wrapper}`}
@@ -53,11 +65,15 @@ function UserAuthenticatedMenu({ onLogout }) {
           className={`${styles.customToggle} d-flex gap-2 align-items-center p-2`}
         >
           <img
-            src={defaultProfile}
+            src={avatarUrl}
             width={35}
             height={35}
             alt="User"
-            className={`rounded-circle  ${styles.avatar}`}
+            className={`rounded-circle ${styles.avatar}`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = ANONYMOUS_AVATAR;
+            }}
           />
           <p className={`mb-0 fs-5 fw-semibold ${styles.userName}`}>{displayName}</p>
           <span className={` ${styles.arrow}`}>
