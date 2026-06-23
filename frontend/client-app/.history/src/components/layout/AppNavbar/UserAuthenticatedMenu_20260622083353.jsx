@@ -24,7 +24,7 @@ function UserAuthenticatedMenu({ onLogout }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const rawName = user?.name || "User";
 const firstName = rawName.split(" ")[0];
-let displayName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+const displayName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
 if (displayName.length > 10) {
   displayName = displayName.substring(0, 10) + "...";
 }
@@ -66,7 +66,7 @@ if (displayName.length > 10) {
             alt="User"
             className={`rounded-circle  ${styles.avatar}`}
           />
-          <p className={`mb-0 fs-4 fw-semibold ${styles.userName}`}>Hi, {displayName}</p>
+          <p className={`mb-0 fs-5 fw-semibold ${styles.userName}`}>{displayName}</p>
           <span className={` ${styles.arrow}`}>
             {isOpen ? <ChevronIconUp /> : <ChevronIconDown />}
           </span>

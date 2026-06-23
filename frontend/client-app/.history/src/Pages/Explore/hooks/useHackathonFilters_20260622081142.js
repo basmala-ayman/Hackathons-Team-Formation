@@ -9,8 +9,7 @@ export default function useHackathonFilters(hackathons) {
     prizeAmount: [],
     type: [], // 'Official', 'User Created'
     status: [], // 'UPCOMING', 'ACTIVE'
-    dateAdded: [],    // 'Last 7 days', 'Last 30 days'
-    prizes: [],       // 'Has Prizes'
+    
 
   });
 

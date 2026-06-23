@@ -22,6 +22,7 @@ function Explore() {
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
 
   const handleInterest = async (hackathonId) => {
+    // if (loadingInterest || isInterested) return; // prevent double click
     try {
       const response = await registerInterest(hackathonId);
       console.log(response);
@@ -36,6 +37,7 @@ function Explore() {
             : hackathon,
         ),
       );
+
       toast.success("Interest submitted");
     } catch (error) {
       const backendMessage = error.message;
@@ -109,11 +111,7 @@ function Explore() {
             </div>
             {/* <HackathonGrid hackathons={hackathons}></HackathonGrid> */}
             {filteredHackathons.length > 0 ? (
-              <HackathonGrid
-                hackathons={filteredHackathons}
-                onInterestClick={handleInterest}
-                isInterestLoading={loadingInterest}
-              />
+              <HackathonGrid hackathons={filteredHackathons} />
             ) : (
               <div className="text-center mt-5">
                 <p className="fs-3">No hackathons match your search.</p>

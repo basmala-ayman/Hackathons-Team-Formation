@@ -109,11 +109,8 @@ function Explore() {
             </div>
             {/* <HackathonGrid hackathons={hackathons}></HackathonGrid> */}
             {filteredHackathons.length > 0 ? (
-              <HackathonGrid
-                hackathons={filteredHackathons}
-                onInterestClick={handleInterest}
-                isInterestLoading={loadingInterest}
-              />
+              <HackathonGrid hackathons={filteredHackathons} onInterestClick={handleInterestToggle}
+                isInterestLoading={interestLoading}/>
             ) : (
               <div className="text-center mt-5">
                 <p className="fs-3">No hackathons match your search.</p>

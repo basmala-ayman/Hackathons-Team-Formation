@@ -13,7 +13,7 @@ import { LoadingState, EmptyState } from "../../shared/States";
 import toast from "react-hot-toast";
 
 function Explore() {
-  const { hackathons, setHackathons, loading, error } = useHackathons();
+  const { hackathons,setHackathons, loading, error } = useHackathons();
   const { filters, handleSearch, handleFilter, filteredHackathons } =
     useHackathonFilters(hackathons);
   const { registerInterest, loadingInterest } = useHackathonInterest();
@@ -21,33 +21,24 @@ function Explore() {
   //handle SearchFilter component on small screens
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
 
-  const handleInterest = async (hackathonId) => {
-    try {
-      const response = await registerInterest(hackathonId);
-      console.log(response);
-      setHackathons((prevHackathons) =>
-        prevHackathons.map((hackathon) =>
-          hackathon.id === hackathonId
-            ? {
-                ...hackathon,
-                isInterested: true,
-                interestCount: response.data.currentPoolSize,
-              }
-            : hackathon,
-        ),
-      );
-      toast.success("Interest submitted");
-    } catch (error) {
-      const backendMessage = error.message;
-
-      if (backendMessage) {
-        toast.error(backendMessage);
-      } else {
-        toast.error("Something went wrong. Please try again.");
+   const handleInterest = async (hackathonId) => {
+      // if (loadingInterest || isInterested) return; // prevent double click
+      try {
+        const response = await registerInterest(hackathonId);
+        
+        // console.log(response.message);
+        toast.success("Interest submitted");
+      } catch (error) {
+        const backendMessage = error.message;
+  
+        if (backendMessage) {
+          toast.error(backendMessage);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
+        // console.log(error);
       }
-      // console.log(error);
-    }
-  };
+    };
   const handleOpenedFilters = () => {
     setOpenMobileFilter(true);
   };
@@ -109,11 +100,7 @@ function Explore() {
             </div>
             {/* <HackathonGrid hackathons={hackathons}></HackathonGrid> */}
             {filteredHackathons.length > 0 ? (
-              <HackathonGrid
-                hackathons={filteredHackathons}
-                onInterestClick={handleInterest}
-                isInterestLoading={loadingInterest}
-              />
+              <HackathonGrid hackathons={filteredHackathons} />
             ) : (
               <div className="text-center mt-5">
                 <p className="fs-3">No hackathons match your search.</p>

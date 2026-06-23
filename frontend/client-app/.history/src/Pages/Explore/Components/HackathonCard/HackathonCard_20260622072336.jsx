@@ -1,4 +1,5 @@
 import styles from "./HackathonCard.module.css";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
@@ -11,21 +12,39 @@ import {
   LevelIcon,
 } from "../../../../assets/Icons";
 
-function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
+function HackathonCard({ hackathon }) {
   const maxCapacity = 30;
+  const [isInterested, setIsInterested] = useState(false);
   const {
     id,
     title,
     prizeAmount = 0,
     status,
-    applyLink,
-    thumbnailUrl,
-    location,
     interestCount = 0,
     userCreated = false,
   } = hackathon;
   // const navigate = useNavigate();
+  const { registerInterest, loading } = useHackathonInterest();
   const progressPercentage = Math.min((interestCount / maxCapacity) * 100, 100);
+
+  const handleInterest = async () => {
+    if (loading || isInterested) return; // prevent double click
+    try {
+      const response = await registerInterest(id);
+      setIsInterested(true);
+      // console.log(response.message);
+      toast.success("Interest submitted");
+    } catch (error) {
+      const backendMessage = error.message;
+
+      if (backendMessage) {
+        toast.error(backendMessage);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+      // console.log(error);
+    }
+  };
 
   return (
     <div className={`${styles.hackathonCard} d-flex flex-column rounded-4 p-3`}>
@@ -67,29 +86,11 @@ function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
 
       {/* Image */}
       <div className={`${styles.hackathonImg} text-center mt-3 mb-3`}>
-        <img
-          src={thumbnailUrl || defaultHackathonImg}
-          alt={title}
-          className="w-100 rounded"
-        />
+        <img src={defaultHackathonImg} alt={title} className="w-100 rounded" />
       </div>
 
       {/* Title */}
-      <h4 className="fw-semibold mt-2 mb-3 fs-2">
-        {applyLink ? (
-          <a
-            href={applyLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none" }}
-            className="hover-underline"
-          >
-            {title}
-          </a>
-        ) : (
-          title
-        )}
-      </h4>
+      <h4 className="fw-semibold mt-2 mb-3 fs-2">{title}</h4>
 
       {/* Hackathon Details */}
       <div className={`${styles.hackathonDetails} mb-4`}>
@@ -122,17 +123,14 @@ function HackathonCard({ hackathon, onInterestClick, isInterestLoading }) {
           variant="primary"
           size="sm"
           className="flex-fill rounded-4 w-100"
-          onClick={() => onInterestClick(id)}
-          // disabled={isInterestLoading || isInterested}
-          disabled={isInterestLoading}
+          onClick={handleInterest}
+          disabled={loading || isInterested}
         >
-          {/* {isInterestLoading
+          {loading
             ? "Submitting..."
             : isInterested
               ? "Interested"
-              : "I'm Interested"} */}
-
-          {isInterestLoading ? "Submitting..." : "I'm Interested"}
+              : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

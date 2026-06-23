@@ -6,19 +6,16 @@ function HackathonGrid({ hackathons, onInterestClick, isInterestLoading }) {
   // }
   return (
     <Container>
-      <Row className="g-4">
-        {hackathons.map((hackathon) => (
-          <Col xs={12} md={6} lg={4} key={hackathon.id}>
-            <HackathonCard
-              hackathon={hackathon}
-              onInterestClick={onInterestClick}
-              isInterestLoading={isInterestLoading}
-            />
-          </Col>
-        ))}
-      </Row>
+        <Row className="g-4">
+            {hackathons.map((hackathon)=>(
+                <Col xs={12} md={6} lg={4} key={hackathon.id} >
+                <HackathonCard hackathon={hackathon} />
+                </Col>
+            ))}
+        </Row>
+      
     </Container>
-  );
+  )
 }
 
-export default HackathonGrid;
+export default HackathonGrid

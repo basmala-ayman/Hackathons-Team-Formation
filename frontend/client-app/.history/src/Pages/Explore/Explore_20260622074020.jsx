@@ -111,7 +111,7 @@ function Explore() {
             {filteredHackathons.length > 0 ? (
               <HackathonGrid
                 hackathons={filteredHackathons}
-                onInterestClick={handleInterest}
+                onInterestClick={handleInterestToggle}
                 isInterestLoading={loadingInterest}
               />
             ) : (

@@ -123,6 +123,3 @@
   color: var(--color-text);
 }
 
-.hover-underline:hover {
-  text-decoration: underline !important;
-}

@@ -17,11 +17,11 @@ export const filterHackathons = (hackathons, searchWord, filters) => {
           hackathon.tags.includes(selectedTag),
         ));
 
-    // const isStatusMatch =
-    //   filters.status.length === 0 || filters.status.includes(hackathon.status);
-    // const isLocationMatch =
-    //   filters.location.length === 0 ||
-    //   filters.location.includes(hackathon.location);
+    const isStatusMatch =
+      filters.status.length === 0 || filters.status.includes(hackathon.status);
+    const isLocationMatch =
+      filters.location.length === 0 ||
+      filters.location.includes(hackathon.location);
 
       let isTypeMatch = true;
     if (filters.type.length > 0) {
