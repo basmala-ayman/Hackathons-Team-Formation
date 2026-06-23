@@ -6,7 +6,7 @@ import { INITIAL_FORM_DATA } from "../CreateTeam.constants";
 
 //function to get saved user's data
 const getSavedData = (key, defaultValue) => {
-  const saved = sessionStorage.getItem(key);
+  const saved = localStorage.getItem(key);
   return saved ? JSON.parse(saved) : defaultValue;
 };
 

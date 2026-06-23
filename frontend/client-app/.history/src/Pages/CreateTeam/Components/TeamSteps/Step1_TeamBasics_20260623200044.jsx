@@ -20,9 +20,6 @@ function Step1_TeamBasics({
       hasIdea: isChecked,
       description: isChecked ? formData.description : "",
     });
-    if (!isChecked) {
-      setErrors((prev) => ({ ...prev, description: false }));
-    }
   };
 
   //handle any change in inputs
@@ -32,13 +29,6 @@ function Step1_TeamBasics({
     if (name === "description" && value.length > 500) return;
 
     setFormData({ ...formData, [name]: value });
-    if (name === "description" && value.trim().length >= 20) {
-      setErrors((prev) => ({ ...prev, description: false }));
-    }
-
-    if (name === "teamName" && value.trim().length >= 3) {
-      setErrors((prev) => ({ ...prev, teamName: false }));
-    }
   };
 
   //handle change in selecting hackathon
@@ -69,10 +59,9 @@ function Step1_TeamBasics({
       hackathon: isHackathonMissing,
       teamSize: isTeamSizeMissing,
       teamName: isTeamNameInvalid,
-      description:isDescriptionInvalid
     });
 
-    if (!isHackathonMissing && !isTeamSizeMissing && !isTeamNameInvalid && !isDescriptionInvalid) {
+    if (!isHackathonMissing && !isTeamSizeMissing && !isTeamNameInvalid) {
       onNext();
     }
   };
@@ -150,20 +139,18 @@ function Step1_TeamBasics({
           value={formData.teamName}
           onChange={handleChange}
         />
-     
+      </div>
       {errors.teamName && (
         <span
           style={{
             color: "var(--color-error-red)",
             fontSize: "1.5rem",
-            marginTop: "0.2rem",
-            
           }}
         >
           Team name must be between 3 and 100 characters.
         </span>
       )}
- </div>
+
       <div className={styles.formGroup}>
         <label className={styles.label}>
           Hackathon Name <span className={styles.asterisk}>*</span>
@@ -227,7 +214,7 @@ function Step1_TeamBasics({
         <div
           className={`${styles.formGroup} animate__animated animate__fadeIn`}
         >
-          <label className={styles.label}>Project Description  <span className={styles.asterisk}>*</span> </label>
+          <label className={styles.label}>Project Description</label>
           <textarea
             name="description"
             className={styles.textarea}
@@ -235,19 +222,6 @@ function Step1_TeamBasics({
             value={formData.description}
             onChange={handleChange}
           />
-          {errors.description ? (
-              <div
-                style={{
-                  color: "var(--color-error-red)",
-                  fontSize: "1.5rem",
-                  marginTop: "0.2rem",
-                }}
-              >
-                Please provide a description of at least 20 characters.
-              </div>
-            ) : (
-              <span></span> 
-            )}
           <span className={styles.charCount}>
             {formData.description.length}/500 characters
           </span>

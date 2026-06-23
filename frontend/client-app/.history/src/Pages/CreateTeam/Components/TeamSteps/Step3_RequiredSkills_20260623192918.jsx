@@ -33,19 +33,7 @@ const [errors, setErrors] = useState({
     });
   };
 
-const handleValidationAndNext = () => {
-    const isRolesMissing = formData.roles.length === 0;
-    const isSkillsMissing = formData.skills.length === 0;
 
-    setErrors({
-      roles: isRolesMissing,
-      skills: isSkillsMissing,
-    });
-
-    if (!isRolesMissing && !isSkillsMissing) {
-      onNext();
-    }
-  };
 
   const selectStyles = {
     control: (base) => ({
@@ -77,7 +65,7 @@ const handleValidationAndNext = () => {
   return (
     <div className="d-flex flex-column gap-4">
       <div className="d-flex flex-column gap-2">
-        <label className={styles.label}>Add Roles You're Looking For <span className={styles.asterisk}>*</span></label>
+        <label className={styles.label}>What roles are you looking for?</label>
         <Select
           isClearable
           isSearchable
@@ -88,15 +76,10 @@ const handleValidationAndNext = () => {
 
         //   value={null}
         />
-        {errors.roles && (
-          <span style={{ color: "var(--color-error-red)", fontSize: "1.5rem" }}>
-            Please select at least one role to proceed.
-          </span>
-        )}
       </div>
 
       <div className="d-flex flex-column gap-2">
-        <label className={styles.label}>Add Skills You're Looking For <span className={styles.asterisk}>*</span></label>
+        <label className={styles.label}>Add Skills You're Looking For</label>
         <Select
           isClearable
           isSearchable
@@ -110,11 +93,6 @@ const handleValidationAndNext = () => {
           maxMenuHeight={300}
         // value={null}
         />
-        {errors.skills && (
-          <span style={{ color: "var(--color-error-red)", fontSize: "1.5rem" }}>
-            Please select at least one skill to proceed.
-          </span>
-        )}
       </div>
 
       {/* show only if there are selected roles */}
@@ -196,7 +174,8 @@ const handleValidationAndNext = () => {
         <CustomButton
           variant="primary"
           size="sm"
-          onClick={handleValidationAndNext}
+          onClick={onNext}
+          disabled={formData.skills.length === 0}
         >
           Next Step
         </CustomButton>

@@ -32,13 +32,6 @@ function Step1_TeamBasics({
     if (name === "description" && value.length > 500) return;
 
     setFormData({ ...formData, [name]: value });
-    if (name === "description" && value.trim().length >= 20) {
-      setErrors((prev) => ({ ...prev, description: false }));
-    }
-
-    if (name === "teamName" && value.trim().length >= 3) {
-      setErrors((prev) => ({ ...prev, teamName: false }));
-    }
   };
 
   //handle change in selecting hackathon
@@ -150,20 +143,19 @@ function Step1_TeamBasics({
           value={formData.teamName}
           onChange={handleChange}
         />
-     
+      </div>
       {errors.teamName && (
         <span
           style={{
             color: "var(--color-error-red)",
             fontSize: "1.5rem",
-            marginTop: "0.2rem",
             
           }}
         >
           Team name must be between 3 and 100 characters.
         </span>
       )}
- </div>
+
       <div className={styles.formGroup}>
         <label className={styles.label}>
           Hackathon Name <span className={styles.asterisk}>*</span>

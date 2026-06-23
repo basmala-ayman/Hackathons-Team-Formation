@@ -196,7 +196,7 @@ const handleValidationAndNext = () => {
         <CustomButton
           variant="primary"
           size="sm"
-          onClick={handleValidationAndNext}
+          onClick={onNext}
         >
           Next Step
         </CustomButton>

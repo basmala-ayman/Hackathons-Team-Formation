@@ -6,7 +6,7 @@ import { INITIAL_FORM_DATA } from "../CreateTeam.constants";
 
 //function to get saved user's data
 const getSavedData = (key, defaultValue) => {
-  const saved = sessionStorage.getItem(key);
+  const saved = localStorage.getItem(key);
   return saved ? JSON.parse(saved) : defaultValue;
 };
 
@@ -64,10 +64,10 @@ export function useCreateTeamForm() {
 
   //save data inside local storage
   useEffect(() => {
-    sessionStorage.setItem("Current_step", currentStep.toString());
+    localStorage.setItem("Current_step", currentStep.toString());
   }, [currentStep]);
   useEffect(() => {
-    sessionStorage.setItem("Team_Data", JSON.stringify(formData));
+    localStorage.setItem("Team_Data", JSON.stringify(formData));
   }, [formData]);
 
   //functions

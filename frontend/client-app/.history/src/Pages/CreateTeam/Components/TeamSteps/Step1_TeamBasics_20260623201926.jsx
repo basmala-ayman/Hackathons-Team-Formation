@@ -36,6 +36,7 @@ function Step1_TeamBasics({
       setErrors((prev) => ({ ...prev, description: false }));
     }
 
+    // Instantly clear the team name error once they type 3 characters
     if (name === "teamName" && value.trim().length >= 3) {
       setErrors((prev) => ({ ...prev, teamName: false }));
     }

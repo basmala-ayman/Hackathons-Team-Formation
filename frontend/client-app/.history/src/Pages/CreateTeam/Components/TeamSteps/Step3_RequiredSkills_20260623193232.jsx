@@ -196,7 +196,8 @@ const handleValidationAndNext = () => {
         <CustomButton
           variant="primary"
           size="sm"
-          onClick={handleValidationAndNext}
+          onClick={onNext}
+          disabled={formData.skills.length === 0}
         >
           Next Step
         </CustomButton>
