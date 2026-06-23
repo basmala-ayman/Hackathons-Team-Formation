@@ -21,6 +21,8 @@ export default function AdminDashboard() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  console.log(data)
+
   if (isLoading) return <div className="text-center py-5"><Spinner animation="border" /></div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
 

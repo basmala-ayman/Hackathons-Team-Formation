@@ -18,17 +18,30 @@ function TeamProfile() {
   const [loadingAction, setLoadingAction] = useState(false); //for preventing multiple clicks on buttons
   const navigate = useNavigate();
 
-  const { recommendationId } = useParams(); //get recommendation id from url
+  const { id } = useParams(); //get recommendation id from url
 
   //get recommended team details from api
   const { teamData, loading, error } =
-    useRecommendationDetails(recommendationId);
+    useRecommendationDetails(id);
   console.log(teamData);
 
   const { user } = useAuth();
-  const isOwner = teamData.targetTeam.ownerId === user?.id; //check if the logged in user is the owner or not
-  const currentUserInfo = teamData.recommendedMembers.find(
-    (member) => member.userId === user?.id,
+
+  //i am habiba who added this ^ ^
+  //the problem from what i understand that we tried to access data before it exists so it crash
+  if (loading) {
+    return <LoadingState message="Loading recommendations..." />;
+  }
+
+  if (error || !teamData) {
+    return <EmptyState message="Team not found!" />;
+  }
+
+  const { targetTeam, recommendedMembers } = teamData;
+
+ const isOwner = targetTeam.ownerId === user?.id; //check if the logged in user is the owner or not
+  const currentUserInfo = recommendedMembers.find(
+    (m) => m.userId === user?.id
   ); //get the user's info (will be needed if he is not the owner)
 
   const invitationId = currentUserInfo?.invitationId; //get the invitaion id that will be used in acceptance and rejection logic
@@ -105,7 +118,7 @@ function TeamProfile() {
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <Link
-                to="/recommendedTeams"
+                to="/recommended-Teams"
                 className={`text-decoration-none ${styles.breadcrumbLink}`}
               >
                 Recommended Teams

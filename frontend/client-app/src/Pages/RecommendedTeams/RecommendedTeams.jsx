@@ -10,8 +10,10 @@ import {
   rejectRecommendation,
   respondToInvitation,
 } from "../../services/recommendationService";
-import { LoadingState,
-  EmptyState} from "../../shared/States"
+import {
+  LoadingState,
+  EmptyState
+} from "../../shared/States"
 
 function RecommendedTeams() {
   const navigate = useNavigate();
@@ -23,36 +25,53 @@ function RecommendedTeams() {
   const { recommendations, loading, error } = useRecommendations();
   const [loadingId, setLoadingId] = useState(null); //to disable more than one click on acceptance/rejection for a recommendation
 
+  // Deduplicate join items by team id
+  const dedupedJoin = (recommendations?.join || []).reduce((acc, invitation) => {
+    const existing = acc.find((item) => item.team.id === invitation.team.id);
+    if (!existing) {
+      acc.push(invitation);
+    } else {
+      // Keep the one with the later deadline
+      if (new Date(invitation.deadline) > new Date(existing.deadline)) {
+        const index = acc.indexOf(existing);
+        acc[index] = invitation;
+      }
+    }
+    return acc;
+  }, []);
+
   const displayedTeams =
     activeTab === "owned"
-      ? recommendations.myTeams
+      ? (recommendations?.myTeams || [])
       : activeTab === "suggested"
-        ? recommendations.join
-        : [...recommendations.myTeams, ...recommendations.join];
-
+        ? dedupedJoin
+        : [
+          ...(recommendations?.myTeams || []),
+          ...dedupedJoin
+        ];
   console.log(displayedTeams);
 
   //accept logic
   const handleAccept = async ({ isOwner, recommendationId, invitationId }) => {
-      if (loadingId === recommendationId) return;
+    if (loadingId === recommendationId) return;
 
     try {
-          setLoadingId(recommendationId);
+      setLoadingId(recommendationId);
 
       if (isOwner) {
         await acceptRecommendation(recommendationId);
       } else {
         await respondToInvitation(invitationId, "ACCEPT");
       }
-      
+
       toast.success("Team accepted successfully");
       console.log("Team accepted successfully");
     } catch (error) {
       toast.error("Failed to Accept")
       console.error(error);
-    }finally {
-    setLoadingId(null);
-  }
+    } finally {
+      setLoadingId(null);
+    }
   };
   // =========================
   // REJECT LOGIC
@@ -85,14 +104,14 @@ function RecommendedTeams() {
   };
 
   if (loading) {
-  return (
-    <LoadingState message="Loading recommendations..." />
-  );
-}
+    return (
+      <LoadingState message="Loading recommendations..." />
+    );
+  }
   if (error) {
     return (
-    <EmptyState message="No Teams found" />
-  );
+      <EmptyState message="No Teams found" />
+    );
   }
 
   return (
@@ -144,53 +163,74 @@ function RecommendedTeams() {
         </div>
 
         {displayedTeams.length > 0 ? (
-          displayedTeams.map((team) => {
-            const isOwner = team.ownerId === user?.id;
+
+          displayedTeams.map((item) => {
+
+            const isJoinItem = !!item.invitationId && !!item.team && !item.teamId;
+            // ================= JOIN TAB =================
+            if (isJoinItem) {
+              return (
+                <TeamCard
+                  key={item.invitationId}
+                  teamName={item.team?.teamName}
+                  hackathonName={item.team?.hackathonName}
+                  description={item.team?.description}
+                  members={item.team?.currentMembers || []}
+                  maxMembers={item.team?.maxMembers || 4}
+                  acceptLabel="Accept to Join Team"
+                  isLoading={loadingId === item.invitationId}
+                  onAccept={() =>
+                    handleAccept({
+                      isOwner: false,
+                      recommendationId: item.invitationId,
+                      invitationId: item.invitationId,
+                    })
+                  }
+                  onView={() => handleViewTeam(item.team.id)} />
+              );
+            }
+
+            // ================= MY TEAMS =================
+            const isOwner = item.ownerId === user?.id;
+
             return (
-              <div key={team.teamId}>
-                {team.recommendations?.map((recommendation) => {
-                  // find current user invitation
-                  const currentInvitation = recommendation.members?.find(
-                    (member) => member.userId === user?.id,
+              <div key={item.teamId}>
+                {item.recommendations?.map((rec) => {
+                  if (!rec) return null;
+
+                  const currentInvitation = rec.members?.find(
+                    (m) => m.userId === user?.id
                   );
 
                   const invitationId = currentInvitation?.invitationId;
 
-                  const buttonLabel = isOwner
-                    ? "Accept Recommended Members"
-                    : "Accept to Join Team";
-
                   return (
                     <TeamCard
-                      key={recommendation.id}
-                      teamName={team.teamName}
-                      hackathonName={team.hackathonName}
-                      description={team.description}
-                      members={recommendation.members}
-                      maxMembers={team.maxMembers}
-                      acceptLabel={buttonLabel}
-                      isLoading={loadingId === recommendation.id}
+                      key={`${item.teamId}-${rec.id}`}
+                      teamName={item.teamName}
+                      hackathonName={item.hackathonName}
+                      description={item.description}
+                      members={rec.members}
+                      maxMembers={item.maxMembers}
+                      acceptLabel={
+                        isOwner
+                          ? "Accept Recommended Members"
+                          : "Accept to Join Team"
+                      }
+                      isLoading={loadingId === rec.id}
                       onAccept={() =>
                         handleAccept({
                           isOwner,
-                          recommendationId: recommendation.id,
+                          recommendationId: rec.id,
                           invitationId,
                         })
                       }
-                      // onReject={() =>
-                      //   handleReject({
-                      //     isOwner,
-                      //     recommendationId:
-                      //       recommendation.id,
-                      //     invitationId,
-                      //   })
-                      // }
-                      onView={() => handleViewTeam(recommendation.id)}
-                      
+                      onView={() => handleViewTeam(item.teamId)}
                     />
                   );
                 })}
               </div>
+              
             );
           })
         ) : (

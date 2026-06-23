@@ -18,7 +18,6 @@ export default function Step2Interests({ formData, setFormData }) {
 
     setFormData((prev) => ({
       ...prev,
-      // interests: updatedInterests,
       intrestes: updatedInterests
     }));
   };

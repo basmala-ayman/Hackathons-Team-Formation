@@ -39,6 +39,12 @@ const generatePayload = (currentValues, originalValues, user, hackathonOptions) 
   if (currentValues.githubUrl) payload.append("githubUrl", currentValues.githubUrl);
   if (currentValues.linkedinUrl) payload.append("linkedinUrl", currentValues.linkedinUrl);
 
+  if (currentValues.avatarFile) {
+    payload.append("profilePicture", currentValues.avatarFile);
+  }
+  else if (originalValues?.avatar) {
+    payload.append("profilePicture", originalValues.avatar);
+  }
 
   const appendIfChanged = (key, value) => {
     if (value !== undefined && value !== null) {
@@ -62,9 +68,11 @@ const generatePayload = (currentValues, originalValues, user, hackathonOptions) 
   appendIfChanged("techRoles", cleanRoles);
   cleanInterests.forEach(interest => payload.append("intrestes[]", interest));
 
-  if (currentValues.avatarFile instanceof File) {
-    payload.append("profilePicture", currentValues.avatarFile);
-  }
+  // if (currentValues.avatarFile) {
+  //   payload.append("profilePicture", currentValues.avatarFile);
+  // } else if (originalValues.avatarFile) {
+  //   payload.append("profilePicture", originalValues.avatarFile);
+  // }
   if (currentValues.resumeFile instanceof File) payload.append("resume", currentValues.resumeFile);
   return payload;
 };
@@ -82,10 +90,19 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     if (show) {
       setCurrentStep(1);
       setShowSuccessScreen(false);
-      setLocalValues({ ...externalValues });
+
+      const safeAvatar = externalValues?.avatar?.startsWith("blob:")
+        ? null
+        : externalValues?.avatar;
+
+      setLocalValues({
+        ...externalValues,
+        avatar: safeAvatar,
+        avatarFile: null,
+      });
       setErrors({});
     }
-  }, [show, externalValues, setErrors]);
+  }, [show, externalValues]);
 
   const updateLocalValuesWithTracking = useCallback((updater) => {
     setLocalValues((prev) => typeof updater === "function" ? updater(prev) : { ...prev, ...updater });
@@ -116,8 +133,21 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     setErrors({});
     try {
       const finalPayload = generatePayload(localValues, externalValues, user, hackathonOptions);
-      await onSave(finalPayload, true);
-      setExternalValues((prev) => ({ ...prev, ...localValues }));
+      const savedData = await onSave(finalPayload, true); // ← capture response
+
+      // ✅ Don't spread localValues (has temp blob URL) — let onSave's setValues handle state
+      // Only sync non-file fields back
+      setExternalValues((prev) => ({
+        ...prev,
+        skills: localValues.skills,
+        techRoles: localValues.techRoles,
+        intrestes: localValues.intrestes,
+        bio: localValues.bio,
+        githubUrl: localValues.githubUrl,
+        linkedinUrl: localValues.linkedinUrl,
+        name: localValues.name,
+      }));
+
       setShowSuccessScreen(true);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred.";

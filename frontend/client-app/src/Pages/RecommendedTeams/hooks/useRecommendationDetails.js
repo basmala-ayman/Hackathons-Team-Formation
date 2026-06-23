@@ -1,24 +1,24 @@
-import { useEffect , useState } from "react";
-import {getRecommendationDetails} from '../../../services/recommendationService'
+import { useEffect, useState } from "react";
+import { getTeamDetails } from "../../../services/teamService";
 
 function useRecommendationDetails(id) {
-    const [teamData, setTeamData]=useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+  const [teamData, setTeamData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    useEffect(() => {
+  
+  useEffect(() => {
     const fetchDetails = async () => {
       try {
         setLoading(true);
 
-        const data =
-          await getRecommendationDetails(id);
+        const data = await getTeamDetails(id);
 
         setTeamData(data);
       } catch (err) {
         setError(
           err.message ||
-            "Failed to load team"
+          "Failed to load team"
         );
       } finally {
         setLoading(false);
