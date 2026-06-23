@@ -40,6 +40,21 @@ def ensure_nonempty_sequence(ids_b, mask_b, unk_id=1):
     return ids_b, mask_b
 
 
+def expand_embedding_layer(embedding_layer: nn.Embedding, new_num_embeddings: int):
+    old_num_embeddings, embedding_dim = embedding_layer.weight.shape
+    if new_num_embeddings <= old_num_embeddings:
+        return embedding_layer
+    
+    new_layer = nn.Embedding(new_num_embeddings, embedding_dim, padding_idx=embedding_layer.padding_idx)
+    nn.init.xavier_uniform_(new_layer.weight)
+    with torch.no_grad():
+        new_layer.weight[:old_num_embeddings].copy_(embedding_layer.weight)
+        if embedding_layer.padding_idx is not None:
+            new_layer.weight[embedding_layer.padding_idx] = 0.0
+            
+    return new_layer
+
+
 class MultiHeadSelfAttention(nn.Module):
     def __init__(self, d: int, n_heads: int):
         super().__init__()
