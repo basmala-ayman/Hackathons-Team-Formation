@@ -33,6 +33,9 @@ const findOwnerTeamsWithRecommendations = (userId) => {
                                             name: true,
                                             profilePicture: true,
                                             techRoles: true,
+                                            skills: {
+                                                include: { skill: { select: { name: true } } }
+                                            }
                                         },
                                     },
                                 },
@@ -75,7 +78,7 @@ const findReceivedInvitations = (userId) => {
                 },
 
             },
-            recommendationMember: {   
+            recommendationMember: {
                 select: { recommendationId: true },
             },
         },
