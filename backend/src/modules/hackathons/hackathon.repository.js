@@ -19,7 +19,14 @@ const findAllHackathons = async () => {
   });
 
   return prisma.hackathon.findMany({
-    orderBy: { createdAt: "desc" }
+    orderBy: { createdAt: "desc" },
+    include: {
+      tags: {
+        include: {
+          tag: true // This fetches the actual Tag details
+        }
+      }
+    }
   });
 };
 

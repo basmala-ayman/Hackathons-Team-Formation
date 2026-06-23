@@ -2,11 +2,26 @@ const hackathonRepository = require('./hackathon.repository');
 const AppError = require("../../utils/AppError");
 
 const createHackathon = async (data, userId) => {
+  const { tags, ...hackathonData } = data;
+
   return await hackathonRepository.createHackathon({
-    ...data,
+    ...hackathonData,
     source: "USER_CREATED",
     createdBy: userId,
-    remainingTime: data.remainingTime || "Active" 
+    remainingTime: hackathonData.remainingTime || "Active",
+
+    tags: tags
+      ? {
+          create: tags.map((name) => ({
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
+              },
+            },
+          })),
+        }
+      : undefined,
   });
 };
 
@@ -15,6 +30,7 @@ const getAllHackathons = async () => {
 
   return hackathons.map(h => ({
     ...h,
+    tags: h.tags?.map(t => t.tag.name) || [],
     userCreated: h.source === "USER_CREATED"
   }));
 };

@@ -2,17 +2,12 @@
  * @swagger
  * tags:
  *   name: Explore Projects
- *   description: Public explore feeds and active project interest matching handlers
+ *   description: Public explore feed + project interest system
  */
 
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
  *   schemas:
  *     ExploreProjectItem:
  *       type: object
@@ -20,38 +15,67 @@
  *         id:
  *           type: string
  *           format: uuid
+ *
  *         title:
  *           type: string
+ *
  *         description:
  *           type: string
+ *
  *         createdAt:
  *           type: string
  *           format: date-time
+ *
  *         creatorId:
  *           type: string
  *           format: uuid
+ *
  *         creatorName:
  *           type: string
+ *
+ *         creatorRole:
+ *           type: string
+ *
  *         creatorPicture:
  *           type: string
  *           nullable: true
+ *
+ *         hackathonTitle:
+ *           type: string
+ *           nullable: true
+ *           description: Derived from project.team.hackathon.title
+ *
  *         teamId:
  *           type: string
  *           format: uuid
+ *
  *         teamName:
  *           type: string
  *           nullable: true
+ *
  *         teamStatus:
  *           type: string
  *           nullable: true
- *         requiredSkillsOrRoles:
+ *
+ *         requiredRoles:
  *           type: array
  *           items:
  *             type: string
+ *
+ *         requiredSkills:
+ *           type: array
+ *           items:
+ *             type: string
+ *
+ *         totalTeamSize:
+ *           type: integer
+ *
  *         totalTeamMembersCount:
  *           type: integer
+ *
  *         totalInterestsCount:
  *           type: integer
+ *
  *         isInterested:
  *           type: boolean
  */
@@ -60,13 +84,14 @@
  * @swagger
  * /project/explore:
  *   get:
- *     summary: Get all projects (Public Feed)
+ *     summary: Get all explore projects (public feed)
+ *     description: Returns all projects with team + owner + hackathon metadata (via team relation)
  *     tags: [Explore Projects]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Global project arrays fetched successfully.
+ *         description: Projects fetched successfully
  *         content:
  *           application/json:
  *             schema:
@@ -86,10 +111,12 @@
  * @swagger
  * /project/interest/{projectId}:
  *   post:
- *     summary: Store project interest directly inside user records
+ *     summary: Register interest in a project
+ *     description: Stores user interest and increments project interest counter
  *     tags: [Explore Projects]
  *     security:
  *       - bearerAuth: []
+ *
  *     parameters:
  *       - in: path
  *         name: projectId
@@ -97,15 +124,35 @@
  *         schema:
  *           type: string
  *           format: uuid
+ *
  *     responses:
  *       200:
- *         description: Interest stored inside user array configuration.
+ *         description: Interest registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 projectId:
+ *                   type: string
+ *                   format: uuid
+ *                 userId:
+ *                   type: string
+ *                   format: uuid
+ *                 totalInterestsCount:
+ *                   type: integer
+ *                 isInterested:
+ *                   type: boolean
+ *
  *       400:
- *         description: Bad Request - Creating self-interest cycles is prohibited.
+ *         description: You cannot express interest in your own project
+ *
  *       401:
- *         description: Unauthorized - Access validation token missing or expired.
+ *         description: Unauthorized - missing or invalid token
+ *
  *       404:
- *         description: Not Found - Project structural records mismatch.
+ *         description: Project not found
+ *
  *       409:
- *         description: Conflict - Row combination already matching inside database indexes.
+ *         description: Already registered interest
  */
