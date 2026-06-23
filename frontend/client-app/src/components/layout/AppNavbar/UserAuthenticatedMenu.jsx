@@ -22,7 +22,12 @@ function UserAuthenticatedMenu({ onLogout }) {
   const [isOpen, setIsopen] = useState(false);
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
-  const displayName = user?.name || "User";
+  const rawName = user?.name || "User";
+  const firstName = rawName.split(" ")[0];
+  let displayName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+  if (displayName.length > 10) {
+    displayName = displayName.substring(0, 10) + "...";
+  }
 
   const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
   const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
@@ -75,7 +80,7 @@ function UserAuthenticatedMenu({ onLogout }) {
               e.target.src = ANONYMOUS_AVATAR;
             }}
           />
-          <p className={`mb-0 fs-5 fw-semibold ${styles.userName}`}>{displayName}</p>
+          <p className={`mb-0 fs-4 fw-semibold ${styles.userName}`}>Hi, {displayName}</p>
           <span className={` ${styles.arrow}`}>
             {isOpen ? <ChevronIconUp /> : <ChevronIconDown />}
           </span>

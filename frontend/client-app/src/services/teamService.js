@@ -13,6 +13,19 @@ export const createTeam = async (teamData) => {
   }
 };
 
+/**
+ * getTeamDetails:
+ * Fetches full details of a team by its ID
+ */
+export const getTeamDetails = async (teamId) => {
+  try {
+    const response = await api.get(`/teams/${teamId}`);
+    return response.data.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch team details!!";
+  }
+};
+
 //or
 // export const createTeam = async (teamData) => {
 //   try {
