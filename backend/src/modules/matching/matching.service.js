@@ -6,52 +6,79 @@ const {
 } = require("../ai/aiCandidate.service");
 const { getOrCreateAIId } = require("../ai/ai.mapper");
 const AppError = require("../../utils/AppError");
-const { prisma } = require("../../config/prisma");
+const  prisma  = require("../../config/prisma");
 
 const POOL_THRESHOLD = 30;
 
-// // derive match level from AI ranking position (0 = best)
-// const getMatchLevel = (index) => {
-//     if (index === 0) return "High";
-//     if (index === 1) return "Medium";
-//     return "Low";
-// };
-
-// ─────────────────────────────────────────────────────────
-// enrich member UUIDs with full profile data
-// AI returns UUIDs — we fetch name, techRole, skills
-// and store them in the teamData JSON snapshot so the
-// frontend never needs extra queries
-// ─────────────────────────────────────────────────────────
 const enrichMembers = async (userIds) => {
-    const users = await prisma.user.findMany({
-        where: { id: { in: userIds } },
-        select: {
-            id: true,
-            name: true,
-            profilePicture: true,
-            techRole: true,
-            skills: {
-                include: { skill: { select: { name: true } } },
-            },
-        },
-    });
+    console.log("🔥🔥🔥 NEW enrichMembers is running!");
+    try {
+        console.log("📤 enrichMembers called with:", userIds);
+        if (!userIds || !Array.isArray(userIds)) {
+            console.warn("⚠️ userIds is not an array:", userIds);
+            return [];
+        }
 
-    return userIds.map((userId) => {
-        const user = users.find((u) => u.id === userId);
-        return {
-            userId,
-            name: user?.name || "",
-            profilePicture: user?.profilePicture || null,
-            role: user?.techRole || "",
-            tags: user?.skills?.map((s) => s.skill.name) || [],
-        };
-    });
+        const validIds = userIds.filter(id => id && typeof id === 'string');
+        console.log("📤 validIds:", validIds);
+        if (validIds.length === 0) {
+            console.log("No valid user IDs found.");
+            return [];
+        }
+
+        const users = await prisma.user.findMany({
+            where: { id: { in: validIds } },
+            select: {
+                id: true,
+                name: true,
+                profilePicture: true,
+                techRoles: true,
+                skills: {
+                    include: { skill: { select: { name: true } } },
+                },
+            },
+        });
+        console.log("📤 Found users in DB:", users.length);
+
+        const result = validIds.map((userId) => {
+            try {
+                const user = users.find((u) => u.id === userId);
+                if (!user) {
+                    console.warn(`⚠️ User with ID ${userId} not found in DB`);
+                    return {
+                        userId,
+                        name: "Unknown User",
+                        profilePicture: null,
+                        role: "",
+                        tags: [],
+                    };
+                }
+                // SAFE: no .user reference
+                return {
+                    userId: user.id,
+                    name: user.name || "",
+                    profilePicture: user.profilePicture || null,
+                    role: user.techRoles && user.techRoles.length > 0 ? user.techRoles[0] : "",
+                    tags: user.skills && Array.isArray(user.skills) ? user.skills.map(s => s.skill.name) : [],
+                };
+            } catch (err) {
+                console.error(`❌ Error processing userId ${userId}:`, err);
+                return {
+                    userId,
+                    name: "Error User",
+                    profilePicture: null,
+                    role: "",
+                    tags: [],
+                };
+            }
+        });
+        return result;
+    } catch (err) {
+        console.error("❌ enrichMembers fatal error:", err);
+        return [];
+    }
 };
 
-// ─────────────────────────────────────────────────────────
-// shared helper — saves recommendations + member rows + notifies owner
-// ─────────────────────────────────────────────────────────
 const saveRecommendationsAndNotify = async ({
     matchingRequestId,
     teamId,
@@ -61,53 +88,105 @@ const saveRecommendationsAndNotify = async ({
     roundNumber,
 }) => {
     console.log(`📝 Saving ${convertedTeams.length} teams for request ${matchingRequestId}`);
-    const recommendationRows = await Promise.all(
-        convertedTeams.map(async (memberIds) => {
-            console.log(`📝 Enriching members: ${memberIds.length} members`);
-            const enrichedMembers = await enrichMembers(memberIds);
-            return {
-                matchingRequestId,
-                teamData: {
-                    members: enrichedMembers,
-                },
-                status: "PENDING",
-            };
-        })
-    );
+    console.log("📝 convertedTeams type:", typeof convertedTeams);
+    console.log("📝 convertedTeams is array?", Array.isArray(convertedTeams));
+    console.log("📝 convertedTeams content:", JSON.stringify(convertedTeams, null, 2));
+    // Validate inputs
+    if (!matchingRequestId) {
+        console.error("❌ matchingRequestId is undefined!");
+        throw new Error("matchingRequestId is required");
+    }
+    if (!convertedTeams || !Array.isArray(convertedTeams) || convertedTeams.length === 0) {
+        console.error("❌ convertedTeams is empty or not an array:", convertedTeams);
+        throw new Error("convertedTeams must be a non-empty array");
+    }
 
-    const createdRecs = await matchingRepository.createRecommendations(recommendationRows);
+    try {
+        const recommendationRows = await Promise.all(
+            convertedTeams.map(async (memberIds, index) => {
+                try {
+                    console.log(`📝 Enriching members for team ${index + 1}: ${memberIds?.length || 0} members`);
 
-    // store member rows in AIRecommendationMember (queryable — for progress bar)
-    const memberRows = [];
-    for (let i = 0; i < createdRecs.length; i++) {
-        const rec = createdRecs[i];
-        const memberIds = convertedTeams[i];
-        for (const userId of memberIds) {
-            memberRows.push({
-                recommendationId: rec.id,
-                userId,
-                status: "PENDING",
-            });
+                    // Validate memberIds
+                    if (!memberIds || !Array.isArray(memberIds)) {
+                        throw new Error(`memberIds is not an array for team ${index + 1}: ${typeof memberIds}`);
+                    }
+
+                    const enrichedMembers = await enrichMembers(memberIds);
+                    if (!enrichedMembers || enrichedMembers.length === 0) {
+                        console.warn(`⚠️ No enriched members for team ${index + 1}, using empty array`);
+                    }
+
+                    return {
+                        matchingRequestId,
+                        teamData: {
+                            members: enrichedMembers || [],
+                        },
+                        status: "PENDING",
+                    };
+                } catch (err) {
+                    console.error(`❌ Error processing team ${index + 1}:`, err);
+                    throw new Error(`Error processing team ${index + 1}: ${err.message}`);
+                }
+            })
+        );
+
+        console.log("STEP 1 - Creating recommendations");
+
+        const createdRecs = await matchingRepository.createRecommendations(recommendationRows);
+
+        console.log("STEP 2 - Recommendations created");
+
+        const memberRows = [];
+        for (let i = 0; i < createdRecs.length; i++) {
+            const rec = createdRecs[i];
+            const memberIds = convertedTeams[i];
+            if (!memberIds || !Array.isArray(memberIds)) {
+                console.warn(`⚠️ Skipping member rows for team ${i + 1} because memberIds is invalid`);
+                continue;
+            }
+            for (const userId of memberIds) {
+                if (userId) {
+                    memberRows.push({
+                        recommendationId: rec.id,
+                        userId,
+                        status: "PENDING",
+                    });
+                }
+            }
         }
+
+        console.log("STEP 3 - Member rows prepared");
+
+        if (memberRows.length > 0) {
+            await matchingRepository.createRecommendationMembers(memberRows);
+        }
+        console.log("STEP 4 - Recommendation members created");
+
+        await matchingRepository.updateMatchingRequestStatus(matchingRequestId, "COMPLETED");
+
+        console.log("STEP 5 - Matching request completed");
+
+        await notificationRepository.createNotifications([
+            {
+                userId: ownerId,
+                type: "RECOMMENDATION_RECEIVED",
+                title: roundNumber > 1
+                    ? `Round ${roundNumber} recommendations ready`
+                    : "Your team recommendations are ready",
+                message: `We found ${createdRecs.length} recommended team(s) for "${hackathonTitle}". Check your recommendations page.`,
+                metadata: { teamId, matchingRequestId, round: roundNumber },
+            },
+        ]);
+
+        console.log("STEP 6 - Notification sent");
+
+    } catch (err) {
+        console.error("❌ saveRecommendationsAndNotify failed:", err);
+        // Mark the matching request as FAILED
+        await matchingRepository.updateMatchingRequestStatus(matchingRequestId, "FAILED");
+        throw err; // rethrow to be caught by the caller
     }
-
-    if (memberRows.length > 0) {
-        await matchingRepository.createRecommendationMembers(memberRows);
-    }
-
-    await matchingRepository.updateMatchingRequestStatus(matchingRequestId, "COMPLETED");
-
-    await notificationRepository.createNotifications([
-        {
-            userId: ownerId,
-            type: "RECOMMENDATION_RECEIVED",
-            title: roundNumber > 1
-                ? `Round ${roundNumber} recommendations ready`
-                : "Your team recommendations are ready",
-            message: `We found ${createdRecs.length} recommended team(s) for "${hackathonTitle}". Check your recommendations page.`,
-            metadata: { teamId, matchingRequestId, round: roundNumber },
-        },
-    ]);
 };
 
 // ─────────────────────────────────────────────────────────
@@ -190,6 +269,7 @@ const triggerHackathonMatching = async () => {
                     teamSize: slotsNeeded,
                 });
 
+                console.log("✅ convertedTeams before saving:", JSON.stringify(convertedTeams, null, 2));
                 await saveRecommendationsAndNotify({
                     matchingRequestId: matchingRequest.id,
                     teamId: team.id,
@@ -200,7 +280,7 @@ const triggerHackathonMatching = async () => {
                 });
             } catch (err) {
                 await matchingRepository.updateMatchingRequestStatus(matchingRequest.id, "FAILED");
-                console.error(`Matching failed for team ${team.id}:`, err.message);
+                console.error(`❌ Matching failed for team ${team.id}:`, err.stack || err.message);
             }
         }
     }

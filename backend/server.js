@@ -22,8 +22,8 @@ const startServer = async () => {
     logger.info("postgreSQL connected via prisma 🔥");
 
     // for scheduling the cron jobs
-    // initCronJobs();
-    // logger.info("Cron jobs initialized successfully! ⏰");
+     initCronJobs();
+    logger.info("Cron jobs initialized successfully! ⏰");
 
     // // Immediate execution for testing
     // if (RUN_SCRAPER_IMMEDIATELY) {

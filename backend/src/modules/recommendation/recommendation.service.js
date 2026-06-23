@@ -1,6 +1,7 @@
 const recommendationRepository = require("./recommendation.repository");
 const notificationRepository = require("../notifications/notification.repository");
 const AppError = require("../../utils/AppError");
+const  prisma  = require("../../config/prisma");
 
 // ─────────────────────────────────────────────────────────
 // GET — "My Teams" tab
@@ -21,53 +22,75 @@ const getMyTeamsTab = async (userId) => {
         )
     );
 
+    console.log("USER:", userId);
+
+    console.log("Teams found:", teams.length);
+
+    console.log(
+        "Matching requests:",
+        teams[0]?.matchingRequests?.length
+    );
+
+    console.log(
+        "Recommendations:",
+        teams[0]?.matchingRequests?.[0]?.recommendations?.length
+    );
+
+    console.dir(
+        teams[0]?.matchingRequests?.[0]?.recommendations?.[0],
+        { depth: null }
+    );
+
 
     return teams.map((team) => {
-        const latestRequest = team.matchingRequests[0] || null;
+        const latestRequest =
+            team.matchingRequests?.reduce((latest, current) => {
+                return !latest ||
+                    new Date(current.createdAt) > new Date(latest.createdAt)
+                    ? current
+                    : latest;
+            }, null) || null;
 
-        const recommendations = latestRequest
-            ? latestRequest.recommendations.map((rec) => {
-                // teamData already has enriched members stored as snapshot
-                const snapshotMembers = rec.teamData?.members || [];
+      const recommendations = latestRequest
+    ? latestRequest.recommendations
+        .filter((rec) => rec.status === "PENDING" || rec.status === "ACCEPTED")
+        .map((rec) => {
+            const snapshotMembers = rec.teamData?.members || [];
 
-                // merge snapshot data with live invitation status from AIRecommendationMember
-                const members = rec.airecommendationMembers.map((m) => {
-                    const snapshot = snapshotMembers.find((s) => s.userId === m.user.id) || {};
-
-                    return {
-                        userId: m.user.id,
-                        name: m.user.name,
-                        profilePicture: m.user.profilePicture,
-                        role: m.user.techRoles || snapshot.role || "",
-                        tags: snapshot.tags || [],
-                        invitationStatus: m.status,
-                    };
-                });
-
-
-
-                const accepted = members.filter((m) => m.invitationStatus === "ACCEPTED").length;
-                const rejected = members.filter((m) => ["REJECTED", "EXPIRED"].includes(m.invitationStatus)).length;
-                const pending = members.filter((m) => m.invitationStatus === "PENDING").length;
-
+            const members = (rec.airecommendationMembers || []).map((m) => {
+                const snapshot = snapshotMembers.find((s) => s.userId === m.user.id) || {};
                 return {
-                    id: rec.id,
-                    matchLevel: rec.teamData?.matchLevel || "Medium",
-                    status: rec.status,
-                    expiresAt: rec.expiresAt,
-                    members,
-                    progress: {
-                        total: members.length,
-                        accepted,
-                        rejected,
-                        pending,
-                        acceptedPercent: members.length > 0
-                            ? Math.round((accepted / members.length) * 100)
-                            : 0,
-                    },
+                    userId: m.user.id,
+                    name: m.user.name,
+                    profilePicture: m.user.profilePicture,
+                    role: m.user.techRoles || snapshot.role || "",
+                    tags: snapshot.tags || [],
+                    invitationStatus: m.status,
                 };
-            })
-            : [];
+            });
+
+            const accepted = members.filter((m) => m.invitationStatus === "ACCEPTED").length;
+            const rejected = members.filter((m) => ["REJECTED", "EXPIRED"].includes(m.invitationStatus)).length;
+            const pending = members.filter((m) => m.invitationStatus === "PENDING").length;
+
+            return {
+                id: rec.id,
+                matchLevel: rec.teamData?.matchLevel || "Medium",
+                status: rec.status,
+                expiresAt: rec.expiresAt,
+                members,
+                progress: {
+                    total: members.length,
+                    accepted,
+                    rejected,
+                    pending,
+                    acceptedPercent: members.length > 0
+                        ? Math.round((accepted / members.length) * 100)
+                        : 0,
+                },
+            };
+        })
+    : [];
 
         return {
             teamId: team.id,
@@ -79,12 +102,22 @@ const getMyTeamsTab = async (userId) => {
             ownerId: team.ownerId,
             hackathon: team.hackathon,
             requiredSkills: team.skills.map((s) => s.skill.name),
-            currentMembers: team.members.map((m) => ({
-                userId: m.user.id,
-                name: m.user.name,
-                profilePicture: m.user.profilePicture,
-                role: m.user.techRoles || "",
-            })),
+            currentMembers: [
+                ...team.members.map(m => ({
+                    userId: m.user.id,
+                    name: m.user.name,
+                    profilePicture: m.user.profilePicture,
+                    role: m.user.techRoles?.[0] || "",
+                    status: "ACCEPTED"
+                })),
+                ...team.invitations?.map(i => ({
+                    userId: i.receiverId,
+                    name: i.receiver.name,
+                    profilePicture: i.receiver.profilePicture,
+                    role: "",
+                    status: i.status
+                })) || []
+            ],
             matchingRound: latestRequest ? latestRequest.roundNumber : 0,
             matchingStatus: latestRequest ? latestRequest.status : null,
             recommendations,
@@ -102,6 +135,7 @@ const getJoinTab = async (userId) => {
         invitationId: inv.id,
         status: inv.status,
         deadline: inv.deadline,
+        recommendationId: inv.recommendationMember?.recommendationId || null, 
         team: {
             id: inv.team.id,
             teamName: inv.team.name,
@@ -111,12 +145,16 @@ const getJoinTab = async (userId) => {
             ownerId: inv.team.owner.id,
             owner: inv.team.owner,
             requiredSkills: inv.team.skills.map((s) => s.skill.name),
-            currentMembers: inv.team.members.map((m) => ({
-                userId: m.user.id,
-                name: m.user.name,
-                profilePicture: m.user.profilePicture,
-                role: m.user.techRoles || "",
-            })),
+            currentMembers: [
+                ...inv.team.members.map(m => ({
+                    userId: m.user.id,
+                    name: m.user.name,
+                    teamId: inv.team.id,
+                    profilePicture: m.user.profilePicture,
+                    role: m.user.techRoles?.[0] || "",
+                    status: "ACCEPTED"
+                })),
+            ],
         },
     }));
 };
@@ -214,7 +252,6 @@ const respondToInvitation = async (invitationId, userId, action) => {
 
         if (teamComplete) await recommendationRepository.updateTeamStatus(invitation.teamId, "COMPLETE");
 
-        const { prisma } = require("../../config/prisma");
         const acceptingUser = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });
 
         await notificationRepository.createNotifications([{
@@ -236,9 +273,7 @@ const respondToInvitation = async (invitationId, userId, action) => {
         await recommendationRepository.updateRecommendationMemberStatus(memberRec.recommendationId, userId, "REJECTED");
     }
 
-    const { prisma } = require("../../config/prisma");
-    const rejectingUser = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });
-    const teamData = await recommendationRepository.findTeamById(invitation.teamId);
+const rejectingUser = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });    const teamData = await recommendationRepository.findTeamById(invitation.teamId);
 
     await notificationRepository.createNotifications([{
         userId: teamData.ownerId,

@@ -1,43 +1,331 @@
-//here the generator its goal is to generate the prisma client that we will use it 
-//later in dealing with the database and there is cases where you may need more than one provider like when dealing with graphicql
-
 generator client {
   provider = "prisma-client-js"
-  //previewFeatures = ["driverAdapters"]
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-//   output   = "./ERD.svg"
-// }
-
 datasource db {
-  //cause prisma can be dealed in many databases like mysql and even mongodb so you need to metnion 
   provider = "postgresql"
 }
 
-// lets first start define the ENUMS we will need
-//-----------------------------------------------------
+model User {
+  id                       String                   @id @default(uuid())
+  email                    String                   @unique
+  password                 String?
+  name                     String
+  bio                      String?
+  role                     Role                     @default(PARTICIPANT)
+  isVerified               Boolean                  @default(false)
+  profilePicture           String?
+  resumeUrl                String?
+  createdAt                DateTime                 @default(now())
+  updatedAt                DateTime                 @updatedAt
+  deletedAt                DateTime?
+  verificationToken        String?
+  verificationTokenExpires DateTime?
+  githubUrl                String?
+  linkedinUrl              String?
+  intrestes                InterestType[]
+  techRoles                String[]                 @default([])
+  airecommendationMembers  AIRecommendationMember[]
+  hackathonInterests       HackathonInterest[]
+  createdHackathons        Hackathon[]              @relation("HackathonCreator")
+  matchingRequests         MatchingRequest[]
+  notifications            Notification[]
+  passwordResetTokens      PasswordResetToken[]
+  projectInterests         ProjectInterest[]
+  ownedProjects            Project[]
+  refreshTokens            RefreshToken[]
+  receivedInvitations      TeamInvitation[]         @relation("InvitationReceiver")
+  sentInvitations          TeamInvitation[]         @relation("InvitationSender")
+  teamMemberships          TeamMember[]
+  ownedTeams               Team[]                   @relation("TeamOwner")
+  skills                   UserSkill[]
+
+  @@index([email])
+  @@index([name])
+  @@map("users")
+}
+
+model Skill {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+  teams     TeamSkill[]
+  users     UserSkill[]
+
+  @@map("skills")
+}
+
+model UserSkill {
+  userId    String
+  skillId   String
+  createdAt DateTime @default(now())
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@map("user_skills")
+}
+
+model Hackathon {
+  id                 String              @id @default(uuid())
+  title              String
+  applyLink          String?
+  status             HackathonStatus     @default(UPCOMING)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  location           String?             @default("Online")
+  organization       String?
+  prizeAmount        Float?              @default(0)
+  prizesCounts       Int?                @default(0)
+  registrationsCount Int?                @default(0)
+  remainingTime      String?
+  slug               String?
+  submissionPeriod   String?
+  thumbnailUrl       String?
+  createdBy          String?
+  endDate            DateTime?
+  interestCount      Int                 @default(0)
+  source             HackathonSource     @default(SCRAPED)
+  devpostId          String?             @unique
+  interests          HackathonInterest[]
+  tags               HackathonTag[]
+  creator            User?               @relation("HackathonCreator", fields: [createdBy], references: [id])
+  matchingRequests   MatchingRequest[]
+  teams              Team[]
+
+  @@map("hackathons")
+}
+
+model Tag {
+  id         String         @id @default(uuid())
+  name       String         @unique
+  createdAt  DateTime       @default(now())
+  hackathons HackathonTag[]
+
+  @@map("tags")
+}
+
+model HackathonTag {
+  hackathonId String
+  tagId       String
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  tag         Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([hackathonId, tagId])
+  @@map("hackathon_tags")
+}
+
+model Team {
+  id               String            @id @default(uuid())
+  name             String
+  hackathonId      String
+  ownerId          String
+  status           TeamStatus        @default(FORMING)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  description      String?
+  formationMethod  FormationMethod   @default(AUTO_MATCHED)
+  roles            String[]
+  size             Int               @default(1)
+  matchingRequests MatchingRequest[]
+  project          Project?
+  invitations      TeamInvitation[]
+  members          TeamMember[]
+  skills           TeamSkill[]
+  hackathon        Hackathon         @relation(fields: [hackathonId], references: [id])
+  owner            User              @relation("TeamOwner", fields: [ownerId], references: [id])
+
+  @@map("teams")
+}
+
+model TeamSkill {
+  teamId  String
+  skillId String
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  team    Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, skillId])
+  @@map("team_skills")
+}
+
+model TeamMember {
+  teamId   String
+  userId   String
+  joinedAt DateTime @default(now())
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+model TeamInvitation {
+  id                   String                  @id @default(uuid())
+  teamId               String
+  senderId             String
+  receiverId           String
+  status               InvitationStatus        @default(PENDING)
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+  deadline             DateTime
+  recommendationMember AIRecommendationMember?
+  receiver             User                    @relation("InvitationReceiver", fields: [receiverId], references: [id])
+  sender               User                    @relation("InvitationSender", fields: [senderId], references: [id])
+  team                 Team                    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@map("team_invitations")
+}
+
+model MatchingRequest {
+  id              String             @id @default(uuid())
+  userId          String
+  hackathonId     String
+  status          MatchingStatus     @default(PENDING)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  projectId       String?
+  queuePosition   Int?
+  roundNumber     Int                @default(1)
+  teamId          String?
+  recommendations AIRecommendation[]
+  hackathon       Hackathon          @relation(fields: [hackathonId], references: [id])
+  project         Project?           @relation(fields: [projectId], references: [id])
+  team            Team?              @relation(fields: [teamId], references: [id])
+  user            User               @relation(fields: [userId], references: [id])
+
+  @@map("matching_requests")
+}
+
+model AIRecommendation {
+  id                      String                   @id @default(uuid())
+  matchingRequestId       String
+  teamData                Json
+  status                  RecommendationStatus     @default(PENDING)
+  createdAt               DateTime                 @default(now())
+  expiresAt               DateTime?
+  airecommendationMembers AIRecommendationMember[]
+  matchingRequest         MatchingRequest          @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
+
+  @@map("ai_recommendations")
+}
+
+model AIRecommendationMember {
+  id               String           @id @default(uuid())
+  recommendationId String
+  userId           String
+  status           InvitationStatus @default(PENDING)
+  createdAt        DateTime         @default(now())
+  invitationId     String?          @unique
+  invitation       TeamInvitation?  @relation(fields: [invitationId], references: [id])
+  recommendation   AIRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([recommendationId, userId])
+  @@map("ai_recommendation_members")
+}
+
+model AIIdentityMap {
+  id         Int      @id @default(autoincrement())
+  entityId   String
+  entityType String
+  createdAt  DateTime @default(now())
+
+  @@unique([entityId, entityType])
+  @@map("ai_identity_maps")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model HackathonInterest {
+  userId      String
+  hackathonId String
+  createdAt   DateTime  @default(now())
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, hackathonId])
+  @@map("hackathon_interests")
+}
+
+model Project {
+  id               String            @id @default(uuid())
+  title            String
+  description      String
+  ownerId          String
+  teamId           String            @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  interestsCount   Int               @default(0)
+  matchingRequests MatchingRequest[]
+  interests        ProjectInterest[]
+  owner            User              @relation(fields: [ownerId], references: [id])
+  team             Team              @relation(fields: [teamId], references: [id])
+
+  @@map("projects")
+}
+
+model ProjectInterest {
+  userId    String
+  projectId String
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_interests")
+}
 
 enum Role {
   PARTICIPANT
   ADMIN
 }
 
-//describe the team status itself the current to see if he still need persons so it is forming or it is complete and can apply now to the hackathon
 enum TeamStatus {
   FORMING
   COMPLETE
 }
 
-//enum for team formation method 
 enum FormationMethod {
   MANUAL
   AUTO_MATCHED
   INVITED
 }
 
-//this is when the human invite another person to join to my team
 enum InvitationStatus {
   PENDING
   ACCEPTED
@@ -46,7 +334,6 @@ enum InvitationStatus {
   CANCELLED
 }
 
-//the matching request the user make it in the website what is its current state now?
 enum MatchingStatus {
   PENDING
   PROCESSING
@@ -54,8 +341,6 @@ enum MatchingStatus {
   FAILED
 }
 
-//and this is the recommended teams that ai recommend them 
-//this is the answer for each recommended team that ai recommends it and this value deponds on the user action
 enum RecommendationStatus {
   PENDING
   ACCEPTED
@@ -75,8 +360,9 @@ enum NotificationType {
   INVITE_ACCEPTED
   INVITE_REJECTED
   HACKATHON_REMINDER
-  RECOMMENDATION_RECEIVED //this used when the founder get the ai recommendation 
-  ROUND2_AVAILABLE ///to tell the owner if he has missing in his currect team
+  RECOMMENDATION_RECEIVED
+  /// to tell the owner if he has missing in his currect team
+  ROUND2_AVAILABLE
 }
 
 enum HackathonSource {
@@ -91,426 +377,4 @@ enum InterestType {
   EDUCATION
   GAMING
   OTHER
-}
-
-//--------------------------------------------------
-//USERS
-//--------------------------------------------------
-
-/**
- * there is some notes here now why we will make the password string?
- * cause this meaning string? it can be null but how? and that cause we planned to make oAUTH
- * so to can support this 2 ways we need to make the passowrd can be null and that cause the normal traditional way
- * need password and the second way is can not be success if user required to enter password
- * we will not put the indexes now until we load all the dataset into the database and then measure
- * each query how much time it takes to can define which ones need to be increased and need to have index
- * @id made prisma understand that this attribute need to be converted to the primary key of this table
- * after each edit in the schema we need to migerate it again to can see the updates  and to make that and to enabel the prisma client to see the new updates we just need to use the command
- * npm prisma generate
- * now after this command the prisma client can see the updates that happened in the schema easily but
- * is it added into the database and in the migeration file? NO
- * if you make changes in schema and added attributes and then you try to migrate it it will give you error if there is exised data in the database in the old schema
- * npm prisma migrate dev
- * so it will give you prisma validation error tells you that you can not migerate and the solution in this case is to delete the old schema data and then migrate again based on the new schema
- * one of the best practise things and well known that to make the id is string and using uuid which make to each user id randomly string as id
- * rather than making it as sequential incremental number id which is predictable
- */
-
-//done
-model User {
-  id                       String         @id @default(uuid())
-  email                    String         @unique
-  password                 String?
-  name                     String
-  bio                      String?
-  role                     Role           @default(PARTICIPANT)
-  isVerified               Boolean        @default(false)
-  profilePicture           String?
-  resumeUrl                String?
-  createdAt                DateTime       @default(now())
-  updatedAt                DateTime       @updatedAt
-  deletedAt                DateTime? //that means can be null
-  verificationToken        String?
-  verificationTokenExpires DateTime?
-  githubUrl                String?
-  linkedinUrl              String?
-  intrestes                InterestType[]
-  techRoles                String[]       @default([]) //this is the role in the hackathon like frontend or backend or designer or data scientist and so on
-
-  // Relations
-  //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
-  skills              UserSkill[] //each user can have many skills 
-  ownedTeams          Team[]               @relation("TeamOwner") //and can create more than one team 
-  teamMemberships     TeamMember[]
-  sentInvitations     TeamInvitation[]     @relation("InvitationSender") //can send many  invitation to ask persons to join
-  receivedInvitations TeamInvitation[]     @relation("InvitationReceiver") //can get many invitations to join their teams
-  notifications       Notification[] //can have many notifications
-  matchingRequests    MatchingRequest[] //can make more than mathcing requests
-  refreshTokens       RefreshToken[]
-  passwordResetTokens PasswordResetToken[]
-
-  hackathonInterests      HackathonInterest[]
-  projectInterests        ProjectInterest[]
-  ownedProjects           Project[]
-  createdHackathons       Hackathon[]              @relation("HackathonCreator")
-  airecommendationMembers AIRecommendationMember[]
-
-  //for performance search in the users invitation we need to make index on email and on name 
-  @@index([email])
-  @@index([name])
-  //this one its goal is to define the name of the table in teh database to be called users
-  @@map("users")
-}
-
-// ─────────────────────────────────────────
-// SKILLS DONE
-// ─────────────────────────────────────────
-
-model Skill {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-
-  // Relations
-  users UserSkill[] //and it is array too cause the relation is many to many which will make us to make new table
-  teams TeamSkill[]
-
-  @@map("skills")
-}
-
-model UserSkill {
-  //there is no need for this id too the primary key for this table will be composite key too
-  userId    String //the forien key this is their names
-  skillId   String //the same for here
-  createdAt DateTime @default(now())
-
-  // Relations
-  //cascade here meaning if the skill is deleted so any record with it deleted
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, skillId])
-  @@map("user_skills")
-}
-
-// ─────────────────────────────────────────
-// HACKATHONS DONE
-// ─────────────────────────────────────────
-
-//done 
-model Hackathon {
-  id                 String          @id @default(uuid())
-  devpostId          String?         @unique
-  title              String
-  slug               String?
-  location           String?         @default("Online")
-  applyLink          String?
-  thumbnailUrl       String?
-  remainingTime      String?
-  submissionPeriod   String?
-  prizeAmount        Float?          @default(0)
-  prizesCounts       Int?            @default(0)
-  registrationsCount Int?            @default(0)
-  organization       String?
-  endDate            DateTime?
-  status             HackathonStatus @default(UPCOMING)
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
-  source             HackathonSource @default(SCRAPED)
-
-  createdBy String?
-  creator   User?   @relation("HackathonCreator", fields: [createdBy], references: [id], onDelete: SetNull)
-
-  //we will need aagolso to store the number counter of intereseted persons for each hackathon to make it more faster and mroe easy when print it in the explore page rather than making another quesry 
-  interestCount Int @default(0)
-
-  // Relations
-  tags             HackathonTag[]
-  teams            Team[]
-  matchingRequests MatchingRequest[]
-  interests        HackathonInterest[]
-
-  @@map("hackathons")
-}
-
-//and we will make it entity rather than making it just enum and that for making the things more dynamic 
-//and cause if we make it enum so in each change in the tags we will need to change the code and redeploy it again which is not good thing
-
-//done
-model Tag {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-
-  // Relations
-  hackathons HackathonTag[]
-
-  @@map("tags")
-}
-
-//and cause this is many to many relationship so we need its composite table to be followed the normalization things
-model HackathonTag {
-  //there is no need for making for this table specific id cause its id will be composite key 
-  hackathonId String
-  tagId       String
-
-  hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
-  tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@unique([hackathonId, tagId]) // and this to ensure that this composite part togather will not be duplicated 
-  @@map("hackathon_tags")
-}
-
-// ─────────────────────────────────────────
-// TEAMS
-// ─────────────────────────────────────────
-
-model Team {
-  id              String          @id @default(uuid())
-  name            String
-  hackathonId     String //foriegn key
-  ownerId         String //foriegn key
-  status          TeamStatus      @default(FORMING)
-  formationMethod FormationMethod @default(AUTO_MATCHED)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  description     String?
-  size            Int             @default(1) //there is no default size of them team
-  roles           String[]
-
-  // Relations
-  hackathon   Hackathon        @relation(fields: [hackathonId], references: [id]) //cause the relation is 1:m
-  owner       User             @relation("TeamOwner", fields: [ownerId], references: [id])
-  members     TeamMember[]
-  invitations TeamInvitation[]
-
-  skills           TeamSkill[]
-  project          Project? //cause this team can be happened but for project user made not hackathon 
-  matchingRequests MatchingRequest[]
-
-  @@map("teams")
-}
-
-//now when the user will create the team for specific hackathon there is many to many relationship related to the teams and skills
-//that the user enter the skills he want to be in this team he created and so we need to make the table of this m:m relationship
-model TeamSkill {
-  teamId  String
-  skillId String
-
-  team  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@unique([teamId, skillId])
-  @@map("team_skills")
-}
-
-//cause there is many to many (belongs to) relationship between the user and the team so we will need this new table
-model TeamMember {
-  teamId   String
-  userId   String
-  joinedAt DateTime @default(now())
-
-  // Relations
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  //just for extra check to ensure that there is duplication can happened and there is no putted the same user duplicated in the same team 
-  @@unique([teamId, userId])
-  @@map("team_members")
-}
-
-model TeamInvitation {
-  id         String           @id @default(uuid())
-  teamId     String
-  senderId   String
-  receiverId String
-  status     InvitationStatus @default(PENDING)
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
-  deadline   DateTime
-
-  // Relations
-  team                 Team                    @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  sender               User                    @relation("InvitationSender", fields: [senderId], references: [id])
-  receiver             User                    @relation("InvitationReceiver", fields: [receiverId], references: [id])
-  recommendationMember AIRecommendationMember?
-
-  @@map("team_invitations")
-}
-
-// ─────────────────────────────────────────
-// AI MATCHING
-// ─────────────────────────────────────────
-
-model MatchingRequest {
-  id            String         @id @default(uuid())
-  userId        String
-  hackathonId   String
-  teamId        String? //the team who requested this matching request
-  projectId     String? //the project that matching happened to but it is optional cause it may be for hackathon not project
-  roundNumber   Int            @default(1)
-  queuePosition Int? //cause who making this request is the owners persons so we need to know each person position to the priority of respond will be based on it
-  status        MatchingStatus @default(PENDING)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-
-  // Relations
-  user            User               @relation(fields: [userId], references: [id])
-  hackathon       Hackathon          @relation(fields: [hackathonId], references: [id])
-  team            Team?              @relation(fields: [teamId], references: [id])
-  project         Project?           @relation(fields: [projectId], references: [id])
-  recommendations AIRecommendation[]
-
-  @@map("matching_requests")
-}
-
-model AIRecommendation {
-  id                String               @id @default(uuid())
-  matchingRequestId String
-  //this will be snapshot and that to make it faster to be appeared in the front end 
-  teamData          Json // teamData shape: { members: [{ userId, name, skills }], explanation: "" }
-  status            RecommendationStatus @default(PENDING)
-  expiresAt         DateTime? //cause after for example 24 hours that this team was recommended to the owner we will ask if make round 2 or that enough
-  createdAt         DateTime             @default(now())
-
-  // Relations
-  matchingRequest         MatchingRequest          @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
-  airecommendationMembers AIRecommendationMember[]
-
-  @@map("ai_recommendations")
-}
-
-//now we yes save the returned member in the ai recommendation as json but this will not be usedful for using it in queries or in asking if there is member of them accept another team or no
-//so we need to make another table to save the returned member in the ai recommendation and that to make the things more faster with keeping the json snapshot as it is
-model AIRecommendationMember {
-  id               String           @id @default(uuid())
-  recommendationId String
-  userId           String
-  invitationId     String?          @unique
-  status           InvitationStatus @default(PENDING)
-  createdAt        DateTime         @default(now())
-
-  recommendation AIRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  invitation     TeamInvitation?  @relation(fields: [invitationId], references: [id])
-
-  @@unique([recommendationId, userId])
-  @@map("ai_recommendation_members")
-}
-
-//we need also to save the mapping of each user id that it is stored here as string uuid and the ai expected integer user ids as mapping here
-//we will need also to store the entity type and that cause we hae more than one entity not just user and each one has itwn own uuid which can be similar in the 2 difference entities objects but each one of them is different so the mapping will be different too
-model AIIdentityMap {
-  //this is the one will be used when talking to the ai model
-  id         Int      @id @default(autoincrement())
-  //and this is the real one that it is stored in the db 
-  entityId   String //cause the user uuid and the project uuid maybe have the same one so we can not making it unique condition 
-  entityType String
-  createdAt  DateTime @default(now())
-
-  @@unique([entityId, entityType])
-  @@map("ai_identity_maps")
-}
-
-// ─────────────────────────────────────────
-// NOTIFICATIONS
-// ─────────────────────────────────────────
-
-model Notification {
-  id        String           @id @default(uuid())
-  userId    String
-  type      NotificationType
-  title     String
-  message   String
-  isRead    Boolean          @default(false)
-  metadata  Json?
-  createdAt DateTime         @default(now())
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("notifications")
-}
-
-// ─────────────────────────────────────────
-// AUTH TOKENS
-// ─────────────────────────────────────────
-
-model RefreshToken {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("refresh_tokens")
-}
-
-model PasswordResetToken {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  isUsed    Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_reset_tokens")
-}
-
-// Case 2 when user presses "I'm Interested" on a hackathon
-// this is the candidate pool for hackathon-based matching
-model HackathonInterest {
-  //so we store here each user and the hackathon he interested on it cause we will send them for the model
-  userId      String
-  hackathonId String
-  createdAt   DateTime  @default(now())
-  // name        String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, hackathonId])
-  @@map("hackathon_interests")
-}
-
-// Case 1 when the project idea the team owner attaches during team creation
-// one project per team, one team per project and that cause just the owner who made the team so there is no any other teams 
-//just one team for each project 
-model Project {
-  id             String   @id @default(uuid())
-  title          String
-  description    String
-  ownerId        String
-  teamId         String   @unique // one project per team
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  interestsCount Int      @default(0) //the number of interested persons in this project idea
-
-  owner            User              @relation(fields: [ownerId], references: [id])
-  team             Team              @relation(fields: [teamId], references: [id])
-  interests        ProjectInterest[]
-  matchingRequests MatchingRequest[] //and this is an array of requests cause the owner can ask to get round 2 recommendations 
-
-  @@map("projects")
-}
-
-// Case 1 when user presses "I'm Interested" on a project in Explore Projects
-// this is the candidate pool for project-based matching
-
-//it is the same idea of the hackathon interest except it is for the projects not hackathons 
-model ProjectInterest {
-  userId    String
-  projectId String
-  createdAt DateTime @default(now())
-
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, projectId])
-  @@map("project_interests")
 }

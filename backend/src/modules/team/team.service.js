@@ -5,7 +5,7 @@ const notificationRepository = require("../notifications/notification.repository
 const interestRepository = require("../interests/interest.repository");
 const AppError = require("../../utils/AppError");
 const { syncHackathonEntity } = require("../ai/aiCandidate.service");
-
+const prisma = require("../../config/prisma");
 
 
 const createTeam = async (ownerId, data) => {
@@ -189,10 +189,90 @@ const createTeam = async (ownerId, data) => {
 
 };
 
-// const getTeamById = async (id) => {
-//     const team = await teamRepository.findTeamById(id);
-//     if (!team) throw new AppError("Team not found", 404);
-//     return team;
-// };
+const getTeamById = async (teamId) => {
+  const team = await prisma.team.findUnique({
+    where: { id: teamId },
+    include: {
+      hackathon: true,
+      owner: { select: { id: true, name: true, profilePicture: true } },
+      members: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profilePicture: true,
+              techRoles: true,
+              skills: { include: { skill: { select: { name: true } } } },
+            },
+          },
+        },
+      },
+      skills: { include: { skill: true } },
+      invitations: {
+        where: { status: "PENDING" },
+        include: {
+          receiver: {
+            select: {
+              id: true,
+              name: true,
+              profilePicture: true,
+              techRoles: true,
+              skills: { include: { skill: { select: { name: true } } } },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!team) throw new AppError("Team not found", 404);
 
-module.exports = { createTeam };
+  const memberMap = new Map();
+
+  // Add accepted members
+  team.members.forEach((m) => {
+    memberMap.set(m.user.id, {
+      userId: m.user.id,
+      name: m.user.name,
+      profilePicture: m.user.profilePicture,
+      role: m.user.techRoles?.[0] || "",
+      skills: m.user.skills?.map((s) => s.skill.name) || [],
+      status: "ACCEPTED",
+    });
+  });
+
+  // Add pending invitations (only if not already in map)
+  team.invitations.forEach((inv) => {
+    if (!memberMap.has(inv.receiver.id)) {
+      memberMap.set(inv.receiver.id, {
+        userId: inv.receiver.id,
+        name: inv.receiver.name,
+        profilePicture: inv.receiver.profilePicture,
+        role: inv.receiver.techRoles?.[0] || "",
+        skills: inv.receiver.skills?.map((s) => s.skill.name) || [],
+        invitationId: inv.id,
+        status: "PENDING",
+      });
+    }
+  });
+
+  const allMembers = Array.from(memberMap.values());
+
+  return {
+    recommendationId: team.id,
+    status: team.status,
+    expiresAt: null,
+    targetTeam: {
+      id: team.id,
+      teamName: team.name,
+      hackathon: team.hackathon,
+      description: team.description || "",
+      maxMembers: team.size,
+      ownerId: team.ownerId,
+      requiredSkills: team.skills.map((s) => s.skill.name),
+    },
+    recommendedMembers: allMembers,
+  };
+};
+
+module.exports = { createTeam ,getTeamById};

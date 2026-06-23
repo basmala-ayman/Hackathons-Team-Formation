@@ -38,7 +38,7 @@ const findHackathonsReadyForMatching = (threshold) => {
             interestCount: { gte: threshold },
             status: { not: "ENDED" },
             matchingRequests: {
-                none: { status: "COMPLETED", projectId: null },
+                none: { status: { in: ["COMPLETED", "PROCESSING"] }, projectId: null },
             },
         },
     });

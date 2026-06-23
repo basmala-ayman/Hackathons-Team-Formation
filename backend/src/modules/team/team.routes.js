@@ -12,6 +12,10 @@ router.use(protect);
 //this for creating team 
 router.post("/", validate(createTeamSchema), teamController.createTeam);
 //this is for getting specific team by its specify id
-// router.get("/:id", validate(teamIdParamSchema, "params"), teamController.getTeam);
+
+
+router.get("/:id", teamController.getTeam);
+
+
 
 module.exports = router;

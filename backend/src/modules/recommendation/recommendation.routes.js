@@ -9,7 +9,7 @@ router.use(protect);
 router.get("/", recommendationController.getRecommendations);
 
 
-
+//this for the view team button
 router.get("/:id",recommendationController.getRecommendationDetails);
 
 

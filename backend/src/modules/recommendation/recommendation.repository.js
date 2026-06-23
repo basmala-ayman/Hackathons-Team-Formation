@@ -38,13 +38,13 @@ const findOwnerTeamsWithRecommendations = (userId) => {
                                 },
                             },
 
-                            invitations: {
-                                select: {
-                                    id: true,
-                                    receiverId: true,
-                                    status: true,
-                                },
-                            },
+                            // invitations: {
+                            //     select: {
+                            //         id: true,
+                            //         receiverId: true,
+                            //         status: true,
+                            //     },
+                            // },
                         },
                     },
                 },
@@ -73,6 +73,10 @@ const findReceivedInvitations = (userId) => {
                         },
                     },
                 },
+
+            },
+            recommendationMember: {   
+                select: { recommendationId: true },
             },
         },
     });

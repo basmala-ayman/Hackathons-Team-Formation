@@ -17,6 +17,16 @@ const createTeam = async (req, res, next) => {
   }
 };
 
+
+const getTeam = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const team = await teamService.getTeamById(id);
+    res.status(200).json({ success: true, data: team });
+  } catch (err) {
+    next(err);
+  }
+};
 // const getTeam = async (req, res, next) => {
 //   try {
 //     const { id } = req.params;
@@ -30,4 +40,4 @@ const createTeam = async (req, res, next) => {
 //   }
 // };
 
-module.exports = { createTeam };
+module.exports = { createTeam, getTeam };

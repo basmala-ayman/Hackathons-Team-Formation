@@ -54,14 +54,18 @@ const initCronJobs = () => {
     });
 
     // ── every 10 seconds — trigger hackathon matching (testing) ──
-    cron.schedule("*/10 * * * * *", async () => {
-        console.log("⏰ Cron fired (every 10 seconds)");
-        console.log("Cron: starting hackathon matching");
+    let isRunning = false;
+
+    cron.schedule("*/2 * * * *", async () => {
+        if (isRunning) return;
+
+        isRunning = true;
         try {
             await matchingService.triggerHackathonMatching();
-            console.log("Cron: hackathon matching completed");
         } catch (err) {
-            console.error("Cron: hackathon matching failed", err.message);
+            console.error(err);
+        } finally {
+            isRunning = false;
         }
     });
 
