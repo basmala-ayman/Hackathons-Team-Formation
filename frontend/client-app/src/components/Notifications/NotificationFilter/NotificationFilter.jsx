@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./NotificationFilter.module.css";
-import { Zap, Bell, Users, CheckCircle, Filter } from "lucide-react";
+import { Zap, Bell, Users, CheckCircle, Filter, XCircle } from "lucide-react";
 
 export default function NotificationFilter({ activeFilter, onFilterChange, counts }) {
   const safeCounts = counts || {};
@@ -22,6 +22,12 @@ export default function NotificationFilter({ activeFilter, onFilterChange, count
       label: "Accepted",
       icon: <CheckCircle size={18} />,
       count: safeCounts.accepted || 0
+    },
+    {
+      id: "declined",
+      label: "Rejected",
+      icon: <XCircle size={18} />,
+      count: safeCounts.declined || 0
     },
     {
       id: "matches",

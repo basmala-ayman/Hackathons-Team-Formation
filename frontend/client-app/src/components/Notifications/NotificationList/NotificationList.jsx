@@ -14,8 +14,8 @@ export default function NotificationList({ filter }) {
 
   const FILTER_CATEGORIES = [
     { id: "all", label: "All", types: [] },
-    { id: "team", label: "Team Requests", types: ["TEAM_INVITE", "INVITE_ACCEPTED", "INVITE_REJECTED"] },
-    { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+    { id: "team", label: "Team Requests", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+    { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] }, // إضافة هذا السطر
     { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED", "ROUND2_AVAILABLE"] },
   ];
 

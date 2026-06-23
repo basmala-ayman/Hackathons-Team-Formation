@@ -55,16 +55,19 @@ export default function NotificationItem({ data, onRead }) {
             </span>
           </div>
 
-          {/* Action buttons for specific types */}
-          {data.type === "JOIN_REQUEST" && (
+          {(data.type === "JOIN_REQUEST" || data.type === "TEAM_INVITE") && (
             <div className={styles.actions}>
-              <button className={styles.btnAccept} onClick={(e) => e.stopPropagation()}>
+              <button className={styles.btnAccept} onClick={(e) => {
+                e.stopPropagation();
+              }}>
                 <Check size={16} strokeWidth={3} />
                 <span>Accept</span>
               </button>
-              <button className={styles.btnDecline} onClick={(e) => e.stopPropagation()}>
+              <button className={styles.btnDecline} onClick={(e) => {
+                e.stopPropagation();
+              }}>
                 <X size={16} strokeWidth={3} />
-                <span>Decline</span>
+                <span>Reject</span>
               </button>
             </div>
           )}

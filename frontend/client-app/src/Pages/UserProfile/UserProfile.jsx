@@ -8,6 +8,8 @@ import ProfileWizardModal from "./../../components/UserProfilePopups/ProfileWiza
 import ProfileHeaderCard from "../../components/UserProfile/ProfileHeader/ProfileHeaderCard";
 import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/MyProjectIdeasCard";
 import { getUserProfile, updateUserProfile } from "../../services/userService";
+import { useAuth } from "../../context/AuthContext/useAuth";
+
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -35,6 +37,7 @@ export default function UserProfile({ isOwner = true }) {
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [completionPercentage, setCompletionPercentage] = useState(0);
+  const { setUser } = useAuth();
 
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
     defaultProfileData,
@@ -104,7 +107,9 @@ export default function UserProfile({ isOwner = true }) {
             hackathonInterests: profileData.hackathonInterests || [],
             ownedProjects: profileData.ownedProjects || []
           });
+
         })
+
         .catch((err) => {
           const errorMessage = err.response?.data?.message || err.message || "Failed to load profile data.";
           setApiError(errorMessage);
@@ -134,8 +139,14 @@ export default function UserProfile({ isOwner = true }) {
         finalPayload.append("githubUrl", payload.githubUrl || values.githubUrl || "");
         finalPayload.append("linkedinUrl", payload.linkedinUrl || values.linkedinUrl || "");
 
+        // const fileToUpload = payload.avatarFile || values.avatarFile;
+        // if (fileToUpload) {
+        //   finalPayload.append("profilePicture", fileToUpload);
+        // }
+
         const fileToUpload = payload.avatarFile || values.avatarFile;
-        if (fileToUpload) {
+
+        if (fileToUpload instanceof File) {
           finalPayload.append("profilePicture", fileToUpload);
         }
 
@@ -159,7 +170,6 @@ export default function UserProfile({ isOwner = true }) {
         let picPath = profileData.profilePicture;
 
         if (picPath.startsWith("http")) {
-          // راجع full URL من السيرفر
           newAvatar = `${picPath}?t=${Date.now()}`;
         } else {
           // relative path
@@ -190,11 +200,17 @@ export default function UserProfile({ isOwner = true }) {
     }
   }, [values, setValues]);
 
+  // useEffect(() => {
+  //   if (values.avatarFile) {
+  //     handleProfileUpdate({ avatarFile: values.avatarFile });
+  //   }
+  // }, [values.avatarFile]);
+
   useEffect(() => {
-    if (values.avatarFile) {
+    if (values.avatarFile instanceof File) {
       handleProfileUpdate({ avatarFile: values.avatarFile });
     }
-  }, [values.avatarFile]);
+  }, [values.avatarFile, handleProfileUpdate]);
 
   // When Loading
   if (isLoading) {

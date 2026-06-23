@@ -39,11 +39,15 @@ const generatePayload = (currentValues, originalValues, user, hackathonOptions) 
   if (currentValues.githubUrl) payload.append("githubUrl", currentValues.githubUrl);
   if (currentValues.linkedinUrl) payload.append("linkedinUrl", currentValues.linkedinUrl);
 
-  if (currentValues.avatarFile) {
+  // if (currentValues.avatarFile) {
+  //   payload.append("profilePicture", currentValues.avatarFile);
+  // }
+  // else if (originalValues?.avatar) {
+  //   payload.append("profilePicture", originalValues.avatar);
+  // }
+
+  if (currentValues.avatarFile instanceof File) {
     payload.append("profilePicture", currentValues.avatarFile);
-  }
-  else if (originalValues?.avatar) {
-    payload.append("profilePicture", originalValues.avatar);
   }
 
   const appendIfChanged = (key, value) => {
@@ -135,8 +139,17 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
       const finalPayload = generatePayload(localValues, externalValues, user, hackathonOptions);
       const savedData = await onSave(finalPayload, true); // ← capture response
 
-      // ✅ Don't spread localValues (has temp blob URL) — let onSave's setValues handle state
-      // Only sync non-file fields back
+      // setExternalValues((prev) => ({
+      //   ...prev,
+      //   skills: localValues.skills,
+      //   techRoles: localValues.techRoles,
+      //   intrestes: localValues.intrestes,
+      //   bio: localValues.bio,
+      //   githubUrl: localValues.githubUrl,
+      //   linkedinUrl: localValues.linkedinUrl,
+      //   name: localValues.name,
+      // }));
+
       setExternalValues((prev) => ({
         ...prev,
         skills: localValues.skills,
@@ -146,6 +159,10 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
         githubUrl: localValues.githubUrl,
         linkedinUrl: localValues.linkedinUrl,
         name: localValues.name,
+
+        // preserve avatar
+        avatar: localValues.avatar || prev.avatar,
+        avatarFile: null,
       }));
 
       setShowSuccessScreen(true);
@@ -164,13 +181,13 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
   };
 
   const handleModalClose = () => {
+    setShowSuccessScreen(false);
     handleClose();
     setTimeout(() => {
       setCurrentStep(1);
-      setShowSuccessScreen(false);
       setErrors({});
       setActiveAction(null);
-    }, 300);
+    }, 400);
   };
 
   return (
