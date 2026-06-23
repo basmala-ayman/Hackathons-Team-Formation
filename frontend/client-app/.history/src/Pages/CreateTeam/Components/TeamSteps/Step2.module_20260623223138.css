@@ -106,13 +106,18 @@
   color: var(--color-error-red);
   border: none;
   border-radius: 50%;
-  padding: 0.4rem;
-
+  width: 2rem;
+  height: 2rem;
+  padding: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s ease; 
+}
+
+.removeIcon:hover {
+  background: #c82333; 
 }
 
 /* btns */

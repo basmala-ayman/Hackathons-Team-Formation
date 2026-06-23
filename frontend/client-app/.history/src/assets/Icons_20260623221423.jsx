@@ -597,11 +597,11 @@ export const ElectricIcon = () => (
     />
   </svg>
 );
-export const XIcon = ({color="#FEFDFF" , size="12"}) => (
+export const XIcon = (color="#FEFDFF") => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
+    width="12"
+    height="12"
     viewBox="0 0 12 12"
     fill="none"
   >

@@ -1,11 +1,6 @@
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
-import {
-  AddMemberIcon,
-  SearchIcon,
-  CheckIcon,
-  XIcon,
-} from "../../../../assets/Icons";
+import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
 import { useState } from "react";
 import Select, { components } from "react-select";
@@ -194,17 +189,8 @@ function Step2_AddMembers({
                 </div>
               </div>
 
-              <div className="d-flex align-items-center gap-3">
-                <div className={styles.badge}>
-                  <CheckIcon /> Invited
-                </div>
-                <button
-                  type="button"
-                  className={styles.removeIcon}
-                  onClick={() => handleRemoveInvitation(memberId)}
-                > 
-                  <XIcon color="red" size="15"/>
-                </button>
+              <div className={styles.badge}>
+                <CheckIcon /> Invited
               </div>
             </div>
           );

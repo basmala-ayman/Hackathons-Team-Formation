@@ -202,8 +202,8 @@ function Step2_AddMembers({
                   type="button"
                   className={styles.removeIcon}
                   onClick={() => handleRemoveInvitation(memberId)}
-                > 
-                  <XIcon color="red" size="15"/>
+                >
+                  <XIcon />
                 </button>
               </div>
             </div>

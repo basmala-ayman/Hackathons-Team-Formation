@@ -64,7 +64,7 @@ export function useCreateTeamForm() {
 
   //save data inside sessionStorage =
   useEffect(() => {
-    sessionStorage.setItem("current_step", currentStep.toString());
+    sessionStorage.setItem("Current_step", currentStep.toString());
   }, [currentStep]);
   useEffect(() => {
     sessionStorage.setItem("Team_Data", JSON.stringify(formData));

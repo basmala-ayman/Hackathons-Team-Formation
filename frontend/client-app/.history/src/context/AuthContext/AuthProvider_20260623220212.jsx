@@ -69,9 +69,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setUser(null);
-    sessionStorage.removeItem("current_step");
+    sessionStorage.removeItem("Current_step");
     sessionStorage.removeItem("Team_Data");
+    setUser(null);
     clearTokens();
   };
 

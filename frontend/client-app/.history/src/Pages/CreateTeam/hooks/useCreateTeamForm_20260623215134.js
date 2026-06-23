@@ -20,7 +20,7 @@ export function useCreateTeamForm() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [userCreated, setUserCreated] = useState(false);
   const [currentStep, setCurrentStep] = useState(() =>
-    Number(getSavedData("current_step", 1)),
+    Number(getSavedData("Current_step", 1)),
   );
   const [formData, setFormData] = useState(() =>
     getSavedData("Team_Data", INITIAL_FORM_DATA),
@@ -64,7 +64,7 @@ export function useCreateTeamForm() {
 
   //save data inside sessionStorage =
   useEffect(() => {
-    sessionStorage.setItem("current_step", currentStep.toString());
+    sessionStorage.setItem("Current_step", currentStep.toString());
   }, [currentStep]);
   useEffect(() => {
     sessionStorage.setItem("Team_Data", JSON.stringify(formData));
@@ -96,8 +96,8 @@ export function useCreateTeamForm() {
 
       console.log("Created Team:", response);
 
-      sessionStorage.removeItem("current_step");
-      sessionStorage.removeItem("Team_Data");
+      localStorage.removeItem("current_step");
+      localStorage.removeItem("Team_Data");
 
       setShowSuccess(true);
     } catch (error) {

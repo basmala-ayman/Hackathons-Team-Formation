@@ -198,13 +198,7 @@ function Step2_AddMembers({
                 <div className={styles.badge}>
                   <CheckIcon /> Invited
                 </div>
-                <button
-                  type="button"
-                  className={styles.removeIcon}
-                  onClick={() => handleRemoveInvitation(memberId)}
-                > 
-                  <XIcon color="red" size="15"/>
-                </button>
+                
               </div>
             </div>
           );

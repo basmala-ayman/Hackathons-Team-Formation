@@ -1,11 +1,6 @@
 import styles from "./Step2.module.css";
 import CustomButton from "../../../../shared/CustomButton/CustomButton";
-import {
-  AddMemberIcon,
-  SearchIcon,
-  CheckIcon,
-  XIcon,
-} from "../../../../assets/Icons";
+import { AddMemberIcon, SearchIcon, CheckIcon } from "../../../../assets/Icons";
 import defaultProfile from "../../../../../src/assets/defaultProfile.png";
 import { useState } from "react";
 import Select, { components } from "react-select";
@@ -104,13 +99,13 @@ function Step2_AddMembers({
       setShowSuccessMsg(false);
     }, 5000);
   };
-  const handleRemoveInvitation = (memberId) => {
+  const handleRemoveMember = (memberIdToRemove) => {
     setFormData((prev) => ({
       ...prev,
-      members: prev.members.filter((id) => id !== memberId),
+      members: prev.members.filter((id) => id !== memberIdToRemove),
     }));
   };
-
+  
   return (
     <div className={styles.container}>
       {/* --- Progress Bar Section --- */}
@@ -194,17 +189,8 @@ function Step2_AddMembers({
                 </div>
               </div>
 
-              <div className="d-flex align-items-center gap-3">
-                <div className={styles.badge}>
-                  <CheckIcon /> Invited
-                </div>
-                <button
-                  type="button"
-                  className={styles.removeIcon}
-                  onClick={() => handleRemoveInvitation(memberId)}
-                > 
-                  <XIcon color="red" size="15"/>
-                </button>
+              <div className={styles.badge}>
+                <CheckIcon /> Invited
               </div>
             </div>
           );
