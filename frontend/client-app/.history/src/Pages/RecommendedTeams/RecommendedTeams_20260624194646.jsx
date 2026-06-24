@@ -205,7 +205,7 @@ function RecommendedTeams() {
             }
 
             //invitations
-            if (activeTab === "invitations") {
+            if (activeTab === "suggested") {
               const invitation = team;
               const targetTeam = invitation.team;
 

@@ -126,7 +126,7 @@ function RecommendedTeams() {
             className={`px-5 py-2 fs-3 ${
               activeTab === "invitations" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("invitations")}
+            onClick={() => setActiveTab("suggested")}
           >
             Invitations
           </button>
@@ -205,7 +205,7 @@ function RecommendedTeams() {
             }
 
             //invitations
-            if (activeTab === "invitations") {
+            if (activeTab === "suggested") {
               const invitation = team;
               const targetTeam = invitation.team;
 

@@ -1,10 +1,8 @@
 .cardWrapper {
   background-color: var(--color-white);
-  border-color: var(--color-primary-light) !important;
+  border-color:  var(--color-primary-light) !important;
   border-width: 2px !important;
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .cardWrapper:hover {
@@ -24,16 +22,17 @@
   border: 3px solid var(--color-white);
   margin-left: -0.8rem;
   object-fit: cover;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
 .membersContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
-  gap: 1.7rem 2.5rem;
-  padding: 0px 1.7rem;
+  gap: 1.7rem 2rem;
+  padding: 0 1rem;
   /* justify-content: center;    */
-  max-width: 900px;
+  max-width: 900px;        
+ 
 }
 
 .memberItem {

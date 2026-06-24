@@ -1,7 +1,7 @@
 import styles from "./RecommendedTeams.module.css";
 import toast from "react-hot-toast";
 import TeamCard from "./TeamCard/TeamCard";
-import { useNavigate , useLocation  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext/useAuth";
 import useRecommendations from "./hooks/useRecommendations";
@@ -10,30 +10,23 @@ import {
   rejectRecommendation,
   respondToInvitation,
 } from "../../services/recommendationService";
-import { RaiseUpIcon } from "../../assets/Icons";
 import { LoadingState, EmptyState } from "../../shared/States";
 
 function RecommendedTeams() {
-  // const navigate = useNavigate();
-   const location = useLocation();
-    const initialTab = location.state?.initialTab || "myTeams";
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  // 'myTeams' | 'invitations'
-  const [activeTab, setActiveTab] = useState(initialTab);
+  // 'owned' | 'suggested'
+  const [activeTab, setActiveTab] = useState("owned");
   const { recommendations, loading, error, refetchRecommendations } =
     useRecommendations();
   const [acceptingId, setAcceptingId] = useState(null);
   const [rejectingId, setRejectingId] = useState(null);
 
   const displayedTeams =
-    activeTab === "myTeams" ? recommendations.myTeams : recommendations.join;
+    activeTab === "owned" ? recommendations.myTeams : recommendations.join;
 
-  const handleAccept = async ({
-    isOwner,
-    recommendationId,
-    invitationId,
-    teamName,
-  }) => {
+  const handleAccept = async ({ isOwner, recommendationId, invitationId }) => {
     const idToLoad = isOwner ? recommendationId : invitationId;
     if (acceptingId === idToLoad) return;
 
@@ -42,14 +35,11 @@ function RecommendedTeams() {
 
       if (isOwner) {
         await acceptRecommendation(recommendationId);
-        toast.success("Team accepted and invitations are sent");
       } else {
-        toast.success(
-          `Congrats for joining the team and you are part of team ${teamName} now`,
-        );
         await respondToInvitation(invitationId, "ACCEPT");
       }
       await refetchRecommendations();
+      toast.success("Accepted successfully");
     } catch (error) {
       toast.error("Failed to Accept");
       console.error(error);
@@ -70,8 +60,8 @@ function RecommendedTeams() {
       } else {
         await respondToInvitation(invitationId, "REJECT");
       }
-      toast.success("Rejected successfully");
       await refetchRecommendations();
+      toast.success("Rejected successfully");
     } catch (error) {
       toast.error("Failed to Reject");
       console.error(error);
@@ -84,7 +74,7 @@ function RecommendedTeams() {
   }
 
   if (error) {
-    return <EmptyState message="No Recommended Teams yet" />;
+    return <EmptyState message="No Teams found" />;
   }
 
   return (
@@ -109,14 +99,13 @@ function RecommendedTeams() {
           projects
         </p>
 
-        {/* tabs */}
         <div className="d-flex  my-5 flex-wrap">
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
+              activeTab === "owned" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("myTeams")}
+            onClick={() => setActiveTab("owned")}
           >
             My Teams
           </button>
@@ -124,9 +113,9 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "invitations" ? styles.activeTab : styles.inactiveTab
+              activeTab === "suggested" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("invitations")}
+            onClick={() => setActiveTab("suggested")}
           >
             Invitations
           </button>
@@ -134,18 +123,17 @@ function RecommendedTeams() {
 
         {displayedTeams.length > 0 ? (
           displayedTeams.map((team) => {
-            //my teams
-            if (activeTab === "myTeams") {
-              const recs = (team.recommendations || []).filter(
-                (rec) => rec.status === "PENDING"
-              );
+            // const isOwner = team.ownerId === user?.id;
+
+            // LOGIC FOR "MY TEAMS" TAB
+
+            if (activeTab === "owned") {
+              const recs = team.recommendations || [];
 
               if (recs.length === 0) {
-                return (
-                  <>
-                    <EmptyState message="No Recommendations found yet" />;
-                  </>
-                );
+                <EmptyState message="No Teams found" />;
+                
+                return null;
               }
 
               // Grouped view for teams with recommendations
@@ -195,7 +183,6 @@ function RecommendedTeams() {
                               recommendationId: rec.id,
                             })
                           }
-                          acceptLabel="Accept Team"
                         />
                       </div>
                     ))}
@@ -204,66 +191,21 @@ function RecommendedTeams() {
               );
             }
 
-            //invitations
-            if (activeTab === "invitations") {
-              const invitation = team;
-              const targetTeam = invitation.team;
-
-              if (!targetTeam) return null;
-
-              return (
-                <div
-                  key={invitation.invitationId}
-                  className="mb-5 p-4 border rounded bg-white shadow-sm"
-                >
-                  <div className="mb-3">
-                    <h4
-                      className="m-0 fw-bold fs-2 mb-4"
-                      style={{ color: "var(--color-very-dark-purple)" }}
-                    >
-                      Invitation to join: {targetTeam.teamName}
-                    </h4>
-                    <p className="mt-3 mb-0 fs-3 d-flex gap-2">
-                      <RaiseUpIcon />
-                      <span>Hackathon Name: </span>
-                      <strong className="text-dark">
-                        {targetTeam.hackathonName}
-                      </strong>
-                    </p>
-                    {targetTeam.description && (
-                      <p className="text-secondary mt-1 mb-0 fs-5">
-                        {targetTeam.description}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Team Members Card */}
-
-                  <TeamCard
-                    members={targetTeam.currentMembers}
-                    isAcceptLoading={acceptingId === invitation.invitationId}
-                    isRejectLoading={rejectingId === invitation.invitationId}
-                    onAccept={() =>
-                      handleAccept({
-                        isOwner: false,
-                        invitationId: invitation.invitationId,
-                        teamName: targetTeam.teamName,
-                      })
-                    }
-                    onReject={() =>
-                      handleReject({
-                        isOwner: false,
-                        invitationId: invitation.invitationId,
-                      })
-                    }
-                    acceptLabel="Accept to Join"
-                  />
-                </div>
-              );
-            }
+            return (
+              <></>
+              // <TeamCard
+              //   key={team.teamId}
+              //   members={team.currentMembers}
+              //   isLoading={false}
+              //   onAccept={() => handleAccept({ isOwner: false, invitationId: team.teamId })}
+              //   onReject={() => handleReject({ isOwner: false, invitationId: team.teamId })}
+              // />
+            );
           })
         ) : (
-          <EmptyState message="No Teams found yet" />
+          <div className="text-center py-5 text-muted fs-2">
+            No teams found.
+          </div>
         )}
       </div>
     </div>

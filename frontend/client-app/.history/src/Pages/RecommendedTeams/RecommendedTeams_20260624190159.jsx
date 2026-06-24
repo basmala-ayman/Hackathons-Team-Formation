@@ -1,7 +1,7 @@
 import styles from "./RecommendedTeams.module.css";
 import toast from "react-hot-toast";
 import TeamCard from "./TeamCard/TeamCard";
-import { useNavigate , useLocation  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext/useAuth";
 import useRecommendations from "./hooks/useRecommendations";
@@ -14,19 +14,18 @@ import { RaiseUpIcon } from "../../assets/Icons";
 import { LoadingState, EmptyState } from "../../shared/States";
 
 function RecommendedTeams() {
-  // const navigate = useNavigate();
-   const location = useLocation();
-    const initialTab = location.state?.initialTab || "myTeams";
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  // 'myTeams' | 'invitations'
-  const [activeTab, setActiveTab] = useState(initialTab);
+  // 'owned' | 'suggested'
+  const [activeTab, setActiveTab] = useState("owned");
   const { recommendations, loading, error, refetchRecommendations } =
     useRecommendations();
   const [acceptingId, setAcceptingId] = useState(null);
   const [rejectingId, setRejectingId] = useState(null);
 
   const displayedTeams =
-    activeTab === "myTeams" ? recommendations.myTeams : recommendations.join;
+    activeTab === "owned" ? recommendations.myTeams : recommendations.join;
 
   const handleAccept = async ({
     isOwner,
@@ -114,9 +113,9 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
+              activeTab === "owned" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("myTeams")}
+            onClick={() => setActiveTab("owned")}
           >
             My Teams
           </button>
@@ -124,9 +123,9 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "invitations" ? styles.activeTab : styles.inactiveTab
+              activeTab === "suggested" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("invitations")}
+            onClick={() => setActiveTab("suggested")}
           >
             Invitations
           </button>
@@ -135,15 +134,13 @@ function RecommendedTeams() {
         {displayedTeams.length > 0 ? (
           displayedTeams.map((team) => {
             //my teams
-            if (activeTab === "myTeams") {
-              const recs = (team.recommendations || []).filter(
-                (rec) => rec.status === "PENDING"
-              );
+            if (activeTab === "owned") {
+              const recs = team.recommendations || [];
 
               if (recs.length === 0) {
                 return (
                   <>
-                    <EmptyState message="No Recommendations found yet" />;
+                    <EmptyState message="No Teams found yet" />;
                   </>
                 );
               }
@@ -205,7 +202,7 @@ function RecommendedTeams() {
             }
 
             //invitations
-            if (activeTab === "invitations") {
+            if (activeTab === "suggested") {
               const invitation = team;
               const targetTeam = invitation.team;
 

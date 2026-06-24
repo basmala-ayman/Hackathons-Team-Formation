@@ -8,7 +8,7 @@ function TeamCard({
   isRejectLoading,
   onAccept,
   onReject,
-  acceptLabel = "Accept"
+  
 }) {
   const formatRole = (role) => {
     const text = role.replace(/_/g, " ").toLowerCase();
@@ -70,7 +70,7 @@ function TeamCard({
             onClick={onAccept}
             disabled={isAcceptLoading}
           >
-           {isAcceptLoading ? "Accepting..." : acceptLabel}
+            {isAcceptLoading ? "Accepting..." : "Accept"}
           </CustomButton>
 
           <CustomButton

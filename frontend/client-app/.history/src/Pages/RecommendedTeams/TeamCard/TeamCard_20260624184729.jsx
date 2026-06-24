@@ -70,7 +70,7 @@ function TeamCard({
             onClick={onAccept}
             disabled={isAcceptLoading}
           >
-           {isAcceptLoading ? "Accepting..." : acceptLabel}
+            {isAcceptLoading ? "Accepting..." : "Accept"}
           </CustomButton>
 
           <CustomButton

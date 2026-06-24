@@ -16,9 +16,9 @@ import { LoadingState, EmptyState } from "../../shared/States";
 function RecommendedTeams() {
   // const navigate = useNavigate();
    const location = useLocation();
-    const initialTab = location.state?.initialTab || "myTeams";
+    const initialTab = location.state?.initialTab || "owned";
 
-  // 'myTeams' | 'invitations'
+  // 'owned' | 'suggested'
   const [activeTab, setActiveTab] = useState(initialTab);
   const { recommendations, loading, error, refetchRecommendations } =
     useRecommendations();
@@ -26,7 +26,7 @@ function RecommendedTeams() {
   const [rejectingId, setRejectingId] = useState(null);
 
   const displayedTeams =
-    activeTab === "myTeams" ? recommendations.myTeams : recommendations.join;
+    activeTab === "owned" ? recommendations.myTeams : recommendations.join;
 
   const handleAccept = async ({
     isOwner,
@@ -114,9 +114,9 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
+              activeTab === "owned" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("myTeams")}
+            onClick={() => setActiveTab("owned")}
           >
             My Teams
           </button>
@@ -124,9 +124,9 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${
-              activeTab === "invitations" ? styles.activeTab : styles.inactiveTab
+              activeTab === "suggested" ? styles.activeTab : styles.inactiveTab
             }`}
-            onClick={() => setActiveTab("invitations")}
+            onClick={() => setActiveTab("suggested")}
           >
             Invitations
           </button>
@@ -135,7 +135,7 @@ function RecommendedTeams() {
         {displayedTeams.length > 0 ? (
           displayedTeams.map((team) => {
             //my teams
-            if (activeTab === "myTeams") {
+            if (activeTab === "owned") {
               const recs = (team.recommendations || []).filter(
                 (rec) => rec.status === "PENDING"
               );
@@ -205,7 +205,7 @@ function RecommendedTeams() {
             }
 
             //invitations
-            if (activeTab === "invitations") {
+            if (activeTab === "suggested") {
               const invitation = team;
               const targetTeam = invitation.team;
 

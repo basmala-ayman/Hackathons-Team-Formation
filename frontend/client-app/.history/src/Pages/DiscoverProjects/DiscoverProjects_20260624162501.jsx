@@ -39,10 +39,10 @@ function DiscoverProjects() {
       // console.error(error);
     }
   };
-  if (loading ) {
+  if (loading) {
     return <LoadingState message="Loading Projects..." />;
   }
-  if (error || projects.length===0) {
+  if (error) {
     return <EmptyState message="No Projects found" />;
   }
 
