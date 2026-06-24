@@ -68,10 +68,10 @@
 
 .notificationDot {
   position: absolute;
-  top: -2px;
+  top: -3px;
   right: -2px;
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: var(--color-error-red);
   border: 2px solid var(--color-white);

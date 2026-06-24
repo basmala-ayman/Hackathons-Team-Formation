@@ -18,10 +18,40 @@ export default function NotificationList({ filter }) {
     clearUnreadLocally,
   } = useNotifications();
 
+  const EMPTY_MESSAGES = {
+    all: {
+      title: "No notifications yet",
+      description: "You'll see updates about invitations, matches, and hackathons here."
+    },
+
+    team: {
+      title: "No team invitations",
+      description: "When teams invite you to join, they'll appear here."
+    },
+
+    accepted: {
+      title: "No accepted invitations",
+      description: "Accepted team invitations will appear here."
+    },
+
+    declined: {
+      title: "No rejected invitations",
+      description: "Rejected or expired invitations will appear here."
+    },
+
+    matches: {
+      title: "No matches yet",
+      description: "When we find potential teammates or recommendations, you'll see them here."
+    }
+  };
+
+  const emptyState =
+    EMPTY_MESSAGES[filter] || EMPTY_MESSAGES.all;
+
   const FILTER_CATEGORIES = [
     { id: "all", label: "All", types: [] },
-    { id: "team", label: "Team Requests", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
-    { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] }, // إضافة هذا السطر
+    { id: "team", label: "Team Invitations", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+    { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] },
     { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED", "ROUND2_AVAILABLE"] },
   ];
 
@@ -42,19 +72,17 @@ export default function NotificationList({ filter }) {
   console.log(allNotifications)
 
   const handleMarkAsRead = async (id) => {
-    try {
-      await markNotificationAsRead(id);
-      markOneAsReadLocally();
-      setAllNotifications(prev =>
-        prev.map(n =>
-          n.id === id
-            ? { ...n, isRead: true }
-            : n
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
+    await markNotificationAsRead(id);
+
+    markOneAsReadLocally();
+
+    setAllNotifications(prev =>
+      prev.map(n =>
+        n.id === id
+          ? { ...n, isRead: true }
+          : n
+      )
+    );
   };
 
   const handleMarkAllAsRead = async () => {
@@ -90,12 +118,16 @@ export default function NotificationList({ filter }) {
     <div className={styles.wrapper}>
       <div className={styles.listHeader}>
         <div className={styles.titleInfo}>
-          <h2>{FILTER_CATEGORIES.find(c => c.id === filter)?.label || "Notifications"}</h2>
+          <h2>
+            {FILTER_CATEGORIES.find(c => c.id === filter)?.label || "Notifications"}
+          </h2>
+
           <span className={styles.badge}>
             {filteredNotifications.filter(n => !n.isRead).length} unread
           </span>
         </div>
-        <button className={styles.markAllBtn} onClick={handleMarkAllAsRead}>
+
+        <button className={styles.markAllBtn}>
           Mark all as read
         </button>
       </div>
@@ -119,8 +151,8 @@ export default function NotificationList({ filter }) {
             <div className={styles.emptyIcon}>
               <BellOff size={48} />
             </div>
-            <h3>No notifications yet</h3>
-            <p>When you have new updates, they will appear here.</p>
+            <h3>{emptyState.title}</h3>
+            <p>{emptyState.description}</p>
           </div>
         )}
       </div>

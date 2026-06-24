@@ -13,7 +13,7 @@ export default function NotificationFilter({ activeFilter, onFilterChange, count
     },
     {
       id: "team",
-      label: "Team Requests",
+      label: "Team Invitations",
       icon: <Users size={18} />,
       count: safeCounts.requests || 0
     },

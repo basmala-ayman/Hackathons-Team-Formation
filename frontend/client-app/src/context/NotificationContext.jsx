@@ -15,6 +15,14 @@ export function NotificationProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    refreshUnreadCount();
+  }, []);
+
+  useEffect(() => {
+    console.log("Context unreadCount:", unreadCount);
+  }, [unreadCount]);
+  
   const markOneAsReadLocally = () => {
     setUnreadCount(prev => Math.max(0, prev - 1));
   };

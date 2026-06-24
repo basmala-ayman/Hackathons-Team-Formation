@@ -49,7 +49,6 @@ function UserAuthenticatedMenu({ onLogout }) {
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">
       <Link to="/notifications" className={styles.notificationLink}>
         <Bell size={28} />
-
         {unreadCount > 0 && (
           <span className={styles.notificationDot} />
         )}
