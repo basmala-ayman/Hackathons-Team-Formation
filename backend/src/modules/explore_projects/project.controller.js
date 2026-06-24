@@ -2,7 +2,9 @@ const projectService = require("./project.service");
 
 const getExploreProjects = async (req, res, next) => {
   try {
-    const data = await projectService.getAllExploreProjects();
+    const data = await projectService.getAllExploreProjects(
+     req.user?.id
+    );
 
     res.status(200).json({
       success: true,

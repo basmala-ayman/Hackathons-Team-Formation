@@ -1,7 +1,7 @@
 const projectRepository = require("./project.repository");
 const AppError = require("../../utils/AppError");
 
-const getAllExploreProjects = async () => {
+const getAllExploreProjects = async (userId) => {
   const projects = await projectRepository.exploreAllProjects();
 
   return projects.map((p) => ({
@@ -22,7 +22,12 @@ const getAllExploreProjects = async () => {
     totalTeamSize: p.team?.size || 0,
     totalTeamMembersCount: p.team?.members?.length || 0,
     totalInterestsCount: p.interestsCount,
-    isInterested: false
+    
+    isInterested: userId
+      ? p.interests.some(
+          (interest) => interest.userId === userId
+        )
+      : false
   }));
 };
 

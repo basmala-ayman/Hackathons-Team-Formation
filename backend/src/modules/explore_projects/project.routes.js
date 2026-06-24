@@ -3,9 +3,9 @@ const router = express.Router();
 const controller = require("./project.controller");
 const validate = require("../../middlewares/validate.middleware");
 const schema = require("./project.validation");
-const { protect } = require("../../middlewares/auth.middleware");
+const { protect , optionalAuth} = require("../../middlewares/auth.middleware");
 
-router.get("/explore", controller.getExploreProjects);
+router.get("/explore", optionalAuth, controller.getExploreProjects);
 
 // router.post(
 //   "/interest/:projectId",

@@ -60,5 +60,37 @@ const authorize = (...allowedRoles) => {
   }
 };
 
+const optionalAuth = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-module.exports = { protect, authorize };
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      req.user = null;
+      return next();
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true
+      }
+    });
+
+    req.user = user || null;
+
+    return next();
+  } catch (err) {
+    // IMPORTANT: do NOT block request
+    req.user = null;
+    return next();
+  }
+};
+
+
+module.exports = { protect, authorize, optionalAuth };
