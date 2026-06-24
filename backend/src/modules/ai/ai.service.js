@@ -20,10 +20,16 @@ const getStatus = async () => {
 // ─────────────────────────────────────────────
 const syncMember = async (memberData) => {
     try {
+        console.log(
+            "SYNC MEMBER PAYLOAD:",
+            JSON.stringify(memberData, null, 2)
+        );
         const response = await axios.post(`${AI_BASE_URL}/sync/member`, memberData);
         return response.data;
     } catch (error) {
-        console.log(error?.response?.data || error.message);
+        console.error("Status:", error?.response?.status);
+        console.error("Data:", error?.response?.data);
+
         throw new AppError("Failed To Sync Member With AI", 500);
     }
 };

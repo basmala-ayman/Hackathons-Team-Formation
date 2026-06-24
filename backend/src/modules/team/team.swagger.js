@@ -153,3 +153,52 @@
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
+/**
+ * @swagger
+ * /api/v1/teams/invitations/{invitationId}/respond:
+ *   patch:
+ *     summary: Accept or reject a direct team invitation
+ *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: invitationId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - action
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum:
+ *                   - ACCEPT
+ *                   - REJECT
+ *     responses:
+ *       200:
+ *         description: Invitation processed successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Invitation accepted successfully
+ *               data:
+ *                 teamComplete: false
+ *
+ *       400:
+ *         description: Invalid action or invitation already responded to
+ *
+ *       403:
+ *         description: Invitation does not belong to current user
+ *
+ *       404:
+ *         description: Invitation not found
+ */

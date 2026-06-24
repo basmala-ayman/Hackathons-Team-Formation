@@ -22,7 +22,7 @@ const createTeam = async (ownerId, data) => {
         // projectTitle,
         // projectDescription,
         userCreated,
-        hasIdea,  
+        hasIdea,
     } = data;
 
 
@@ -190,89 +190,240 @@ const createTeam = async (ownerId, data) => {
 };
 
 const getTeamById = async (teamId) => {
-  const team = await prisma.team.findUnique({
-    where: { id: teamId },
-    include: {
-      hackathon: true,
-      owner: { select: { id: true, name: true, profilePicture: true } },
-      members: {
+    const team = await prisma.team.findUnique({
+        where: { id: teamId },
         include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              profilePicture: true,
-              techRoles: true,
-              skills: { include: { skill: { select: { name: true } } } },
+            hackathon: true,
+            owner: { select: { id: true, name: true, profilePicture: true } },
+            members: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            profilePicture: true,
+                            techRoles: true,
+                            skills: { include: { skill: { select: { name: true } } } },
+                        },
+                    },
+                },
             },
-          },
-        },
-      },
-      skills: { include: { skill: true } },
-      invitations: {
-        where: { status: "PENDING" },
-        include: {
-          receiver: {
-            select: {
-              id: true,
-              name: true,
-              profilePicture: true,
-              techRoles: true,
-              skills: { include: { skill: { select: { name: true } } } },
+            skills: { include: { skill: true } },
+            invitations: {
+                where: { status: "PENDING" },
+                include: {
+                    receiver: {
+                        select: {
+                            id: true,
+                            name: true,
+                            profilePicture: true,
+                            techRoles: true,
+                            skills: { include: { skill: { select: { name: true } } } },
+                        },
+                    },
+                },
             },
-          },
         },
-      },
-    },
-  });
-  if (!team) throw new AppError("Team not found", 404);
-
-  const memberMap = new Map();
-
-  // Add accepted members
-  team.members.forEach((m) => {
-    memberMap.set(m.user.id, {
-      userId: m.user.id,
-      name: m.user.name,
-      profilePicture: m.user.profilePicture,
-      role: m.user.techRoles?.[0] || "",
-      skills: m.user.skills?.map((s) => s.skill.name) || [],
-      status: "ACCEPTED",
     });
-  });
+    if (!team) throw new AppError("Team not found", 404);
 
-  // Add pending invitations (only if not already in map)
-  team.invitations.forEach((inv) => {
-    if (!memberMap.has(inv.receiver.id)) {
-      memberMap.set(inv.receiver.id, {
-        userId: inv.receiver.id,
-        name: inv.receiver.name,
-        profilePicture: inv.receiver.profilePicture,
-        role: inv.receiver.techRoles?.[0] || "",
-        skills: inv.receiver.skills?.map((s) => s.skill.name) || [],
-        invitationId: inv.id,
-        status: "PENDING",
+    const memberMap = new Map();
+
+    // Add accepted members
+    team.members.forEach((m) => {
+        memberMap.set(m.user.id, {
+            userId: m.user.id,
+            name: m.user.name,
+            profilePicture: m.user.profilePicture,
+            role: m.user.techRoles?.[0] || "",
+            skills: m.user.skills?.map((s) => s.skill.name) || [],
+            status: "ACCEPTED",
+        });
+    });
+
+    // Add pending invitations (only if not already in map)
+    team.invitations.forEach((inv) => {
+        if (!memberMap.has(inv.receiver.id)) {
+            memberMap.set(inv.receiver.id, {
+                userId: inv.receiver.id,
+                name: inv.receiver.name,
+                profilePicture: inv.receiver.profilePicture,
+                role: inv.receiver.techRoles?.[0] || "",
+                skills: inv.receiver.skills?.map((s) => s.skill.name) || [],
+                invitationId: inv.id,
+                status: "PENDING",
+            });
+        }
+    });
+
+    const allMembers = Array.from(memberMap.values());
+
+    return {
+        recommendationId: team.id,
+        status: team.status,
+        expiresAt: null,
+        targetTeam: {
+            id: team.id,
+            teamName: team.name,
+            hackathon: team.hackathon,
+            description: team.description || "",
+            maxMembers: team.size,
+            ownerId: team.ownerId,
+            requiredSkills: team.skills.map((s) => s.skill.name),
+        },
+        recommendedMembers: allMembers,
+    };
+};
+
+const respondToInvitation = async (
+  invitationId,
+  userId,
+  action
+) => {
+  if (!["ACCEPT", "REJECT"].includes(action)) {
+    throw new AppError(
+      "Action must be ACCEPT or REJECT",
+      400
+    );
+  }
+
+  const invitation =
+    await teamRepository.findInvitationById(
+      invitationId
+    );
+
+  if (!invitation) {
+    throw new AppError(
+      "Invitation not found",
+      404
+    );
+  }
+
+  if (invitation.receiverId !== userId) {
+    throw new AppError(
+      "This invitation is not for you",
+      403
+    );
+  }
+
+  if (invitation.status !== "PENDING") {
+    throw new AppError(
+      "Invitation already responded to",
+      400
+    );
+  }
+
+  if (invitation.deadline < new Date()) {
+    throw new AppError(
+      "Invitation has expired",
+      400
+    );
+  }
+
+  // ACCEPT
+  if (action === "ACCEPT") {
+    await teamRepository.updateInvitationStatus(
+      invitationId,
+      "ACCEPTED"
+    );
+
+    await teamRepository.addTeamMember({
+      teamId: invitation.teamId,
+      userId,
+    });
+
+    const team =
+      await prisma.team.findUnique({
+        where: {
+          id: invitation.teamId,
+        },
+        include: {
+          members: true,
+        },
+      });
+
+    const teamComplete =
+      team.members.length >= team.size;
+
+    if (teamComplete) {
+      await prisma.team.update({
+        where: {
+          id: team.id,
+        },
+        data: {
+          status: "COMPLETE",
+        },
       });
     }
-  });
 
-  const allMembers = Array.from(memberMap.values());
+    const user =
+      await prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          name: true,
+        },
+      });
+
+    await notificationRepository.createNotifications([
+      {
+        userId: team.ownerId,
+        type: "INVITE_ACCEPTED",
+        title: "Invitation Accepted",
+        message: `${user.name} accepted your invitation to join "${team.name}".`,
+        metadata: {
+          teamId: team.id,
+          invitedUserId: userId,
+          teamComplete,
+        },
+      },
+    ]);
+
+    return {
+      message:
+        "Invitation accepted successfully",
+      teamComplete,
+    };
+  }
+
+  // REJECT
+  await teamRepository.updateInvitationStatus(
+    invitationId,
+    "REJECTED"
+  );
+
+  const user =
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+      },
+    });
+
+  await notificationRepository.createNotifications([
+    {
+      userId: invitation.team.ownerId,
+      type: "INVITE_REJECTED",
+      title: "Invitation Rejected",
+      message: `${user.name} rejected your invitation to join "${invitation.team.name}".`,
+      metadata: {
+        teamId: invitation.teamId,
+        invitedUserId: userId,
+      },
+    },
+  ]);
 
   return {
-    recommendationId: team.id,
-    status: team.status,
-    expiresAt: null,
-    targetTeam: {
-      id: team.id,
-      teamName: team.name,
-      hackathon: team.hackathon,
-      description: team.description || "",
-      maxMembers: team.size,
-      ownerId: team.ownerId,
-      requiredSkills: team.skills.map((s) => s.skill.name),
-    },
-    recommendedMembers: allMembers,
+    message:
+      "Invitation rejected successfully",
   };
 };
 
-module.exports = { createTeam ,getTeamById};
+module.exports = {
+  createTeam,
+  getTeamById,
+  respondToInvitation,
+};

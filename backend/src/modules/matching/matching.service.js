@@ -6,9 +6,28 @@ const {
 } = require("../ai/aiCandidate.service");
 const { getOrCreateAIId } = require("../ai/ai.mapper");
 const AppError = require("../../utils/AppError");
-const  prisma  = require("../../config/prisma");
+const prisma = require("../../config/prisma");
 
 const POOL_THRESHOLD = 30;
+
+
+
+const getPinnedMemberIds = async (team) => {
+    // team.members includes owner + anyone who accepted an invitation
+    const acceptedNonOwnerIds = team.members
+        .map(m => m.userId)
+        .filter(id => id !== team.ownerId);
+
+    if (acceptedNonOwnerIds.length === 0) return [];
+
+    // sync each accepted member to AI and get their integer IDs
+    const pinnedIds = await Promise.all(
+        acceptedNonOwnerIds.map(id => getOrCreateAIId(id, "USER"))
+    );
+
+    return pinnedIds;
+};
+
 
 const enrichMembers = async (userIds) => {
     console.log("🔥🔥🔥 NEW enrichMembers is running!");
@@ -201,6 +220,12 @@ const triggerProjectMatching = async (projectId) => {
     const slotsNeeded = team.size - team.members.length;
     if (slotsNeeded <= 0) return;
 
+    const pinnedMemberIds = await getPinnedMemberIds(team);
+    const excludeFromSearch = [
+        team.ownerId,
+        ...team.members.map(m => m.userId),
+    ];
+
     const matchingRequest = await matchingRepository.createMatchingRequest({
         userId: team.ownerId,
         hackathonId: team.hackathonId,
@@ -214,7 +239,9 @@ const triggerProjectMatching = async (projectId) => {
         const convertedTeams = await generateProjectRecommendations({
             projectId: project.id,
             tags,
-            teamSize: slotsNeeded,
+            teamSize: team.size, 
+            pinnedMemberIds,             
+            excludeUserIds: excludeFromSearch,
         });
 
         const hackathon = await prisma.hackathon.findUnique({
@@ -251,6 +278,15 @@ const triggerHackathonMatching = async () => {
             const slotsNeeded = team.size - team.members.length;
             if (slotsNeeded <= 0) continue;
 
+            //first we need to get the accepted members who accept the invitations the owner sent
+            const pinnedMemberIds = await getPinnedMemberIds(team);
+
+            // exclude owner + already accepted from search pool
+            const excludeFromSearch = [
+                team.ownerId,
+                ...team.members.map(m => m.userId),
+            ];
+
             const matchingRequest = await matchingRepository.createMatchingRequest({
                 userId: team.ownerId,
                 hackathonId: hackathon.id,
@@ -266,7 +302,9 @@ const triggerHackathonMatching = async () => {
                     hackathonId: hackathon.id,
                     hackathonAiEntityId: hackathon.id,
                     tags,
-                    teamSize: slotsNeeded,
+                    teamSize: team.size, 
+                    pinnedMemberIds,
+                    excludeUserIds: excludeFromSearch,
                 });
 
                 console.log("✅ convertedTeams before saving:", JSON.stringify(convertedTeams, null, 2));

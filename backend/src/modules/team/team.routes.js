@@ -16,6 +16,9 @@ router.post("/", validate(createTeamSchema), teamController.createTeam);
 
 router.get("/:id", teamController.getTeam);
 
-
+router.patch(
+  "/invitations/:invitationId/respond",
+  teamController.respondToInvitation
+);
 
 module.exports = router;

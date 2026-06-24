@@ -44,6 +44,31 @@ const createProject = (data) => {
   return prisma.project.create({ data });
 };
 
+const findInvitationById = async (invitationId) => {
+  return prisma.teamInvitation.findUnique({
+    where: {
+      id: invitationId,
+    },
+    include: {
+      team: true,
+    },
+  });
+};
+
+const updateInvitationStatus = async (
+  invitationId,
+  status
+) => {
+  return prisma.teamInvitation.update({
+    where: {
+      id: invitationId,
+    },
+    data: {
+      status,
+    },
+  });
+};
+
 
 module.exports = {
   upsertSkill,
@@ -52,4 +77,7 @@ module.exports = {
   addTeamSkills,
   createInvitations,
   createProject,
+
+  findInvitationById,
+  updateInvitationStatus,
 };
