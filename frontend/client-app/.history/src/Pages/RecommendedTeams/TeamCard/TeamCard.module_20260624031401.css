@@ -1,0 +1,33 @@
+
+
+
+.sectionLabel {
+  font-size: var(--fs-regular);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.avatarImg {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 3px solid var(--color-white);
+  margin-left: -0.8rem;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+
+
+.membersContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
+  gap: 1.7rem 2rem;
+  justify-content: center;   
+  max-width: 900px;        
+ 
+}
+
+.memberItem {
+  width: 100%;
+}

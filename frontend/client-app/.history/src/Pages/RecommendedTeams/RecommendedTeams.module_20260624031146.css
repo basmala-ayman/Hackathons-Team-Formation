@@ -1,0 +1,33 @@
+.pageBackground {
+  background: var(--gradient-website-bg);
+  padding: 2rem 0 4rem 0;
+}
+
+
+.activeTab {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  border-radius: 1px;
+  border: 2px solid var(--color-primary-dark);
+  /* box-shadow: 0 0.4rem 1.2rem rgba(124, 77, 255, 0.2); */
+  transition: all 0.2s ease-in-out;
+  padding: 5rem 1rem;
+}
+
+.inactiveTab {
+  background-color: var(--color-white);
+  color: var( --color-dark-gray);
+  /* border-radius:1rem; */
+  border: 2px solid var(--color-primary-dark);
+  transition: all 0.2s ease-in-out;
+}
+ 
+.inactiveTab:hover {
+  background-color: var(--color-primary-light-3);
+  color: var(--color-primary-dark);
+}
+.optionsBadge {
+  background-color: var(--color-primary-light-2) !important;
+  color: var(--color-very-dark-purple) !important;
+  font-size: var(--fs-small) !important;
+}
