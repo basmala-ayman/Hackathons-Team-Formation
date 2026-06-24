@@ -1,18 +1,20 @@
 .card {
+  background: white;
+  border: 1px solid #ece7ff;
+  border-radius: 20px;
   padding: 2rem;
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-primary-light-2);
+  transition: all 0.25s ease;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .card:hover {
-  background-color: var(--color-primary-light-3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(108, 67, 255, 0.12);
 }
 
 .unread {
-  background-color: var(--color-primary-light-3);
+  border-left: 5px solid var(--color-primary-dark);
 }
 
 .main {
@@ -59,14 +61,36 @@
   align-items: start;
 }
 
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.timeStamp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-primary-dark);
+}
+
 .titleGroup {
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .notTitle {
-  padding: 0.6rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.4rem;
 }
 
 .notTitle h3 {
@@ -89,9 +113,10 @@
 }
 
 .message {
-  font-size: var(--fs-small);
+  margin-top: 1rem;
+  font-size: 1.55rem;
   color: var(--color-dark-gray);
-  line-height: 1.5;
+  line-height: 1.7;
 }
 
 /* Metadata Row */
@@ -120,11 +145,11 @@
 }
 
 .actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
   display: flex;
   gap: 1rem;
-  margin-top: 1.6rem;
-  align-items: center;
-  flex-wrap: wrap;
 }
 
 .btnAccept,
@@ -135,7 +160,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
   font-size: var(--fs-small);
   transition: all 200ms ease-in-out;
   cursor: pointer;
@@ -158,7 +183,7 @@
   background: transparent;
   border: 1px solid var(--color-primary-dark);
   color: var(--color-primary-dark);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .btnAccept:hover {

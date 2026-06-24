@@ -66,6 +66,7 @@ export default function NotificationList({ filter }) {
       Loading notifications...
     </div>
   );
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.listHeader}>
@@ -87,6 +88,11 @@ export default function NotificationList({ filter }) {
               key={item.id}
               data={{ ...item, isUnread: !item.isRead }}
               onRead={() => handleMarkAsRead(item.id)}
+              onRemove={() =>
+                setAllNotifications(prev =>
+                  prev.filter(n => n.id !== item.id)
+                )
+              }
             />
           ))
         ) : (
