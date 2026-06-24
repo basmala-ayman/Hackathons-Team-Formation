@@ -46,34 +46,50 @@
  *                 value:
  *                   success: true
  *                   data:
- *                     - teamId: "uuid"
- *                       teamName: "EcoHackers"
- *                       hackathonName: "AI for Climate Action"
- *                       description: "Building sustainable solutions"
+ *                     - teamId: "a32679ad-9c2b-4762-b5fc-5ec8ed93febd"
+ *                       teamName: "heheheheh"
+ *                       hackathonName: "habiba ho ho"
+ *                       description: ""
  *                       status: "FORMING"
  *                       maxMembers: 4
- *                       ownerId: "uuid"
- *                       requiredSkills: ["Python", "ML", "React"]
+ *                       ownerId: "69ff9fb4-9b23-43bc-ab8d-ed5f6ae8272a"
+ *                       hackathon:
+ *                         id: "7ba7eb74-5a87-4dfb-bad1-563a6929568b"
+ *                         title: "habiba ho ho"
+ *                         status: "UPCOMING"
+ *                       requiredSkills: ["linux", "css", "html", "node.js"]
  *                       currentMembers:
- *                         - userId: "uuid"
- *                           name: "Sarah Chen"
- *                           profilePicture: null
- *                           role: "Team Leader"
+ *                         - userId: "69ff9fb4-9b23-43bc-ab8d-ed5f6ae8272a"
+ *                           name: "zeina wady"
+ *                           profilePicture: "/uploads/profile-pictures/1782244315439-438691418.jpg"
+ *                           role: "CYBERSECURITY_ENGINEER"
+ *                           status: "ACCEPTED"
  *                       matchingRound: 1
  *                       matchingStatus: "COMPLETED"
  *                       recommendations:
- *                         - id: "uuid"
- *                           matchLevel: "High"
- *                           status: "PENDING"
- *                           expiresAt: null
+ *                         - id: "aee9db43-da13-464f-890d-3c6a79d29a22"
+ *                           matchLevel: "Medium"
+ *                           status: "ACCEPTED"
+ *                           expiresAt: "2026-06-24T21:29:45.959Z"
  *                           members:
- *                             - userId: "uuid"
- *                               name: "Mike Johnson"
+ *                             - userId: "ba18d4fd-700d-4503-87a9-2b15f49160b3"
+ *                               name: "Mostafa Samir"
  *                               profilePicture: null
- *                               role: "Frontend Developer"
- *                               tags: ["React", "Frontend"]
+ *                               role: ["Backend Developer"]
+ *                               tags: ["Node.js", "MongoDB", "Docker"]
  *                               invitationStatus: "PENDING"
- *                               invitationId: "uuid"   # 👈 IMPORTANT
+ *                             - userId: "e9a01d93-671b-449c-9c7a-6b49031885ae"
+ *                               name: "Laila Mostafa"
+ *                               profilePicture: null
+ *                               role: ["Product Manager"]
+ *                               tags: ["Product Management", "Figma"]
+ *                               invitationStatus: "PENDING"
+ *                             - userId: "27c7e068-5cdb-4d4b-bd22-ba36d3dfa7de"
+ *                               name: "Mohamed Reda"
+ *                               profilePicture: null
+ *                               role: ["Cybersecurity Engineer"]
+ *                               tags: ["Cybersecurity", "AWS"]
+ *                               invitationStatus: "PENDING"
  *                           progress:
  *                             total: 3
  *                             accepted: 0
@@ -82,25 +98,46 @@
  *                             acceptedPercent: 0
  *
  *               join:
- *                 summary: tab=join response
+ *                 summary: tab=join response (when user has pending invitations)
  *                 value:
  *                   success: true
  *                   data:
- *                     - invitationId: "uuid"   # 👈 THIS is TeamInvitation.id
+ *                     - invitationId: "uuid"
  *                       status: "PENDING"
- *                       deadline: "2026-05-21T10:00:00.000Z"
+ *                       deadline: "2026-06-24T21:29:45.959Z"
+ *                       recommendationId: "uuid"
  *                       team:
  *                         id: "uuid"
- *                         teamName: "Neural Green Team"
- *                         hackathonName: "AI for Climate Action"
- *                         description: "Developing neural networks"
+ *                         teamName: "heheheheh"
+ *                         hackathonName: "habiba ho ho"
+ *                         description: ""
  *                         maxMembers: 4
  *                         ownerId: "uuid"
- *                         requiredSkills: ["Python", "ML"]
+ *                         owner:
+ *                           id: "uuid"
+ *                           name: "zeina wady"
+ *                           profilePicture: "/uploads/profile-pictures/1782244315439-438691418.jpg"
+ *                         requiredSkills: ["linux", "css", "html", "node.js"]
  *                         currentMembers:
  *                           - userId: "uuid"
- *                             name: "Zeina"
- *                             role: "Backend Developer"
+ *                             name: "zeina wady"
+ *                             profilePicture: "/uploads/profile-pictures/1782244315439-438691418.jpg"
+ *                             role: "CYBERSECURITY_ENGINEER"
+ *                             status: "ACCEPTED"
+ *
+ *               all:
+ *                 summary: tab=all response (combined)
+ *                 value:
+ *                   success: true
+ *                   data:
+ *                     myTeams:
+ *                       - teamId: "a32679ad-9c2b-4762-b5fc-5ec8ed93febd"
+ *                         teamName: "heheheheh"
+ *                         hackathonName: "habiba ho ho"
+ *                         # ... same as my-teams example
+ *                     join:
+ *                       - invitationId: "uuid"
+ *                         # ... same as join example
  */
 
 /**
@@ -243,7 +280,7 @@
  *           application/json:
  *             example:
  *               success: true
- *               message: "Round 2 is being processed."
+ *               message: "Round 2 is being processed. You will be notified when recommendations are ready."
  */
 
 /**
@@ -266,7 +303,6 @@
  *                 total_projects: 5
  */
 
-
 /**
  * @swagger
  * /api/v1/recommendations/{id}:
@@ -278,11 +314,12 @@
  *
  *       Includes:
  *       - Target team information
- *       - team owner information
+ *       - Team owner information
  *       - Hackathon information
  *       - Required skills
  *       - Recommended members
- *       - Member bios, roles, skills and profile pictures and invitation ids and status 
+ *       - Member bios, roles, skills and profile pictures
+ *       - Invitation IDs and status
  *
  *     tags: [Recommendations]
  *     security:
@@ -305,51 +342,59 @@
  *             example:
  *               success: true
  *               data:
- *                 recommendationId: "uuid"
- *                 status: "PENDING"
- *                 expiresAt: null
+ *                 recommendationId: "aee9db43-da13-464f-890d-3c6a79d29a22"
+ *                 status: "ACCEPTED"
+ *                 expiresAt: "2026-06-24T21:29:45.959Z"
  *
  *                 targetTeam:
- *                   id: "uuid"
- *                   teamName: "Eco Hackers"
- *                   description: "Building AI solutions for climate change"
+ *                   id: "a32679ad-9c2b-4762-b5fc-5ec8ed93febd"
+ *                   teamName: "heheheheh"
+ *                   description: ""
  *                   maxMembers: 4
- *                   ownerId: "uuid"
- * 
+ *                   ownerId: "69ff9fb4-9b23-43bc-ab8d-ed5f6ae8272a"
  *
  *                   requiredSkills:
- *                     - "Node.js"
- *                     - "React"
- *                     - "Python"
+ *                     - "linux"
+ *                     - "css"
+ *                     - "html"
+ *                     - "node.js"
  *
  *                   hackathon:
- *                     id: "uuid"
- *                     title: "AI For Climate Action"
+ *                     id: "7ba7eb74-5a87-4dfb-bad1-563a6929568b"
+ *                     title: "habiba ho ho"
  *
  *                 recommendedMembers:
- *                   - userId: "uuid"
- *                     name: "Ahmed Hassan"
+ *                   - userId: "ba18d4fd-700d-4503-87a9-2b15f49160b3"
+ *                     name: "Mostafa Samir"
  *                     profilePicture: null
- *                     bio: "Backend developer passionate about scalable systems."
+ *                     bio: ""
  *                     role: "Backend Developer"
  *                     skills:
  *                       - "Node.js"
- *                       - "PostgreSQL"
+ *                       - "MongoDB"
  *                       - "Docker"
- * 
  *                     invitationId: null
  *                     invitationStatus: "PENDING"
  *
- *                   - userId: "uuid"
- *                     name: "Sara Mohamed"
+ *                   - userId: "e9a01d93-671b-449c-9c7a-6b49031885ae"
+ *                     name: "Laila Mostafa"
  *                     profilePicture: null
- *                     bio: "Frontend engineer focused on React."
- *                     role: "Frontend Developer"
+ *                     bio: ""
+ *                     role: "Product Manager"
  *                     skills:
- *                       - "React"
- *                       - "TypeScript"
- *                       - "Next.js"
- *                    
+ *                       - "Product Management"
+ *                       - "Figma"
+ *                     invitationId: null
+ *                     invitationStatus: "PENDING"
+ *
+ *                   - userId: "27c7e068-5cdb-4d4b-bd22-ba36d3dfa7de"
+ *                     name: "Mohamed Reda"
+ *                     profilePicture: null
+ *                     bio: ""
+ *                     role: "Cybersecurity Engineer"
+ *                     skills:
+ *                       - "Cybersecurity"
+ *                       - "AWS"
  *                     invitationId: null
  *                     invitationStatus: "PENDING"
  *
