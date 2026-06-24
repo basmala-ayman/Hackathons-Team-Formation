@@ -96,7 +96,7 @@ function ProjectCard({
         />
         <div>
           <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <small className={styles.creatorLabel}>{creator?.creatorRole || "Project Creator"}</small>
         </div>
       </div>
 

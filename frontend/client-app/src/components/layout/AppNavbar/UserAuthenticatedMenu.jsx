@@ -41,8 +41,6 @@ function UserAuthenticatedMenu({ onLogout }) {
     const baseUrl = BACKEND_URL.replace("/api/v1", "");
     return `${baseUrl}${user.profilePicture}`;
   })();
-
-  console.log("Navbar unreadCount:", unreadCount);
   
 
   return (
