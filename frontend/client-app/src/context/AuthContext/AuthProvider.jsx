@@ -48,13 +48,20 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     setIsSubmitting(true);
+
     try {
       const response = await loginService(credentials);
-      console.log("Login successful, response data:", response);
       const actualData = response.data;
-      storeTokens(actualData.accessToken, actualData.refreshToken);
-      setUser(actualData.user);
-      // localStorage.setItem("user", JSON.stringify(actualData.user));
+      storeTokens(
+        actualData.accessToken,
+        actualData.refreshToken
+      );
+      const profileData = await getUserProfile();
+      setUser({
+        ...actualData.user,
+        profilePicture: profileData.profile?.profilePicture,
+      });
+
       return actualData;
     } catch (err) {
       const errorData = {
