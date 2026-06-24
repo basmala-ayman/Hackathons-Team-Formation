@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }) => {
         ...actualData.user,
         profilePicture: profileData.profile?.profilePicture,
       });
-
       return actualData;
     } catch (err) {
       const errorData = {
