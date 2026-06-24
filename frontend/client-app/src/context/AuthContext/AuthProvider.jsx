@@ -13,6 +13,7 @@ import {
 } from "../../utils/tokenStorage";
 import { useLocalStorage } from "../../hooks/useLocalStorage.js";
 import { AuthContext } from "./AuthContext.jsx";
+import { getUserProfile } from "../../services/userService.js";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
@@ -21,12 +22,29 @@ export const AuthProvider = ({ children }) => {
 
   // load user on refresh
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      setUser(null);
-    }
-    setLoading(false);
-  }, [setUser]);
+    const loadUserProfile = async () => {
+      const token = getAccessToken();
+
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const profileData = await getUserProfile();
+        setUser(prev => ({
+          ...prev,
+          profilePicture: profileData.profile?.profilePicture,
+        }));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUserProfile();
+  }, []);
 
   const login = async (credentials) => {
     setIsSubmitting(true);

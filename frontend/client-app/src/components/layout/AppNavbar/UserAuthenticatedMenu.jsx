@@ -35,12 +35,11 @@ function UserAuthenticatedMenu({ onLogout }) {
   const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
   const avatarUrl = (() => {
-    const pic = user?.profilePicture || user?.avatar;
-    if (!pic) return ANONYMOUS_AVATAR;
-    if (pic.startsWith("http")) return pic;
+    if (!user?.profilePicture) {
+      return ANONYMOUS_AVATAR;
+    }
     const baseUrl = BACKEND_URL.replace("/api/v1", "");
-    const path = pic.startsWith("/") ? pic : `/${pic}`;
-    return `${baseUrl}${path}`;
+    return `${baseUrl}${user.profilePicture}`;
   })();
 
   console.log("Navbar unreadCount:", unreadCount);
@@ -53,7 +52,7 @@ function UserAuthenticatedMenu({ onLogout }) {
           <span className={styles.notificationDot} />
         )}
       </Link>
-      
+
       <Dropdown
         className={`${styles.wrapper}`}
         show={isOpen}
@@ -67,10 +66,8 @@ function UserAuthenticatedMenu({ onLogout }) {
         >
           <img
             src={avatarUrl}
-            width={35}
-            height={35}
             alt="User"
-            className={`rounded-circle ${styles.avatar}`}
+            className={styles.avatar}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = ANONYMOUS_AVATAR;

@@ -1,7 +1,15 @@
 .wrapper {
-  width: 155px;
-  position: relative;
+  width: auto;
 }
+
+.avatar {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-dark);
+}
+
 .bellIcon {
   cursor: pointer;
 }
