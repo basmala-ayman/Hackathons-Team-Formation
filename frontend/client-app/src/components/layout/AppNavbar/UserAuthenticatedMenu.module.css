@@ -52,4 +52,27 @@
 .bellIcon {
   position: relative;
   display: inline-block;
+  color: var(--color-primary-light) !important;
+}
+
+.notificationLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationLink svg {
+  color: var(--color-very-dark-purple);
+}
+
+.notificationDot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-error-red);
+  border: 2px solid var(--color-white);
 }

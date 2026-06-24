@@ -4,10 +4,12 @@ import { Zap, Check, X, Eye, Clock, Users, Bell, Info } from "lucide-react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { useNavigate } from "react-router-dom";
 import { getNotificationNavigation } from "../../../utils/notificationNavigation";
+import { useNotifications } from "../../../context/NotificationContext";
 
 export default function NotificationItem({ data, onRead, onRemove }) {
   const metadata = data.metadata || {};
   const navigate = useNavigate();
+  const { markOneAsReadLocally } = useNotifications();
 
   const ICON_MAP = {
     JOIN_REQUEST: <Users size={20} />,
@@ -22,11 +24,17 @@ export default function NotificationItem({ data, onRead, onRemove }) {
 
   const handleAccept = (e) => {
     e.stopPropagation();
+    if (data.isUnread) {
+      markOneAsReadLocally();
+    }
     onRemove?.();
   };
 
   const handleReject = (e) => {
     e.stopPropagation();
+    if (data.isUnread) {
+      markOneAsReadLocally();
+    }
     onRemove?.();
   };
 

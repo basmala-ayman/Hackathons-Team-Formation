@@ -8,9 +8,15 @@ import {
   markAllNotificationsAsRead
 } from "../../../services/notificationService";
 
+import { useNotifications } from "../../../context/NotificationContext";
+
 export default function NotificationList({ filter }) {
   const [allNotifications, setAllNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {
+    markOneAsReadLocally,
+    clearUnreadLocally,
+  } = useNotifications();
 
   const FILTER_CATEGORIES = [
     { id: "all", label: "All", types: [] },
@@ -38,18 +44,31 @@ export default function NotificationList({ filter }) {
   const handleMarkAsRead = async (id) => {
     try {
       await markNotificationAsRead(id);
-      setAllNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+      markOneAsReadLocally();
+      setAllNotifications(prev =>
+        prev.map(n =>
+          n.id === id
+            ? { ...n, isRead: true }
+            : n
+        )
+      );
     } catch (err) {
-      console.error("Failed to mark as read", err);
+      console.error(err);
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllNotificationsAsRead();
-      setAllNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      clearUnreadLocally();
+      setAllNotifications(prev =>
+        prev.map(n => ({
+          ...n,
+          isRead: true,
+        }))
+      );
     } catch (err) {
-      console.error("Failed to mark all as read", err);
+      console.error(err);
     }
   };
 
