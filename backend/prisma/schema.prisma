@@ -371,32 +371,32 @@ enum HackathonSource {
 }
 
 enum InterestType {
-  AR_VR
-  BEGINNER_FRIENDLY
-  BLOCKCHAIN
-  COMMUNICATION
-  CYBERSECURITY
-  DATABASES
-  DESIGN
-  DEVOPS
-  ECOMMERCE_RETAIL
-  EDUCATION
-  ENTERPRISE
-  FINTECH
-  GAMING
-  HEALTH
-  IOT
-  LIFEHACKS
-  LOW_NO_CODE
-  MACHINE_LEARNING_AI
-  MOBILE
-  MUSIC_ART
-  OPEN_ENDED
-  PRODUCTIVITY
-  QUANTUM
-  ROBOTIC_PROCESS_AUTOMATION
-  SERVERLESS
-  SOCIAL_GOOD
-  VOICE_SKILLS
-  WEB
+  AR/VR
+  Beginner Friendly
+  Blockchain
+  Communication
+  Cybersecurity
+  Databases
+  Design
+  DevOps
+  E-commerce/Retail
+  Education
+  Enterprise
+  Fintech
+  Gaming
+  Health
+  IoT
+  Lifehacks
+  Low/No Code
+  Machine Learning/AI
+  Mobile
+  Music/Art
+  Open Ended
+  Productivity
+  Quantum
+  Robotic Process Automation
+  Serverless
+  Social Good
+  Voice skills
+  Web
 }
