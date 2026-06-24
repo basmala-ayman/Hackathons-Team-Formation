@@ -43,11 +43,12 @@ function UserAuthenticatedMenu({ onLogout }) {
   })();
 
   console.log("Navbar unreadCount:", unreadCount);
+  
 
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">
       <Link to="/notifications" className={styles.notificationLink}>
-        <Bell size={28} />
+        <Bell size={35} />
         {unreadCount > 0 && (
           <span className={styles.notificationDot} />
         )}
