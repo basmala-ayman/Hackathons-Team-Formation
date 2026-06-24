@@ -107,52 +107,52 @@
  *                     $ref: '#/components/schemas/ExploreProjectItem'
  */
 
-/**
- * @swagger
- * /project/interest/{projectId}:
- *   post:
- *     summary: Register interest in a project
- *     description: Stores user interest and increments project interest counter
- *     tags: [Explore Projects]
- *     security:
- *       - bearerAuth: []
- *
- *     parameters:
- *       - in: path
- *         name: projectId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *
- *     responses:
- *       200:
- *         description: Interest registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 projectId:
- *                   type: string
- *                   format: uuid
- *                 userId:
- *                   type: string
- *                   format: uuid
- *                 totalInterestsCount:
- *                   type: integer
- *                 isInterested:
- *                   type: boolean
- *
- *       400:
- *         description: You cannot express interest in your own project
- *
- *       401:
- *         description: Unauthorized - missing or invalid token
- *
- *       404:
- *         description: Project not found
- *
- *       409:
- *         description: Already registered interest
- */
+// /**
+//  * @swagger
+//  * /project/interest/{projectId}:
+//  *   post:
+//  *     summary: Register interest in a project
+//  *     description: Stores user interest and increments project interest counter
+//  *     tags: [Explore Projects]
+//  *     security:
+//  *       - bearerAuth: []
+//  *
+//  *     parameters:
+//  *       - in: path
+//  *         name: projectId
+//  *         required: true
+//  *         schema:
+//  *           type: string
+//  *           format: uuid
+//  *
+//  *     responses:
+//  *       200:
+//  *         description: Interest registered successfully
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 projectId:
+//  *                   type: string
+//  *                   format: uuid
+//  *                 userId:
+//  *                   type: string
+//  *                   format: uuid
+//  *                 totalInterestsCount:
+//  *                   type: integer
+//  *                 isInterested:
+//  *                   type: boolean
+//  *
+//  *       400:
+//  *         description: You cannot express interest in your own project
+//  *
+//  *       401:
+//  *         description: Unauthorized - missing or invalid token
+//  *
+//  *       404:
+//  *         description: Project not found
+//  *
+//  *       409:
+//  *         description: Already registered interest
+//  */

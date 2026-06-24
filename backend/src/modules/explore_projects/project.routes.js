@@ -7,11 +7,11 @@ const { protect } = require("../../middlewares/auth.middleware");
 
 router.get("/explore", controller.getExploreProjects);
 
-router.post(
-  "/interest/:projectId",
-  protect,
-  validate(schema.projectParam, "params"),
-  controller.toggleInterest
-);
+// router.post(
+//   "/interest/:projectId",
+//   protect,
+//   validate(schema.projectParam, "params"),
+//   controller.toggleInterest
+// );
 
 module.exports = router;

@@ -26,48 +26,48 @@ const getAllExploreProjects = async () => {
   }));
 };
 
-const registerProjectInterest = async (projectId, userId) => {
-  const project = await projectRepository.findProjectById(projectId);
+// const registerProjectInterest = async (projectId, userId) => {
+//   const project = await projectRepository.findProjectById(projectId);
 
-  if (!project) {
-    throw new AppError("Project not found", 404);
-  }
+//   if (!project) {
+//     throw new AppError("Project not found", 404);
+//   }
 
-  if (project.ownerId === userId) {
-    throw new AppError(
-      "You cannot express interest in your own project",
-      400
-    );
-  }
+//   if (project.ownerId === userId) {
+//     throw new AppError(
+//       "You cannot express interest in your own project",
+//       400
+//     );
+//   }
 
-  const existingRelation =
-    await projectRepository.findInterestRelation(
-      projectId,
-      userId
-    );
+//   const existingRelation =
+//     await projectRepository.findInterestRelation(
+//       projectId,
+//       userId
+//     );
 
-  if (existingRelation) {
-    throw new AppError(
-      "You have already registered interest for this project",
-      409
-    );
-  }
+//   if (existingRelation) {
+//     throw new AppError(
+//       "You have already registered interest for this project",
+//       409
+//     );
+//   }
 
-  const updatedProject =
-    await projectRepository.storeInterestOnUserRecord(
-      projectId,
-      userId
-    );
+//   const updatedProject =
+//     await projectRepository.storeInterestOnUserRecord(
+//       projectId,
+//       userId
+//     );
 
-  return {
-    projectId: updatedProject.id,
-    userId,
-    totalInterestsCount: updatedProject.interestsCount,
-    isInterested: true
-  };
-};
+//   return {
+//     projectId: updatedProject.id,
+//     userId,
+//     totalInterestsCount: updatedProject.interestsCount,
+//     isInterested: true
+//   };
+// };
 
 module.exports = {
   getAllExploreProjects,
-  registerProjectInterest
+  // registerProjectInterest
 };

@@ -63,31 +63,31 @@ const findInterestRelation = async (projectId, userId) => {
   });
 };
 
-const storeInterestOnUserRecord = async (projectId, userId) => {
-  return prisma.$transaction(async (tx) => {
-    await tx.user.update({
-      where: { id: userId },
-      data: {
-        projectInterests: {
-          create: { projectId }
-        }
-      }
-    });
+// const storeInterestOnUserRecord = async (projectId, userId) => {
+//   return prisma.$transaction(async (tx) => {
+//     await tx.user.update({
+//       where: { id: userId },
+//       data: {
+//         projectInterests: {
+//           create: { projectId }
+//         }
+//       }
+//     });
 
-    return tx.project.update({
-      where: { id: projectId },
-      data: {
-        interestsCount: {
-          increment: 1
-        }
-      }
-    });
-  });
-};
+//     return tx.project.update({
+//       where: { id: projectId },
+//       data: {
+//         interestsCount: {
+//           increment: 1
+//         }
+//       }
+//     });
+//   });
+// };
 
 module.exports = {
   exploreAllProjects,
   findInterestRelation,
   findProjectById,
-  storeInterestOnUserRecord
+  // storeInterestOnUserRecord
 };
