@@ -135,9 +135,11 @@ function RecommendedTeams() {
           </button>
         </div>
 
-        {displayedTeams.length > 0 ?(
-          activeTab === "myTeams" ? (
-            <MyTeamsList 
+        {displayedTeams.length > 0 ? (
+          displayedTeams.map((team) => {
+            //my teams
+            if (activeTab === "myTeams") {
+              <MyTeamsList 
               teams={displayedTeams} 
               acceptingId={acceptingId}
               rejectingId={rejectingId}
@@ -145,16 +147,13 @@ function RecommendedTeams() {
               onReject={handleReject}
               styles={styles}
             />
-          ) : (
-            <InvitationsList 
-              invitations={displayedTeams}
-              acceptingId={acceptingId}
-              rejectingId={rejectingId}
-              onAccept={handleAccept}
-              onReject={handleReject}
-              styles={styles}
-            />
-          )
+            }
+
+            //invitations
+            if (activeTab === "invitations") {
+             
+            }
+          })
         ) : (
           <EmptyState message="No Teams found yet" />
         )}

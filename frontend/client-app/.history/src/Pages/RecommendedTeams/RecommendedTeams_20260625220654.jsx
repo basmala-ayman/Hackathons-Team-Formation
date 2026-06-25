@@ -135,26 +135,68 @@ function RecommendedTeams() {
           </button>
         </div>
 
-        {displayedTeams.length > 0 ?(
-          activeTab === "myTeams" ? (
-            <MyTeamsList 
-              teams={displayedTeams} 
-              acceptingId={acceptingId}
-              rejectingId={rejectingId}
-              onAccept={handleAccept}
-              onReject={handleReject}
-              styles={styles}
-            />
-          ) : (
-            <InvitationsList 
-              invitations={displayedTeams}
-              acceptingId={acceptingId}
-              rejectingId={rejectingId}
-              onAccept={handleAccept}
-              onReject={handleReject}
-              styles={styles}
-            />
-          )
+        {displayedTeams.length > 0 ? (
+          displayedTeams.map((team) => {
+           
+
+            //invitations
+            if (activeTab === "invitations") {
+              const invitation = team;
+              const targetTeam = invitation.team;
+
+              if (!targetTeam) return null;
+
+              return (
+                <div
+                  key={invitation.invitationId}
+                  className="mb-5 p-4 border rounded bg-white shadow-sm"
+                >
+                  <div className="mb-3">
+                    <h4
+                      className="m-0 fw-bold fs-2 mb-4"
+                      style={{ color: "var(--color-very-dark-purple)" }}
+                    >
+                      Invitation to join: {targetTeam.teamName}
+                    </h4>
+                    <p className="mt-3 mb-0 fs-3 d-flex gap-2">
+                      <RaiseUpIcon />
+                      <span>Hackathon Name: </span>
+                      <strong className="text-dark">
+                        {targetTeam.hackathonName}
+                      </strong>
+                    </p>
+                    {targetTeam.description && (
+                      <p className="text-secondary mt-1 mb-0 fs-5">
+                        {targetTeam.description}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Team Members Card */}
+
+                  <TeamCard
+                    members={targetTeam.currentMembers}
+                    isAcceptLoading={acceptingId === invitation.invitationId}
+                    isRejectLoading={rejectingId === invitation.invitationId}
+                    onAccept={() =>
+                      handleAccept({
+                        isOwner: false,
+                        invitationId: invitation.invitationId,
+                        teamName: targetTeam.teamName,
+                      })
+                    }
+                    onReject={() =>
+                      handleReject({
+                        isOwner: false,
+                        invitationId: invitation.invitationId,
+                      })
+                    }
+                    acceptLabel="Accept to Join"
+                  />
+                </div>
+              );
+            }
+          })
         ) : (
           <EmptyState message="No Teams found yet" />
         )}
