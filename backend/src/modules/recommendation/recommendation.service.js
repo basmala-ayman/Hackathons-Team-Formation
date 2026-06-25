@@ -24,7 +24,7 @@ const getMyTeamsTab = async (userId) => {
 
         console.log("Selected request:", latestRequest?.id, "status:", latestRequest?.status);
         console.log("Recommendations count:", latestRequest?.recommendations?.length);
-        
+
         const recommendations = latestRequest
             ? latestRequest.recommendations
                 .filter((rec) => rec.status !== "REJECTED" && rec.status !== "EXPIRED")
@@ -170,7 +170,7 @@ const acceptRecommendation = async (recommendationId, founderId) => {
     await notificationRepository.createNotifications(
         memberIds.map((receiverId) => ({
             userId: receiverId,
-            type: "TEAM_INVITE",
+            type: "MATCH_FOUND",
             title: "You have been matched to a team",
             message: `You were matched to team "${team.name}" for "${hackathonTitle}". You have 24 hours to accept or decline.`,
             metadata: { teamId: team.id, recommendationId, deadline },
