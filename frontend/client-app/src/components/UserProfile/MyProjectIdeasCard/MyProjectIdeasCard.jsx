@@ -23,16 +23,25 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
       <div className={styles.mainContainerCard}>
         <div className={styles.sectionHeader}>
           <div className={styles.titleGroup}>
-            <FolderHeart size={22} />
-            <h4>My Project Ideas</h4>
-            <span className={styles.countBadge}>
-              {projects.length}
-            </span>
+            <FolderHeart
+              size={22}
+              className={styles.headerIcon}
+            />
+            <h4 className={styles.sectionTitle}>
+              My Project Ideas
+            </h4>
           </div>
+
+          <span className={styles.subBadgeCount}>
+            {projects.length} Active
+          </span>
         </div>
 
         <div className={styles.emptyStateContainer}>
-          <p className={styles.emptyStateTitle}>No project ideas added yet.</p>
+          <p className={styles.emptyStateTitle}>
+            No project ideas added yet.
+          </p>
+
           <span className={styles.emptyStateSubtext}>
             Create your own project ideas to showcase them here!
           </span>
@@ -40,7 +49,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
       </div>
     );
   }
-
+  
   return (
     <div className={styles.mainContainerCard}>
       <div className={styles.sectionHeader}>
@@ -48,6 +57,9 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
           <FolderHeart size={22} className={styles.headerIcon} />
           <h4 className={styles.sectionTitle}>My Project Ideas</h4>
         </div>
+        <span className={styles.subBadgeCount}>
+          {projects.length} Active
+        </span>
       </div>
 
       <div className={styles.ideasGrid}>

@@ -5,19 +5,6 @@ import { Users, Clock, Trophy } from "lucide-react"
 
 export default function TeamCard({ team }) {
 
-  const getBadgeVariant = (status) => {
-    switch (status?.toLowerCase()) {
-      case "forming":
-        return "warning";
-
-      case "complete":
-        return "success";
-
-      default:
-        return "secondary";
-    }
-  };
-
   return (
     <Card className={styles.teamCard}>
       <Card.Body className="p-4">

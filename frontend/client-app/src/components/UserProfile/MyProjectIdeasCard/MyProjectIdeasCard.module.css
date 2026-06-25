@@ -70,6 +70,16 @@
   color: var(--color-dark-gray);
 }
 
+.subBadgeCount {
+  background-color: var(--color-primary-light-3);
+  color: var(--color-primary-dark);
+  font-size: var(--fs-v-small);
+  font-weight: 600;
+  padding: 0.4rem 1.2rem;
+  border-radius: 2rem;
+  border: 0.1rem solid var(--color-primary-light-2);
+}
+
 .creatorAvatarWrapper {
   width: 3.8rem;
   height: 3.8rem;
@@ -192,8 +202,8 @@
   border-radius: 999px;
   font-size: 1.1rem;
   font-weight: 600;
-  background: var(--color-primary-light-2);
-  color: var(--color-primary-dark);
+  background: var(--color-primary-dark) !important;
+  color: var(--color-white);
 }
 
 .infoBadge {
@@ -204,7 +214,6 @@
   color: var(--color-dark-gray);
   font-weight: 600;
 }
-
 
 .heartIcon {
   color: var(--color-light-red);

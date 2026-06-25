@@ -1,9 +1,25 @@
-import React from "react";
-import { Trophy, Calendar, DollarSign, Heart, ArrowUpRight } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Trophy, Calendar, DollarSign, Heart, ArrowUpRight, ChevronLeft,
+  ChevronRight
+} from "lucide-react";
 import styles from "./InterestedHackathonsCard.module.css";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 export default function InterestedHackathonsCard({ hackathons = [] }) {
   const hasHackathons = hackathons && hackathons.length > 0;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentHackathons = hackathons.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const totalPages = Math.ceil(hackathons.length / itemsPerPage);
 
   return (
     <div className={styles.mainContainerCard}>
@@ -26,7 +42,7 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
         </div>
       ) : (
         <div className={styles.hackathonsGrid}>
-          {hackathons.map((hackathon) => {
+          {currentHackathons.map((hackathon) => {
             const currentCount = hackathon.interestCount || 0
             // console.log("Hackathon Object:", hackathon);
             const maxCount = 30;
@@ -65,6 +81,37 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
               </div>
             );
           })}
+        </div>
+      )}
+      {totalPages > 1 && (
+        <div className={styles.paginationControls}>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={
+                currentPage === i + 1
+                  ? styles.activePage
+                  : ""
+              }
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
       )}
     </div>
