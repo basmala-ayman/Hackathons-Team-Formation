@@ -27,39 +27,39 @@ export default function NotificationItem({ data, onRead, onRemove }) {
   };
 
 
-const handleAccept = async (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  const handleAccept = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-  try {
-    await acceptInvitationFromNotification(metadata.invitationId);
+    try {
+      await acceptInvitationFromNotification(metadata.invitationId);
 
-    if (data.isUnread) {
-      markOneAsReadLocally();
+      if (data.isUnread) {
+        markOneAsReadLocally();
+      }
+
+      onRemove?.();
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    onRemove?.();
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const handleReject = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-const handleReject = async (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+    try {
+      await rejectInvitationFromNotification(metadata.invitationId);
 
-  try {
-    await rejectInvitationFromNotification(metadata.invitationId);
+      if (data.isUnread) {
+        markOneAsReadLocally();
+      }
 
-    if (data.isUnread) {
-      markOneAsReadLocally();
+      onRemove?.();
+    } catch (error) {
+      console.error(error);
     }
-
-    onRemove?.();
-  } catch (error) {
-    console.error(error);
-  }
-};
+  };
 
   const handleSeeInvitation = async (e) => {
     e.stopPropagation();
@@ -82,7 +82,7 @@ const handleReject = async (e) => {
   console.log("InvitationId:", metadata.invitationId);
 
   const handleNotificationClick = async () => {
-      console.log("CARD CLICKED");
+    console.log("CARD CLICKED");
     try {
       await onRead?.();
       const destination = getNotificationNavigation(data);
@@ -118,9 +118,7 @@ const handleReject = async (e) => {
               </span>
             </div>
           </div>
-
           <p className={styles.message}>{data.message}</p>
-
           <div className={styles.meta}>
             {metadata.openSlots !== undefined && (
               <span className={styles.matchBadge}>
@@ -137,7 +135,7 @@ const handleReject = async (e) => {
             </span>
           </div>
 
-          {(data.type === "TEAM_INVITE") && (
+          {(data.type === "TEAM_INVITE" || data.type == "TEAM_REQUEST") && (
             <div className={styles.actions}>
               <button className={styles.btnAccept} onClick={handleAccept}>
                 <Check size={16} strokeWidth={3} />
@@ -166,7 +164,10 @@ const handleReject = async (e) => {
               variant="primary"
               className="w-100 mt-4"
               size="sm"
-              onClick={() => window.location.href = '/recommended-Teams'}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/recommended-Teams");
+              }}
             >
               View Recommended Teams
             </CustomButton>
