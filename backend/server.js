@@ -32,6 +32,8 @@ const startServer = async () => {
       collectDevpostHackathons().catch((err) => {
         logger.error("Error during immediate collection:", err);
       });
+      logger.info("Done devpost hackathon collection for testing! ✅");
+
     }
 
     //make the server
