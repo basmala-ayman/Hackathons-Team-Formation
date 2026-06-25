@@ -63,5 +63,26 @@ const respondToInvitation = async (req, res, next) => {
   }
 };
 
+const getMyTeams = async (req, res, next) => {
+    try {
+        const userId = req.user.userId;
+        const teams = await teamService.getMyTeams(userId);
+        res.status(200).json({ success: true, data: teams });
+    } catch (err) {
+        next(err);
+    }
+};
 
-module.exports = { createTeam, getTeam, respondToInvitation };
+const finalizeTeam = async (req, res, next) => {
+    try {
+        const founderId = req.user.userId;
+        const { id } = req.params;
+        const result = await teamService.finalizeTeam(id, founderId);
+        res.status(200).json({ success: true, message: result.message });
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+module.exports = { createTeam, getTeam, respondToInvitation, getMyTeams, finalizeTeam };

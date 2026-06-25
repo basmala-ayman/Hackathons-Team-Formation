@@ -431,8 +431,111 @@ const respondToInvitation = async (
     };
 };
 
+const getMyTeams = async (userId) => {
+    const teams = await teamRepository.findMyTeamsWithMembers(userId);
+
+    return teams.map((team) => {
+        // Build unified member list from team_members + invitations
+        const memberMap = new Map();
+
+        // Accepted members (in team_members table)
+        team.members.forEach((m) => {
+            memberMap.set(m.user.id, {
+                userId: m.user.id,
+                name: m.user.name,
+                email: m.user.email,
+                profilePicture: m.user.profilePicture,
+                techRoles: m.user.techRoles || [],
+                githubUrl: m.user.githubUrl || null,
+                linkedinUrl: m.user.linkedinUrl || null,
+                status: "ACCEPTED",
+                isOwner: m.user.id === team.ownerId,
+            });
+        });
+
+        // Invited members (pending/rejected/expired)
+        team.invitations.forEach((inv) => {
+            if (!memberMap.has(inv.receiver.id)) {
+                memberMap.set(inv.receiver.id, {
+                    userId: inv.receiver.id,
+                    name: inv.receiver.name,
+                    email: inv.receiver.email,
+                    profilePicture: inv.receiver.profilePicture,
+                    techRoles: inv.receiver.techRoles || [],
+                    githubUrl: inv.receiver.githubUrl || null,
+                    linkedinUrl: inv.receiver.linkedinUrl || null,
+                    invitationId: inv.id,
+                    status: inv.status,
+                    isOwner: false,
+                });
+            }
+        });
+
+        return {
+            teamId: team.id,
+            teamName: team.name,
+            description: team.description || "",
+            status: team.status,
+            maxMembers: team.size,
+            ownerId: team.ownerId,
+            hackathon: team.hackathon,
+            project: team.project || null,
+            requiredSkills: team.skills.map((s) => s.skill.name),
+            members: Array.from(memberMap.values()),
+        };
+    });
+};
+
+// "Get Enough" — finalize team with current accepted members
+const finalizeTeam = async (teamId, founderId) => {
+    const team = await prisma.team.findUnique({
+        where: { id: teamId },
+        include: {
+            members: true,
+            invitations: { where: { status: "PENDING" } },
+        },
+    });
+
+    if (!team) throw new AppError("Team not found", 404);
+    if (team.ownerId !== founderId) throw new AppError("Only the team owner can finalize the team", 403);
+    if (team.status === "COMPLETE") throw new AppError("Team is already complete", 400);
+
+    // Cancel all pending invitations
+    const pendingInvitationIds = team.invitations.map((inv) => inv.id);
+    if (pendingInvitationIds.length > 0) {
+        await prisma.teamInvitation.updateMany({
+            where: { id: { in: pendingInvitationIds } },
+            data: { status: "CANCELLED" },
+        });
+
+        // Notify pending members that the team is now closed
+        await notificationRepository.createNotifications(
+            team.invitations.map((inv) => ({
+                userId: inv.receiverId,
+                type: "TEAM_INVITE",
+                title: "Team is now complete",
+                message: `The team you were invited to has been finalized without you. Better luck next time!`,
+                metadata: { teamId },
+            }))
+        );
+    }
+
+    // Mark team as COMPLETE
+    await prisma.team.update({
+        where: { id: teamId },
+        data: { status: "COMPLETE" },
+    });
+
+    return { message: "Team finalized successfully with current members." };
+};
+
+
+
+
 module.exports = {
     createTeam,
     getTeamById,
     respondToInvitation,
-};
+    getMyTeams,
+    finalizeTeam,
+}

@@ -239,8 +239,8 @@ const triggerProjectMatching = async (projectId) => {
         const convertedTeams = await generateProjectRecommendations({
             projectId: project.id,
             tags,
-            teamSize: team.size, 
-            pinnedMemberIds,             
+            teamSize: team.size,
+            pinnedMemberIds,
             excludeUserIds: excludeFromSearch,
         });
 
@@ -302,7 +302,7 @@ const triggerHackathonMatching = async () => {
                     hackathonId: hackathon.id,
                     hackathonAiEntityId: hackathon.id,
                     tags,
-                    teamSize: team.size, 
+                    teamSize: team.size,
                     pinnedMemberIds,
                     excludeUserIds: excludeFromSearch,
                 });
@@ -337,14 +337,15 @@ const triggerRound2 = async (teamId, founderId) => {
     if (!lastRequest) throw new AppError("No previous matching found for this team", 400);
 
     const currentMemberCount = await matchingRepository.countTeamMembers(teamId);
-    const slotsRemaining = team.size - currentMemberCount;
-    if (slotsRemaining <= 0) throw new AppError("Team already has enough members", 400);
+    // const slotsRemaining = team.size - currentMemberCount;
+    // if (slotsRemaining <= 0) throw new AppError("Team already has enough members", 400);
+    if (team.size - currentMemberCount <= 0) throw new AppError("Team already has enough members", 400);
 
     const acceptedRows = await matchingRepository.findAcceptedRecommendationMembers(teamId);
     const confirmedUserIds = acceptedRows.map((r) => r.userId);
 
-    const allRecommendedRows = await matchingRepository.findAllRecommendedUserIdsForTeam(teamId);
-    const excludeUserIds = allRecommendedRows.map((r) => r.userId);
+    const rejectedRows = await matchingRepository.findRejectedRecommendationMembers(teamId);
+    const excludeUserIds = rejectedRows.map((r) => r.userId);
 
     const pinnedMemberIds = await Promise.all(
         confirmedUserIds.map((id) => getOrCreateAIId(id, "USER"))
@@ -369,7 +370,7 @@ const triggerRound2 = async (teamId, founderId) => {
             convertedTeams = await generateProjectRecommendations({
                 projectId: lastRequest.projectId,
                 tags,
-                teamSize: slotsRemaining,
+                teamSize: team.size,
                 pinnedMemberIds,
                 excludeUserIds,
             });
@@ -378,7 +379,7 @@ const triggerRound2 = async (teamId, founderId) => {
                 hackathonId: lastRequest.hackathonId,
                 hackathonAiEntityId: lastRequest.hackathonId,
                 tags,
-                teamSize: slotsRemaining,
+                teamSize: team.size,
                 pinnedMemberIds,
                 excludeUserIds,
             });

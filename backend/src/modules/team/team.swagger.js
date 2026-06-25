@@ -202,3 +202,69 @@
  *       404:
  *         description: Invitation not found
  */
+
+/**
+ * @swagger
+ * /teams/my-teams:
+ *   get:
+ *     summary: Get all teams owned by the logged-in user
+ *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of teams with all members and their statuses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       teamId:        { type: string }
+ *                       teamName:      { type: string }
+ *                       description:   { type: string }
+ *                       status:        { type: string, enum: [FORMING, COMPLETE] }
+ *                       maxMembers:    { type: integer }
+ *                       ownerId:       { type: string }
+ *                       hackathon:     { type: object }
+ *                       project:       { type: object, nullable: true }
+ *                       requiredSkills:
+ *                         type: array
+ *                         items: { type: string }
+ *                       members:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             userId:       { type: string }
+ *                             name:         { type: string }
+ *                             email:        { type: string }
+ *                             profilePicture: { type: string, nullable: true }
+ *                             techRoles:    { type: array, items: { type: string } }
+ *                             githubUrl:    { type: string, nullable: true }
+ *                             linkedinUrl:  { type: string, nullable: true }
+ *                             invitationId: { type: string, nullable: true }
+ *                             status:       { type: string, enum: [ACCEPTED, PENDING, REJECTED, EXPIRED, CANCELLED] }
+ *                             isOwner:      { type: boolean }
+ *
+ * /teams/{id}/finalize:
+ *   patch:
+ *     summary: Finalize team with current accepted members (Get Enough button)
+ *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Team finalized, pending invitations cancelled
+ */

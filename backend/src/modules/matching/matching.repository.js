@@ -169,6 +169,18 @@ const findFormingTeamsWithNoOpenInvitations = () => {
     });
 };
 
+
+const findRejectedRecommendationMembers = (teamId) => {
+    return prisma.aIRecommendationMember.findMany({
+        where: {
+            status: { in: ["REJECTED", "EXPIRED"] },
+            recommendation: { matchingRequest: { teamId } },
+        },
+        select: { userId: true },
+        distinct: ["userId"],
+    });
+};
+
 module.exports = {
     createMatchingRequest,
     updateMatchingRequestStatus,
@@ -186,4 +198,5 @@ module.exports = {
     findAllRecommendedUserIdsForTeam,
     markExpiredInvitations,
     findFormingTeamsWithNoOpenInvitations,
+    findRejectedRecommendationMembers,
 };
