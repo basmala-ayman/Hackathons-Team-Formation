@@ -2,9 +2,14 @@ import React from "react";
 import styles from "./NotificationItem.module.css";
 import { Zap, Check, X, Eye, Clock, Users, Bell, Info } from "lucide-react";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
+import { useNavigate } from "react-router-dom";
+import { getNotificationNavigation } from "../../../utils/notificationNavigation";
+import { useNotifications } from "../../../context/NotificationContext";
 
-export default function NotificationItem({ data, onRead }) {
+export default function NotificationItem({ data, onRead, onRemove }) {
   const metadata = data.metadata || {};
+  const navigate = useNavigate();
+  const { markOneAsReadLocally } = useNotifications();
 
   const ICON_MAP = {
     JOIN_REQUEST: <Users size={20} />,
@@ -17,10 +22,40 @@ export default function NotificationItem({ data, onRead }) {
     SYSTEM: <Bell size={20} />
   };
 
+  const handleAccept = (e) => {
+    e.stopPropagation();
+    if (data.isUnread) {
+      markOneAsReadLocally();
+    }
+    onRemove?.();
+  };
+
+  const handleReject = (e) => {
+    e.stopPropagation();
+    if (data.isUnread) {
+      markOneAsReadLocally();
+    }
+    onRemove?.();
+  };
+
+  const handleNotificationClick = async () => {
+    try {
+      await onRead?.();
+      const destination = getNotificationNavigation(data);
+      if (!destination) return;
+      navigate(destination.path, {
+        state: destination.state,
+      });
+    } catch (error) {
+      console.error("Failed to handle notification click", error);
+    }
+  };
+
+
   return (
     <div
       className={`${styles.card} ${data.isUnread ? styles.unread : ""}`}
-      onClick={onRead}
+      onClick={handleNotificationClick}
     >
       <div className={styles.main}>
         <div className={styles.iconArea}>
@@ -32,8 +67,11 @@ export default function NotificationItem({ data, onRead }) {
 
         <div className={styles.content}>
           <div className={styles.topRow}>
-            <div className={styles.titleGroup}>
+            <div>
               <h3 className={styles.notTitle}>{data.title}</h3>
+              <span className={styles.typeBadge}>
+                {data.type.replace("_", " ")}
+              </span>
             </div>
           </div>
 
@@ -57,15 +95,11 @@ export default function NotificationItem({ data, onRead }) {
 
           {(data.type === "JOIN_REQUEST" || data.type === "TEAM_INVITE") && (
             <div className={styles.actions}>
-              <button className={styles.btnAccept} onClick={(e) => {
-                e.stopPropagation();
-              }}>
+              <button className={styles.btnAccept} onClick={handleAccept}>
                 <Check size={16} strokeWidth={3} />
                 <span>Accept</span>
               </button>
-              <button className={styles.btnDecline} onClick={(e) => {
-                e.stopPropagation();
-              }}>
+              <button className={styles.btnDecline} onClick={handleReject}>
                 <X size={16} strokeWidth={3} />
                 <span>Reject</span>
               </button>
@@ -84,6 +118,6 @@ export default function NotificationItem({ data, onRead }) {
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

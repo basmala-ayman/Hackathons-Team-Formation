@@ -1,7 +1,15 @@
 .wrapper {
-  width: 155px;
-  position: relative;
+  width: auto;
 }
+
+.avatar {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-dark);
+}
+
 .bellIcon {
   cursor: pointer;
 }
@@ -52,4 +60,27 @@
 .bellIcon {
   position: relative;
   display: inline-block;
+  color: var(--color-primary-light) !important;
+}
+
+.notificationLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationLink svg {
+  color: var(--color-very-dark-purple);
+}
+
+.notificationDot {
+  position: absolute;
+  top: -3px;
+  right: -2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--color-error-red);
+  border: 2px solid var(--color-white);
 }

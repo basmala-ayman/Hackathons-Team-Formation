@@ -40,30 +40,44 @@ function ProjectCard({
   //state used to show (show more) or not
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
+  const BACKEND_URL =
+    import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ||
+    "http://localhost:3000";
+
+  // Backend returns only a relative image path:
+  // The browser cannot display this directly because it needs
+  // the full URL including the server domain.
+  // Example:- Relative path  -> /uploads/profile-pictures/pic.jpg
+  // Full URL -> http://localhost:3000/uploads/profile-pictures/pic.jpg
+  const creatorAvatar = creator?.avatarUrl
+    ? `${BACKEND_URL}${creator.avatarUrl}`
+    : defaultProfile;
+
   useEffect(() => {
     //get the real elements after render
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
     if (!titleElement || !descElement) return;
-      //scroll height -> real height 
-      // client height-> the height that user see
-      const isTitleClipped =
-        titleElement.scrollHeight > titleElement.clientHeight;
-      const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
+    //scroll height -> real height 
+    // client height-> the height that user see
+    const isTitleClipped =
+      titleElement.scrollHeight > titleElement.clientHeight;
+    const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
-      const shouldExpand=
-        isTitleClipped ||
-        isDescClipped ||
-        hasHiddenSkills ||
-        hasHiddenRoles;
-       
+    const shouldExpand =
+      isTitleClipped ||
+      isDescClipped ||
+      hasHiddenSkills ||
+      hasHiddenRoles;
 
-  // eslint-disable-next-line
+
+    // eslint-disable-next-line
     setCanExpand(shouldExpand);
-      
-    }
-  , [title, description, skills, roles]);
+
+  }
+    , [title, description, skills, roles]);
+
 
   return (
     <div
@@ -72,13 +86,17 @@ function ProjectCard({
       {/* Header Profile */}
       <div className="d-flex align-items-center gap-3 mb-3">
         <img
-          src={creator?.avatarUrl || defaultProfile}
+          src={creatorAvatar}
           alt={creator?.name || "Creator"}
           className={styles.creatorAvatar}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = defaultProfile;
+          }}
         />
         <div>
           <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>{creator?.role || "Project Creator"}</small>
+          <small className={styles.creatorLabel}>{creator?.creatorRole || "Project Creator"}</small>
         </div>
       </div>
 
@@ -196,7 +214,7 @@ function ProjectCard({
           disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
-          
+
           <span>{isLoading
             ? "Submitting..."
             : isInterested

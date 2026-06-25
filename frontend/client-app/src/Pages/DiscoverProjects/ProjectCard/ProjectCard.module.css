@@ -47,12 +47,12 @@
 
 /* normal styles */
 
-
 .creatorAvatar {
-  width: 5.2rem;
-  height: 5.2rem;
-  border-radius: 50%;
+  width: 7rem;
+  height: 7rem;
   object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-primary-dark);
 }
 
 .creatorLabel {
@@ -90,7 +90,6 @@
   color: var(--color-dark-gray);
   font-weight: 500;
 }
-
 
 /* read more styles */
 

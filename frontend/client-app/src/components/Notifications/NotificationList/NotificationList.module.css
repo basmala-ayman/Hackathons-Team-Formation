@@ -4,10 +4,15 @@
 }
 
 .listHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-white);
+  padding-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.4rem;
+  gap: 1.6rem;
 }
 
 .titleInfo {
@@ -23,27 +28,28 @@
 }
 
 .badge {
-  background-color: #ffe8e8;
-  color: var(--color-light-red);
-  font-size: var(--fs-v-small);
-  font-weight: 600;
-  padding: 0.4rem 1.4rem;
-  border-radius: 5rem;
+  background: #fff1f2;
+  color: #ef4444;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
 }
 
 .markAllBtn {
-  background: none;
-  border: none;
-  color: var(--color-primary-dark);
-  font-size: var(--fs-small);
+  border: 1px solid #e5e7eb;
+  background: white;
+  padding: 0.8rem 1.4rem;
+  border-radius: 12px;
   font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
+  font-size: var(--fs-v-small);
 }
 
 .markAllBtn:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+  background: #f8fafc;
+  border-color: var(--color-primary-dark);
+  text-decoration: none;
 }
 
 .itemsStack {
@@ -52,21 +58,35 @@
   background-color: var(--color-white);
   border-radius: 1.6rem;
   border: 1px solid var(--color-primary-light-2);
-  overflow: hidden;
   box-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.02);
-  gap:1rem;
-  padding:0 1rem 1rem 1rem;
+  gap: 1rem;
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.itemsStack::-webkit-scrollbar {
+  width: 8px;
+}
+
+.itemsStack::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.itemsStack::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dark);
+  border-radius: 999px;
 }
 
 .emptyState {
+  min-height: 350px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: var(--color-dark-gray);
+  align-items: center;
   text-align: center;
 }
+
 .emptyIcon {
   margin-bottom: 16px;
   opacity: 0.5;

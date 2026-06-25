@@ -5,7 +5,7 @@
 .header h1 {
   font-size: var(--fs-h3);
   font-weight: 600;
-  color: var(--color-primary-dark);
+  color: var(--color-very-dark-purple);
   line-height: 6.4rem;
 }
 

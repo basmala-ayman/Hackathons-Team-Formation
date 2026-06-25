@@ -13,6 +13,7 @@ import {
 } from "../../utils/tokenStorage";
 import { useLocalStorage } from "../../hooks/useLocalStorage.js";
 import { AuthContext } from "./AuthContext.jsx";
+import { getUserProfile } from "../../services/userService.js";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
@@ -21,22 +22,45 @@ export const AuthProvider = ({ children }) => {
 
   // load user on refresh
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      setUser(null);
-    }
-    setLoading(false);
-  }, [setUser]);
+    const loadUserProfile = async () => {
+      const token = getAccessToken();
+
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const profileData = await getUserProfile();
+        setUser(prev => ({
+          ...prev,
+          profilePicture: profileData.profile?.profilePicture,
+        }));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUserProfile();
+  }, []);
 
   const login = async (credentials) => {
     setIsSubmitting(true);
+
     try {
       const response = await loginService(credentials);
-      console.log("Login successful, response data:", response);
       const actualData = response.data;
-      storeTokens(actualData.accessToken, actualData.refreshToken);
-      setUser(actualData.user);
-      // localStorage.setItem("user", JSON.stringify(actualData.user));
+      storeTokens(
+        actualData.accessToken,
+        actualData.refreshToken
+      );
+      const profileData = await getUserProfile();
+      setUser({
+        ...actualData.user,
+        profilePicture: profileData.profile?.profilePicture,
+      });
       return actualData;
     } catch (err) {
       const errorData = {

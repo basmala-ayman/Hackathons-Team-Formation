@@ -2,10 +2,9 @@ import React from "react";
 import { Trophy, Calendar, DollarSign, Heart, ArrowUpRight } from "lucide-react";
 import styles from "./InterestedHackathonsCard.module.css";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
-import { useNavigate } from 'react-router-dom';
 export default function InterestedHackathonsCard({ hackathons = [] }) {
   const hasHackathons = hackathons && hackathons.length > 0;
-  const navigate = useNavigate();
+
   return (
     <div className={styles.mainContainerCard}>
       <div className={styles.sectionHeader}>
@@ -28,10 +27,10 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
       ) : (
         <div className={styles.hackathonsGrid}>
           {hackathons.map((hackathon) => {
-            const currentCount = hackathon.interestCount || 0;
+            const currentCount = hackathon.interestCount || 0
+            console.log("Hackathon Object:", hackathon);
             const maxCount = 30;
             const computedProgress = (currentCount / maxCount) * 100;
-            const countString = `${currentCount}/${maxCount}`;
             return (
               <div key={hackathon.id || hackathon.title} className={styles.hackathonMiniCard}>
                 <div className={styles.cardContent}>
@@ -56,10 +55,10 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
                       <Calendar size={15} className={styles.metaIcon} />
                       <span>{hackathon.location} ({hackathon.status})</span>
                     </div>
-                    <div className={styles.metaItem}>
+                    {/* <div className={styles.metaItem}>
                       <DollarSign size={15} className={styles.metaIcon} />
                       <span className={styles.prizeText}>{hackathon.prizeAmount ? `$${hackathon.prizeAmount.toLocaleString()}` : "Prizes available"}</span>
-                    </div>
+                    </div> */}
                   </div>
 
                 </div>
