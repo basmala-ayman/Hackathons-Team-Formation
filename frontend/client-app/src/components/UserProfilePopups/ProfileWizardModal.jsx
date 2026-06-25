@@ -116,6 +116,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     }
   }, [show, externalValues]);
 
+
   const updateLocalValuesWithTracking = useCallback((updater) => {
     setLocalValues((prev) => typeof updater === "function" ? updater(prev) : { ...prev, ...updater });
   }, []);
@@ -169,6 +170,10 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
       }));
 
       setShowSuccessScreen(true);
+      setTimeout(() => {
+        handleModalClose();
+      }, 3000);
+
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "An unexpected error occurred.";
       setErrors((prev) => ({ ...prev, apiError: errorMessage }));
@@ -185,12 +190,10 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
 
   const handleModalClose = () => {
     setShowSuccessScreen(false);
+    setCurrentStep(1);
+    setErrors({});
+    setActiveAction(null);
     handleClose();
-    setTimeout(() => {
-      setCurrentStep(1);
-      setErrors({});
-      setActiveAction(null);
-    }, 400);
   };
 
   return (

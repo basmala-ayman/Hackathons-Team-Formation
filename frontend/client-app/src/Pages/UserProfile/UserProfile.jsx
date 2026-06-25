@@ -208,7 +208,6 @@ export default function UserProfile({ isOwner = true }) {
         avatarFile: null,
       }));
 
-      if (isFinal) setIsWizardOpen(false);
       return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
