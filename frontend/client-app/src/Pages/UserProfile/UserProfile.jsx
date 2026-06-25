@@ -31,6 +31,16 @@ const defaultProfileData = {
   resumeFile: null
 };
 
+const VALID_INTERESTS = new Set([
+  "AR_VR", "BEGINNER_FRIENDLY", "BLOCKCHAIN", "COMMUNICATION",
+  "CYBERSECURITY", "DATABASES", "DESIGN", "DEVOPS", "ECOMMERCE_RETAIL",
+  "EDUCATION", "ENTERPRISE", "FINTECH", "GAMING", "HEALTH", "IOT",
+  "LIFEHACKS", "LOW_NO_CODE", "MACHINE_LEARNING_AI", "MOBILE",
+  "MUSIC_ART", "OPEN_ENDED", "PRODUCTIVITY", "QUANTUM",
+  "ROBOTIC_PROCESS_AUTOMATION", "SERVERLESS", "SOCIAL_GOOD",
+  "VOICE_SKILLS", "WEB"
+]);
+
 export default function UserProfile({ isOwner = true }) {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [wizardMode, setWizardMode] = useState("full");
@@ -78,15 +88,19 @@ export default function UserProfile({ isOwner = true }) {
             rawAvatar = "";
           }
 
+
           let parsedInterests = [];
-          if (Array.isArray(profileData.interests)) {
-            parsedInterests = profileData.interests;
-          } else
-            if (Array.isArray(profileData.intrestes)) {
-              parsedInterests = profileData.intrestes;
-            } else if (Array.isArray(profileData.hackathonInterests)) {
-              parsedInterests = profileData.hackathonInterests.map(i => typeof i === 'string' ? i : (i.title || i.name || i));
-            }
+
+          if (Array.isArray(profileData.intrestes)) {
+            parsedInterests = profileData.intrestes.filter(i => VALID_INTERESTS.has(i));
+          } else if (Array.isArray(profileData.interests)) {
+            parsedInterests = profileData.interests.filter(i => VALID_INTERESTS.has(i));
+          } else if (Array.isArray(profileData.hackathonInterests)) {
+            parsedInterests = profileData.hackathonInterests
+              .map(i => typeof i === "string" ? i : i.value)
+              .filter(i => VALID_INTERESTS.has(i));
+          }
+          console.log("Fetched interests:", profileData.intrestes);
 
           setValues({
             avatar: rawAvatar,
@@ -139,11 +153,6 @@ export default function UserProfile({ isOwner = true }) {
         finalPayload.append("githubUrl", payload.githubUrl || values.githubUrl || "");
         finalPayload.append("linkedinUrl", payload.linkedinUrl || values.linkedinUrl || "");
 
-        // const fileToUpload = payload.avatarFile || values.avatarFile;
-        // if (fileToUpload) {
-        //   finalPayload.append("profilePicture", fileToUpload);
-        // }
-
         const fileToUpload = payload.avatarFile || values.avatarFile;
 
         if (fileToUpload instanceof File) {
@@ -157,10 +166,20 @@ export default function UserProfile({ isOwner = true }) {
         roles.forEach(r => finalPayload.append("techRoles[]", r));
 
         const interests = payload.intrestes || payload.interests || values.intrestes || [];
-        interests.forEach(i => finalPayload.append("intrestes[]", i));
+        interests.forEach(i =>
+          finalPayload.append("intrestes[]", i)
+        );
       }
 
+      console.log("====== FORM DATA ======");
+      for (const [key, value] of finalPayload.entries()) {
+        console.log(key, value);
+      }
       const response = await updateUserProfile(finalPayload);
+
+      console.log("UPDATE RESPONSE");
+      console.log(response.data);
+
       const responseData = response?.data?.data || response?.data || response;
       const profileData = responseData.profile || {};
 
@@ -187,6 +206,14 @@ export default function UserProfile({ isOwner = true }) {
         linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
         resumeUrl: profileData.resumeUrl || prev.resumeUrl,
         avatar: newAvatar,
+        skills: responseData.skills ?? prev.skills,
+        techRoles: responseData.techRoles ?? prev.techRoles,
+        intrestes: (
+          responseData.intrestes ??
+          responseData.interests ??
+          prev.intrestes ??
+          []
+        ).filter(i => VALID_INTERESTS.has(i)),
         avatarFile: null,
       }));
 
@@ -258,7 +285,7 @@ export default function UserProfile({ isOwner = true }) {
       <SkillsExpertiseCard
         skills={values.skills || []}
         roles={Array.isArray(values.techRoles) ? values.techRoles : (values.techRoles ? [values.techRoles] : [])}
-        interests={values.interests || values.intrestes || []}
+        interests={values.intrestes}
         isOwner={isOwner}
         onAddSkillClick={() => {
           setWizardMode("skillsOnly");

@@ -12,7 +12,7 @@ import { useStaticData } from "../../hooks/useStaticData.js";
 
 
 
-const cleanAndMapToEnum = (text, type, hackathonOptions = []) => {
+const cleanAndMapToEnum = (text, type) => {
   if (!text) return "";
   let normalized = text.toUpperCase().trim();
   if (type === "role") {
@@ -23,28 +23,23 @@ const cleanAndMapToEnum = (text, type, hackathonOptions = []) => {
     if (normalized.includes("DEVOPS")) return "DEVOPS";
   }
   if (type === "interest") {
-    const validInterests = hackathonOptions.map(h => h.label);
-    if (validInterests.includes(normalized)) return normalized;
-    return null;
+    return normalized;
   }
   return normalized.replace(/[\s/-]+/g, "_");
 };
 
 
-const generatePayload = (currentValues, originalValues, user, hackathonOptions) => {
+const generatePayload = (
+  currentValues,
+  originalValues,
+  user
+) => {
   const payload = new FormData();
   const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
   payload.append("name", nameToSubmit);
 
   if (currentValues.githubUrl) payload.append("githubUrl", currentValues.githubUrl);
   if (currentValues.linkedinUrl) payload.append("linkedinUrl", currentValues.linkedinUrl);
-
-  // if (currentValues.avatarFile) {
-  //   payload.append("profilePicture", currentValues.avatarFile);
-  // }
-  // else if (originalValues?.avatar) {
-  //   payload.append("profilePicture", originalValues.avatar);
-  // }
 
   if (currentValues.avatarFile instanceof File) {
     payload.append("profilePicture", currentValues.avatarFile);
@@ -62,22 +57,35 @@ const generatePayload = (currentValues, originalValues, user, hackathonOptions) 
 
   const rolesArray = currentValues.techRoles || [];
   const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
-  const interestsArray = currentValues.interests || currentValues.intrestes || [];
-  const cleanInterests = interestsArray.map(i =>
-    cleanAndMapToEnum(typeof i === "string" ? i : i.value, "interest", hackathonOptions)
-  ).filter(Boolean);
+  const interestsArray = currentValues.intrestes || [];
+  const VALID_INTERESTS = new Set([
+    "AR_VR", "BEGINNER_FRIENDLY", "BLOCKCHAIN", "COMMUNICATION",
+    "CYBERSECURITY", "DATABASES", "DESIGN", "DEVOPS", "ECOMMERCE_RETAIL",
+    "EDUCATION", "ENTERPRISE", "FINTECH", "GAMING", "HEALTH", "IOT",
+    "LIFEHACKS", "LOW_NO_CODE", "MACHINE_LEARNING_AI", "MOBILE",
+    "MUSIC_ART", "OPEN_ENDED", "PRODUCTIVITY", "QUANTUM",
+    "ROBOTIC_PROCESS_AUTOMATION", "SERVERLESS", "SOCIAL_GOOD",
+    "VOICE_SKILLS", "WEB"
+  ]);
+
+  const cleanInterests = interestsArray
+    .map(i => (typeof i === "string" ? i : i.value).toUpperCase().trim())
+    .filter(i => VALID_INTERESTS.has(i));
 
   appendIfChanged("skills", currentValues.skills);
   appendIfChanged("bio", currentValues.bio);
   appendIfChanged("techRoles", cleanRoles);
-  cleanInterests.forEach(interest => payload.append("intrestes[]", interest));
+  cleanInterests.forEach((interest) => {
+    payload.append("intrestes[]", interest);
+  });
 
-  // if (currentValues.avatarFile) {
-  //   payload.append("profilePicture", currentValues.avatarFile);
-  // } else if (originalValues.avatarFile) {
-  //   payload.append("profilePicture", originalValues.avatarFile);
-  // }
   if (currentValues.resumeFile instanceof File) payload.append("resume", currentValues.resumeFile);
+
+  console.log("======= PAYLOAD =======");
+
+  for (const [key, value] of payload.entries()) {
+    console.log(key, value);
+  }
   return payload;
 };
 
@@ -87,7 +95,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
   const { user } = useAuth();
-  const { hackathonOptions } = useStaticData();
+  const { hackathonInterests } = useStaticData();
   const isSkillsOnly = mode === "skillsOnly";
 
   useEffect(() => {
@@ -136,19 +144,13 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     setActiveAction(actionType);
     setErrors({});
     try {
-      const finalPayload = generatePayload(localValues, externalValues, user, hackathonOptions);
-      const savedData = await onSave(finalPayload, true); // ← capture response
-
-      // setExternalValues((prev) => ({
-      //   ...prev,
-      //   skills: localValues.skills,
-      //   techRoles: localValues.techRoles,
-      //   intrestes: localValues.intrestes,
-      //   bio: localValues.bio,
-      //   githubUrl: localValues.githubUrl,
-      //   linkedinUrl: localValues.linkedinUrl,
-      //   name: localValues.name,
-      // }));
+      const finalPayload = generatePayload(
+        localValues,
+        externalValues,
+        user,
+        hackathonInterests
+      );
+      const savedData = await onSave(finalPayload, true);
 
       setExternalValues((prev) => ({
         ...prev,

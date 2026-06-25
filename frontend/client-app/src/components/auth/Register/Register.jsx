@@ -87,18 +87,18 @@ export default function Register() {
       <div className={loginStyles.loginContainer}>
         <h2 className={loginStyles.title}>Create your account</h2>
 
-        <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
+        {/* <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
           <button type="button" className={loginStyles.socialBtn}>
             <GoogleIcon /> Sign Up with Google
           </button>
           <button type="button" className={loginStyles.socialBtn}>
             <GithubIcon /> Sign Up with Github
           </button>
-        </div>
-
+        </div> */}
+        {/* 
         <div className={loginStyles.divider}>
           <span>Or register with email</span>
-        </div>
+        </div> */}
 
         <form
           onSubmit={handleRegister}

@@ -1,38 +1,34 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Form, Badge } from "react-bootstrap";
 import styles from "./steps.module.css";
 import { useStaticData } from "../../../hooks/useStaticData.js";
 
 export default function Step2Interests({ formData, setFormData }) {
-  // const [customInput, setCustomInput] = useState("");
-  const { hackathonOptions } = useStaticData();
-  const interests = formData?.intrestes || [];
+  const { hackathonInterests } = useStaticData();
 
-  const predefinedInterests = hackathonOptions.map(h => h.label);
+  console.log("Hackathon Interests:", hackathonInterests);
+  console.log("Form Data:", formData);
+  const interests = formData.intrestes || [];
+
+  const predefinedInterests = hackathonInterests;
+
+  useEffect(() => {
+    console.log("Current formData.intrestes:", formData.intrestes);
+  }, [formData.intrestes]);
 
   const toggleInterest = (interest) => {
-    const isSelected = interests.includes(interest);
-    const updatedInterests = isSelected
-      ? interests.filter((i) => i !== interest)
-      : [...interests, interest];
+    const current = formData.intrestes || [];
 
+    const updated = current.includes(interest)
+      ? current.filter((i) => i !== interest)
+      : [...current, interest];
     setFormData((prev) => ({
       ...prev,
-      intrestes: updatedInterests
+      intrestes: updated,
     }));
   };
 
-  // const handleCustomKeyDown = (e) => {
-  //   if (e.key === 'Enter') {
-  //     e.preventDefault();
-  //     const value = customInput.trim().toUpperCase();
-  //     if (value && !interests.includes(value)) {
-  //       const updated = [...interests, value];
-  //       setFormData((prev) => ({ ...prev, interests: updated }));
-  //       setCustomInput("");
-  //     }
-  //   }
-  // };
+
 
   return (
     <div className={styles.stepContainer}>
@@ -47,36 +43,24 @@ export default function Step2Interests({ formData, setFormData }) {
 
         <div className="d-flex flex-wrap gap-3 mb-4">
           {predefinedInterests.map((interest) => {
-            const isSelected = interests.includes(interest);
+            const isSelected =
+              (formData.intrestes || []).includes(interest.value);
+
             return (
               <Badge
-                key={interest}
+                key={interest.value}
                 pill
-                onClick={() => toggleInterest(interest)}
-                className={`${styles.interestTag} ${isSelected ? styles.tagSelected : ""}`}
-                style={{ cursor: 'pointer' }}
+                onClick={() => toggleInterest(interest.value)}
+                className={`${styles.interestTag} ${isSelected ? styles.tagSelected : ""
+                  }`}
+                style={{ cursor: "pointer" }}
               >
-                {interest}
+                {interest.label}
               </Badge>
             );
           })}
         </div>
       </Form.Group>
-
-      {/* <Form.Group className="mb-3">
-        <Form.Label className={styles.formLabel}>Add Custom Hackathon Interest</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="e.g., Cloud Computing (Press Enter to add)"
-          className={styles.inputControl}
-          value={customInput}
-          onChange={(e) => setCustomInput(e.target.value)}
-          onKeyDown={handleCustomKeyDown}
-        />
-        <span className={styles.hintText}>
-          💡 Press Enter or click suggestions to add hackathon interest
-        </span>
-      </Form.Group> */}
     </div>
   );
 }

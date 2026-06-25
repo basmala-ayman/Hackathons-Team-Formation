@@ -31,6 +31,8 @@ export default function UserDashboard() {
       });
   }, []);
 
+  console.log("User dashboard data:", dashboardData)
+
   const formatActivityDate = (isoString) => {
     if (!isoString) return "Recently";
     const date = new Date(isoString);
@@ -44,10 +46,20 @@ export default function UserDashboard() {
 
   const getActivityDotClass = (type) => {
     switch (type) {
-      case "TEAM_INVITE": return styles.blue;
-      case "TEAM_JOIN": return styles.green;
-      case "ACHIEVEMENT": return styles.purple;
-      default: return styles.orange;
+      case "TEAM_INVITE":
+        return styles.blue;
+
+      case "TEAM_JOIN":
+        return styles.green;
+
+      case "ACHIEVEMENT":
+        return styles.purple;
+
+      case "ROUND2_AVAILABLE":
+        return styles.orange;
+
+      default:
+        return styles.gray;
     }
   };
 

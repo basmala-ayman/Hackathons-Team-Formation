@@ -7,7 +7,7 @@ const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 
 function MyProjectIdeasCard({ projects = [], userAvatar }) {
   const { user: authUser } = useAuth();
-  
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
@@ -23,8 +23,11 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
       <div className={styles.mainContainerCard}>
         <div className={styles.sectionHeader}>
           <div className={styles.titleGroup}>
-            <FolderHeart size={22} className={styles.headerIcon} />
-            <h4 className={styles.sectionTitle}>My Project Ideas</h4>
+            <FolderHeart size={22} />
+            <h4>My Project Ideas</h4>
+            <span className={styles.countBadge}>
+              {projects.length}
+            </span>
           </div>
         </div>
 
@@ -49,10 +52,12 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
 
       <div className={styles.ideasGrid}>
         {currentProjects.map((idea) => {
+          console.log("Project idea", idea)
           const projectId = idea.id;
           const title = idea.title;
           const description = idea.description;
-          const skills = idea.requiredSkillsOrRoles || [];
+          const skills = idea.requiredSkillsOrRoles
+            || [];
           const teamSize = idea.totalTeamMembersCount;
           const interestedCount = idea.totalInterestsCount;
 
@@ -67,8 +72,19 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
                   />
                 </div>
                 <div className={styles.creatorMeta}>
-                  <span className={styles.creatorName}>{authUser?.name || "User"}</span>
-                  <span className={styles.creatorBadge}>Project Creator</span>
+                  <span className={styles.creatorName}>
+                    {authUser?.name || "User"}
+                  </span>
+
+                  <div className={styles.metaRow}>
+                    <span className={styles.createdDate}>
+                      {new Date(idea.createdAt).toLocaleDateString()}
+                    </span>
+
+                    <span className={styles.statusBadge}>
+                      {idea.teamStatus || "FORMING"}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -77,7 +93,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
 
               {skills.length > 0 && (
                 <div className={styles.skillsSection}>
-                  <h6 className={styles.skillsTitle}>Required Skills</h6>
+                  <h6 className={styles.skillsTitle}>Required Skills/Roles</h6>
                   <div className={styles.skillsWrapper}>
                     {skills.map((skill, index) => (
                       <span key={index} className={styles.skillTag}>

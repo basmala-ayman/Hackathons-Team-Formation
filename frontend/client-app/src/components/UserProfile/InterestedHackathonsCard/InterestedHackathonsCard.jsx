@@ -28,7 +28,7 @@ export default function InterestedHackathonsCard({ hackathons = [] }) {
         <div className={styles.hackathonsGrid}>
           {hackathons.map((hackathon) => {
             const currentCount = hackathon.interestCount || 0
-            console.log("Hackathon Object:", hackathon);
+            // console.log("Hackathon Object:", hackathon);
             const maxCount = 30;
             const computedProgress = (currentCount / maxCount) * 100;
             return (
