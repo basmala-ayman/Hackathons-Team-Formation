@@ -3,7 +3,7 @@ import styles from "./Login.module.css";
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import Input from "../../../shared/Input/Input";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
-import { Link } from "react-router-dom";
+import { Link, replace } from "react-router-dom";
 import {
   GoogleIcon,
   GithubIcon,
@@ -16,6 +16,7 @@ import { popUp } from "../../../utils/popUp.js";
 import { useFormHandler } from "../../../hooks/useFormHandler.js";
 
 export default function Login() {
+  
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +56,14 @@ export default function Login() {
       if (result) {
         const userName = result.user?.name || "User";
         popUp.success(`Welcome, ${userName}!`);
-        navigate("/", { replace: true });
+        // navigate("/", { replace: true });
+        const userEmail=result.user?.email|| email;
+        if (userEmail === "team.catalyst26@gmail.com"){
+          navigate("/admin-dashboard" ,{ replace: true });
+        }
+        else{
+          navigate("/userprofile" , { replace: true });
+        }
       }
     } catch (err) {
       // Check the error status or response message
