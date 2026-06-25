@@ -113,9 +113,8 @@ function RecommendedTeams() {
         <div className="d-flex  my-5 flex-wrap">
           <button
             type="button"
-            className={`px-5 py-2 fs-3 ${styles.leftTab} ${
-              activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
-            }`}
+            className={`px-5 py-2 fs-3 ${styles.leftTab} ${activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
+              }`}
             onClick={() => setActiveTab("myTeams")}
           >
             My Teams
@@ -123,11 +122,10 @@ function RecommendedTeams() {
 
           <button
             type="button"
-            className={`px-5 py-2 fs-3 ${styles.rightTab} ${
-              activeTab === "invitations"
+            className={`px-5 py-2 fs-3 ${styles.rightTab} ${activeTab === "invitations"
                 ? styles.activeTab
                 : styles.inactiveTab
-            }`}
+              }`}
             onClick={() => setActiveTab("invitations")}
           >
             Invitations

@@ -1,19 +1,40 @@
 import styles from "./TeamCard.module.css";
-import { TeamIcon, RaiseUpIcon } from "../../../assets/Icons";
+import { TeamIcon } from "../../../assets/Icons";
 import defaultProfile from "../../../assets/defaultProfile.jpg";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
+
+const BACKEND_URL =
+  import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ||
+  "http://localhost:3000";
+
 function TeamCard({
   members = [],
   isAcceptLoading,
   isRejectLoading,
   onAccept,
   onReject,
-  acceptLabel = "Accept"
+  acceptLabel = "Accept",
 }) {
   const formatRole = (role) => {
     const text = role.replace(/_/g, " ").toLowerCase();
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
+
+  const getAvatar = (member) => {
+    const picture = member.profilePicture || member.avatarUrl;
+
+    if (!picture) return defaultProfile;
+
+    if (
+      picture.startsWith("http") ||
+      picture.startsWith("blob:")
+    ) {
+      return picture;
+    }
+
+    return `${BACKEND_URL}${picture}`;
+  };
+
 
   return (
     <div className={`p-4 mb-4 border rounded ${styles.cardWrapper}`}>
@@ -25,9 +46,9 @@ function TeamCard({
           <span>Team Members</span>
         </div>
 
-        {/* Detailed Members  */}
         <div className={`mb-5 mt-4 ${styles.membersContainer}`}>
           {members.map((member) => {
+            console.log(member);
             const displayRole = Array.isArray(member.role)
               ? member.role.map(formatRole).join(", ")
               : member.role
@@ -40,13 +61,15 @@ function TeamCard({
                 className={`d-flex align-items-center gap-3 ${styles.memberItem}`}
               >
                 <img
-                  src={
-                    member.profilePicture || member.avatarUrl || defaultProfile
-                  }
+                  src={getAvatar(member)}
                   alt={member.name || "Member"}
                   className={styles.avatarImg}
-                  // style={{ width: "45px", height: "45px", objectFit: "cover" }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultProfile;
+                  }}
                 />
+
                 <div className="d-flex flex-column">
                   <span
                     className="fw-bold fs-4 text-dark m-0"
@@ -54,29 +77,29 @@ function TeamCard({
                   >
                     {member.name || "Unknown Member"}
                   </span>
-                  <span className="text-muted fs-4">{displayRole}</span>
+
+                  <span className="text-muted fs-4">
+                    {displayRole}
+                  </span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Action Buttons*/}
         <div className="d-flex gap-2">
           <CustomButton
             variant="primary"
             size="sm"
-            // className="w-100"
             onClick={onAccept}
             disabled={isAcceptLoading}
           >
-           {isAcceptLoading ? "Accepting..." : acceptLabel}
+            {isAcceptLoading ? "Accepting..." : acceptLabel}
           </CustomButton>
 
           <CustomButton
             variant="secondary"
             size="sm"
-            // className={"w-100"}
             onClick={onReject}
             disabled={isRejectLoading}
           >
@@ -87,4 +110,5 @@ function TeamCard({
     </div>
   );
 }
+
 export default TeamCard;

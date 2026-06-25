@@ -5,6 +5,10 @@ import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { useNavigate } from "react-router-dom";
 import { getNotificationNavigation } from "../../../utils/notificationNavigation";
 import { useNotifications } from "../../../context/NotificationContext";
+import {
+  acceptInvitationFromNotification,
+  rejectInvitationFromNotification,
+} from "../../../services/recommendationService";
 
 export default function NotificationItem({ data, onRead, onRemove }) {
   const metadata = data.metadata || {};
@@ -22,21 +26,36 @@ export default function NotificationItem({ data, onRead, onRemove }) {
     SYSTEM: <Bell size={20} />
   };
 
-  const handleAccept = (e) => {
+  const handleAccept = async (e) => {
     e.stopPropagation();
-    if (data.isUnread) {
-      markOneAsReadLocally();
+    try {
+      await acceptInvitationFromNotification(metadata.invitationId);
+
+      if (data.isUnread) {
+        markOneAsReadLocally();
+      }
+      onRemove?.();
+    } catch (error) {
+      console.error(error);
     }
-    onRemove?.();
   };
 
-  const handleReject = (e) => {
+  const handleReject = async (e) => {
     e.stopPropagation();
-    if (data.isUnread) {
-      markOneAsReadLocally();
+    try {
+      await rejectInvitationFromNotification(metadata.invitationId);
+      if (data.isUnread) {
+        markOneAsReadLocally();
+      }
+      onRemove?.();
+    } catch (error) {
+      console.error(error);
     }
-    onRemove?.();
   };
+
+  console.log("Notification:", data);
+  console.log("Metadata:", metadata);
+  console.log("InvitationId:", metadata.invitationId);
 
   const handleNotificationClick = async () => {
     try {
