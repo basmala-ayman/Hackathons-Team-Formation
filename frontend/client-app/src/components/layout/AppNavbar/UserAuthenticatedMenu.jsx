@@ -38,6 +38,9 @@ function UserAuthenticatedMenu({ onLogout }) {
 
   const avatarUrl = (() => {
     if (!user?.profilePicture) return ANONYMOUS_AVATAR;
+    if (user.profilePicture.startsWith("blob:")) {
+      return user.profilePicture;
+    }
     const baseUrl = BACKEND_URL.replace("/api/v1", "");
     return `${baseUrl}${user.profilePicture}?t=${Date.now()}`;
   })();
