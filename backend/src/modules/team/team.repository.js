@@ -33,10 +33,14 @@ const addTeamSkills = async (teamSkillsData) => {
 };
 
 //this will taking all the members that the user want to invite them and making invitations to them all in the same time 
-const createInvitations = async (invitationsData) => {
-  return prisma.teamInvitation.createMany({
-    data: invitationsData,
-  });
+const createInvitations = async (data) => {
+  return Promise.all(
+    data.map((invitation) =>
+      prisma.teamInvitation.create({
+        data: invitation,
+      })
+    )
+  );
 };
 
 //now here we want to add the project things in the repositry too

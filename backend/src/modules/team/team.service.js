@@ -162,7 +162,7 @@ const createTeam = async (ownerId, data) => {
         //the deadlign for the invited persons to accept or reject the invitations will be 1 days for making updates before sending to the model
         deadline.setDate(deadline.getDate() + 1);
 
-        await teamRepository.createInvitations(
+        const invitations = await teamRepository.createInvitations(
             safeMembers.map((receiverId) => ({
                 teamId: team.id,
                 senderId: ownerId,
@@ -172,14 +172,15 @@ const createTeam = async (ownerId, data) => {
         );
 
         await notificationRepository.createNotifications(
-            safeMembers.map((receiverId) => ({
-                userId: receiverId,
+            invitations.map((invitation) => ({
+                userId: invitation.receiverId,
                 type: "TEAM_INVITE",
                 title: "New Team Invitation",
                 message: `You have been invited to join team "${team.name}" for ${hackathon.title}`,
                 metadata: {
                     teamId: team.id,
                     hackathonId: hackathon.id,
+                    invitationId: invitation.id,
                 },
             }))
         );
