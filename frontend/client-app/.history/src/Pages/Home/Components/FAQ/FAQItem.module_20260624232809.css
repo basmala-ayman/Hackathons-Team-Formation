@@ -1,0 +1,48 @@
+
+.faqItem {
+  border-radius: 1.5rem;
+  cursor: pointer;
+  border: 1px solid var(--color-primary-light-3);
+  transition: all 0.2s ease-in-out;
+}
+
+.faqItem:hover {
+  border-color: var(--color-primary-light);
+}
+
+.faqTitle {
+  font-size: var(--fs-small);
+  color: var(--color-text);
+}
+
+.iconContainer {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+}
+
+.icon {
+  font-size: 1.7rem;
+  line-height: 1;
+  transition: transform 0.1s ease-in;
+}
+
+.iconOpen {
+  transform: rotate(45deg);
+}
+
+.answerContainer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.02s ease-in-out, margin-top 0.07s ease-in-out;
+}
+
+.answerContainerOpen {
+  max-height: 200px; 
+  margin-top: 1rem;  /* Equivalent to Bootstrap mt-3 */
+}
+
+.answerText {
+  font-size: var(--fs-v-small);
+}

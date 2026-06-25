@@ -1,0 +1,71 @@
+import FAQItem from "./FAQItem";
+const FAQ_DATA = [
+
+  {
+    id: 1,
+    question: "Do I need to complete my profile before using Team Catalyst?",
+    answer:
+      "Yes. Your profile is one of the most important parts of the matching process. The more accurate your skills, interests, Bio, and preferences are, the better the AI can recommend suitable teammates and team options for you.",
+  },
+   {
+    id: 2,
+    question: "What if I already have a partial team?",
+    answer:
+      "You can easily invite your existing teammates to your group. Our AI will then match you with individuals who fill the remaining skill gaps in your partial team.",
+  },
+   {
+    id: 3,
+    question: "Can I create a team without having a project idea?",
+    answer:
+      "Yes. You can create a team request even if you don’t have a project idea yet. Just choose the hackathon, define the kind of team you want, and the platform will help you find suitable teammates.",
+  },
+  {
+    id: 5,
+    question: "What if I already have a project idea?",
+    answer:
+      "When creating your team, you can also add a project idea for the selected hackathon. Your idea can then be shown to users who are interested in that hackathon, and AI will use interested participants to help build a suitable team around it.",
+  },
+  {
+    id: 6,
+    question: "Can other users see my project idea?",
+    answer:
+      "Yes, if you add a project idea while creating your team, it will be displayed to users and if interested they may become part of your team.",
+  },
+   {
+    id: 7,
+    question: "What if I don’t have a team idea or team requirements?",
+    answer:
+      "You can simply apply to a hackathon as someone interested in joining it. In that case, the AI can match you with teams created by other users for that hackathon.",
+  },
+];
+function FAQ() {
+  return (
+    <div
+      className=" text-center"
+      style={{ background: "var(--color-primary-light-4)", padding:"6rem" }}
+    >
+      <section className="mb-5 container">
+        <h2
+          className="fw-bold mb-3"
+          style={{
+            fontSize: "var(--fs-h2)",
+            color: "var(--color-text)",
+          }}
+        >
+          Questions You May Have
+        </h2>
+        <p className="text-muted" style={{ fontSize: "var(--fs-regular)" }}>
+          Everything you need to know about TeamCatalyst
+        </p>
+
+        <div className="mt-5 mx-auto text-start" style={{ maxWidth: "850px" }}>
+          {FAQ_DATA.map((faq) => (
+            <FAQItem key={faq.id} question={faq.question} answer={faq.answer} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default FAQ;
