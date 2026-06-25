@@ -371,32 +371,32 @@ enum HackathonSource {
 }
 
 enum InterestType {
-  AR_VR
-  BEGINNER_FRIENDLY
-  BLOCKCHAIN
-  COMMUNICATION
-  CYBERSECURITY
-  DATABASES
-  DESIGN
-  DEVOPS
-  ECOMMERCE_RETAIL
-  EDUCATION
-  ENTERPRISE
-  FINTECH
-  GAMING
-  HEALTH
-  IOT
-  LIFEHACKS
-  LOW_NO_CODE
-  MACHINE_LEARNING_AI
-  MOBILE
-  MUSIC_ART
-  OPEN_ENDED
-  PRODUCTIVITY
-  QUANTUM
-  ROBOTIC_PROCESS_AUTOMATION
-  SERVERLESS
-  SOCIAL_GOOD
-  VOICE_SKILLS
-  WEB
+  AR_VR                       @map("AR/VR")
+  BEGINNER_FRIENDLY           @map("Beginner Friendly")
+  BLOCKCHAIN                  @map("Blockchain")
+  COMMUNICATION               @map("Communication")
+  CYBERSECURITY               @map("Cybersecurity")
+  DATABASES                   @map("Databases")
+  DESIGN                      @map("Design")
+  DEVOPS                      @map("DevOps")
+  ECOMMERCE_RETAIL            @map("E-commerce/Retail")
+  EDUCATION                   @map("Education")
+  ENTERPRISE                  @map("Enterprise")
+  FINTECH                     @map("Fintech")
+  GAMING                      @map("Gaming")
+  HEALTH                      @map("Health")
+  IOT                         @map("IoT")
+  LIFEHACKS                   @map("Lifehacks")
+  LOW_NO_CODE                 @map("Low/No Code")
+  MACHINE_LEARNING_AI         @map("Machine Learning/AI")
+  MOBILE                      @map("Mobile")
+  MUSIC_ART                   @map("Music/Art")
+  OPEN_ENDED                  @map("Open Ended")
+  PRODUCTIVITY                @map("Productivity")
+  QUANTUM                     @map("Quantum")
+  ROBOTIC_PROCESS_AUTOMATION  @map("Robotic Process Automation")
+  SERVERLESS                  @map("Serverless")
+  SOCIAL_GOOD                 @map("Social Good")
+  VOICE_SKILLS                @map("Voice skills")
+  WEB                         @map("Web")
 }

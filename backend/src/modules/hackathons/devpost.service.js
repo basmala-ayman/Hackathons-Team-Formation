@@ -22,7 +22,7 @@ const mapDevpostStatus = (status) => {
 
 const collectDevpostHackathons = async () => {
     let page = 0;
-    const maxPages = 10;
+    const maxPages = 5;
     while (page <= maxPages) {
         try {
             const { data } = await axios.get(`https://devpost.com/api/hackathons?page=${page}`);

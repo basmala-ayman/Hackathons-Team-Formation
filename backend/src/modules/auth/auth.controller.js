@@ -4,6 +4,7 @@
 
 const authService = require("./auth.service");
 const AppError = require("../../utils/AppError");
+const config= require("../../config/env");
 
 // register
 const register = async (req, res, next) => {

@@ -76,6 +76,14 @@ const createTeam = async (ownerId, data) => {
         );
     }
 
+    //check if the user already create team for this hackathon before or no
+    const existingTeam = await teamRepository.findUserTeamForHackathon(ownerId, hackathon.id);
+    if (existingTeam) {
+        throw new AppError(
+            "You already have a team for this hackathon.",
+            400
+        );
+    }
 
     //now the user who try to create this team cannot create this team if he is already interested in this
     //so we just need to check
@@ -276,154 +284,154 @@ const getTeamById = async (teamId) => {
 };
 
 const respondToInvitation = async (
-  invitationId,
-  userId,
-  action
+    invitationId,
+    userId,
+    action
 ) => {
-  if (!["ACCEPT", "REJECT"].includes(action)) {
-    throw new AppError(
-      "Action must be ACCEPT or REJECT",
-      400
-    );
-  }
-
-  const invitation =
-    await teamRepository.findInvitationById(
-      invitationId
-    );
-
-  if (!invitation) {
-    throw new AppError(
-      "Invitation not found",
-      404
-    );
-  }
-
-  if (invitation.receiverId !== userId) {
-    throw new AppError(
-      "This invitation is not for you",
-      403
-    );
-  }
-
-  if (invitation.status !== "PENDING") {
-    throw new AppError(
-      "Invitation already responded to",
-      400
-    );
-  }
-
-  if (invitation.deadline < new Date()) {
-    throw new AppError(
-      "Invitation has expired",
-      400
-    );
-  }
-
-  // ACCEPT
-  if (action === "ACCEPT") {
-    await teamRepository.updateInvitationStatus(
-      invitationId,
-      "ACCEPTED"
-    );
-
-    await teamRepository.addTeamMember({
-      teamId: invitation.teamId,
-      userId,
-    });
-
-    const team =
-      await prisma.team.findUnique({
-        where: {
-          id: invitation.teamId,
-        },
-        include: {
-          members: true,
-        },
-      });
-
-    const teamComplete =
-      team.members.length >= team.size;
-
-    if (teamComplete) {
-      await prisma.team.update({
-        where: {
-          id: team.id,
-        },
-        data: {
-          status: "COMPLETE",
-        },
-      });
+    if (!["ACCEPT", "REJECT"].includes(action)) {
+        throw new AppError(
+            "Action must be ACCEPT or REJECT",
+            400
+        );
     }
 
+    const invitation =
+        await teamRepository.findInvitationById(
+            invitationId
+        );
+
+    if (!invitation) {
+        throw new AppError(
+            "Invitation not found",
+            404
+        );
+    }
+
+    if (invitation.receiverId !== userId) {
+        throw new AppError(
+            "This invitation is not for you",
+            403
+        );
+    }
+
+    if (invitation.status !== "PENDING") {
+        throw new AppError(
+            "Invitation already responded to",
+            400
+        );
+    }
+
+    if (invitation.deadline < new Date()) {
+        throw new AppError(
+            "Invitation has expired",
+            400
+        );
+    }
+
+    // ACCEPT
+    if (action === "ACCEPT") {
+        await teamRepository.updateInvitationStatus(
+            invitationId,
+            "ACCEPTED"
+        );
+
+        await teamRepository.addTeamMember({
+            teamId: invitation.teamId,
+            userId,
+        });
+
+        const team =
+            await prisma.team.findUnique({
+                where: {
+                    id: invitation.teamId,
+                },
+                include: {
+                    members: true,
+                },
+            });
+
+        const teamComplete =
+            team.members.length >= team.size;
+
+        if (teamComplete) {
+            await prisma.team.update({
+                where: {
+                    id: team.id,
+                },
+                data: {
+                    status: "COMPLETE",
+                },
+            });
+        }
+
+        const user =
+            await prisma.user.findUnique({
+                where: {
+                    id: userId,
+                },
+                select: {
+                    name: true,
+                },
+            });
+
+        await notificationRepository.createNotifications([
+            {
+                userId: team.ownerId,
+                type: "INVITE_ACCEPTED",
+                title: "Invitation Accepted",
+                message: `${user.name} accepted your invitation to join "${team.name}".`,
+                metadata: {
+                    teamId: team.id,
+                    invitedUserId: userId,
+                    teamComplete,
+                },
+            },
+        ]);
+
+        return {
+            message:
+                "Invitation accepted successfully",
+            teamComplete,
+        };
+    }
+
+    // REJECT
+    await teamRepository.updateInvitationStatus(
+        invitationId,
+        "REJECTED"
+    );
+
     const user =
-      await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          name: true,
-        },
-      });
+        await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                name: true,
+            },
+        });
 
     await notificationRepository.createNotifications([
-      {
-        userId: team.ownerId,
-        type: "INVITE_ACCEPTED",
-        title: "Invitation Accepted",
-        message: `${user.name} accepted your invitation to join "${team.name}".`,
-        metadata: {
-          teamId: team.id,
-          invitedUserId: userId,
-          teamComplete,
+        {
+            userId: invitation.team.ownerId,
+            type: "INVITE_REJECTED",
+            title: "Invitation Rejected",
+            message: `${user.name} rejected your invitation to join "${invitation.team.name}".`,
+            metadata: {
+                teamId: invitation.teamId,
+                invitedUserId: userId,
+            },
         },
-      },
     ]);
 
     return {
-      message:
-        "Invitation accepted successfully",
-      teamComplete,
+        message:
+            "Invitation rejected successfully",
     };
-  }
-
-  // REJECT
-  await teamRepository.updateInvitationStatus(
-    invitationId,
-    "REJECTED"
-  );
-
-  const user =
-    await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        name: true,
-      },
-    });
-
-  await notificationRepository.createNotifications([
-    {
-      userId: invitation.team.ownerId,
-      type: "INVITE_REJECTED",
-      title: "Invitation Rejected",
-      message: `${user.name} rejected your invitation to join "${invitation.team.name}".`,
-      metadata: {
-        teamId: invitation.teamId,
-        invitedUserId: userId,
-      },
-    },
-  ]);
-
-  return {
-    message:
-      "Invitation rejected successfully",
-  };
 };
 
 module.exports = {
-  createTeam,
-  getTeamById,
-  respondToInvitation,
+    createTeam,
+    getTeamById,
+    respondToInvitation,
 };

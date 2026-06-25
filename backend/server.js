@@ -11,7 +11,7 @@ const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.s
 
 const PORT = config.port;
 
-const RUN_SCRAPER_IMMEDIATELY = true;
+const RUN_SCRAPER_IMMEDIATELY = false;
 
 // there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
 const startServer = async () => {

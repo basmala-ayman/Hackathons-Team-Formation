@@ -69,6 +69,17 @@ const updateInvitationStatus = async (
   });
 };
 
+const findUserTeamForHackathon = async (userId, hackathonId) => {
+  return prisma.team.findFirst({
+    where: {
+      hackathonId,
+      OR: [
+        { ownerId: userId },
+        { members: { some: { userId } } }
+      ]
+    }
+  });
+};
 
 module.exports = {
   upsertSkill,
@@ -80,4 +91,5 @@ module.exports = {
 
   findInvitationById,
   updateInvitationStatus,
+  findUserTeamForHackathon
 };
