@@ -8,23 +8,29 @@ const getUserDashboard = async (userId) => {
     throw new AppError("User not found", 404);
   }
 
-  // Combine and include status for frontend distinction
-  const allTeamsList = [
-    ...user.ownedTeams.map((team) => ({
-      id: team.id,
-      name: team.name,
-      status: team.status, // "COMPLETE" or "FORMING"
-      role: "Leader/Owner",
-      hackathon: team.hackathon?.title || "General Event"
-    })),
-    ...user.teamMemberships.map((membership) => ({
+  const ownedTeamIds = new Set(
+  user.ownedTeams.map(team => team.id)
+);
+
+const allTeamsList = [
+  ...user.ownedTeams.map((team) => ({
+    id: team.id,
+    name: team.name,
+    status: team.status,
+    role: "Owner",
+    hackathon: team.hackathon?.title || "General Event"
+  })),
+
+  ...user.teamMemberships
+    .filter(membership => !ownedTeamIds.has(membership.team.id))
+    .map((membership) => ({
       id: membership.team.id,
       name: membership.team.name,
-      status: membership.team.status, // "COMPLETE" or "FORMING"
+      status: membership.team.status,
       role: "Member",
       hackathon: membership.team.hackathon?.title || "General Event"
     }))
-  ];
+];
 
   const recommendedTeamsCount = user.matchingRequests.reduce((total, request) => {
     return total + (request.recommendations?.length || 0);
