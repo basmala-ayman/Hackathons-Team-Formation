@@ -151,7 +151,7 @@ const handleValidationAndNext = () => {
           </span>
           <div className="d-flex flex-wrap gap-3">
             {formData.skills.map((skill, index) => {
-              const displayLabel = reverseSkillsMap[skill] || skill;
+              const displayLabel = reverseSkillsMap[skill];
               return (
                 <div key={index} className={styles.skillChip}>
                   {displayLabel}

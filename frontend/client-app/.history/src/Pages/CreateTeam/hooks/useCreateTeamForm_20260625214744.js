@@ -3,8 +3,6 @@ import { getBasicUsers } from "../../../services/userService";
 import { getHackathonNames } from "../../../services/hackathonService";
 import { createTeam } from "../../../services/teamService";
 import { INITIAL_FORM_DATA } from "../CreateTeam.constants";
-import toast from "react-hot-toast";
-
 
 //function to get saved user's data
 const getSavedData = (key, defaultValue) => {
