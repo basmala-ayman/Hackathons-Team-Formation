@@ -168,19 +168,13 @@ export default function UserProfile({ isOwner = true }) {
         );
       }
 
-      console.log("====== FORM DATA ======");
-      for (const [key, value] of finalPayload.entries()) {
-        console.log(key, value);
-      }
       const response = await updateUserProfile(finalPayload);
-
-      console.log("UPDATE RESPONSE");
-      console.log(response.data);
 
       const responseData = response?.data?.data || response?.data || response;
       const profileData = responseData.profile || {};
 
       let newAvatar = values.avatar;
+
       if (profileData.profilePicture) {
         const baseUrl = BACKEND_URL.replace("/api/v1", "");
         let picPath = profileData.profilePicture;
@@ -214,7 +208,6 @@ export default function UserProfile({ isOwner = true }) {
         avatarFile: null,
       }));
 
-      if (isFinal) setIsWizardOpen(false);
       return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -240,6 +233,7 @@ export default function UserProfile({ isOwner = true }) {
       </Container>
     );
   }
+
 
 
   return (

@@ -8,7 +8,7 @@ const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png"
 
 export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner }) {
   const fileInputRef = useRef(null);
-  const { user: authUser } = useAuth();
+  const { user: authUser, setUser } = useAuth();
   const [previewUrl, setPreviewUrl] = useState(detailedUser?.avatar || null);
 
   useEffect(() => {
@@ -44,6 +44,10 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
     if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
     const blobUrl = URL.createObjectURL(file);
     setPreviewUrl(blobUrl);
+    setUser(prev => ({
+      ...prev,
+      profilePicture: blobUrl,
+    }));
     setFormData(prev => ({ ...prev, avatar: blobUrl, avatarFile: file }));
     e.target.value = "";
   };
