@@ -7,11 +7,11 @@ const logger = require("./src/config/logger");
 // const cronJobs = require("./src/jobs/hackathon.cron");
 // for scheduling the cron jobs
 const { initCronJobs } = require("./src/utils/cron");
-// const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.service");
+const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.service");
 
 const PORT = config.port;
 
-// const RUN_SCRAPER_IMMEDIATELY = true;
+const RUN_SCRAPER_IMMEDIATELY = true;
 
 // there is a note related to the prisma that it is lazy connection that means it will connect and ensure that the connection is correct in the first query called 
 const startServer = async () => {
@@ -22,17 +22,17 @@ const startServer = async () => {
     logger.info("postgreSQL connected via prisma 🔥");
 
     // for scheduling the cron jobs
-     initCronJobs();
+    initCronJobs();
     logger.info("Cron jobs initialized successfully! ⏰");
 
     // // Immediate execution for testing
-    // if (RUN_SCRAPER_IMMEDIATELY) {
-    //   logger.info("Running immediate hackathon collection for testing...");
-    //   // Using .catch() here so the server still starts even if the initial scrape fails
-    //   collectDevpostHackathons().catch((err) => {
-    //     logger.error("Error during immediate collection:", err);
-    //   });
-    // }
+    if (RUN_SCRAPER_IMMEDIATELY) {
+      logger.info("Running immediate hackathon collection for testing...");
+      // Using .catch() here so the server still starts even if the initial scrape fails
+      collectDevpostHackathons().catch((err) => {
+        logger.error("Error during immediate collection:", err);
+      });
+    }
 
     //make the server
     app.listen(PORT, () => {
