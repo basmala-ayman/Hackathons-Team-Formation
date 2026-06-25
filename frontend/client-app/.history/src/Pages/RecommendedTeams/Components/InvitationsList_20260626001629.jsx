@@ -2,15 +2,18 @@ import TeamCard from "../TeamCard/TeamCard";
 import { RaiseUpIcon } from "../../../assets/Icons"; 
 
 function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onReject }) {
-  
-  const pendingInvitations = invitations.filter(
+  return (
+    <>
+      const pendingInvitations = invitations.filter(
     (invitation) => invitation.status === "PENDING"
   );
 
+  // 2. If there are no pending invitations, show the empty state
   if (pendingInvitations.length === 0) {
-    return <EmptyState message="No invitations found" />;
+    return <EmptyState message="No pending invitations found" />;
   }
 
+  // 3. Otherwise, render the pending invitations
   return (
     <>
       {pendingInvitations.map((invitation) => {
@@ -57,4 +60,5 @@ function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onRe
     </>
   );
 }
+
 export default InvitationsList;

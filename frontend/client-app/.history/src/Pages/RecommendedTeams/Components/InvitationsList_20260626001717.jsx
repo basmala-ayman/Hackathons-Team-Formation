@@ -3,14 +3,17 @@ import { RaiseUpIcon } from "../../../assets/Icons";
 
 function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onReject }) {
   
+  // 1. Filter out any invitations that are not PENDING
   const pendingInvitations = invitations.filter(
     (invitation) => invitation.status === "PENDING"
   );
 
+  // 2. If there are no pending invitations, show the empty state
   if (pendingInvitations.length === 0) {
-    return <EmptyState message="No invitations found" />;
+    return <EmptyState message="No pending invitations found" />;
   }
 
+  // 3. Otherwise, render the pending invitations
   return (
     <>
       {pendingInvitations.map((invitation) => {
