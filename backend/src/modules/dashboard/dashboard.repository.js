@@ -5,28 +5,22 @@ const getUserDashboardData = (userId) => {
     where: { id: userId },
     select: {
       name: true,
-      // Fetching only teams owned by user
+      // Fetching all owned teams (status: FORMING and COMPLETE)
       ownedTeams: {
-        where: { status: "COMPLETE" },
         include: { hackathon: true }
       },
-      // Fetching only teams user joined as a member
+      // Fetching all teams user joined as a member
       teamMemberships: {
-        where: {
-          team: { status: "COMPLETE" }
-        },
         include: {
           team: {
             include: { hackathon: true }
           }
         }
       },
-      // Only need the count/status for pending invitations
       receivedInvitations: {
         where: { status: "PENDING" },
         select: { id: true }
       },
-      // Recent activities limited to 5 records
       notifications: {
         take: 5,
         orderBy: { createdAt: "desc" },
@@ -37,7 +31,6 @@ const getUserDashboardData = (userId) => {
           createdAt: true
         }
       },
-      // Used to pull and count recommendations
       matchingRequests: {
         include: {
           recommendations: {
@@ -72,23 +65,13 @@ const getAdminDashboardData = async () => {
     prisma.user.count(),
     prisma.team.count(),
     prisma.team.count({ where: { status: "COMPLETE" } }),
-
     prisma.team.count({ where: { formationMethod: "AUTO_MATCHED" } }),
     prisma.team.count({ where: { formationMethod: "MANUAL" } }),
     prisma.team.count({ where: { formationMethod: "INVITED" } }),
-
-    prisma.user.findMany({
-      take: 5,
-      orderBy: { createdAt: "desc" }
-    }),
-    prisma.team.findMany({
-      take: 5,
-      orderBy: { createdAt: "desc" }
-    }),
-
+    prisma.user.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
+    prisma.team.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
     prisma.user.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
     prisma.team.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
-
     prisma.user.findMany({
       where: { createdAt: { gte: thirtyDaysAgo } },
       select: { createdAt: true },
@@ -97,7 +80,6 @@ const getAdminDashboardData = async () => {
   ]);
 
   const totalFormation = autoMatchedTeams + manualTeams + invitedTeams;
-
   const growthTimelineMap = {};
   growthChartRaw.forEach((user) => {
     const day = user.createdAt.toISOString().split("T")[0];
@@ -110,39 +92,21 @@ const getAdminDashboardData = async () => {
   }));
 
   return {
-    systemOverview: {
-      totalUsers,
-      totalTeams,
-      completeTeams
-    },
+    systemOverview: { totalUsers, totalTeams, completeTeams },
     teamFormationStats: {
       autoMatched: totalFormation ? Math.round((autoMatchedTeams / totalFormation) * 100) : 0,
       manual: totalFormation ? Math.round((manualTeams / totalFormation) * 100) : 0,
       invited: totalFormation ? Math.round((invitedTeams / totalFormation) * 100) : 0
     },
     participantsGrowth,
-    weeklyActivity: {
-      newUsers: weeklyNewUsersCount,
-      newTeams: weeklyNewTeamsCount
-    },
+    weeklyActivity: { newUsers: weeklyNewUsersCount, newTeams: weeklyNewTeamsCount },
     recentActivities: [
-      ...recentUsers.map((user) => ({
-        type: "NEW_USER",
-        message: `${user.name} joined platform`,
-        date: user.createdAt
-      })),
-      ...recentTeams.map((team) => ({
-        type: "NEW_TEAM",
-        message: `${team.name} created`,
-        date: team.createdAt
-      }))
+      ...recentUsers.map((user) => ({ type: "NEW_USER", message: `${user.name} joined platform`, date: user.createdAt })),
+      ...recentTeams.map((team) => ({ type: "NEW_TEAM", message: `${team.name} created`, date: team.createdAt }))
     ]
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       .slice(0, 10)
   };
 };
 
-module.exports = {
-  getUserDashboardData,
-  getAdminDashboardData
-};
+module.exports = { getUserDashboardData, getAdminDashboardData };

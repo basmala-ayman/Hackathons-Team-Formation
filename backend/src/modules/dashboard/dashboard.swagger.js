@@ -36,7 +36,7 @@
  *                     metrics:
  *                       type: object
  *                       properties:
- *                         activeTeamsCount:
+ *                         allTeamsCount:
  *                           type: integer
  *                           example: 2
  *                         recommendedTeamsCount:
@@ -45,7 +45,7 @@
  *                         pendingInvitationsCount:
  *                           type: integer
  *                           example: 1
- *                     activeTeams:
+ *                     allTeams:
  *                       type: array
  *                       items:
  *                         type: object
@@ -55,6 +55,9 @@
  *                           name:
  *                             type: string
  *                             example: Titan Coders
+ *                           status:
+ *                             type: string
+ *                             example: FORMING
  *                           role:
  *                             type: string
  *                             example: Member

@@ -8,23 +8,24 @@ const getUserDashboard = async (userId) => {
     throw new AppError("User not found", 404);
   }
 
-  // 1. Gather info about active teams (status === "COMPLETE")
-  const activeTeamsList = [
+  // Combine and include status for frontend distinction
+  const allTeamsList = [
     ...user.ownedTeams.map((team) => ({
       id: team.id,
       name: team.name,
+      status: team.status, // "COMPLETE" or "FORMING"
       role: "Leader/Owner",
       hackathon: team.hackathon?.title || "General Event"
     })),
     ...user.teamMemberships.map((membership) => ({
       id: membership.team.id,
       name: membership.team.name,
+      status: membership.team.status, // "COMPLETE" or "FORMING"
       role: "Member",
       hackathon: membership.team.hackathon?.title || "General Event"
     }))
   ];
 
-  // 2. Extract and count pending recommended teams across all matching requests
   const recommendedTeamsCount = user.matchingRequests.reduce((total, request) => {
     return total + (request.recommendations?.length || 0);
   }, 0);
@@ -32,11 +33,11 @@ const getUserDashboard = async (userId) => {
   return {
     welcomeMessage: `Welcome back, ${user.name}!`,
     metrics: {
-      activeTeamsCount: activeTeamsList.length,
+      allTeamsCount: allTeamsList.length,
       recommendedTeamsCount: recommendedTeamsCount,
       pendingInvitationsCount: user.receivedInvitations.length
     },
-    activeTeams: activeTeamsList,
+    allTeams: allTeamsList,
     recentActivities: user.notifications.map((notification) => ({
       id: notification.id,
       type: notification.type,
@@ -50,7 +51,4 @@ const getAdminDashboard = async () => {
   return dashboardRepository.getAdminDashboardData();
 };
 
-module.exports = {
-  getUserDashboard,
-  getAdminDashboard
-};
+module.exports = { getUserDashboard, getAdminDashboard };
