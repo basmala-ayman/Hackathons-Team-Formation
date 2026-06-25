@@ -7,12 +7,16 @@ export default function TeamCard({ team }) {
 
   const getBadgeVariant = (status) => {
     switch (status?.toLowerCase()) {
-      case "active": return "success";
-      case "pending": return "warning";
-      case "completed": return "secondary";
-      default: return "light";
+      case "forming":
+        return "warning";
+
+      case "complete":
+        return "success";
+
+      default:
+        return "secondary";
     }
-  }
+  };
 
   return (
     <Card className={styles.teamCard}>
@@ -20,32 +24,42 @@ export default function TeamCard({ team }) {
         <Stack direction="horizontal" gap={3} className="justify-content-between align-items-start mb-3">
           <div>
             <Card.Title className={styles.teamName}>{team.name}</Card.Title>
-            <Card.Text className={styles.challengeName}>{team.challenge}</Card.Text>
+            <div className={styles.challenge}>
+              <span className={styles.challengeLabel}>
+                <Trophy size={14} />
+                Hackathon
+              </span>
+
+              <p className={styles.challengeName}>
+                {team.challenge}
+              </p>
+            </div>
           </div>
           <Badge
             pill
-            bg={getBadgeVariant(team.status)}
-            className={`${styles.statusBadge} ${styles[team.status?.toLowerCase()]}`}
+            className={`${styles.statusBadge} ${styles[team.status.toLowerCase()]}`}
           >
-            {team.status}
+            {team.status === "FORMING" ? "Forming" : "Complete"}
           </Badge>
         </Stack>
         <div className={styles.cardFooter}>
           <Stack direction="horizontal" gap={4}>
-            <div className={styles.metaItem}>
-              <Users size={16} />
-              <span>{team.members} members</span>
-            </div>
+            {team.role && (
+              <div className={styles.metaItem}>
+                <Users size={16} />
+                <span>{team.role}</span>
+              </div>
+            )}
 
-            {team.status === "Completed" ? (
-              <div className={`${styles.metaItem} ${styles.achievement}`}>
-                <Trophy size={16} />
-                <span>{team.achievement || "Participation"}</span>
+            {team.status === "FORMING" ? (
+              <div className={styles.metaItem}>
+                <Clock size={16} />
+                <span>Team in Progress</span>
               </div>
             ) : (
               <div className={styles.metaItem}>
-                <Clock size={16} />
-                <span>{team.timeLeft}</span>
+                <Trophy size={16} />
+                <span>Team Complete</span>
               </div>
             )}
           </Stack>

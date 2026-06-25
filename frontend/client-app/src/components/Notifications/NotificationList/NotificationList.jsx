@@ -52,7 +52,7 @@ export default function NotificationList({ filter }) {
     { id: "all", label: "All", types: [] },
     { id: "team", label: "Team Invitations", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
     { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] },
-    { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED", "ROUND2_AVAILABLE"] },
+    { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED"] },
   ];
 
   const filteredNotifications = useMemo(() => {
@@ -64,7 +64,13 @@ export default function NotificationList({ filter }) {
   useEffect(() => {
     setLoading(true);
     getMyNotifications(1, 20)
-      .then((res) => setAllNotifications(res.notifications || []))
+      .then((res) =>
+        setAllNotifications(
+          (res.notifications || []).filter(
+            (n) => n.type !== "ROUND2_AVAILABLE"
+          )
+        )
+      )
       .catch((err) => console.error("Error fetching:", err))
       .finally(() => setLoading(false));
   }, []);

@@ -23,6 +23,8 @@ import {
 function UserAuthenticatedMenu({ onLogout }) {
   const [isOpen, setIsopen] = useState(false);
   const { user } = useAuth();
+  console.log("USER:", user);
+  console.log("PROFILE:", user?.profilePicture);
   const { unreadCount } = useNotifications();
   const rawName = user?.name || "User";
   const firstName = rawName.split(" ")[0];
@@ -35,13 +37,10 @@ function UserAuthenticatedMenu({ onLogout }) {
   const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
   const avatarUrl = (() => {
-    if (!user?.profilePicture) {
-      return ANONYMOUS_AVATAR;
-    }
+    if (!user?.profilePicture) return ANONYMOUS_AVATAR;
     const baseUrl = BACKEND_URL.replace("/api/v1", "");
-    return `${baseUrl}${user.profilePicture}`;
+    return `${baseUrl}${user.profilePicture}?t=${Date.now()}`;
   })();
-  
 
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">

@@ -73,14 +73,19 @@ export default function UserDashboard() {
   }
 
   const welcomeMessage = dashboardData?.welcomeMessage || "Welcome back!";
-  const metrics = dashboardData?.metrics || { activeTeamsCount: 0, recommendedTeamsCount: 0, pendingInvitationsCount: 0 };
-  const activeTeams = dashboardData?.activeTeams || [];
+  const metrics = dashboardData?.metrics || {
+    allTeamsCount: 0,
+    recommendedTeamsCount: 0,
+    pendingInvitationsCount: 0,
+  };
+  const activeTeams = dashboardData?.allTeams || [];
+  console.log(activeTeams);
   const recentActivities = dashboardData?.recentActivities || [];
 
   const statsData = [
     {
       title: "Active Teams",
-      value: metrics.activeTeamsCount,
+      value: metrics.allTeamsCount,
       subText: "Teams you are coding with"
     },
     {
@@ -146,10 +151,9 @@ export default function UserDashboard() {
                   const normalizedTeam = {
                     id: team.id || idx,
                     name: team.name,
-                    challenge: team.hackathon || "Independent Challenge",
-                    status: team.role || "Member",
-                    members: "Active",
-                    timeLeft: "Ongoing"
+                    challenge: team.hackathon,
+                    status: team.status,
+                    role: team.role,
                   };
                   return <TeamCard key={normalizedTeam.id} team={normalizedTeam} />;
                 })
@@ -183,13 +187,6 @@ export default function UserDashboard() {
               )}
             </div>
 
-            {/* {recentActivities.length > 3 && (
-              <div className="text-center mt-3">
-                <button className="btn btn-link btn-sm text-decoration-none" onClick={() => navigate("/activities")}>
-                  View All Activities
-                </button>
-              </div>
-            )} */}
 
             {/* Quick Actions Card */}
             <div className="card border-0 shadow-sm p-4 mb-4" style={{ borderRadius: "1.5rem", backgroundColor: "var(--color-white)" }}>

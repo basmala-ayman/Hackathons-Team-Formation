@@ -61,8 +61,6 @@ export default function UserProfile({ isOwner = true }) {
           const profileData = response.data?.data || response.data || response;
           const coreProfile = profileData.profile || {};
 
-          console.log("Raw Profile Response on Refresh:", profileData);
-
           let parsedSkills = Array.isArray(profileData.skills) ? profileData.skills : [];
           let parsedRoles = Array.isArray(profileData.techRoles) ? profileData.techRoles : [];
 
@@ -100,7 +98,6 @@ export default function UserProfile({ isOwner = true }) {
               .map(i => typeof i === "string" ? i : i.value)
               .filter(i => VALID_INTERESTS.has(i));
           }
-          console.log("Fetched interests:", profileData.intrestes);
 
           setValues({
             avatar: rawAvatar,
@@ -227,11 +224,6 @@ export default function UserProfile({ isOwner = true }) {
     }
   }, [values, setValues]);
 
-  // useEffect(() => {
-  //   if (values.avatarFile) {
-  //     handleProfileUpdate({ avatarFile: values.avatarFile });
-  //   }
-  // }, [values.avatarFile]);
 
   useEffect(() => {
     if (values.avatarFile instanceof File) {

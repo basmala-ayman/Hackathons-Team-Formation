@@ -6,10 +6,21 @@
   margin-bottom: 1.6rem;
 }
 
+.forming {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.complete {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+
 .teamCard:hover {
   transform: translateY(-0.3rem);
   border-color: var(--color-primary-dark) !important;
-  background-color:#ffff !important;
+  background-color: #ffff !important;
 }
 
 .teamName {
@@ -27,21 +38,8 @@
 
 .statusBadge {
   padding: 0.6rem 1.2rem;
-  font-size:var(--fs-v-small);
+  font-size: var(--fs-v-small);
   color: var(--color-white) !important;
-}
-
-.active {
-  background-color: #e6fffa;
-  color: #38a169;
-}
-.pending {
-  background-color: #fffbeb;
-  color: #d69e2e;
-}
-.completed {
-  background-color: #edf2f7;
-  color: var(--color-dark-gray);
 }
 
 .cardFooter {
@@ -57,4 +55,26 @@
   color: var(--color-dark-gray);
   font-size: 1.3rem;
   font-weight: 500;
+}
+
+.challenge {
+  margin-top: 0.8rem;
+}
+
+.challengeLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  color: var(--color-primary-dark);
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  margin-bottom: 0.5rem;
+}
+
+.challengeName {
+  color: var(--color-dark-gray);
+  font-size: 1.45rem;
+  line-height: 1.6;
 }

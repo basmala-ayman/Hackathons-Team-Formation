@@ -80,23 +80,9 @@ export default function Login() {
     <AuthLayout>
       <div className={styles.loginContainer}>
         <h2 className={styles.title}>Welcome Back!</h2>
-        {/* Social Buttons */}
-        {/* <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
-          <button
-            type="button"
-            className={styles.socialBtn}
-            onClick={handleGoogleLogin}
-          >
-            <GoogleIcon /> Sign In with Google
-          </button>
-          <button type="button" className={styles.socialBtn}>
-            <GithubIcon /> Sign In with Github
-          </button>
-        </div> */}
-        {/* <div className={styles.divider}>
-          <span>Or login with email</span>
-        </div> */}
-
+        <p className={styles.subtitle}>
+          Continue your team formation journey.
+        </p>
         <form onSubmit={handleLogin}>
           <Input
             label="Email"

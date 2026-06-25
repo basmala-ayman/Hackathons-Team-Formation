@@ -86,20 +86,9 @@ export default function Register() {
     <AuthLayout>
       <div className={loginStyles.loginContainer}>
         <h2 className={loginStyles.title}>Create your account</h2>
-
-        {/* <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
-          <button type="button" className={loginStyles.socialBtn}>
-            <GoogleIcon /> Sign Up with Google
-          </button>
-          <button type="button" className={loginStyles.socialBtn}>
-            <GithubIcon /> Sign Up with Github
-          </button>
-        </div> */}
-        {/* 
-        <div className={loginStyles.divider}>
-          <span>Or register with email</span>
-        </div> */}
-
+        <p className={loginStyles.subtitle}>
+          Join TeamCatalyst and build your next winning team.
+        </p>
         <form
           onSubmit={handleRegister}
           noValidate

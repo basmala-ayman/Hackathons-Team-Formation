@@ -46,6 +46,27 @@ export const AuthProvider = ({ children }) => {
     loadUserProfile();
   }, []);
 
+  const refreshUser = async () => {
+    try {
+      const profileData = await getUserProfile();
+
+      console.log("PROFILE FROM API", profileData.profile?.profilePicture);
+
+      setUser(prev => {
+        const updated = {
+          ...prev,
+          profilePicture: profileData.profile?.profilePicture,
+        };
+
+        console.log("SETTING USER", updated);
+
+        return updated;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const login = async (credentials) => {
     setIsSubmitting(true);
 
@@ -162,6 +183,7 @@ export const AuthProvider = ({ children }) => {
         user,
         setUser,
         isAuthenticated,
+        refreshUser,
         login,
         logout,
         loading,

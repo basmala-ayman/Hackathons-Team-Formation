@@ -94,7 +94,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
   const [activeAction, setActiveAction] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [localValues, setLocalValues] = useState(() => ({ ...externalValues }));
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const { hackathonInterests } = useStaticData();
   const isSkillsOnly = mode === "skillsOnly";
 
@@ -151,6 +151,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
         hackathonInterests
       );
       const savedData = await onSave(finalPayload, true);
+      await refreshUser();
 
       setExternalValues((prev) => ({
         ...prev,
