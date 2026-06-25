@@ -30,12 +30,19 @@ export default function NotificationFilter({ activeFilter, onFilterChange, count
       count: safeCounts.declined || 0
     },
     {
+      id: "recommendations",
+      label: "Recommendations",
+      icon: <Bell size={18} />,
+      count: safeCounts.recommendations || 0,
+    },
+    {
       id: "matches",
       label: "Matches",
       icon: <Zap size={18} />,
       count: safeCounts.matches || 0
     },
   ];
+
 
   return (
     <div className={styles.filterCard}>

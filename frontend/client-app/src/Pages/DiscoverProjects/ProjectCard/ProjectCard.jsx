@@ -12,6 +12,7 @@ import {
   ChevronIconDown,
   HeartIcon,
 } from "../../../assets/Icons";
+import { getAvatarUrl } from "../../../utils/getAvatarUrl";
 function ProjectCard({
   title,
   description,
@@ -40,19 +41,21 @@ function ProjectCard({
   //state used to show (show more) or not
   const [canExpand, setCanExpand] = useState(false); //can expand and show more details or not
 
-  const BACKEND_URL =
-    import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ||
-    "http://localhost:3000";
+  // const BACKEND_URL =
+  //   import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ||
+  //   "http://localhost:3000";
 
   // Backend returns only a relative image path:
   // The browser cannot display this directly because it needs
   // the full URL including the server domain.
   // Example:- Relative path  -> /uploads/profile-pictures/pic.jpg
   // Full URL -> http://localhost:3000/uploads/profile-pictures/pic.jpg
-  const creatorAvatar = creator?.avatarUrl
-    ? `${BACKEND_URL}${creator.avatarUrl}`
-    : defaultProfile;
+  // const creatorAvatar = creator?.avatarUrl
+  //   ? `${BACKEND_URL}${creator.avatarUrl}`
+  //   : defaultProfile;
+  // console.log(creator);
 
+  const creatorAvatar = getAvatarUrl(creator?.avatarUrl);
   useEffect(() => {
     //get the real elements after render
     const titleElement = titleRef.current;

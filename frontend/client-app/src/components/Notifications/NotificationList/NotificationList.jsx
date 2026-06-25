@@ -38,10 +38,14 @@ export default function NotificationList({ filter }) {
       title: "No rejected invitations",
       description: "Rejected or expired invitations will appear here."
     },
-
+    recommendations: {
+      title: "No recommendations",
+      description:
+        "Recommended teams will appear here.",
+    },
     matches: {
       title: "No matches yet",
-      description: "When we find potential teammates or recommendations, you'll see them here."
+      description: "When we find potential team member, it will appear here."
     }
   };
 
@@ -52,7 +56,12 @@ export default function NotificationList({ filter }) {
     { id: "all", label: "All", types: [] },
     { id: "team", label: "Team Invitations", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
     { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] },
-    { id: "matches", label: "Matches", types: ["MATCH_FOUND", "RECOMMENDATION_RECEIVED"] },
+    { id: "matches", label: "Matches", types: ["MATCH_FOUND"] },
+    {
+      id: "recommendations",
+      label: "Recommendations",
+      types: ["RECOMMENDATION_RECEIVED"],
+    },
   ];
 
   const filteredNotifications = useMemo(() => {
@@ -75,7 +84,6 @@ export default function NotificationList({ filter }) {
       .finally(() => setLoading(false));
   }, []);
 
-  console.log(allNotifications)
 
   const handleMarkAsRead = async (id) => {
     await markNotificationAsRead(id);

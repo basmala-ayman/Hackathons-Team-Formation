@@ -155,10 +155,9 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
         githubUrl: localValues.githubUrl,
         linkedinUrl: localValues.linkedinUrl,
         name: localValues.name,
-        avatar: localValues.avatar || prev.avatar,
         avatarFile: null,
       }));
-
+      
       handleModalClose();
 
       setTimeout(() => {

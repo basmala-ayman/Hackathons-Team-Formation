@@ -26,14 +26,18 @@ export default function NotificationItem({ data, onRead, onRemove }) {
     SYSTEM: <Bell size={20} />
   };
 
+
   const handleAccept = async (e) => {
+    e.preventDefault();
     e.stopPropagation();
+
     try {
       await acceptInvitationFromNotification(metadata.invitationId);
 
       if (data.isUnread) {
         markOneAsReadLocally();
       }
+
       onRemove?.();
     } catch (error) {
       console.error(error);
@@ -41,15 +45,47 @@ export default function NotificationItem({ data, onRead, onRemove }) {
   };
 
   const handleReject = async (e) => {
+    e.preventDefault();
     e.stopPropagation();
+
     try {
       await rejectInvitationFromNotification(metadata.invitationId);
+
       if (data.isUnread) {
         markOneAsReadLocally();
       }
+
       onRemove?.();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSeeInvitation = async (e) => {
+    e.stopPropagation();
+
+    try {
+      await onRead?.();
+
+      navigate("/recommended-Teams", {
+        state: {
+          initialTab: "invitations",
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleViewRecommendations = async (e) => {
+    e.stopPropagation();
+
+    try {
+      await onRead?.();
+
+      navigate("/recommended-Teams");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -58,6 +94,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
   console.log("InvitationId:", metadata.invitationId);
 
   const handleNotificationClick = async () => {
+    console.log("CARD CLICKED");
     try {
       await onRead?.();
       const destination = getNotificationNavigation(data);
@@ -93,9 +130,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
               </span>
             </div>
           </div>
-
           <p className={styles.message}>{data.message}</p>
-
           <div className={styles.meta}>
             {metadata.openSlots !== undefined && (
               <span className={styles.matchBadge}>
@@ -112,7 +147,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
             </span>
           </div>
 
-          {(data.type === "JOIN_REQUEST" || data.type === "TEAM_INVITE") && (
+          {(data.type === "TEAM_INVITE" || data.type == "TEAM_REQUEST") && (
             <div className={styles.actions}>
               <button className={styles.btnAccept} onClick={handleAccept}>
                 <Check size={16} strokeWidth={3} />
@@ -125,12 +160,23 @@ export default function NotificationItem({ data, onRead, onRemove }) {
             </div>
           )}
 
+          {data.type === "MATCH_FOUND" && (
+            <CustomButton
+              variant="primary"
+              size="sm"
+              className="w-100 mt-4"
+              onClick={handleSeeInvitation}
+            >
+              View Invitation Details
+            </CustomButton>
+          )}
+
           {data.type === "RECOMMENDATION_RECEIVED" && (
             <CustomButton
               variant="primary"
               className="w-100 mt-4"
               size="sm"
-              onClick={() => window.location.href = '/recommended-Teams'}
+              onClick={handleViewRecommendations}
             >
               View Recommended Teams
             </CustomButton>

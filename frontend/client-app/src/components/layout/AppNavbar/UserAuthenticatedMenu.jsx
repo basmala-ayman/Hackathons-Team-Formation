@@ -2,10 +2,10 @@ import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import styles from "./UserAuthenticatedMenu.module.css";
-import defaultProfile from "../../../assets/defaultProfile.png";
 import { useAuth } from "../../../context/AuthContext/useAuth.js";
 import { useNotifications } from "../../../context/NotificationContext.jsx";
 import { Bell } from "lucide-react";
+import { getAvatarUrl } from "../../../utils/getAvatarUrl";
 
 import {
   getCSSVariable
@@ -34,16 +34,18 @@ function UserAuthenticatedMenu({ onLogout }) {
   }
 
   const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+  // const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
-  const avatarUrl = (() => {
-    if (!user?.profilePicture) return ANONYMOUS_AVATAR;
-    if (user.profilePicture.startsWith("blob:")) {
-      return user.profilePicture;
-    }
-    const baseUrl = BACKEND_URL.replace("/api/v1", "");
-    return `${baseUrl}${user.profilePicture}?t=${Date.now()}`;
-  })();
+  // const avatarUrl = (() => {
+  //   if (!user?.profilePicture) return ANONYMOUS_AVATAR;
+  //   if (user.profilePicture.startsWith("blob:")) {
+  //     return user.profilePicture;
+  //   }
+  //   const baseUrl = BACKEND_URL.replace("/api/v1", "");
+  //   return `${baseUrl}${user.profilePicture}?t=${Date.now()}`;
+  // })();
+
+  const avatarUrl = getAvatarUrl(user?.profilePicture);
 
   return (
     <div className="d-flex gap-3 align-items-center mt-lg-2 mt-3">

@@ -8,8 +8,7 @@ import {
 } from "lucide-react";
 import styles from "./MyProjectIdeasCard.module.css";
 import { useAuth } from "../../../context/AuthContext/useAuth";
-
-const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
 
 function MyProjectIdeasCard({ projects = [], userAvatar }) {
   const { user: authUser } = useAuth();
@@ -84,7 +83,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
               <div className={styles.creatorHeader}>
                 <div className={styles.creatorAvatarWrapper}>
                   <img
-                    src={userAvatar || ANONYMOUS_AVATAR}
+                   src={getAvatarUrl(userAvatar)}
                     alt="Creator"
                     className={styles.creatorImg}
                   />

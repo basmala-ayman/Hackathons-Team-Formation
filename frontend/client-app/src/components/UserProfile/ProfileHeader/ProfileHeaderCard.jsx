@@ -3,8 +3,8 @@ import { GithubIcon, LinkedinIcon } from "../../../shared/Icons/GoogleGithubIcon
 import { Mail, Link2, Edit3 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext/useAuth.js";
 import styles from "./ProfileHeaderCard.module.css";
-
-const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
+// const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner }) {
   const fileInputRef = useRef(null);
@@ -58,7 +58,7 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
         <div className="d-flex flex-column align-items-center gap-3">
           <div className={styles.avatarWrapper}>
             <img
-              src={previewUrl || ANONYMOUS_AVATAR}
+              src={getAvatarUrl(previewUrl)}
               alt={`${user.name}'s avatar`}
               className={styles.avatarImg}
               onError={(e) => { e.target.onerror = null; e.target.src = ANONYMOUS_AVATAR; }}
