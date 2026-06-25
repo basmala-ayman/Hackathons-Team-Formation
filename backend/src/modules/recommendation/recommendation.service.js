@@ -13,44 +13,18 @@ const getMyTeamsTab = async (userId) => {
     const teams = await recommendationRepository.findOwnerTeamsWithRecommendations(userId);
 
 
-    console.log(
-        "airecommendationMembers:",
-        JSON.stringify(
-            teams[0]?.matchingRequests[0]?.recommendations[0]?.airecommendationMembers,
-            null,
-            2
-        )
-    );
-
-    console.log("USER:", userId);
-
-    console.log("Teams found:", teams.length);
-
-    console.log(
-        "Matching requests:",
-        teams[0]?.matchingRequests?.length
-    );
-
-    console.log(
-        "Recommendations:",
-        teams[0]?.matchingRequests?.[0]?.recommendations?.length
-    );
-
-    console.dir(
-        teams[0]?.matchingRequests?.[0]?.recommendations?.[0],
-        { depth: null }
-    );
-
 
     return teams.map((team) => {
-        const latestRequest =
-            team.matchingRequests?.reduce((latest, current) => {
-                return !latest ||
-                    new Date(current.createdAt) > new Date(latest.createdAt)
-                    ? current
-                    : latest;
-            }, null) || null;
+        const completedRequests = team.matchingRequests.filter(req => req.status === "COMPLETED");
+        const latestCompleted = completedRequests.length > 0
+            ? completedRequests.reduce((a, b) => new Date(a.createdAt) > new Date(b.createdAt) ? a : b)
+            : null;
 
+        const latestRequest = latestCompleted || team.matchingRequests[0];
+
+        console.log("Selected request:", latestRequest?.id, "status:", latestRequest?.status);
+        console.log("Recommendations count:", latestRequest?.recommendations?.length);
+        
         const recommendations = latestRequest
             ? latestRequest.recommendations
                 .filter((rec) => rec.status !== "REJECTED" && rec.status !== "EXPIRED")

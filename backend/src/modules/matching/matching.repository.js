@@ -23,7 +23,16 @@ const findLastMatchingRequestForTeam = (teamId) => {
 
 const findTeamsQueueByHackathon = (hackathonId) => {
     return prisma.team.findMany({
-        where: { hackathonId, status: "FORMING" },
+        where: {
+            hackathonId,
+            status: "FORMING",
+            matchingRequests: {
+                none: {
+                    status: { in: ["COMPLETED", "PROCESSING"] },
+                    projectId: null,
+                },
+            },
+        },
         orderBy: { createdAt: "asc" },
         include: {
             skills: { include: { skill: { select: { name: true } } } },
@@ -37,9 +46,17 @@ const findHackathonsReadyForMatching = (threshold) => {
         where: {
             interestCount: { gte: threshold },
             status: { not: "ENDED" },
-            matchingRequests: {
-                none: { status: { in: ["COMPLETED", "PROCESSING"] }, projectId: null },
-            },
+            teams: {
+                some: {
+                    status: "FORMING",
+                    matchingRequests: {
+                        none: {
+                            status: { in: ["COMPLETED", "PROCESSING"] },
+                            projectId: null,
+                        },
+                    },
+                },
+            }
         },
     });
 };

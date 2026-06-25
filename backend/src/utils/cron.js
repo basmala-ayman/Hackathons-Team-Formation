@@ -70,15 +70,15 @@ const initCronJobs = () => {
     });
 
     // ── every hour — mark expired invitations + notify founders ──
-    cron.schedule("0 * * * *", async () => {
-        logger.info("Cron: checking expired invitations");
-        try {
-            await matchingService.checkExpiredInvitations();
-            logger.info("Cron: expired invitation check done");
-        } catch (err) {
-            logger.error("Cron: expired invitation check failed", { error: err.message });
-        }
-    });
+    // cron.schedule("0 * * * *", async () => {
+    //     logger.info("Cron: checking expired invitations");
+    //     try {
+    //         await matchingService.checkExpiredInvitations();
+    //         logger.info("Cron: expired invitation check done");
+    //     } catch (err) {
+    //         logger.error("Cron: expired invitation check failed", { error: err.message });
+    //     }
+    // });
 
 };
 

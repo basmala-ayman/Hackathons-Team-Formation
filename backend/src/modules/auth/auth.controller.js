@@ -32,16 +32,16 @@ const verifyEmail = async (req, res, next) => {
     //now lets get the token that as query param
     const { token } = req.query;
 
-    const result = await authService.verifyEmail(token);
+    await authService.verifyEmail(token);
 
-    res.status(200).json({
-      success: true,
-      message: result.message,
-      data: null,
-    });
+    return res.redirect(
+      `${config.frontendUrl}/login?verified=true`
+    );
 
   } catch (err) {
-    next(err);//to make it go to the global error handler
+    return res.redirect(
+      `${config.frontendUrl}/login?verified=false`
+    );
   }
 
 };
