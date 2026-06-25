@@ -10,7 +10,6 @@ import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/
 import { getUserProfile, updateUserProfile } from "../../services/userService";
 import { useAuth } from "../../context/AuthContext/useAuth";
 
-
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
 const defaultProfileData = {

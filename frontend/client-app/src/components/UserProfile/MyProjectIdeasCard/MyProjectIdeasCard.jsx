@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { FolderHeart, Users, Heart } from "lucide-react";
+import {
+  FolderHeart,
+  Users,
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import styles from "./MyProjectIdeasCard.module.css";
 import { useAuth } from "../../../context/AuthContext/useAuth";
 
@@ -10,7 +16,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 2;
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -23,16 +29,25 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
       <div className={styles.mainContainerCard}>
         <div className={styles.sectionHeader}>
           <div className={styles.titleGroup}>
-            <FolderHeart size={22} />
-            <h4>My Project Ideas</h4>
-            <span className={styles.countBadge}>
-              {projects.length}
-            </span>
+            <FolderHeart
+              size={22}
+              className={styles.headerIcon}
+            />
+            <h4 className={styles.sectionTitle}>
+              My Project Ideas
+            </h4>
           </div>
+
+          <span className={styles.subBadgeCount}>
+            {projects.length} Active
+          </span>
         </div>
 
         <div className={styles.emptyStateContainer}>
-          <p className={styles.emptyStateTitle}>No project ideas added yet.</p>
+          <p className={styles.emptyStateTitle}>
+            No project ideas added yet.
+          </p>
+
           <span className={styles.emptyStateSubtext}>
             Create your own project ideas to showcase them here!
           </span>
@@ -48,6 +63,9 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
           <FolderHeart size={22} className={styles.headerIcon} />
           <h4 className={styles.sectionTitle}>My Project Ideas</h4>
         </div>
+        <span className={styles.subBadgeCount}>
+          {projects.length} Active
+        </span>
       </div>
 
       <div className={styles.ideasGrid}>
@@ -129,18 +147,28 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
           >
-            Previous
+            <ChevronLeft size={18} />
           </button>
 
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={
+                currentPage === i + 1
+                  ? styles.activePage
+                  : ""
+              }
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
 
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
           >
-            Next
+            <ChevronRight size={18} />
           </button>
         </div>
       )}

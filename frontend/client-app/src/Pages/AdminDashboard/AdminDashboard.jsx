@@ -29,7 +29,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login", { replace: true });
+    navigate("/login");
   };
 
   if (isLoading) return <div className="text-center py-5"><Spinner animation="border" /></div>;
