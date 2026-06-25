@@ -9,26 +9,26 @@ import toast from "react-hot-toast";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log('projects' , projects);
+  console.log('projects', projects);
   const { registerInterest, loadingId } = useProjectInterest();
 
   const handleInterestToggle = async (projectId) => {
     try {
-      
+
       const response = await registerInterest(projectId);
       setProjects((prev) =>
         prev.map((project) =>
           project.id === projectId
             ? {
-                ...project,
-                isInterested: response.data?.isInterested,
-                totalInterestsCount: response.data?.currentPoolSize,
-              }
+              ...project,
+              isInterested: response.data?.isInterested,
+              totalInterestsCount: response.data?.currentPoolSize,
+            }
             : project,
         ),
       );
       // console.log(response.message);
-       toast.success("Interest submitted")
+      toast.success("Interest submitted")
     } catch (error) {
       const backendMessage = error.message;
       if (backendMessage) {
@@ -39,10 +39,10 @@ function DiscoverProjects() {
       // console.error(error);
     }
   };
-  if (loading ) {
+  if (loading) {
     return <LoadingState message="Loading Projects..." />;
   }
-  if (error || projects.length===0) {
+  if (error || projects.length === 0) {
     return <EmptyState message="No Projects found" />;
   }
 
@@ -70,7 +70,7 @@ function DiscoverProjects() {
         <div className="d-flex flex-column mt-4 gap-5">
           {projects.map((project) => (
             <ProjectCard
-            key={project.id}
+              key={project.id}
               title={project.title}
               description={project.description}
               hackathonName={project.hackathonTitle}
@@ -87,7 +87,7 @@ function DiscoverProjects() {
               }}
               onInterestToggle={() => handleInterestToggle(project.id)}
               isInterested={project.isInterested}
-              isLoading={loadingId===project.id}
+              isLoading={loadingId === project.id}
             ></ProjectCard>
           ))}
         </div>

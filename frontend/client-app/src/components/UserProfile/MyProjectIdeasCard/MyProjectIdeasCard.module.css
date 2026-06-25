@@ -65,6 +65,11 @@
   margin-bottom: 1.4rem;
 }
 
+.createdDate {
+  font-size: 1.2rem;
+  color: var(--color-dark-gray);
+}
+
 .creatorAvatarWrapper {
   width: 3.8rem;
   height: 3.8rem;
@@ -151,6 +156,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
+  max-height: 8rem;
+  overflow-y: auto;
 }
 
 .skillTag {
@@ -173,6 +180,22 @@
   gap: 1.8rem;
 }
 
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: var(--color-primary-light-2);
+  color: var(--color-primary-dark);
+}
+
 .infoBadge {
   display: flex;
   align-items: center;
@@ -181,6 +204,7 @@
   color: var(--color-dark-gray);
   font-weight: 600;
 }
+
 
 .heartIcon {
   color: var(--color-light-red);

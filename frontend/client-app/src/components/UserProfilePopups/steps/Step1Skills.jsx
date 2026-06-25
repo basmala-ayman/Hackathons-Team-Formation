@@ -5,7 +5,7 @@ import styles from "./steps.module.css";
 import { useStaticData } from "../../../hooks/useStaticData.js";
 
 export default function Step1Skills({ formData, setFormData, errors, setErrors, mode = "full" }) {
-  const { roleOptions, skillsOptions, hackathonOptions} = useStaticData();
+  const { roleOptions, skillsOptions, hackathonInterests } = useStaticData();
   const [skillInput, setSkillInput] = useState("");
   const [roleInput, setRoleInput] = useState("");
   const [showSkillDropdown, setShowSkillDropdown] = useState(false);
@@ -13,8 +13,9 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
 
   const allAvailableSkills = skillsOptions.map(s => s.label);
   const roles = roleOptions.map(r => r.label);
-  const hackathonInterests = hackathonOptions.map(h=>h.label)
-  console.log(hackathonOptions)
+  // const hackathonInterests = hackathonOptions.map(h=>h.label)
+  const interests = hackathonInterests;
+  console.log(interests)
 
   const handleBioChange = (e) => {
     const value = e.target.value;
@@ -39,7 +40,10 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
     const updated = current.includes(interest)
       ? current.filter((i) => i !== interest)
       : [...current, interest];
-    setFormData((prev) => ({ ...prev, intrestes: updated }));
+    setFormData((prev) => ({
+      ...prev,
+      intrestes: updated,
+    }));
   };
 
   return (
@@ -161,16 +165,21 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
           <Form.Label className={styles.formLabel}>Hackathon Interests</Form.Label>
           <div className="d-flex flex-wrap gap-2 mt-2">
             {hackathonInterests.map((interest) => {
-              const isSelected = (formData.intrestes || []).includes(interest);
+              const isSelected =
+                (formData.intrestes || []).includes(interest.value)
               return (
                 <Badge
-                  key={interest}
+                  key={interest.value}
                   pill
-                  onClick={() => toggleInterest(interest)}
-                  className={`${styles.interestTag} ${isSelected ? styles.tagSelected : ""}`}
-                  style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.6 }}
+                  onClick={() => toggleInterest(interest.value)}
+                  className={`${styles.interestTag} ${isSelected ? styles.tagSelected : ""
+                    }`}
+                  style={{
+                    cursor: "pointer",
+                    opacity: isSelected ? 1 : 0.6,
+                  }}
                 >
-                  {interest}
+                  {interest.label}
                 </Badge>
               );
             })}

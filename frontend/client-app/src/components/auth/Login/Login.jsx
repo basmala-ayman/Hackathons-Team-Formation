@@ -89,7 +89,7 @@ export default function Login() {
       <div className={styles.loginContainer}>
         <h2 className={styles.title}>Welcome Back!</h2>
         {/* Social Buttons */}
-        <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
+        {/* <div className="d-flex flex-column flex-sm-row gap-2 mb-4">
           <button
             type="button"
             className={styles.socialBtn}
@@ -100,10 +100,11 @@ export default function Login() {
           <button type="button" className={styles.socialBtn}>
             <GithubIcon /> Sign In with Github
           </button>
-        </div>
-        <div className={styles.divider}>
+        </div> */}
+        {/* <div className={styles.divider}>
           <span>Or login with email</span>
-        </div>
+        </div> */}
+
         <form onSubmit={handleLogin}>
           <Input
             label="Email"
