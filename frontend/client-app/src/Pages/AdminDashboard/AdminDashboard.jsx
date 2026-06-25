@@ -8,11 +8,17 @@ import TeamPieCard from "../../components/Admin/Charts/TeamPieCard/TeamPieCard";
 import WeeklyActivity from "../../components/Admin/Charts/WeeklyActivity/WeeklyActivity";
 import { Users, Zap, Award } from "lucide-react";
 import { getAdminDashboard } from "../../services/dashboard";
+import { useAuth } from "../../context/AuthContext/useAuth";
+import { useNavigate } from "react-router-dom";
+import CustomButton from "../../shared/CustomButton/CustomButton";
+import { LogOut } from "lucide-react";
 
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAdminDashboard()
@@ -21,7 +27,10 @@ export default function AdminDashboard() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  console.log(data)
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   if (isLoading) return <div className="text-center py-5"><Spinner animation="border" /></div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
@@ -39,6 +48,15 @@ export default function AdminDashboard() {
     <div className="container py-5">
       <header className={styles.header}>
         <h1 className={styles.pageTitle}>Admin Dashboard</h1>
+
+        <CustomButton
+          variant="secondary"
+          size="sm"
+          onClick={handleLogout}
+        >
+          <LogOut size={18} />
+          Logout
+        </CustomButton>
       </header>
 
       {/* Stats */}
