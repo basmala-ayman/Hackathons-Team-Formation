@@ -114,8 +114,9 @@ function RecommendedTeams() {
         <div className="d-flex  my-5 flex-wrap">
           <button
             type="button"
-            className={`px-5 py-2 fs-3 ${styles.leftTab} ${activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
-              }`}
+            className={`px-5 py-2 fs-3 ${styles.leftTab} ${
+              activeTab === "myTeams" ? styles.activeTab : styles.inactiveTab
+            }`}
             onClick={() => setActiveTab("myTeams")}
           >
             My Teams
@@ -123,19 +124,22 @@ function RecommendedTeams() {
 
           <button
             type="button"
-            className={`px-5 py-2 fs-3 ${styles.rightTab} ${activeTab === "invitations"
+            className={`px-5 py-2 fs-3 ${styles.rightTab} ${
+              activeTab === "invitations"
                 ? styles.activeTab
                 : styles.inactiveTab
-              }`}
+            }`}
             onClick={() => setActiveTab("invitations")}
           >
             Invitations
           </button>
         </div>
 
-        {displayedTeams.length > 0 ?(
-          activeTab === "myTeams" ? (
-            <MyTeamsList 
+        {displayedTeams.length > 0 ? (
+        
+            //my teams
+            if (activeTab === "myTeams") {
+              <MyTeamsList 
               teams={displayedTeams} 
               acceptingId={acceptingId}
               rejectingId={rejectingId}
@@ -143,8 +147,11 @@ function RecommendedTeams() {
               onReject={handleReject}
               styles={styles}
             />
-          ) : (
-            <InvitationsList 
+            }
+
+            //invitations
+            if (activeTab === "invitations") {
+             <InvitationsList 
               invitations={displayedTeams}
               acceptingId={acceptingId}
               rejectingId={rejectingId}
@@ -152,10 +159,11 @@ function RecommendedTeams() {
               onReject={handleReject}
               styles={styles}
             />
-          )
+            }
+          }
         ) : (
           <EmptyState message="No Teams found yet" />
-        )}
+        )
       </div>
     </div>
   );
