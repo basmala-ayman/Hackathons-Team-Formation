@@ -48,12 +48,12 @@ function Discover() {
           Intelligent tools to build and grow your hackathon team
         </p>
       </div>
-      <Row className="g-5">
+      <Row className="g-4">
         {featuresData.map((feature) => {
           const FeatureIcon = feature.icon;
           return (
             <Col xs={12} md={6} key={feature.id}>
-              <TiltCard className="h-100">
+              <TiltCard className="h-100"></TiltCard>
               <div className={`d-flex gap-3 p-5 rounded-4  ${feature.bgClass}`}>
                 <div className={styles.iconBox}>
                   <FeatureIcon></FeatureIcon>
@@ -73,7 +73,6 @@ function Discover() {
                   </p>
                 </div>
               </div>
-              </TiltCard>
             </Col>
           );
         })}
