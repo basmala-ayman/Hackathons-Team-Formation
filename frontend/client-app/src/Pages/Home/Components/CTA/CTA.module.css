@@ -1,4 +1,5 @@
 .ctaBox {
-  /* background: var( --color-primary-light); */
-  border-radius: 1.5rem; 
+  margin-top: 4rem;
+  background: var(--gradient-website-bg);
+  border-radius: 1.5rem;
 }
