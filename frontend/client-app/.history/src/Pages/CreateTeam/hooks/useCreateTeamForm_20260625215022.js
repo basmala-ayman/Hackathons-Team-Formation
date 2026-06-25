@@ -3,8 +3,6 @@ import { getBasicUsers } from "../../../services/userService";
 import { getHackathonNames } from "../../../services/hackathonService";
 import { createTeam } from "../../../services/teamService";
 import { INITIAL_FORM_DATA } from "../CreateTeam.constants";
-import toast from "react-hot-toast";
-
 
 //function to get saved user's data
 const getSavedData = (key, defaultValue) => {
@@ -104,12 +102,7 @@ export function useCreateTeamForm() {
       setShowSuccess(true);
     } catch (error) {
       console.error(error);
-       const backendMessage = error.message;
-      if (backendMessage) {
-        toast.error(backendMessage);
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
+      console.log("hiii");
       setSubmitError("Failed to create team.");
     } finally {
       setIsSubmitting(false);

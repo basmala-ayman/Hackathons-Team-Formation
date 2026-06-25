@@ -97,7 +97,7 @@ const handleValidationAndNext = () => {
 
       <div className="d-flex flex-column gap-2">
         <label className={styles.label}>Add Skills You're Looking For <span className={styles.asterisk}>*</span></label>
-        <CreatableSelect
+        <Select
           isClearable
           isSearchable
           placeholder="Search skills..."
@@ -125,7 +125,7 @@ const handleValidationAndNext = () => {
           </span>
           <div className="d-flex flex-wrap gap-3">
             {formData.roles.map((role, index) => {
-              const displayLabel = reverseRolesMap[role] || role;
+              const displayLabel = reverseRolesMap[role];
               return (
                 <div key={index} className={styles.skillChip}>
                   {displayLabel}
@@ -151,7 +151,7 @@ const handleValidationAndNext = () => {
           </span>
           <div className="d-flex flex-wrap gap-3">
             {formData.skills.map((skill, index) => {
-              const displayLabel = reverseSkillsMap[skill] || skill;
+              const displayLabel = reverseSkillsMap[skill];
               return (
                 <div key={index} className={styles.skillChip}>
                   {displayLabel}
