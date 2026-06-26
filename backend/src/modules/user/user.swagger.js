@@ -327,3 +327,66 @@
  *       401:
  *         description: Unauthorized
  */
+
+/**
+ * @swagger
+ * /user/{userId}/basic-info:
+ *   get:
+ *     summary: Get public basic info of any user (name, email, LinkedIn, GitHub, skills, tech roles)
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: UUID of the user
+ *     responses:
+ *       200:
+ *         description: Basic user info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "User basic info fetched successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                     name:
+ *                       type: string
+ *                       example: "John Doe"
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: "john@example.com"
+ *                     linkedinUrl:
+ *                       type: string
+ *                       nullable: true
+ *                       example: "https://linkedin.com/in/john"
+ *                     githubUrl:
+ *                       type: string
+ *                       nullable: true
+ *                       example: "https://github.com/john"
+ *                     techRoles:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["BACKEND", "DEVOPS"]
+ *                     skills:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example: ["Node.js", "Docker", "PostgreSQL"]
+ *       404:
+ *         description: User not found
+ */

@@ -18,6 +18,20 @@ const getProfile = async (req, res, next) => {
   }
 };
 
+const getUserProfileById = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const profileData = await userService.getBasicUserInfo(userId);
+    res.status(200).json({
+      success: true,
+      message: "User profile fetched successfully",
+      data: profileData
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateProfile = async (req, res, next) => {
   try {
 
@@ -120,5 +134,6 @@ module.exports = {
   updateProfile,
   searchUsers,
   getUsersBasicList,
-  getHackathonInterests
+  getHackathonInterests,
+  getUserProfileById
 };

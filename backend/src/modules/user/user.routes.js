@@ -10,6 +10,8 @@ const { upload } = require("../../middlewares/upload.middleware");
 // GET current logged-in user profile & step completion states
 router.get("/profile", protect, controller.getProfile);
 
+router.get("/:userId/basic-info", controller.getUserProfileById);
+
 // GET all users names and emails
 router.get("/list/basic", protect, controller.getUsersBasicList);
 

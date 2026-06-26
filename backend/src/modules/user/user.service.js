@@ -189,8 +189,46 @@ const getUsersBasicList = async (currentUserId) => {
   return userRepository.getUsersBasicList(currentUserId);
 };
 
+const getBasicUserInfo = async (id) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      linkedinUrl: true,
+      githubUrl: true,
+      techRoles: true,
+      skills: {
+        include: {
+          skill: {
+            select: { name: true }
+          }
+        }
+      }
+    }
+  });
+
+  if (!user || user.deletedAt) {
+    throw new AppError("User not found", 404);
+  }
+
+  const skills = user.skills.map(us => us.skill.name);
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    linkedinUrl: user.linkedinUrl,
+    githubUrl: user.githubUrl,
+    techRoles: user.techRoles,
+    skills
+  };
+};
+
 module.exports = {
   getProfile,
   updateProfile,
-  getUsersBasicList
+  getUsersBasicList,
+  getBasicUserInfo
 };
