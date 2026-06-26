@@ -440,6 +440,7 @@ const getMyTeams = async (userId) => {
 
         // Accepted members (in team_members table)
         team.members.forEach((m) => {
+            if (m.user.id === team.ownerId) return;
             memberMap.set(m.user.id, {
                 userId: m.user.id,
                 name: m.user.name,
@@ -463,7 +464,7 @@ const getMyTeams = async (userId) => {
                     email: inv.receiver.email,
                     profilePicture: inv.receiver.profilePicture,
                     techRoles: inv.receiver.techRoles || [],
-                    skills: m.user.skills?.map((s) => s.skill.name) || [],
+                    skills: inv.receiver.skills?.map((s) => s.skill.name) || [],
                     githubUrl: inv.receiver.githubUrl || null,
                     linkedinUrl: inv.receiver.linkedinUrl || null,
                     invitationId: inv.id,
@@ -480,7 +481,7 @@ const getMyTeams = async (userId) => {
             status: team.status,
             maxMembers: team.size,
             ownerId: team.ownerId,
-            hackathon: team.hackathon,
+            hackathonName: team.hackathon.title, 
             project: team.project || null,
             requiredSkills: team.skills.map((s) => s.skill.name),
             members: Array.from(memberMap.values()),
