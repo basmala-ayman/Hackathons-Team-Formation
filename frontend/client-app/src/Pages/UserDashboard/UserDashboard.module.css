@@ -171,3 +171,51 @@ aside h3 {
   color: var(--color-dark-gray);
   font-size: var(--fs-v-small);
 }
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.paginationControls button {
+  width: 3.8rem;
+  height: 3.8rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0.8rem;
+  border: 1px solid var(--color-primary-light-2);
+
+  background: white;
+  color: var(--color-primary-dark);
+
+  font-weight: 600;
+  font-size: 1.4rem;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationControls button:hover:not(:disabled) {
+  background: var(--color-primary-light-3);
+  transform: translateY(-2px);
+}
+
+.paginationControls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background: var(--color-primary-dark) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-primary-dark) !important;
+}

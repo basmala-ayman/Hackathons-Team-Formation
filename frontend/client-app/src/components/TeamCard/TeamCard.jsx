@@ -52,6 +52,7 @@ export default function TeamCard({ team }) {
           </Stack>
         </div>
       </Card.Body>
+      
 
     </Card>
   )
