@@ -61,7 +61,10 @@ export default function NotificationList({ filter }) {
     {
       id: "recommendations",
       label: "Recommendations",
-      types: ["RECOMMENDATION_RECEIVED"],
+      types: [
+        "RECOMMENDATION_RECEIVED",
+        "ROUND2_AVAILABLE",
+      ],
     },
   ];
 
@@ -76,10 +79,7 @@ export default function NotificationList({ filter }) {
     getMyNotifications(1, 20)
       .then((res) =>
         setAllNotifications(
-          (res.notifications || []).filter(
-            (n) => n.type !== "ROUND2_AVAILABLE"
-          )
-        )
+          (res.notifications || []))
       )
       .catch((err) => console.error("Error fetching:", err))
       .finally(() => setLoading(false));
@@ -116,7 +116,7 @@ export default function NotificationList({ filter }) {
   };
 
   if (loading) return (
-    <LoadingState  message="Loading Notifications..."/>
+    <LoadingState message="Loading Notifications..." />
   );
 
   return (

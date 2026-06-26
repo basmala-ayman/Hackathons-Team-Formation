@@ -13,6 +13,7 @@ export const getNotificationNavigation = (notification) => {
       };
 
     case "RECOMMENDATION_RECEIVED":
+    case "ROUND2_AVAILABLE":
       return {
         path: "/recommended-Teams",
       };

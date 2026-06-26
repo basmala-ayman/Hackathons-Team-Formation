@@ -10,6 +10,7 @@ import {
   rejectInvitationFromNotification,
 } from "../../../services/recommendationService";
 
+
 export default function NotificationItem({ data, onRead, onRemove }) {
   const metadata = data.metadata || {};
   const navigate = useNavigate();
@@ -171,16 +172,21 @@ export default function NotificationItem({ data, onRead, onRemove }) {
             </CustomButton>
           )}
 
-          {data.type === "RECOMMENDATION_RECEIVED" && (
-            <CustomButton
-              variant="primary"
-              className="w-100 mt-4"
-              size="sm"
-              onClick={handleViewRecommendations}
-            >
-              View Recommended Teams
-            </CustomButton>
-          )}
+          {(
+            data.type === "RECOMMENDATION_RECEIVED" ||
+            data.type === "ROUND2_AVAILABLE"
+          ) && (
+              <CustomButton
+                variant="primary"
+                className="w-100 mt-4"
+                size="sm"
+                onClick={handleViewRecommendations}
+              >
+                {data.type === "ROUND2_AVAILABLE"
+                  ? "View Round 2 Teams"
+                  : "View Recommended Teams"}
+              </CustomButton>
+            )}
         </div>
       </div>
     </div >
