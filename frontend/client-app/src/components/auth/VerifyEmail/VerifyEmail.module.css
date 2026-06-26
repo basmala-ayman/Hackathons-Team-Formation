@@ -34,13 +34,14 @@
   font-weight: 700;
   color: var(--color-very-dark-purple);
   margin-bottom: 1.6rem;
+  transform: translateY(-2rem);
 }
 
 .description {
   color: var(--color-dark-gray);
   font-size: 1.5rem;
   line-height: 1.8;
-  margin: 1.6rem 0 3rem;
+  transform: translateY(-15px);
 }
 
 .description strong {
