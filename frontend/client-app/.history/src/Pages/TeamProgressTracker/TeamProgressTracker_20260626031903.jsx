@@ -7,13 +7,8 @@ import { useState } from "react";
 import styles from "./TeamProgressTracker.module.css";
 import { RaiseUpIcon, ElectricIcon, TeamMeetIcon } from "../../assets/Icons";
 import TeamProgressCard from "./Components/TeamProgressCard";
-import { LoadingState , EmptyState } from "../../shared/States";
-import { useMyTeams } from "./hooks/useMyTeams";
-
+import { LoadingState , Em } from "../../shared/States";
 function TeamProgressTracker() {
-  const { teams, loading, error, refetch } = useMyTeams();
-  console.log("teams in track:",teams)
-
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
     actionType: null,
@@ -21,12 +16,64 @@ function TeamProgressTracker() {
     teamName: "",
   });
 
+  const [teams, setTeams] = useState([
+    {
+      id: 101,
+      teamName: "EcoVision Team",
+      hackathonName: "Green Tech Hackathon 2028",
+      description: "dek fff fff eww sss sss sss",
+      members: [
+        {
+          id: 1,
+          name: "Sarah Chen",
+          linkedin: "#",
+          github: "#",
+          status: "ACCEPTED",
+        },
+        {
+          id: 2,
+          name: "Mike Johnson",
+          linkedin: "#",
+          github: "#",
+          status: "PENDING",
+        },
+        {
+          id: 3,
+          name: "Lisa Park",
+          linkedin: "#",
+          github: "#",
+          status: "REJECTED",
+        },
+      ],
+    },
+    {
+      id: 102,
+      teamName: "Quantum Coders",
+      hackathonName: "AI Innovation Challenge",
+      members: [
+        {
+          id: 4,
+          name: "Alex Turner",
+          linkedin: "#",
+          github: "#",
+          status: "ACCEPTED",
+        },
+        {
+          id: 5,
+          name: "Maria Garcia",
+          linkedin: "#",
+          github: "#",
+          status: "ACCEPTED",
+        },
+      ],
+    },
+  ]);
 
   const openModal = (type, team) => {
     setModalConfig({
       isOpen: true,
       actionType: type,
-      teamId: team.teamId,
+      teamId: team.id,
       teamName: team.teamName,
     });
   };
@@ -49,21 +96,12 @@ function TeamProgressTracker() {
         // e.g., await requestNewMatches(modalConfig.teamId);
         toast.success(`Looking for new members for ${modalConfig.teamName}...`);
       }
-      await refetch();
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       closeModal();
     }
   };
-
-   if (loading) {
-    return <LoadingState message="Loading your teams..." />;
-  }
-
-  if (error) {
-    return <EmptyState message="No Teams yet" />;
-  }
 
   return (
     <div className={`py-5 min-vh-100 ${styles.pageBackground}`}>
@@ -90,15 +128,22 @@ function TeamProgressTracker() {
 
         {teams.length > 0 ? (
           teams.map((team) => (
-          <TeamProgressCard 
-              key={team.teamId} 
-              team={{...team , hackathonName: team.hackathonName}}
-              onOpenModal={openModal} 
+            <TeamProgressCard
+              key={team.id}
+              team={team}
+              onOpenModal={openModal}
             />
           ))
         ) : (
-          <div>
-           <EmptyState message="No Teams yet"/>
+          <div className="text-center py-5">
+            <p
+              style={{
+                color: "var(--color-gray)",
+                fontSize: "var(--fs-regular)",
+              }}
+            >
+              You don't have any teams in progress right now.
+            </p>
           </div>
         )}
       </div>

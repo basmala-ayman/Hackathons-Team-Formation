@@ -12,7 +12,6 @@ import { useMyTeams } from "./hooks/useMyTeams";
 
 function TeamProgressTracker() {
   const { teams, loading, error, refetch } = useMyTeams();
-  console.log("teams in track:",teams)
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -57,14 +56,6 @@ function TeamProgressTracker() {
     }
   };
 
-   if (loading) {
-    return <LoadingState message="Loading your teams..." />;
-  }
-
-  if (error) {
-    return <EmptyState message="No Teams yet" />;
-  }
-
   return (
     <div className={`py-5 min-vh-100 ${styles.pageBackground}`}>
       <div className="container">
@@ -90,15 +81,22 @@ function TeamProgressTracker() {
 
         {teams.length > 0 ? (
           teams.map((team) => (
-          <TeamProgressCard 
-              key={team.teamId} 
-              team={{...team , hackathonName: team.hackathonName}}
-              onOpenModal={openModal} 
+            <TeamProgressCard
+              key={team.id}
+              team={team}
+              onOpenModal={openModal}
             />
           ))
         ) : (
-          <div>
-           <EmptyState message="No Teams yet"/>
+          <div className="text-center py-5">
+            <p
+              style={{
+                color: "var(--color-gray)",
+                fontSize: "var(--fs-regular)",
+              }}
+            >
+              You don't have any teams in progress right now.
+            </p>
           </div>
         )}
       </div>

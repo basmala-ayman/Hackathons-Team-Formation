@@ -92,7 +92,10 @@ function TeamProgressTracker() {
           teams.map((team) => (
           <TeamProgressCard 
               key={team.teamId} 
-              team={{...team , hackathonName: team.hackathonName}}
+              team={{
+                ...team,
+                hackathonName: team.hackathon || "Independent Project"
+              }}
               onOpenModal={openModal} 
             />
           ))

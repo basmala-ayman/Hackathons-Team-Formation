@@ -59,30 +59,6 @@ function MemberProgressCard({ member }) {
               </a>
             )}
           </div>
-          {/* Roles & Skills Tags */}
-            <div className="d-flex flex-wrap gap-2">
-              {/* Render Roles in Purple */}
-              {techRoles.map((role, idx) => (
-                <span 
-                  key={`role-${idx}`} 
-                  className="badge" 
-                  style={{ backgroundColor: 'var(--color-primary-light-2)', color: 'var(--color-very-dark-purple)', fontSize: 'var(--fs-v-small)', fontWeight: '500' }}
-                >
-                  {role}
-                </span>
-              ))}
-              
-              {/* Render Skills in Gray/Neutral */}
-              {skills.map((skill, idx) => (
-                <span 
-                  key={`skill-${idx}`} 
-                  className="badge" 
-                  style={{ backgroundColor: 'var(--color-register-bg)', color: 'var(--color-dark-gray)', fontSize: 'var(--fs-v-small)', fontWeight: '500' }}
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
         </div>
 
         <div>

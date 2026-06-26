@@ -32,7 +32,7 @@ export const getMyTeams = async () => {
     return response.data.data; 
 
   }catch(error){
-    throw error.response?.data || "Failed to fetch teams!!";
+    throw error.response?.data || "Failed to fetch team details!!";
 
   }
 };

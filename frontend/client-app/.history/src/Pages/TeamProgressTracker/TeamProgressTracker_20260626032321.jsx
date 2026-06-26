@@ -12,7 +12,6 @@ import { useMyTeams } from "./hooks/useMyTeams";
 
 function TeamProgressTracker() {
   const { teams, loading, error, refetch } = useMyTeams();
-  console.log("teams in track:",teams)
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -92,13 +91,16 @@ function TeamProgressTracker() {
           teams.map((team) => (
           <TeamProgressCard 
               key={team.teamId} 
-              team={{...team , hackathonName: team.hackathonName}}
+              team={{
+                ...team,
+                hackathonName: team.hackathon?.name
+              }} 
               onOpenModal={openModal} 
             />
           ))
         ) : (
           <div>
-           <EmptyState message="No Teams yet"/>
+           <EmptyState>
           </div>
         )}
       </div>
