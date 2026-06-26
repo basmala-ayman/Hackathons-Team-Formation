@@ -4,9 +4,6 @@ import defaultProfile from "../../../assets/defaultProfile.jpg";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 import { getAvatarUrl } from "../../../utils/getAvatarUrl";
 
-// const BACKEND_URL =
-//   import.meta.env.VITE_API_BASE_URL?.replace("/api/v1", "") ||
-//   "http://localhost:3000";
 
 function TeamCard({
   members = [],
@@ -20,21 +17,6 @@ function TeamCard({
     const text = role.replace(/_/g, " ").toLowerCase();
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
-
-  // const getAvatar = (member) => {
-  //   const picture = member.profilePicture || member.avatarUrl;
-
-  //   if (!picture) return defaultProfile;
-
-  //   if (
-  //     picture.startsWith("http") ||
-  //     picture.startsWith("blob:")
-  //   ) {
-  //     return picture;
-  //   }
-
-  //   return `${BACKEND_URL}${picture}?t=${Date.now()}`;
-  // };
 
   const getAvatar = (member) =>
     getAvatarUrl(member.profilePicture || member.avatarUrl);
