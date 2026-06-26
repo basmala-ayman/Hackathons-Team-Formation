@@ -116,7 +116,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
                     : description}
               </p>
 
-              {(description.length > 120 || skills.length > 0) && (
+              {description.length > 120 && (
                 <button
                   type="button"
                   className={styles.showMoreBtn}
@@ -125,58 +125,48 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
                   }
                 >
                   <span>
-                    {isExpanded
-                      ? "Show Less"
-                      : "Show Full Project Details"}
+                    {isExpanded ? "Show Less" : "Show Full Project Details"}
                   </span>
 
                   {isExpanded ? (
-                    <ChevronUp size={18} strokeWidth={2.5} />
+                    <ChevronUp size={18} />
                   ) : (
-                    <ChevronDown size={18} strokeWidth={2.5} />
+                    <ChevronDown size={18} />
                   )}
                 </button>
               )}
 
-              {isExpanded && (
-                <>
-                  {skills.length > 0 && (
-                    <div className={styles.skillsSection}>
-                      <h6 className={styles.skillsTitle}>
-                        Required Skills/Roles
-                      </h6>
+              {skills.length > 0 && (
+                <div className={styles.skillsSection}>
+                  <h6 className={styles.skillsTitle}>
+                    Required Skills/Roles
+                  </h6>
 
-                      <div className={styles.skillsWrapper}>
-                        {skills.map((skill, index) => (
-                          <span key={index} className={styles.skillTag}>
-                            #{skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className={styles.cardFooter}>
-                    <div className={styles.footerInfo}>
-                      <div className={styles.infoBadge}>
-                        <Users size={14} />
-                        <span>
-                          {teamSize}{" "}
-                          {teamSize > 1 ? "Members" : "Member"}
-                        </span>
-                      </div>
-
-                      <div className={styles.infoBadge}>
-                        <Heart
-                          size={14}
-                          className={styles.heartIcon}
-                        />
-                        <span>{interestedCount} Interested</span>
-                      </div>
-                    </div>
+                  <div className={styles.skillsWrapper}>
+                    {skills.map((skill, index) => (
+                      <span key={index} className={styles.skillTag}>
+                        #{skill}
+                      </span>
+                    ))}
                   </div>
-                </>
+                </div>
               )}
+
+              <div className={styles.cardFooter}>
+                <div className={styles.footerInfo}>
+                  <div className={styles.infoBadge}>
+                    <Users size={14} />
+                    <span>
+                      {teamSize} {teamSize > 1 ? "Members" : "Member"}
+                    </span>
+                  </div>
+
+                  <div className={styles.infoBadge}>
+                    <Heart size={14} className={styles.heartIcon} />
+                    <span>{interestedCount} Interested</span>
+                  </div>
+                </div>
+              </div>
             </div>
           );
         })}
