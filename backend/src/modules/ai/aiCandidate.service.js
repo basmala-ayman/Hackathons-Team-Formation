@@ -118,17 +118,21 @@ const prepareHackathonCandidates = async (hackathonId) => {
             console.warn("⚠️ interest.user is null/undefined for interest:", interest);
             continue;
         }
-        
+
         const aiId = await getOrCreateAIId(user.id, "USER");
         const skills = user.skills.map((s) => s.skill.name);
-        const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
+        // const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
+
+        const pastTeamAiIds = await Promise.all(
+            user.teamMemberships.map((m) => getOrCreateAIId(m.teamId, "TEAM"))
+        );
 
         await aiService.syncMember({
             id: aiId,
             bio: user.bio || "",
             skills,
             past_teammate_ids: [],
-            past_team_ids: pastTeamIds,
+            past_team_ids: pastTeamAiIds,
         });
 
         preparedMembers.push({ realUserId: user.id, aiId });
@@ -185,15 +189,15 @@ const generateHackathonRecommendations = async ({
     for (const team of result.recommended_teams) {
         const realMembers = [];
         for (const aiId of team) {
-            try{
-            const realUserId = await getRealEntityId(aiId);
-            if (realUserId) realMembers.push(realUserId);
-            }catch(err){
+            try {
+                const realUserId = await getRealEntityId(aiId);
+                if (realUserId) realMembers.push(realUserId);
+            } catch (err) {
                 console.warn(`⚠️ Skipping AI ID ${aiId} – mapping not found`, err.message);
             }
         }
-       // convertedTeams.push(realMembers);
-           if (realMembers.length > 0) convertedTeams.push(realMembers);
+        // convertedTeams.push(realMembers);
+        if (realMembers.length > 0) convertedTeams.push(realMembers);
     }
 
     console.log(`✅ Converted teams: ${convertedTeams.length}`);
@@ -225,14 +229,15 @@ const prepareProjectCandidates = async (projectId) => {
         const user = interest.user;
         const aiId = await getOrCreateAIId(user.id, "USER");
         const skills = user.skills.map((s) => s.skill.name);
-        const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
-
+        const pastTeamAiIds = await Promise.all(
+            user.teamMemberships.map((m) => getOrCreateAIId(m.teamId, "TEAM"))
+        );
         await aiService.syncMember({
             id: aiId,
             bio: user.bio || "",
             skills,
             past_teammate_ids: [],
-            past_team_ids: pastTeamIds,
+            past_team_ids: pastTeamAiIds,
         });
 
         preparedMembers.push({ realUserId: user.id, aiId });
