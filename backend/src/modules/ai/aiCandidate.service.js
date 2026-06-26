@@ -62,7 +62,10 @@ const rehydrateIfNeeded = async () => {
 
     for (const user of allUsers) {
         const aiId = await getOrCreateAIId(user.id, "USER");
-        const skills = user.skills.map((s) => s.skill.name);
+        const skillNames = user.skills.map((s) => s.skill.name);
+        const roleNames = user.techRoles || [];
+        const skills = [...new Set([...skillNames, ...roleNames])];
+        
         const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
         await aiService.syncMember({
             id: aiId,
@@ -120,9 +123,11 @@ const prepareHackathonCandidates = async (hackathonId) => {
         }
 
         const aiId = await getOrCreateAIId(user.id, "USER");
-        const skills = user.skills.map((s) => s.skill.name);
-        // const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
+        const skillNames = user.skills.map((s) => s.skill.name);
+        const roleNames = user.techRoles || [];
+        const skills = [...new Set([...skillNames, ...roleNames])];
 
+        // const pastTeamIds = user.teamMemberships.map((m) => m.teamId);
         const pastTeamAiIds = await Promise.all(
             user.teamMemberships.map((m) => getOrCreateAIId(m.teamId, "TEAM"))
         );
@@ -228,7 +233,10 @@ const prepareProjectCandidates = async (projectId) => {
     for (const interest of interests) {
         const user = interest.user;
         const aiId = await getOrCreateAIId(user.id, "USER");
-        const skills = user.skills.map((s) => s.skill.name);
+        const skillNames = user.skills.map((s) => s.skill.name);
+        const roleNames = user.techRoles || [];
+        const skills = [...new Set([...skillNames, ...roleNames])];
+
         const pastTeamAiIds = await Promise.all(
             user.teamMemberships.map((m) => getOrCreateAIId(m.teamId, "TEAM"))
         );

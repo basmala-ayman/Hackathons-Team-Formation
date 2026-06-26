@@ -218,7 +218,10 @@ const triggerProjectMatching = async (projectId) => {
     if (!project || !project.team) return;
 
     const team = project.team;
-    const tags = team.skills.map((s) => s.skill.name);
+    const skillTags = team.skills.map((s) => s.skill.name);
+    const roleTags = team.roles || [];
+    const tags = [...new Set([...skillTags, ...roleTags])];
+
     const slotsNeeded = team.size - team.members.length;
     if (slotsNeeded <= 0) return;
 
@@ -276,7 +279,10 @@ const triggerHackathonMatching = async () => {
 
         for (let i = 0; i < teamsQueue.length; i++) {
             const team = teamsQueue[i];
-            const tags = team.skills.map((s) => s.skill.name);
+            const skillTags = team.skills.map((s) => s.skill.name);
+            const roleTags = team.roles || [];
+            const tags = [...new Set([...skillTags, ...roleTags])];
+
             const slotsNeeded = team.size - team.members.length;
             if (slotsNeeded <= 0) continue;
 
@@ -354,7 +360,9 @@ const triggerRound2 = async (teamId, founderId) => {
     );
 
     const nextRoundNumber = lastRequest.roundNumber + 1;
-    const tags = team.skills.map((s) => s.skill.name);
+    const skillTags = team.skills.map((s) => s.skill.name);
+    const roleTags = team.roles || [];
+    const tags = [...new Set([...skillTags, ...roleTags])];
 
     const matchingRequest = await matchingRepository.createMatchingRequest({
         userId: founderId,
