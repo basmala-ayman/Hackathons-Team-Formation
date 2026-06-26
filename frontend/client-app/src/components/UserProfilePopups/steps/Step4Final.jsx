@@ -3,11 +3,13 @@ import { Form } from "react-bootstrap";
 import { User, FileText } from "lucide-react";
 import { GithubIcon, LinkedinIcon, CloudUploadIcon } from "../../../shared/Icons/GoogleGithubIcons.jsx";
 import styles from "./steps.module.css";
+import { useAuth } from "../../../context/AuthContext/useAuth";
 const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 export default function Step4Final({ formData, setFormData, handleChange }) {
   const avatarInputRef = useRef(null);
   const cvInputRef = useRef(null);
+  const { setUser } = useAuth();
 
   // Compress image before saving to speed up the saving task
   const compressImage = async (file) => {
@@ -35,14 +37,21 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    // const compressedFile = await compressImage(file);
-    // const localImageUrl = URL.createObjectURL(compressedFile);
+    // Show preview immediately
+    const preview = URL.createObjectURL(file);
 
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   avatar: localImageUrl,
-    //   avatarFile: compressedFile,
-    // }));
+    setUser(prev => ({
+      ...prev,
+      profilePicture: preview,
+    }));
+
+    setFormData(prev => ({
+      ...prev,
+      avatar: preview,
+      avatarFile: file,
+    }));
+
+    // Compress in background
     const compressedBlob = await compressImage(file);
 
     const compressedFile = new File(
@@ -53,15 +62,13 @@ export default function Step4Final({ formData, setFormData, handleChange }) {
       }
     );
 
-    const localImageUrl = URL.createObjectURL(compressedFile);
-
-    setFormData((prev) => ({
+    // Replace only the file that will be uploaded
+    setFormData(prev => ({
       ...prev,
-      avatar: localImageUrl,
       avatarFile: compressedFile,
     }));
   };
-
+  
   const handleCvChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;

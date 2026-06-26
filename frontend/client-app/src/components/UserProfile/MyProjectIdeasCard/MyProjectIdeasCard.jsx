@@ -12,7 +12,7 @@ import styles from "./MyProjectIdeasCard.module.css";
 import { useAuth } from "../../../context/AuthContext/useAuth";
 import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
 
-function MyProjectIdeasCard({ projects = [], userAvatar }) {
+function MyProjectIdeasCard({ projects = [] }) {
   const { user: authUser } = useAuth();
   const [expandedProject, setExpandedProject] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +83,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
               <div className={styles.creatorHeader}>
                 <div className={styles.creatorAvatarWrapper}>
                   <img
-                    src={getAvatarUrl(userAvatar)}
+                    src={getAvatarUrl(authUser?.profilePicture)}
                     alt="Creator"
                     className={styles.creatorImg}
                   />

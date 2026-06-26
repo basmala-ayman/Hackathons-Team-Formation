@@ -11,6 +11,17 @@ import { popUp } from "../../utils/popUp";
 
 
 
+const VALID_INTERESTS = new Set([
+  "AR_VR", "BEGINNER_FRIENDLY", "BLOCKCHAIN", "COMMUNICATION",
+  "CYBERSECURITY", "DATABASES", "DESIGN", "DEVOPS", "ECOMMERCE_RETAIL",
+  "EDUCATION", "ENTERPRISE", "FINTECH", "GAMING", "HEALTH", "IOT",
+  "LIFEHACKS", "LOW_NO_CODE", "MACHINE_LEARNING_AI", "MOBILE",
+  "MUSIC_ART", "OPEN_ENDED", "PRODUCTIVITY", "QUANTUM",
+  "ROBOTIC_PROCESS_AUTOMATION", "SERVERLESS", "SOCIAL_GOOD",
+  "VOICE_SKILLS", "WEB"
+]);
+
+
 const cleanAndMapToEnum = (text, type) => {
   if (!text) return "";
   let normalized = text.toUpperCase().trim();
@@ -35,45 +46,73 @@ const generatePayload = (
 ) => {
   const payload = new FormData();
   const nameToSubmit = currentValues.name || originalValues.name || user?.name || "User";
-  payload.append("name", nameToSubmit);
+  if (nameToSubmit !== originalValues.name) {
+    payload.append("name", nameToSubmit);
+  }
 
-  if (currentValues.githubUrl) payload.append("githubUrl", currentValues.githubUrl);
-  if (currentValues.linkedinUrl) payload.append("linkedinUrl", currentValues.linkedinUrl);
+  if (currentValues.githubUrl !== originalValues.githubUrl) {
+    payload.append("githubUrl", currentValues.githubUrl || "");
+  }
+
+  if (currentValues.linkedinUrl !== originalValues.linkedinUrl) {
+    payload.append("linkedinUrl", currentValues.linkedinUrl || "");
+  }
 
   if (currentValues.avatarFile instanceof File) {
     payload.append("profilePicture", currentValues.avatarFile);
   }
 
-  const appendIfChanged = (key, value) => {
-    if (value !== undefined && value !== null) {
-      if (Array.isArray(value)) {
-        value.forEach(item => payload.append(`${key}[]`, item));
-      } else {
-        payload.append(key, value);
-      }
+  // const appendIfChanged = (key, value) => {
+  //   if (value !== undefined && value !== null) {
+  //     if (Array.isArray(value)) {
+  //       value.forEach(item => payload.append(`${key}[]`, item));
+  //     } else {
+  //       payload.append(key, value);
+  //     }
+  //   }
+  // };
+  const arraysEqual = (a = [], b = []) =>
+    JSON.stringify(a) === JSON.stringify(b);
+
+  const appendIfChanged = (key, current, original) => {
+    if (current === undefined || current === null) return;
+
+    if (Array.isArray(current)) {
+      if (arraysEqual(current, original)) return;
+
+      current.forEach(item => payload.append(`${key}[]`, item));
+    } else {
+      if (current === original) return;
+
+      payload.append(key, current);
     }
   };
 
   const rolesArray = currentValues.techRoles || [];
   const cleanRoles = rolesArray.map(r => cleanAndMapToEnum(typeof r === "string" ? r : r.value, "role")).filter(Boolean);
   const interestsArray = currentValues.intrestes || [];
-  const VALID_INTERESTS = new Set([
-    "AR_VR", "BEGINNER_FRIENDLY", "BLOCKCHAIN", "COMMUNICATION",
-    "CYBERSECURITY", "DATABASES", "DESIGN", "DEVOPS", "ECOMMERCE_RETAIL",
-    "EDUCATION", "ENTERPRISE", "FINTECH", "GAMING", "HEALTH", "IOT",
-    "LIFEHACKS", "LOW_NO_CODE", "MACHINE_LEARNING_AI", "MOBILE",
-    "MUSIC_ART", "OPEN_ENDED", "PRODUCTIVITY", "QUANTUM",
-    "ROBOTIC_PROCESS_AUTOMATION", "SERVERLESS", "SOCIAL_GOOD",
-    "VOICE_SKILLS", "WEB"
-  ]);
 
   const cleanInterests = interestsArray
     .map(i => (typeof i === "string" ? i : i.value).toUpperCase().trim())
     .filter(i => VALID_INTERESTS.has(i));
 
-  appendIfChanged("skills", currentValues.skills);
-  appendIfChanged("bio", currentValues.bio);
-  appendIfChanged("techRoles", cleanRoles);
+  appendIfChanged(
+    "skills",
+    currentValues.skills,
+    originalValues.skills
+  );
+
+  appendIfChanged(
+    "bio",
+    currentValues.bio,
+    originalValues.bio
+  );
+
+  appendIfChanged(
+    "techRoles",
+    cleanRoles,
+    originalValues.techRoles
+  );
 
   cleanInterests.forEach((interest) => {
     payload.append("intrestes[]", interest);
@@ -147,6 +186,21 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
     setErrors({});
 
     try {
+      const hasChanges =
+        localValues.name !== externalValues.name ||
+        localValues.bio !== externalValues.bio ||
+        localValues.githubUrl !== externalValues.githubUrl ||
+        localValues.linkedinUrl !== externalValues.linkedinUrl ||
+        JSON.stringify(localValues.skills) !== JSON.stringify(externalValues.skills) ||
+        JSON.stringify(localValues.techRoles) !== JSON.stringify(externalValues.techRoles) ||
+        JSON.stringify(localValues.intrestes) !== JSON.stringify(externalValues.intrestes) ||
+        localValues.avatarFile instanceof File ||
+        localValues.resumeFile instanceof File;
+
+      if (!hasChanges) {
+        handleModalClose();
+        return;
+      }
       const finalPayload = generatePayload(
         localValues,
         externalValues,
@@ -172,9 +226,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
 
       handleModalClose();
 
-      setTimeout(() => {
-        popUp.success("Profile updated successfully!");
-      }, 150);
+      popUp.success("Profile updated successfully!");
 
     } catch (error) {
       const errorMessage =

@@ -6,7 +6,7 @@ import styles from "./ProfileHeaderCard.module.css";
 import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
 import { FileText } from "lucide-react";
 
-export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner }) {
+export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner, onAvatarUpload, }) {
   const fileInputRef = useRef(null);
   const { user: authUser, setUser } = useAuth();
   const [previewUrl, setPreviewUrl] = useState(detailedUser?.avatar || null);
@@ -38,17 +38,31 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (previewUrl?.startsWith("blob:")) URL.revokeObjectURL(previewUrl);
+
+    if (previewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
     const blobUrl = URL.createObjectURL(file);
+
     setPreviewUrl(blobUrl);
+
     setUser(prev => ({
       ...prev,
       profilePicture: blobUrl,
     }));
-    setFormData(prev => ({ ...prev, avatar: blobUrl, avatarFile: file }));
+
+    setFormData(prev => ({
+      ...prev,
+      avatar: blobUrl,
+      avatarFile: file,
+    }));
+
+    await onAvatarUpload(file);
+
     e.target.value = "";
   };
 

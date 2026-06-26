@@ -49,7 +49,6 @@ export default function UserProfile({ isOwner = true }) {
   const [apiError, setApiError] = useState(null);
   const [completionPercentage, setCompletionPercentage] = useState(0);
   const { setUser } = useAuth();
-
   const { values, setValues, handleChange, errors, setErrors } = useFormHandler(
     defaultProfileData,
   );
@@ -112,6 +111,7 @@ export default function UserProfile({ isOwner = true }) {
         });
     }
   }, [isOwner, setValues]);
+
 
 
   const handleProfileUpdate = useCallback(async (payload, isFinal = false) => {
@@ -200,6 +200,8 @@ export default function UserProfile({ isOwner = true }) {
         profilePicture: latestCore.profilePicture
       }));
 
+      console.log("FROM GET:", latestCore.profilePicture);
+
       return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -210,11 +212,11 @@ export default function UserProfile({ isOwner = true }) {
   }, [values, setValues, setUser]);
 
 
-  useEffect(() => {
-    if (values.avatarFile instanceof File) {
-      handleProfileUpdate({ avatarFile: values.avatarFile });
-    }
-  }, [values.avatarFile, handleProfileUpdate]);
+  // useEffect(() => {
+  //   if (values.avatarFile instanceof File) {
+  //     handleProfileUpdate({ avatarFile: values.avatarFile });
+  //   }
+  // }, [values.avatarFile, handleProfileUpdate]);
 
   // When Loading
   if (isLoading) {
@@ -241,6 +243,11 @@ export default function UserProfile({ isOwner = true }) {
           setWizardMode("full");
           setIsWizardOpen(true);
         } : null}
+        onAvatarUpload={async (file) => {
+          const formData = new FormData();
+          formData.append("profilePicture", file);
+          await handleProfileUpdate(formData);
+        }}
       />
 
       {isOwner && (
@@ -268,7 +275,7 @@ export default function UserProfile({ isOwner = true }) {
         }}
       />
       <InterestedHackathonsCard hackathons={values.hackathonInterests || []} />
-      <MyProjectIdeasCard projects={values.ownedProjects || []} userAvatar={values.avatar} />
+      <MyProjectIdeasCard projects={values.ownedProjects || []} />
     </Container>
   );
 }
