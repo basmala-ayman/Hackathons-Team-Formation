@@ -78,10 +78,20 @@ export const AuthProvider = ({ children }) => {
         actualData.refreshToken
       );
       const profileData = await getUserProfile();
-      setUser({
-        ...actualData.user,
-        profilePicture: profileData.profile?.profilePicture,
-      });
+      // setUser({
+      //   ...actualData.user,
+      //   profilePicture: profileData.profile?.profilePicture,
+      // });
+
+      const profile = profileData.profile;
+
+      setUser(prev => ({
+        ...prev,
+        name: profile.name,
+        email: profile.email,
+        profilePicture: profile.profilePicture,
+      }));
+
       return actualData;
     } catch (err) {
       const errorData = {

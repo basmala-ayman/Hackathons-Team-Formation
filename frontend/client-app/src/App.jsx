@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
-
+import CompleteProfileRoute from "./components/Routes/CompleteProfileRoute";
 import MainLayout from "./components/layout/MainLayout/MainLayout.jsx";
 import { ProtectedRoute, AdminRoute } from "./components/Routes/ProtectedRoutes.jsx";
 

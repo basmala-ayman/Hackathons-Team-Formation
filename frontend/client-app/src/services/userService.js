@@ -43,7 +43,6 @@ export const updateUserProfile = async (profileData) => {
 export const getUserBasicInfo = async (userId) => {
   try {
     const response = await api.get(`/users/${userId}/basic-info`);
-    console.log("basic data", response.data?.data);
     return response.data?.data;
   } catch (error) {
     throw error.response?.data || "Failed to fetch user basic info!!";
