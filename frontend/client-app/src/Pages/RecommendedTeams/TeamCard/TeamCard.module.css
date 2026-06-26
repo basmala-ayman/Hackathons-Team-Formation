@@ -18,10 +18,10 @@
 }
 
 .avatarImg {
-  width: 4rem;
-  height: 4rem;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
-  border: 3px solid var(--color-white);
+  border: 3.4px solid var(--color-primary-dark);
   margin-left: -0.8rem;
   object-fit: cover;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);

@@ -7,12 +7,14 @@ import TeamCard from "../../components/TeamCard/TeamCard.jsx";
 import CustomButton from "../../shared/CustomButton/CustomButton.jsx";
 import { Users, Trophy, Bell, Plus, Calendar } from "lucide-react";
 import { getUserDashboard } from "../../services/dashboard.js";
-
+import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   useEffect(() => {
     getUserDashboard()
@@ -31,7 +33,6 @@ export default function UserDashboard() {
       });
   }, []);
 
-  console.log("User dashboard data:", dashboardData)
 
   const formatActivityDate = (isoString) => {
     if (!isoString) return "Recently";
@@ -63,15 +64,6 @@ export default function UserDashboard() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100 flex-column gap-2">
-        <Spinner animation="border" variant="primary" />
-        <p className="text-muted fw-medium">Fetching your dashboard data...</p>
-      </div>
-    );
-  }
-
   const welcomeMessage = dashboardData?.welcomeMessage || "Welcome back!";
   const metrics = dashboardData?.metrics || {
     allTeamsCount: 0,
@@ -80,7 +72,21 @@ export default function UserDashboard() {
   };
   const activeTeams = dashboardData?.allTeams || [];
   console.log(activeTeams);
+
   const recentActivities = dashboardData?.recentActivities || [];
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTeams.length]);
+
+
+  if (isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100 flex-column gap-2">
+        <Spinner animation="border" variant="primary" />
+        <p className="text-muted fw-medium">Fetching your dashboard data...</p>
+      </div>
+    );
+  }
 
   const statsData = [
     {
@@ -99,6 +105,20 @@ export default function UserDashboard() {
       subText: "Awaiting your response"
     },
   ];
+
+
+  const teamsPerPage = 2;
+
+  const indexOfLastTeam = currentPage * teamsPerPage;
+  const indexOfFirstTeam = indexOfLastTeam - teamsPerPage;
+
+  const currentTeams = activeTeams.slice(
+    indexOfFirstTeam,
+    indexOfLastTeam
+  );
+
+  const totalPages = Math.ceil(activeTeams.length / teamsPerPage);
+
 
   return (
     <div className={`container-fluid ${styles.dashboardWrapper} py-5`}>
@@ -147,7 +167,7 @@ export default function UserDashboard() {
                   <span className="small text-muted">Explore recommendations or create a catalyst team to begin!</span>
                 </div>
               ) : (
-                activeTeams.map((team, idx) => {
+                currentTeams.map((team, idx) => {
                   const normalizedTeam = {
                     id: team.id || idx,
                     name: team.name,
@@ -157,6 +177,38 @@ export default function UserDashboard() {
                   };
                   return <TeamCard key={normalizedTeam.id} team={normalizedTeam} />;
                 })
+
+              )}
+              {totalPages > 1 && (
+                <div className={styles.paginationControls}>
+                  <button
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      className={
+                        currentPage === index + 1
+                          ? styles.activePage
+                          : ""
+                      }
+                      onClick={() => setCurrentPage(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </div>
               )}
             </div>
           </section>

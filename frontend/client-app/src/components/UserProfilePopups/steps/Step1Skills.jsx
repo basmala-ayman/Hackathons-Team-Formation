@@ -23,8 +23,16 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
   };
 
   const addTag = (value, list, key) => {
-    if (list.includes(value) && !(formData[key] || []).includes(value)) {
-      setFormData((prev) => ({ ...prev, [key]: [...(prev[key] || []), value] }));
+    const trimmed = value.trim();
+
+    if (!trimmed) return;
+
+    if (!(formData[key] || []).includes(trimmed)) {
+      setFormData((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] || []), trimmed],
+      }));
+
       if (errors[key]) {
         setErrors((prev) => ({ ...prev, [key]: null }));
       }
@@ -57,12 +65,26 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
         <div className={styles.selectWrapper}>
           <Form.Control
             type="text"
-            className={`${styles.inputControl} ${errors.skills ? 'is-invalid' : ''}`}
-            placeholder="e.g., React, UI/UX Design, Communication..."
+            className={`${styles.inputControl} ${errors.skills ? "is-invalid" : ""}`}
+            placeholder="e.g., React, UI/UX Design..."
             value={skillInput}
-            onChange={(e) => { setSkillInput(e.target.value); setShowSkillDropdown(true); }}
+            onChange={(e) => {
+              setSkillInput(e.target.value);
+              setShowSkillDropdown(true);
+            }}
             onFocus={() => setShowSkillDropdown(true)}
             onBlur={() => setTimeout(() => setShowSkillDropdown(false), 200)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+
+                if (skillInput.trim()) {
+                  addTag(skillInput, allAvailableSkills, "skills");
+                  setSkillInput("");
+                  setShowSkillDropdown(false);
+                }
+              }
+            }}
           />
           <ChevronDown
             onMouseDown={(e) => {
@@ -78,21 +100,29 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
 
         {showSkillDropdown && (
           <div className={styles.suggestionsDropdown}>
-            {allAvailableSkills
-              .filter(s => s.toLowerCase().includes(skillInput.toLowerCase()))
-              .map(skill => (
-                <div
-                  key={skill}
-                  className={styles.suggestionItem}
-                  onMouseDown={() => {
-                    addTag(skill, allAvailableSkills, 'skills');
-                    setSkillInput('');
-                    setShowSkillDropdown(false);
-                  }}
-                >
-                  {skill}
-                </div>
-              ))}
+            {(() => {
+              const filtered = allAvailableSkills.filter((s) =>
+                s.toLowerCase().includes(skillInput.toLowerCase())
+              );
+
+              return (
+                <>
+                  {filtered.map((skill) => (
+                    <div
+                      key={skill}
+                      className={styles.suggestionItem}
+                      onMouseDown={() => {
+                        addTag(skill, allAvailableSkills, "skills");
+                        setSkillInput("");
+                        setShowSkillDropdown(false);
+                      }}
+                    >
+                      {skill}
+                    </div>
+                  ))}
+                </>
+              );
+            })()}
           </div>
         )}
 
@@ -117,6 +147,17 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
             onChange={(e) => { setRoleInput(e.target.value); setShowRoleDropdown(true); }}
             onFocus={() => setShowRoleDropdown(true)}
             onBlur={() => setTimeout(() => setShowRoleDropdown(false), 200)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+
+                if (roleInput.trim()) {
+                  addTag(roleInput, roles, "techRoles");
+                  setRoleInput("");
+                  setShowRoleDropdown(false);
+                }
+              }
+            }}
           />
           <ChevronDown
             onMouseDown={(e) => {
@@ -132,21 +173,29 @@ export default function Step1Skills({ formData, setFormData, errors, setErrors, 
 
         {showRoleDropdown && (
           <div className={styles.suggestionsDropdown}>
-            {roles
-              .filter(r => r.toLowerCase().includes(roleInput.toLowerCase()))
-              .map(role => (
-                <div
-                  key={role}
-                  className={styles.suggestionItem}
-                  onMouseDown={() => {
-                    addTag(role, roles, 'techRoles');
-                    setRoleInput('');
-                    setShowRoleDropdown(false);
-                  }}
-                >
-                  {role}
-                </div>
-              ))}
+            {(() => {
+              const filtered = roles.filter((r) =>
+                r.toLowerCase().includes(roleInput.toLowerCase())
+              );
+
+              return (
+                <>
+                  {filtered.map((role) => (
+                    <div
+                      key={role}
+                      className={styles.suggestionItem}
+                      onMouseDown={() => {
+                        addTag(role, roles, "techRoles");
+                        setRoleInput("");
+                        setShowRoleDropdown(false);
+                      }}
+                    >
+                      {role}
+                    </div>
+                  ))}
+                </>
+              );
+            })()}
           </div>
         )}
 

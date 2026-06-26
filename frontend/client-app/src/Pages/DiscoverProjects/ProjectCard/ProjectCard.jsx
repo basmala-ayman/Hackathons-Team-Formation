@@ -56,6 +56,7 @@ function ProjectCard({
   // console.log(creator);
 
   const creatorAvatar = getAvatarUrl(creator?.avatarUrl);
+  console.log("creator",creator);
   useEffect(() => {
     //get the real elements after render
     const titleElement = titleRef.current;

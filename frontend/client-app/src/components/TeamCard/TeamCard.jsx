@@ -8,7 +8,8 @@ export default function TeamCard({ team }) {
   return (
     <Card className={styles.teamCard}>
       <Card.Body className="p-4">
-        <Stack direction="horizontal" gap={3} className="justify-content-between align-items-start mb-3">
+        <Stack direction="horizontal" gap={3} className="justify-content-between align-items-start flex-wrap mb-3"
+        >
           <div>
             <Card.Title className={styles.teamName}>{team.name}</Card.Title>
             <div className={styles.challenge}>
@@ -52,6 +53,7 @@ export default function TeamCard({ team }) {
           </Stack>
         </div>
       </Card.Body>
+
 
     </Card>
   )

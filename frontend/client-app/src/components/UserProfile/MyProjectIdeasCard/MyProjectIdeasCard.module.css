@@ -54,6 +54,12 @@
   margin-top: 10px;
 }
 
+.ideasGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .ideaCard:hover {
   border-color: var(--color-primary-light);
 }
@@ -118,6 +124,7 @@
   color: var(--color-text);
   margin: 0 0 1rem 0;
   text-align: left;
+  word-break: break-all;
 }
 
 .ideaDesc {
@@ -126,6 +133,9 @@
   line-height: 1.6;
   text-align: left;
   margin-bottom: 1.6rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .hackathonRow {
@@ -177,6 +187,8 @@
   font-weight: 600;
   padding: 0.6rem 1.4rem;
   border-radius: 0.6rem;
+  max-width: 100%;
+  word-break: break-word;
 }
 
 .cardFooter {
@@ -187,7 +199,8 @@
 
 .footerInfo {
   display: flex;
-  gap: 1.8rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .metaRow {
@@ -289,4 +302,52 @@
   color: var(--color-white) !important;
   border-color: var(--color-primary-dark) !important;
   box-shadow: 0 0.6rem 1.4rem rgba(107, 70, 193, 0.18);
+}
+
+.showMoreBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0.5rem 0 1rem;
+  cursor: pointer;
+
+  color: var(--color-primary-dark);
+  font-size: var(--fs-small);
+  font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.showMoreBtn:hover {
+  color: var(--color-primary);
+}
+
+.showMoreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0;
+  margin-bottom: 1.4rem;
+
+  background: transparent;
+  border: none;
+
+  color: var(--color-primary-dark);
+  font-size: var(--fs-small);
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.showMoreBtn:hover {
+  color: var(--color-primary);
+}
+
+.showMoreBtn svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
