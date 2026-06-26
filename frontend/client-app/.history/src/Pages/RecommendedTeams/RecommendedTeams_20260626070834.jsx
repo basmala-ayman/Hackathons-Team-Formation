@@ -80,7 +80,7 @@ function RecommendedTeams() {
     }
   };
   if (loading) {
-    return <LoadingState message="Loading recommendations" />;
+    return <LoadingState message="Loading recommendation" />;
   }
 
   if (error) {
