@@ -8,16 +8,13 @@ export const ANONYMOUS_AVATAR =
 export function getAvatarUrl(path) {
   if (!path) return ANONYMOUS_AVATAR;
 
-  // Blob URL (local preview)
-  if (path.startsWith("blob:")) {
+  if (
+    path.startsWith("blob:") ||
+    path.startsWith("http://") ||
+    path.startsWith("https://")
+  ) {
     return path;
   }
 
-  // Full URL (Cloudinary, S3, etc.)
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-
-  // Backend relative path
   return `${BACKEND_URL}${path}`;
 }
