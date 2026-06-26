@@ -1,5 +1,7 @@
 const userService = require("./user.service");
 const uploadToCloudinary = require("../../utils/uploadToCloudinary");
+const fs = require("fs");
+const path = require("path");
 
 
 const getProfile = async (req, res, next) => {
@@ -18,16 +20,27 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-   
+
     if (req.files?.profilePicture?.[0]) {
       const cloudinaryResult = await uploadToCloudinary(req.files.profilePicture[0].buffer, "profile_pictures");
+
       req.body.profilePicture = cloudinaryResult;
+
     } else if (req.body.profilePicture === "" || req.body.profilePicture === "null") {
       delete req.body.profilePicture;
     }
-    const resumeFile = req.files?.resume?.[0] || req.files?.resumeUrl?.[0];
+
+
+    const resumeFile = req.files?.resume?.[0];
     if (resumeFile) {
-      req.body.resumeUrl = `/uploads/resumes/${resumeFile.filename}`;
+      const uniqueName =
+        Date.now() +
+        "-" +
+        Math.round(Math.random() * 1e9) +
+        path.extname(resumeFile.originalname);
+      const filePath = path.join("uploads", "resumes", uniqueName);
+      fs.writeFileSync(filePath, resumeFile.buffer); // save buffer
+      req.body.resumeUrl = `/uploads/resumes/${uniqueName}`;
     } else if (req.body.resumeUrl === "" || req.body.resumeUrl === "null") {
       delete req.body.resumeUrl;
     }
