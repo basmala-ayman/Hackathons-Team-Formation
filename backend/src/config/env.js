@@ -12,6 +12,9 @@ const requiredEnvVars = [
     "GOOGLE_CLIENT_ID",
     "FRONTEND_URL",
     "AI_BASE_URL",
+    "CLOUDINARY_CLOUD_NAME",
+    "CLOUDINARY_API_KEY",
+    "CLOUDINARY_API_SECRET",
 ];
 
 //and then loop for each of this needed variables and making validation for them to make fast failure if there is missing in one of them and detect them from the start
@@ -57,6 +60,11 @@ const config = {
 
     ai: {
         baseUrl: process.env.AI_BASE_URL,
+    },
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        apiSecret: process.env.CLOUDINARY_API_SECRET,
     },
 
 

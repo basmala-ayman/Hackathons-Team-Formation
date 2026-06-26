@@ -1,4 +1,6 @@
 const userService = require("./user.service");
+const uploadToCloudinary = require("../../utils/uploadToCloudinary");
+
 
 const getProfile = async (req, res, next) => {
   try {
@@ -18,7 +20,8 @@ const updateProfile = async (req, res, next) => {
   try {
    
     if (req.files?.profilePicture?.[0]) {
-      req.body.profilePicture = `/uploads/profile-pictures/${req.files.profilePicture[0].filename}`;
+      const cloudinaryResult = await uploadToCloudinary(req.files.profilePicture[0].buffer, "profile_pictures");
+      req.body.profilePicture = cloudinaryResult;
     } else if (req.body.profilePicture === "" || req.body.profilePicture === "null") {
       delete req.body.profilePicture;
     }
