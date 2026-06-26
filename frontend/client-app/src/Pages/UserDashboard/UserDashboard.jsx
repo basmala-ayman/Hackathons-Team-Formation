@@ -8,6 +8,8 @@ import CustomButton from "../../shared/CustomButton/CustomButton.jsx";
 import { Users, Trophy, Bell, Plus, Calendar } from "lucide-react";
 import { getUserDashboard } from "../../services/dashboard.js";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { LoadingState } from "../../shared/States.jsx";
+
 export default function UserDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,10 +83,7 @@ export default function UserDashboard() {
 
   if (isLoading) {
     return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100 flex-column gap-2">
-        <Spinner animation="border" variant="primary" />
-        <p className="text-muted fw-medium">Fetching your dashboard data...</p>
-      </div>
+      <LoadingState message="Loading Dashboard..." />
     );
   }
 

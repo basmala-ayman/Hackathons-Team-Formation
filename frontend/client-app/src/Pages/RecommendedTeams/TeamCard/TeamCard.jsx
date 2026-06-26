@@ -12,6 +12,7 @@ function TeamCard({
   onAccept,
   onReject,
   acceptLabel = "Accept",
+  onMemberClick,
 }) {
 
   const formatRole = (role) => {
@@ -46,6 +47,8 @@ function TeamCard({
               <div
                 key={member.userId}
                 className={`d-flex align-items-center gap-3 ${styles.memberItem}`}
+                onClick={() => onMemberClick?.(member)}
+                style={{ cursor: "pointer" }}
               >
                 <img
                   src={getAvatar(member)}

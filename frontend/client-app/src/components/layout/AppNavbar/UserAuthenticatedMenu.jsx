@@ -34,17 +34,6 @@ function UserAuthenticatedMenu({ onLogout }) {
   }
 
   const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-  // const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-
-  // const avatarUrl = (() => {
-  //   if (!user?.profilePicture) return ANONYMOUS_AVATAR;
-  //   if (user.profilePicture.startsWith("blob:")) {
-  //     return user.profilePicture;
-  //   }
-  //   const baseUrl = BACKEND_URL.replace("/api/v1", "");
-  //   return `${baseUrl}${user.profilePicture}?t=${Date.now()}`;
-  // })();
-
   const avatarUrl = getAvatarUrl(user?.profilePicture);
 
   return (
@@ -88,7 +77,7 @@ function UserAuthenticatedMenu({ onLogout }) {
             </span>{" "}
             View Profile
           </Dropdown.Item>
-           <Dropdown.Item as={Link} to="/progress-Tracker" className={styles.menuItem}>
+          <Dropdown.Item as={Link} to="/progress-Tracker" className={styles.menuItem}>
             <span className={styles.icon}>
               {/* <ProfileIcon></ProfileIcon> */}
             </span>{" "}

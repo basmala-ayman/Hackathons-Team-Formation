@@ -35,3 +35,17 @@ export const updateUserProfile = async (profileData) => {
   }
 };
 
+/**
+ * getUserBasicInfo:
+ * Fetch public basic info of any user by their UUID
+ * Returns name, email, LinkedIn, GitHub, skills, tech roles
+ */
+export const getUserBasicInfo = async (userId) => {
+  try {
+    const response = await api.get(`/users/${userId}/basic-info`);
+    console.log("basic data", response.data?.data);
+    return response.data?.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch user basic info!!";
+  }
+};

@@ -1,8 +1,11 @@
 import TeamCard from "../TeamCard/TeamCard";
 import { RaiseUpIcon } from "../../../assets/Icons";
 import { EmptyState } from "../../../shared/States";
+import { useState } from "react";
+import UserPreviewModal from "./UserPreviewModal/UserPreviewModal"; // adjust path if needed
 
 function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onReject }) {
+  const [selectedMember, setSelectedMember] = useState(null);
 
   const pendingInvitations = invitations.filter(
     (invitation) => invitation.status === "PENDING"
@@ -16,7 +19,6 @@ function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onRe
     <>
       {pendingInvitations.map((invitation) => {
         const targetTeam = invitation.team;
-
         if (!targetTeam) return null;
 
         return (
@@ -36,7 +38,6 @@ function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onRe
                 </p>
               )}
             </div>
-
             <TeamCard
               members={targetTeam.currentMembers}
               isAcceptLoading={acceptingId === invitation.invitationId}
@@ -51,11 +52,19 @@ function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onRe
                 invitationId: invitation.invitationId,
               })}
               acceptLabel="Accept to Join"
+              onMemberClick={setSelectedMember}  // ← added
             />
           </div>
         );
       })}
+
+      <UserPreviewModal
+        show={!!selectedMember}
+        member={selectedMember}
+        onHide={() => setSelectedMember(null)}
+      />
     </>
   );
 }
+
 export default InvitationsList;

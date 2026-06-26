@@ -1,18 +1,18 @@
 import TeamCard from "../TeamCard/TeamCard";
 import { EmptyState } from "../../../shared/States";
+import { useState } from "react";
+import UserPreviewModal from "./UserPreviewModal/UserPreviewModal";
 
 function MyTeamsList({ teams, acceptingId, rejectingId, onAccept, onReject, styles }) {
+  const [selectedMember, setSelectedMember] = useState(null);
 
   const teamsWithPendingRecs = teams.filter((team) => {
-
-    //filter to check the number of teams have pending recomendations
     const pendingRecs = (team.recommendations || []).filter(
       (rec) => rec.status === "PENDING"
     );
     return pendingRecs.length > 0;
   });
 
-  //if no team has recommendation pending then display empty state
   if (teamsWithPendingRecs.length === 0) {
     return <EmptyState message="No Recommendations found yet" />;
   }
@@ -20,7 +20,6 @@ function MyTeamsList({ teams, acceptingId, rejectingId, onAccept, onReject, styl
   return (
     <>
       {teamsWithPendingRecs.map((team) => {
-        // filter again to remove all the non pending recommendations and display the pending only
         const recs = (team.recommendations || []).filter(
           (rec) => rec.status === "PENDING"
         );
@@ -56,6 +55,7 @@ function MyTeamsList({ teams, acceptingId, rejectingId, onAccept, onReject, styl
                     onAccept={() => onAccept({ isOwner: true, recommendationId: rec.id })}
                     onReject={() => onReject({ isOwner: true, recommendationId: rec.id })}
                     acceptLabel="Accept Team"
+                    onMemberClick={setSelectedMember}
                   />
                 </div>
               ))}
@@ -63,6 +63,12 @@ function MyTeamsList({ teams, acceptingId, rejectingId, onAccept, onReject, styl
           </div>
         );
       })}
+
+      <UserPreviewModal
+        show={!!selectedMember}
+        member={selectedMember}
+        onHide={() => setSelectedMember(null)}
+      />
     </>
   );
 }
