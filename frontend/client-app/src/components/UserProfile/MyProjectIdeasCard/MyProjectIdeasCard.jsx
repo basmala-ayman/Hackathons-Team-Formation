@@ -83,7 +83,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
               <div className={styles.creatorHeader}>
                 <div className={styles.creatorAvatarWrapper}>
                   <img
-                   src={getAvatarUrl(userAvatar)}
+                    src={getAvatarUrl(userAvatar)}
                     alt="Creator"
                     className={styles.creatorImg}
                   />
