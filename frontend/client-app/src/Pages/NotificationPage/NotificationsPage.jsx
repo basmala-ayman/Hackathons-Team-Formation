@@ -11,8 +11,15 @@ export default function NotificationsPage() {
   // Calculate dynamic counts based on the notification types
   const counts = useMemo(() => ({
     all: allNotifications.length,
-    requests: allNotifications.filter(n =>
-      ["TEAM_INVITE", "INVITE_ACCEPTED", "INVITE_REJECTED"].includes(n.type)
+    requests: allNotifications.filter(
+      n =>
+        n.type === "TEAM_INVITE" &&
+        n.title !== "Team is now complete"
+    ).length,
+    updates: allNotifications.filter(
+      n =>
+        n.type === "TEAM_INVITE" &&
+        n.title === "Team is now complete"
     ).length,
     accepted: allNotifications.filter(n => n.type === "INVITE_ACCEPTED").length,
     matches: allNotifications.filter(n =>

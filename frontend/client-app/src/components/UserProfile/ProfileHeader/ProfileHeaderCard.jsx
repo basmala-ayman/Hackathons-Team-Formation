@@ -4,7 +4,7 @@ import { Mail, Link2, Edit3 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext/useAuth.js";
 import styles from "./ProfileHeaderCard.module.css";
 import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
-// const ANONYMOUS_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+import { FileText } from "lucide-react";
 
 export default function ProfileHeaderCard({ user: detailedUser, onEditClick, setFormData, isOwner }) {
   const fileInputRef = useRef(null);

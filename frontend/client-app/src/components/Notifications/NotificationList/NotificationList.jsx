@@ -47,7 +47,11 @@ export default function NotificationList({ filter }) {
     matches: {
       title: "No matches yet",
       description: "When we find potential team member, it will appear here."
-    }
+    },
+    updates: {
+      title: "No team updates",
+      description: "Updates about your team invitations will appear here."
+    },
   };
 
   const emptyState =
@@ -55,20 +59,47 @@ export default function NotificationList({ filter }) {
 
   const FILTER_CATEGORIES = [
     { id: "all", label: "All", types: [] },
-    { id: "team", label: "Team Invitations", types: ["TEAM_INVITE"] }, { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+
+    { id: "team", label: "Team Invitations", types: ["TEAM_INVITE"] },
+
+    { id: "updates", label: "Team Updates", types: ["TEAM_INVITE"] },
+
+    { id: "accepted", label: "Accepted", types: ["INVITE_ACCEPTED"] },
+
     { id: "declined", label: "Declined", types: ["INVITE_REJECTED"] },
+
     { id: "matches", label: "Matches", types: ["MATCH_FOUND"] },
+
     {
       id: "recommendations",
       label: "Recommendations",
-      types: ["RECOMMENDATION_RECEIVED"],
+      types: [
+        "RECOMMENDATION_RECEIVED",
+        "ROUND2_AVAILABLE",
+      ],
     },
   ];
 
   const filteredNotifications = useMemo(() => {
     const category = FILTER_CATEGORIES.find(c => c.id === filter);
     if (!category || category.id === "all") return allNotifications;
-    return allNotifications.filter(n => category.types.includes(n.type));
+    return allNotifications.filter((n) => {
+      if (category.id === "team") {
+        return (
+          n.type === "TEAM_INVITE" &&
+          n.title !== "Team is now complete"
+        );
+      }
+
+      if (category.id === "updates") {
+        return (
+          n.type === "TEAM_INVITE" &&
+          n.title === "Team is now complete"
+        );
+      }
+
+      return category.types.includes(n.type);
+    });
   }, [allNotifications, filter]);
 
   useEffect(() => {
@@ -76,10 +107,7 @@ export default function NotificationList({ filter }) {
     getMyNotifications(1, 20)
       .then((res) =>
         setAllNotifications(
-          (res.notifications || []).filter(
-            (n) => n.type !== "ROUND2_AVAILABLE"
-          )
-        )
+          (res.notifications || []))
       )
       .catch((err) => console.error("Error fetching:", err))
       .finally(() => setLoading(false));
@@ -116,7 +144,7 @@ export default function NotificationList({ filter }) {
   };
 
   if (loading) return (
-    <LoadingState  message="Loading Notifications..."/>
+    <LoadingState message="Loading Notifications..." />
   );
 
   return (
