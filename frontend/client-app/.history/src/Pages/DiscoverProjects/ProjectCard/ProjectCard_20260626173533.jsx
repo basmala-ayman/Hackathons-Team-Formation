@@ -209,7 +209,7 @@ function ProjectCard({
         </div>
 
         <CustomButton
-          variant={isInterested ? "secondary" : "primary"}
+          variant={isInterested ? "outline-primary" : "primary"}
           size="sm"
           className="w-100"
           onClick={onInterestToggle}

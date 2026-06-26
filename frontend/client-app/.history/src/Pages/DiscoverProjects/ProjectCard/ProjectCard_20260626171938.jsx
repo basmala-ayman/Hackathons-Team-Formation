@@ -26,7 +26,7 @@ function ProjectCard({
   creator,
   onInterestToggle,
   isInterested,
-  isLoading,
+  isLoading
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleSkills = isExpanded ? skills : skills.slice(0, 3);
@@ -56,25 +56,32 @@ function ProjectCard({
   // console.log(creator);
 
   const creatorAvatar = getAvatarUrl(creator?.avatarUrl);
-  console.log("creator", creator);
+  console.log("creator",creator);
   useEffect(() => {
     //get the real elements after render
     const titleElement = titleRef.current;
     const descElement = descRef.current;
 
     if (!titleElement || !descElement) return;
-    //scroll height -> real height
+    //scroll height -> real height 
     // client height-> the height that user see
     const isTitleClipped =
       titleElement.scrollHeight > titleElement.clientHeight;
     const isDescClipped = descElement.scrollHeight > descElement.clientHeight;
 
     const shouldExpand =
-      isTitleClipped || isDescClipped || hasHiddenSkills || hasHiddenRoles;
+      isTitleClipped ||
+      isDescClipped ||
+      hasHiddenSkills ||
+      hasHiddenRoles;
+
 
     // eslint-disable-next-line
     setCanExpand(shouldExpand);
-  }, [title, description, skills, roles]);
+
+  }
+    , [title, description, skills, roles]);
+
 
   return (
     <div
@@ -93,9 +100,7 @@ function ProjectCard({
         />
         <div>
           <h6 className={`fw-bold fs-4 mb-0`}>{creator?.name}</h6>
-          <small className={styles.creatorLabel}>
-            {creator?.creatorRole || "Project Creator"}
-          </small>
+          <small className={styles.creatorLabel}>{creator?.creatorRole || "Project Creator"}</small>
         </div>
       </div>
 
@@ -195,10 +200,7 @@ function ProjectCard({
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
           >
             <TeamIcon size={20} />
-            <span>
-              {" "}
-              Team {currentTeamSize - 1}/{maxTeamSize}
-            </span>
+            <span> Team {currentTeamSize-1}/{maxTeamSize}</span>
           </div>
           <div
             className={`d-flex align-items-center gap-2 ${styles.bottomStat}`}
@@ -209,21 +211,19 @@ function ProjectCard({
         </div>
 
         <CustomButton
-          variant={isInterested ? "secondary" : "primary"}
+          variant="primary"
           size="sm"
-          className="w-100"
+          className="w-70"
           onClick={onInterestToggle}
           disabled={isLoading}
         >
           <HeartIcon color="var(--color-white)"></HeartIcon>
 
-          <span>
-            {isLoading
-              ? "Updating..."
-              : isInterested
-                ? "Remove Interest"
-                : "I'm Interested"}
-          </span>
+          <span>{isLoading
+            ? "Submitting..."
+            : isInterested
+              ? "Interested"
+              : "I'm Interested"}</span>
         </CustomButton>
       </div>
     </div>

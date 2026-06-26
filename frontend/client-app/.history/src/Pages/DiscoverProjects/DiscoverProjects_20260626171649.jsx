@@ -9,49 +9,26 @@ import toast from "react-hot-toast";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log("projects", projects);
-  const { registerInterest, removeInterest, loadingId } = useProjectInterest();
+  console.log('projects', projects);
+  const { registerInterest,removeInterest, loadingId } = useProjectInterest();
 
   const handleInterestToggle = async (projectId) => {
-    const targetProject = projects.find((p) => p.id === projectId);
-    const isCurrentlyInterested = targetProject?.isInterested;
-
     try {
-      if (isCurrentlyInterested) {
-        await removeInterest(projectId);
-        setProjects((prev) =>
-          prev.map((project) =>
-            project.id === projectId
-              ? {
-                  ...project,
-                  isInterested: false,
-                  totalInterestsCount: Math.max(
-                    0,
-                    project.totalInterestsCount - 1,
-                  ),
-                }
-              : project,
-          ),
-        );
-        toast.success("Interest removed");
-      } else {
-        const response = await registerInterest(projectId);
 
-        setProjects((prev) =>
-          prev.map((project) =>
-            project.id === projectId
-              ? {
-                  ...project,
-                  isInterested: true,
-                  totalInterestsCount:
-                    response.data?.currentPoolSize ||
-                    project.totalInterestsCount + 1,
-                }
-              : project,
-          ),
-        );
-        toast.success("Interest submitted");
-      }
+      const response = await registerInterest(projectId);
+      setProjects((prev) =>
+        prev.map((project) =>
+          project.id === projectId
+            ? {
+              ...project,
+              isInterested: response.data?.isInterested,
+              totalInterestsCount: response.data?.currentPoolSize,
+            }
+            : project,
+        ),
+      );
+      // console.log(response.message);
+      toast.success("Interest submitted")
     } catch (error) {
       const backendMessage = error.message;
       if (backendMessage) {
@@ -59,6 +36,7 @@ function DiscoverProjects() {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
+      // console.error(error);
     }
   };
   if (loading) {

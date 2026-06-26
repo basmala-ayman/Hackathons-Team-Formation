@@ -23,8 +23,7 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
     location,
     interestCount = 0,
     userCreated = false,
-    isInterested = false,
-
+    
   } = hackathon;
   // const navigate = useNavigate();
   const isThisCardLoading = loadingId === id;
@@ -121,19 +120,20 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
       {/* Action Buttons */}
       <div className="d-flex gap-2 mt-auto">
         <CustomButton
-          variant={isInterested ? "secondary" : "primary"}
+          variant="primary"
           size="sm"
           className="flex-fill rounded-4 w-100"
           onClick={() => onInterestClick(id)}
+          // disabled={isInterestLoading || isInterested}
           disabled={isThisCardLoading}
         >
-      {isThisCardLoading 
-            ? "Updating..." 
-            : isInterested 
-              ? "Remove Interest" 
-              : "I'm Interested"
-          }
+          {/* {isInterestLoading
+            ? "Submitting..."
+            : isInterested
+              ? "Interested"
+              : "I'm Interested"} */}
 
+          {isThisCardLoading ? "Submitting..." : "I'm Interested"}
         </CustomButton>
       </div>
     </div>

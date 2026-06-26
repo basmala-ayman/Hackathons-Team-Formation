@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { markInterestInHackathon } from "../../../services/interestService";
+import { markInterestInHackathon , removeHackathonInterest } from "../../../services/interestService";
 
 function useHackathonInterest() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ function useHackathonInterest() {
 
       return response;
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      console.log(err);
       throw err;
     } finally {
       setLoading(false);

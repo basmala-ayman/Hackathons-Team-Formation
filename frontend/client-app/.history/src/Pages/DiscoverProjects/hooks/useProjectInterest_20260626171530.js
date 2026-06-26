@@ -36,7 +36,6 @@ export const useProjectInterest=()=> {
 
   return {
     registerInterest,
-    removeInterest,
     loadingId,
     error,
   };

@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 
 function DiscoverProjects() {
   const { projects, loading, error, setProjects } = useExploreProjects();
-  console.log("projects", projects);
-  const { registerInterest, removeInterest, loadingId } = useProjectInterest();
+  console.log('projects', projects);
+  const { registerInterest,removeInterest, loadingId } = useProjectInterest();
 
   const handleInterestToggle = async (projectId) => {
     const targetProject = projects.find((p) => p.id === projectId);
@@ -18,37 +18,38 @@ function DiscoverProjects() {
 
     try {
       if (isCurrentlyInterested) {
+        // --- 1. REMOVE INTEREST ---
         await removeInterest(projectId);
+        
         setProjects((prev) =>
           prev.map((project) =>
             project.id === projectId
               ? {
                   ...project,
                   isInterested: false,
-                  totalInterestsCount: Math.max(
-                    0,
-                    project.totalInterestsCount - 1,
-                  ),
+                  // Decrement locally so it updates immediately on the UI
+                  totalInterestsCount: Math.max(0, project.totalInterestsCount - 1),
                 }
-              : project,
-          ),
+              : project
+          )
         );
         toast.success("Interest removed");
-      } else {
-        const response = await registerInterest(projectId);
 
+      } else {
+        // --- 2. ADD INTEREST ---
+        const response = await registerInterest(projectId);
+        
         setProjects((prev) =>
           prev.map((project) =>
             project.id === projectId
               ? {
                   ...project,
                   isInterested: true,
-                  totalInterestsCount:
-                    response.data?.currentPoolSize ||
-                    project.totalInterestsCount + 1,
+                  // Use backend size if returned, otherwise increment locally
+                  totalInterestsCount: response.data?.currentPoolSize || project.totalInterestsCount + 1,
                 }
-              : project,
-          ),
+              : project
+          )
         );
         toast.success("Interest submitted");
       }
@@ -59,6 +60,7 @@ function DiscoverProjects() {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
+    }
     }
   };
   if (loading) {

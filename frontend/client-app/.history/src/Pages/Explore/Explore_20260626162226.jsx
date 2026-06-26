@@ -25,19 +25,21 @@ function Explore() {
 
   const handleInterest = async (hackathonId) => {
     setLoadingId(hackathonId);
-    
-    const targetHackathon = hackathons.find((h) => h.id === hackathonId);
+        const targetHackathon = hackathons.find((h) => h.id === hackathonId);
     const isCurrentlyInterested = targetHackathon?.isInterested;
 
     try {
       if (isCurrentlyInterested) {
+        // --- 1. REMOVE INTEREST ---
         await removeInterest(hackathonId);
+        
         setHackathons((prevHackathons) =>
           prevHackathons.map((hackathon) =>
             hackathon.id === hackathonId
               ? {
                   ...hackathon,
                   isInterested: false,
+                  // Decrement local count by 1 
                   interestCount: Math.max(0, hackathon.interestCount - 1), 
                 }
               : hackathon
@@ -46,6 +48,7 @@ function Explore() {
         toast.success("Interest removed");
 
       } else {
+        // --- 2. ADD INTEREST ---
         const response = await registerInterest(hackathonId);
         
         setHackathons((prevHackathons) =>
@@ -54,6 +57,7 @@ function Explore() {
               ? {
                   ...hackathon,
                   isInterested: true,
+                  // Use backend value or increment locally
                   interestCount: response.data?.currentPoolSize || hackathon.interestCount + 1,
                 }
               : hackathon

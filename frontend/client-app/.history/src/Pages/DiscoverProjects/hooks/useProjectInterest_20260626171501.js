@@ -21,22 +21,9 @@ export const useProjectInterest=()=> {
       setLoadingId(null);
     }
   };
-  const removeInterest = async (projectId) => {
-    try {
-      setLoadingId(projectId);
-      setError("");
-      return await removeInterestFromProject(projectId);
-    } catch (err) {
-      console.log(err);
-      throw err;
-    } finally {
-      setLoadingId(null);
-    }
-  };
 
   return {
     registerInterest,
-    removeInterest,
     loadingId,
     error,
   };

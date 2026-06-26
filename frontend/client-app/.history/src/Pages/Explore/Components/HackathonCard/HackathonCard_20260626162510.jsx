@@ -125,6 +125,7 @@ function HackathonCard({ hackathon, onInterestClick, loadingId }) {
           size="sm"
           className="flex-fill rounded-4 w-100"
           onClick={() => onInterestClick(id)}
+          // disabled={isInterestLoading || isInterested}
           disabled={isThisCardLoading}
         >
       {isThisCardLoading 

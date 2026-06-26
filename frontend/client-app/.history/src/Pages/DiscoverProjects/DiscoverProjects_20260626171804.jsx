@@ -35,6 +35,7 @@ function DiscoverProjects() {
         );
         toast.success("Interest removed");
       } else {
+        // --- 2. ADD INTEREST ---
         const response = await registerInterest(projectId);
 
         setProjects((prev) =>
@@ -43,6 +44,7 @@ function DiscoverProjects() {
               ? {
                   ...project,
                   isInterested: true,
+                  // Use backend size if returned, otherwise increment locally
                   totalInterestsCount:
                     response.data?.currentPoolSize ||
                     project.totalInterestsCount + 1,

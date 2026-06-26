@@ -25,54 +25,34 @@ function Explore() {
 
   const handleInterest = async (hackathonId) => {
     setLoadingId(hackathonId);
-    
-    const targetHackathon = hackathons.find((h) => h.id === hackathonId);
-    const isCurrentlyInterested = targetHackathon?.isInterested;
-
     try {
-      if (isCurrentlyInterested) {
-        await removeInterest(hackathonId);
-        setHackathons((prevHackathons) =>
-          prevHackathons.map((hackathon) =>
-            hackathon.id === hackathonId
-              ? {
-                  ...hackathon,
-                  isInterested: false,
-                  interestCount: Math.max(0, hackathon.interestCount - 1), 
-                }
-              : hackathon
-          )
-        );
-        toast.success("Interest removed");
-
-      } else {
-        const response = await registerInterest(hackathonId);
-        
-        setHackathons((prevHackathons) =>
-          prevHackathons.map((hackathon) =>
-            hackathon.id === hackathonId
-              ? {
-                  ...hackathon,
-                  isInterested: true,
-                  interestCount: response.data?.currentPoolSize || hackathon.interestCount + 1,
-                }
-              : hackathon
-          )
-        );
-        toast.success("Interest submitted");
-      }
+      const response = await registerInterest(hackathonId);
+      console.log(response);
+      setHackathons((prevHackathons) =>
+        prevHackathons.map((hackathon) =>
+          hackathon.id === hackathonId
+            ? {
+                ...hackathon,
+                isInterested: true,
+                interestCount: response.data.currentPoolSize,
+              }
+            : hackathon,
+        ),
+      );
+      toast.success("Interest submitted");
     } catch (error) {
       const backendMessage = error.message;
+
       if (backendMessage) {
         toast.error(backendMessage);
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-    } finally {
+      // console.log(error);
+    }finally{
       setLoadingId(null);
     }
   };
-
   const handleOpenedFilters = () => {
     setOpenMobileFilter(true);
   };

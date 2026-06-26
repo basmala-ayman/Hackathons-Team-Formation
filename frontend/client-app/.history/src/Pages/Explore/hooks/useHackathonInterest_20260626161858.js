@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { markInterestInHackathon } from "../../../services/hackathonService";
+import { markInterestInHackathon , removeHackathonInterest } from "../../../services/interestService";
 
 function useHackathonInterest() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,19 @@ function useHackathonInterest() {
 
       return response;
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      console.log(err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const removeInterest = async (hackathonId) => {
+    try {
+      setLoading(true);
+      setError("");
+      return await removeHackathonInterest(hackathonId);
+    } catch (err) {
+      console.log(err);
       throw err;
     } finally {
       setLoading(false);
@@ -23,6 +35,7 @@ function useHackathonInterest() {
 
   return {
     registerInterest,
+    removeInterest,
     loading,
     error,
   };

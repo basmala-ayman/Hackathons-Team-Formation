@@ -14,15 +14,7 @@ export const markInterestInHackathon = async (hackathonId) => {
   }
 };
 
-export const removeHackathonInterest = async (hackathonId) => {try {
-    const response = await api.delete(
-      `/interests/hackathons/${hackathonId}`
-    );
-    
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || {
-      message: "Failed to remove interest",
-    };
-  }
+export const removeHackathonInterest = async (hackathonId) => {
+  const response = await axios.delete(`/interests/hackathons/${hackathonId}`);
+  return response.data;
 };

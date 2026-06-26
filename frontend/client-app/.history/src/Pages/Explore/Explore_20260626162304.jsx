@@ -54,6 +54,7 @@ function Explore() {
               ? {
                   ...hackathon,
                   isInterested: true,
+                  // Use backend value or increment locally
                   interestCount: response.data?.currentPoolSize || hackathon.interestCount + 1,
                 }
               : hackathon

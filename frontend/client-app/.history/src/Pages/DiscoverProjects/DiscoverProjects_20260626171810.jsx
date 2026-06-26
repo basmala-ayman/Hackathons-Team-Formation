@@ -43,6 +43,7 @@ function DiscoverProjects() {
               ? {
                   ...project,
                   isInterested: true,
+                  // Use backend size if returned, otherwise increment locally
                   totalInterestsCount:
                     response.data?.currentPoolSize ||
                     project.totalInterestsCount + 1,
