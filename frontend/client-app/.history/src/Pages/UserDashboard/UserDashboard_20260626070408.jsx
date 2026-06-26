@@ -83,7 +83,7 @@ export default function UserDashboard() {
 
   if (isLoading) {
     return (
-      <LoadingState message="Loading Dashboard" />
+      <LoadingState message="Loading Dashboard..." />
     );
   }
 
