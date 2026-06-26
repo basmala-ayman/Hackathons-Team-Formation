@@ -85,8 +85,7 @@ function TeamProgressCard({ team, onOpenModal }) {
       </div>
 
       {/* Team Action Buttons Section */}
-      
-     {team.buttonDisplayed && team.status !== "COMPLETE"  && (
+     {team.buttonDisplayed && (
         <div className="d-flex justify-content-end gap-3 pt-1">
           <CustomButton
             variant="secondary"
