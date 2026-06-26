@@ -9,6 +9,7 @@ import ProfileHeaderCard from "../../components/UserProfile/ProfileHeader/Profil
 import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/MyProjectIdeasCard";
 import { getUserProfile, updateUserProfile } from "../../services/userService";
 import { useAuth } from "../../context/AuthContext/useAuth";
+import { getAvatarUrl } from "../../utils/getAvatarUrl";
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -66,24 +67,7 @@ export default function UserProfile({ isOwner = true }) {
           if (profileData.profileCompletionPercentage) {
             setCompletionPercentage(profileData.profileCompletionPercentage);
           }
-
-          let rawAvatar = coreProfile.profilePicture;
-
-          if (rawAvatar) {
-            let cleanPath = rawAvatar;
-            if (cleanPath.includes("/api/v1")) {
-              cleanPath = cleanPath.replace("/api/v1", "");
-            }
-
-            if (!cleanPath.startsWith("/uploads")) {
-              cleanPath = cleanPath.startsWith("/") ? `/uploads${cleanPath}` : `/uploads/${cleanPath}`;
-            }
-
-            const baseUrl = BACKEND_URL.replace("/api/v1", "");
-            rawAvatar = `${baseUrl}${cleanPath.startsWith("/") ? "" : "/"}${cleanPath}?t=${new Date().getTime()}`;
-          } else {
-            rawAvatar = "";
-          }
+          let rawAvatar = getAvatarUrl(coreProfile.profilePicture);
 
 
           let parsedInterests = [];
@@ -191,11 +175,7 @@ export default function UserProfile({ isOwner = true }) {
       const profile = await getUserProfile();
       const latestProfile = profile.data?.data || profile.data || profile;
       const latestCore = latestProfile.profile;
-      let latestAvatar = "";
-      if (latestCore.profilePicture) {
-        const baseUrl = BACKEND_URL.replace("/api/v1", "");
-        latestAvatar = `${baseUrl}${latestCore.profilePicture}?t=${Date.now()}`;
-      }
+      const latestAvatar = getAvatarUrl(latestCore.profilePicture);
 
       setValues(prev => ({
         ...prev,
