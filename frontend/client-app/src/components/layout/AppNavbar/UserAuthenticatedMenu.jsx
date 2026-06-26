@@ -88,6 +88,12 @@ function UserAuthenticatedMenu({ onLogout }) {
             </span>{" "}
             View Profile
           </Dropdown.Item>
+           <Dropdown.Item as={Link} to="/progress-Tracker" className={styles.menuItem}>
+            <span className={styles.icon}>
+              {/* <ProfileIcon></ProfileIcon> */}
+            </span>{" "}
+            View Team Progress
+          </Dropdown.Item>
 
           <Dropdown.Item as={Link} to="/userdashboard" className={styles.menuItem}>
             <span className={styles.icon}>
