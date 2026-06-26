@@ -148,6 +148,44 @@ const findMyTeamsWithMembers = async (userId) => {
   });
 };
 
+const getTeamWithDetails = async (teamId) => {
+    return prisma.team.findUnique({
+        where: { id: teamId },
+        include: {
+            hackathon: true,
+            project: true,
+            skills: {
+                include: {
+                    skill: true,
+                },
+            },
+            members: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            profilePicture: true,
+                            techRoles: true,
+                            githubUrl: true,
+                            linkedinUrl: true,
+                            skills: {
+                                include: {
+                                    skill: {
+                                        select: {
+                                            name: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+};
 
 module.exports = {
   upsertSkill,
@@ -160,5 +198,6 @@ module.exports = {
   findInvitationById,
   updateInvitationStatus,
   findUserTeamForHackathon,
-  findMyTeamsWithMembers
+  findMyTeamsWithMembers,
+  getTeamWithDetails
 };

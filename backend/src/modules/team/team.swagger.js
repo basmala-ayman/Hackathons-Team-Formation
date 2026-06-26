@@ -289,3 +289,114 @@
  *       500:
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /teams/{teamId}/finalize:
+ *   patch:
+ *     summary: Finalize a team with its current accepted members
+ *     tags:
+ *       - Teams
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: teamId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Team ID
+ *     responses:
+ *       200:
+ *         description: Team finalized successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Team finalized successfully.
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     teamId:
+ *                       type: string
+ *                       example: 67b1c6b8-4d0b-4d58-9f2d-92b2f91f5c52
+ *                     teamName:
+ *                       type: string
+ *                       example: AI Innovators
+ *                     description:
+ *                       type: string
+ *                       example: Building an AI-powered healthcare assistant.
+ *                     status:
+ *                       type: string
+ *                       example: COMPLETE
+ *                     maxMembers:
+ *                       type: integer
+ *                       example: 4
+ *                     ownerId:
+ *                       type: string
+ *                     hackathon:
+ *                       type: string
+ *                       example: Hack Cairo 2026
+ *                     project:
+ *                       nullable: true
+ *                       type: object
+ *                     requiredSkills:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       example:
+ *                         - nodejs
+ *                         - react
+ *                         - python
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           userId:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           profilePicture:
+ *                             type: string
+ *                             nullable: true
+ *                           techRoles:
+ *                             type: array
+ *                             items:
+ *                               type: string
+ *                           skills:
+ *                             type: array
+ *                             items:
+ *                               type: string
+ *                           githubUrl:
+ *                             type: string
+ *                             nullable: true
+ *                           linkedinUrl:
+ *                             type: string
+ *                             nullable: true
+ *                           status:
+ *                             type: string
+ *                             example: ACCEPTED
+ *                           isOwner:
+ *                             type: boolean
+ *                           invitationId:
+ *                             type: string
+ *                             nullable: true
+ *                             example: null
+ *                     buttonDisplayed:
+ *                       type: boolean
+ *                       example: false
+ *       400:
+ *         description: Team is already complete or request is invalid.
+ *       403:
+ *         description: Only the team owner can finalize the team.
+ *       404:
+ *         description: Team not found.
+ */

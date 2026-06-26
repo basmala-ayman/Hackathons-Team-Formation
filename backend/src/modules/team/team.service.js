@@ -549,7 +549,36 @@ const finalizeTeam = async (teamId, founderId) => {
         data: { status: "COMPLETE" },
     });
 
-    return { message: "Team finalized successfully with current members." };
+    const completedTeam = await teamRepository.getTeamWithDetails(teamId);
+
+    const members = completedTeam.members.map((member) => ({
+    userId: member.user.id,
+    name: member.user.name,
+    email: member.user.email,
+    profilePicture: member.user.profilePicture,
+    techRoles: member.user.techRoles || [],
+    skills: member.user.skills?.map((s) => s.skill.name) || [],
+    githubUrl: member.user.githubUrl || null,
+    linkedinUrl: member.user.linkedinUrl || null,
+    status: "ACCEPTED",
+    isOwner: member.user.id === completedTeam.ownerId,
+    invitationId: null,
+}));
+
+return {
+    teamId: completedTeam.id,
+    teamName: completedTeam.name,
+    description: completedTeam.description || "",
+    status: completedTeam.status,
+    maxMembers: completedTeam.size,
+    ownerId: completedTeam.ownerId,
+    hackathon: completedTeam.hackathon.title,
+    project: completedTeam.project || null,
+    requiredSkills: completedTeam.skills.map((s) => s.skill.name),
+    members,
+    buttonDisplayed: false,
+};
+
 };
 
 
