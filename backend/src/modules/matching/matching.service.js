@@ -189,11 +189,13 @@ const saveRecommendationsAndNotify = async ({
         await notificationRepository.createNotifications([
             {
                 userId: ownerId,
-                type: "RECOMMENDATION_RECEIVED",
+                type: roundNumber > 1 ? "ROUND2_AVAILABLE" : "RECOMMENDATION_RECEIVED",
                 title: roundNumber > 1
-                    ? `Round ${roundNumber} recommendations ready`
+                    ? "Round 2 recommendations are ready!"
                     : "Your team recommendations are ready",
-                message: `We found ${createdRecs.length} recommended team(s) for "${hackathonTitle}". Check your recommendations page.`,
+                message: roundNumber > 1
+                    ? `Round ${roundNumber} is done! We found ${createdRecs.length} new recommended team(s) for "${hackathonTitle}". Check your recommendations page to review and accept.`
+                    : `We found ${createdRecs.length} recommended team(s) for "${hackathonTitle}". Check your recommendations page.`,
                 metadata: { teamId, matchingRequestId, round: roundNumber },
             },
         ]);
