@@ -39,10 +39,23 @@ const countUnread = (userId) => {
     return prisma.notification.count({ where: { userId, isRead: false } });
 };
 
+
+const findRecentNotification = async (userId, type, metadata, since) => {
+    return prisma.notification.findFirst({
+        where: {
+            userId,
+            type,
+            metadata: { path: ['teamId'], equals: metadata.teamId },
+            createdAt: { gte: since },
+        },
+    });
+};
+
 module.exports = {
   createNotifications,
   findByUserId,
   markAsRead,
   markAllAsRead,
   countUnread,
+  findRecentNotification,
 };

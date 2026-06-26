@@ -338,6 +338,22 @@ const triggerHackathonMatching = async () => {
 const triggerRound2 = async (teamId, founderId) => {
     const team = await matchingRepository.findTeamById(teamId);
     if (!team) throw new AppError("Team not found", 404);
+
+    const processingRequest = await prisma.matchingRequest.findFirst({
+        where: {
+            teamId,
+            status: "PROCESSING",
+        },
+    });
+    if (processingRequest) {
+        throw new AppError(
+            "A matching request is already being processed for this team. Please wait.",
+            409
+        );
+    }
+
+
+
     if (team.ownerId !== founderId) throw new AppError("Only the team owner can request new recommendations", 403);
     if (team.status === "COMPLETE") throw new AppError("Team is already complete", 400);
 
@@ -419,31 +435,31 @@ const triggerRound2 = async (teamId, founderId) => {
 // ─────────────────────────────────────────────────────────
 // CRON — Check expired invitations
 // ─────────────────────────────────────────────────────────
-const checkExpiredInvitations = async () => {
-    await matchingRepository.markExpiredInvitations();
+// // const checkExpiredInvitations = async () => {
+//     await matchingRepository.markExpiredInvitations();
 
-    const teamsToCheck = await matchingRepository.findFormingTeamsWithNoOpenInvitations();
+//     const teamsToCheck = await matchingRepository.findFormingTeamsWithNoOpenInvitations();
 
-    for (const team of teamsToCheck) {
-        const memberCount = team.members.length;
-        if (memberCount >= team.size) {
-            await matchingRepository.updateTeamStatus(team.id, "COMPLETE");
-        } else {
-            const openSlots = team.size - memberCount;
-            await notificationRepository.createNotifications([{
-                userId: team.ownerId,
-                type: "ROUND2_AVAILABLE",
-                title: "Some invitations expired",
-                message: `${openSlots} slot(s) in your team are still open. You can request new recommendations or keep the current team.`,
-                metadata: { teamId: team.id, openSlots },
-            }]);
-        }
-    }
-};
+//     for (const team of teamsToCheck) {
+//         const memberCount = team.members.length;
+//         if (memberCount >= team.size) {
+//             await matchingRepository.updateTeamStatus(team.id, "COMPLETE");
+//         } else {
+//             const openSlots = team.size - memberCount;
+//             await notificationRepository.createNotifications([{
+//                 userId: team.ownerId,
+//                 type: "ROUND2_AVAILABLE",
+//                 title: "Some invitations expired",
+//                 message: `${openSlots} slot(s) in your team are still open. You can request new recommendations or keep the current team.`,
+//                 metadata: { teamId: team.id, openSlots },
+//             }]);
+//         }
+//     }
+// };
 
 module.exports = {
     triggerProjectMatching,
     triggerHackathonMatching,
     triggerRound2,
-    checkExpiredInvitations,
+    //checkExpiredInvitations,
 };
