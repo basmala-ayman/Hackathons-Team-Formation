@@ -7,21 +7,20 @@ import { useAuth } from "../../../context/AuthContext/useAuth.js";
 import { popUp } from "../../../utils/popUp.js";
 import { Link } from "react-router-dom";
 import { useLocalStorage } from "../../../hooks/useLocalStorage.js";
-import { useFormHandler } from "../../../hooks/useFormHandler.js";
 export default function VerifyEmail() {
   const { resendVerification, isSubmitting } = useAuth();
-
-  // const email = localStorage.getItem("tempEmail") || "your email address";
-  const [email] = useLocalStorage("reg_email", "your email address");
-  const { setErrors } = useFormHandler({});
+  const [email] = useLocalStorage("reg_email", "");
 
   const handleResend = async () => {
+    if (!email) {
+      popUp.error("No email found.");
+      return;
+    }
     try {
       await resendVerification(email);
       popUp.success("Verification email sent! Check your inbox.");
     } catch (err) {
       popUp.error(err.message || "Failed to resend email.");
-      setErrors({ resend: err.message });
     }
   };
 
@@ -39,7 +38,7 @@ export default function VerifyEmail() {
 
         <p className={styles.description}>
           We sent a verification link to <br />
-          <strong>{email}</strong> <br />
+          <strong>{email || "your email address"}</strong> <br />
           Please click the link to activate your account.
         </p>
 

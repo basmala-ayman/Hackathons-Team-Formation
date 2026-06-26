@@ -1,5 +1,4 @@
 import React from "react";
-// import { Link, useLocation } from "react-router-dom";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import { useAuth } from "../../../context/AuthContext/useAuth";
 import { popUp } from "../../../utils/popUp";
@@ -10,9 +9,6 @@ import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function EmailSent() {
-  // const location = useLocation();
-  // // Email will come later from backend
-  // const email = location.state?.email || "example@gmail.com";
   const navigate = useNavigate();
   const [email] = useLocalStorage("resetEmail", "");
   const { forgotPassword, isSubmitting } = useAuth();
@@ -33,17 +29,18 @@ export default function EmailSent() {
       imgClass={styles.immgIllustration}
     >
       <div className={styles.container}>
-        <div className={styles.iconWrapper}>
-          <Mail size={40} strokeWidth={2} />
+        <div className={styles.iconCircle}>
+          <Mail size={24} color="white" />
         </div>
         <h2 className={styles.title}>Check Your Email</h2>
         <p className={styles.description}>
-          We've sent a password reset link to:
-        </p>
-        <p className={styles.email}>{email}</p>
-        <p className={styles.helperText}>
-          Click the link in the email to reset your password. If you don't see
-          it, check your spam folder.
+          We've sent a password reset link to
+          <br />
+          <strong>{email}</strong>
+          <br />
+          Click the link in the email to reset your password.
+          <br />
+          If you don't see it, check your spam folder.
         </p>
         <CustomButton
           variant="primary"

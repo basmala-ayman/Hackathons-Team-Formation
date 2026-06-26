@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   padding: 3rem;
-
   background:
     radial-gradient(
       circle at top right,
@@ -21,12 +20,14 @@
 
 .authCard {
   width: 100%;
-  max-width: 52rem;
-  background: var(--color-white);
-  border: 0.1rem solid var(--color-primary-light-2);
-  border-radius: 2rem;
-  padding: 4rem;
-  box-shadow: 0 1rem 4rem rgba(107, 70, 193, 0.08);
+  max-width: 54rem;
+  padding: 5rem 4.5rem;
+  border-radius: 2.4rem;
+  background: #fff;
+  border: 1px solid rgba(126, 87, 255, 0.12);
+  box-shadow:
+    0 20px 60px rgba(79, 70, 229, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.04);
   transition: 0.3s ease;
 }
 

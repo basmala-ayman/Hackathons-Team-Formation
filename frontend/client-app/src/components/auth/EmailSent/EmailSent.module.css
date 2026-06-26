@@ -17,16 +17,15 @@
   box-shadow: 0 0.4rem 0.4rem 0 var(--color-primary-light-2);
 }
 
-.iconWrapper {
+.iconCircle {
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
-  background: linear-gradient(180deg, var(--color-primary-dark), #8945ff);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  margin-bottom: 3rem;
+  background: linear-gradient(180deg, var(--color-primary-dark), #8945ff);
+  flex-shrink: 0;
 }
 
 .title {
@@ -37,38 +36,35 @@
 }
 
 .description {
-  font-size: var(--fs-regular);
-  color: var(--color-text);
-  margin-bottom: 0.8rem;
-}
-
-.email {
-  font-size: var(--fs-small);
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: 2.4rem;
-}
-
-.helperText {
-  font-size: var(--fs-small);
-  color: var(--color-text);
+  color: var(--color-dark-gray);
+  font-size: 1.5rem;
   line-height: 1.8;
-  margin-bottom: 3rem;
+  margin: 1.6rem 0 3rem;
+}
+
+.description strong {
+  display: inline-block;
+  margin: 0.8rem 0;
+  color: var(--color-very-dark-purple);
+  font-weight: 700;
 }
 
 .footerText {
-  margin-top: 2.4rem;
+  margin-top: 1.5rem;
   font-size: var(--fs-small);
-  color: var(--color-text);
+  color: var(--color-gray);
 }
 
 .tryAgainBtn {
-  background: none;
+  background: transparent;
   border: none;
-  color: var(--color-primary-dark);
+  color: var(--color-very-dark-purple);
   font-weight: 700;
+  font-size: 1.6rem;
   cursor: pointer;
-  padding: 0;
-  font-size: var(--fs-small);
-  transition: 0.2s ease-in-out;
+  transition: color 0.2s ease;
+}
+
+.tryAgainBtn:hover {
+  color: var(--color-primary-dark);
 }
