@@ -188,14 +188,23 @@ export default function UserProfile({ isOwner = true }) {
         }
       }
 
+      const profile = await getUserProfile();
+      const latestProfile = profile.data?.data || profile.data || profile;
+      const latestCore = latestProfile.profile;
+      let latestAvatar = "";
+      if (latestCore.profilePicture) {
+        const baseUrl = BACKEND_URL.replace("/api/v1", "");
+        latestAvatar = `${baseUrl}${latestCore.profilePicture}?t=${Date.now()}`;
+      }
+
       setValues(prev => ({
         ...prev,
-        name: profileData.name || prev.name,
-        bio: profileData.bio || prev.bio,
-        githubUrl: profileData.githubUrl || prev.githubUrl,
-        linkedinUrl: profileData.linkedinUrl || prev.linkedinUrl,
-        resumeUrl: profileData.resumeUrl || prev.resumeUrl,
-        avatar: newAvatar,
+        name: latestCore.name || prev.name,
+        bio: latestCore.bio || prev.bio,
+        githubUrl: latestCore.githubUrl || prev.githubUrl,
+        linkedinUrl: latestCore.linkedinUrl || prev.linkedinUrl,
+        resumeUrl: latestCore.resumeUrl || prev.resumeUrl,
+        avatar: latestAvatar,
         skills: responseData.skills ?? prev.skills,
         techRoles: responseData.techRoles ?? prev.techRoles,
         intrestes: (
@@ -207,6 +216,11 @@ export default function UserProfile({ isOwner = true }) {
         avatarFile: null,
       }));
 
+      setUser(prev => ({
+        ...prev,
+        profilePicture: latestCore.profilePicture
+      }));
+
       return responseData;
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -214,7 +228,7 @@ export default function UserProfile({ isOwner = true }) {
       setApiError(msg);
       throw err;
     }
-  }, [values, setValues]);
+  }, [values, setValues, setUser]);
 
 
   useEffect(() => {

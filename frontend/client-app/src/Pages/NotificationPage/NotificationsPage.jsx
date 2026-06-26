@@ -7,6 +7,7 @@ export default function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [allNotifications, setAllNotifications] = useState([]);
 
+
   // Calculate dynamic counts based on the notification types
   const counts = useMemo(() => ({
     all: allNotifications.length,

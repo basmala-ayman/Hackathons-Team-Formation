@@ -43,6 +43,7 @@ export default function NotificationFilter({ activeFilter, onFilterChange, count
     },
   ];
 
+
   return (
     <div className={styles.filterCard}>
       <div className={styles.filterHeader}>

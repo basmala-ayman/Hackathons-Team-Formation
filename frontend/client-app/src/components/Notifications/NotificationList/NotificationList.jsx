@@ -84,7 +84,6 @@ export default function NotificationList({ filter }) {
       .finally(() => setLoading(false));
   }, []);
 
-  console.log(allNotifications)
 
   const handleMarkAsRead = async (id) => {
     await markNotificationAsRead(id);

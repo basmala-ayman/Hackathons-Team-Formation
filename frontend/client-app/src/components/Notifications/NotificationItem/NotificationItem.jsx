@@ -77,6 +77,18 @@ export default function NotificationItem({ data, onRead, onRemove }) {
     }
   };
 
+  const handleViewRecommendations = async (e) => {
+    e.stopPropagation();
+
+    try {
+      await onRead?.();
+
+      navigate("/recommended-Teams");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   console.log("Notification:", data);
   console.log("Metadata:", metadata);
   console.log("InvitationId:", metadata.invitationId);
@@ -155,7 +167,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
               className="w-100 mt-4"
               onClick={handleSeeInvitation}
             >
-              See Invitation Details
+              View Invitation Details
             </CustomButton>
           )}
 
@@ -164,10 +176,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
               variant="primary"
               className="w-100 mt-4"
               size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate("/recommended-Teams");
-              }}
+              onClick={handleViewRecommendations}
             >
               View Recommended Teams
             </CustomButton>

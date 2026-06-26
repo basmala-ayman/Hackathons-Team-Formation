@@ -1,8 +1,8 @@
 import TeamCard from "../TeamCard/TeamCard";
-import { RaiseUpIcon } from "../../../assets/Icons"; 
+import { RaiseUpIcon } from "../../../assets/Icons";
 
 function InvitationsList({ invitations, acceptingId, rejectingId, onAccept, onReject }) {
-  
+
   const pendingInvitations = invitations.filter(
     (invitation) => invitation.status === "PENDING"
   );
