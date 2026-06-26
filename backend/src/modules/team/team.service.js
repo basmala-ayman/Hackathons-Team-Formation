@@ -435,29 +435,48 @@ const getMyTeams = async (userId) => {
     const teams = await teamRepository.findMyTeamsWithMembers(userId);
 
     return teams.map((team) => {
-        // Build unified member list from team_members + invitations
         const memberMap = new Map();
 
-        // Accepted members (in team_members table)
-        team.members.forEach((m) => {
-            if (m.user.id === team.ownerId) return;
-            memberMap.set(m.user.id, {
-                userId: m.user.id,
-                name: m.user.name,
-                email: m.user.email,
-                profilePicture: m.user.profilePicture,
-                techRoles: m.user.techRoles || [],
-                skills: m.user.skills?.map((s) => s.skill.name) || [],
-                githubUrl: m.user.githubUrl || null,
-                linkedinUrl: m.user.linkedinUrl || null,
+        const isOwner = team.ownerId === userId;
+
+        // 1. Add owner only if the current user is NOT the owner
+        if (!isOwner && team.owner) {
+            memberMap.set(team.owner.id, {
+                userId: team.owner.id,
+                name: team.owner.name,
+                email: team.owner.email,
+                profilePicture: team.owner.profilePicture,
+                techRoles: team.owner.techRoles || [],
+                skills: team.owner.skills?.map((s) => s.skill.name) || [],
+                githubUrl: team.owner.githubUrl || null,
+                linkedinUrl: team.owner.linkedinUrl || null,
                 status: "ACCEPTED",
-                isOwner: m.user.id === team.ownerId,
+                isOwner: true,
+                invitationId: null,
             });
+        }
+
+        team.members.forEach((m) => {
+            if (m.user.id === team.ownerId) return; // skip owner
+            if (!memberMap.has(m.user.id)) {
+                memberMap.set(m.user.id, {
+                    userId: m.user.id,
+                    name: m.user.name,
+                    email: m.user.email,
+                    profilePicture: m.user.profilePicture,
+                    techRoles: m.user.techRoles || [],
+                    skills: m.user.skills?.map((s) => s.skill.name) || [],
+                    githubUrl: m.user.githubUrl || null,
+                    linkedinUrl: m.user.linkedinUrl || null,
+                    status: "ACCEPTED",
+                    isOwner: false,
+                    invitationId: null,
+                });
+            }
         });
 
-        // Invited members (pending/rejected/expired)
         team.invitations.forEach((inv) => {
-            if (!memberMap.has(inv.receiver.id)) {
+            if (inv.status === "PENDING" && !memberMap.has(inv.receiver.id)) {
                 memberMap.set(inv.receiver.id, {
                     userId: inv.receiver.id,
                     name: inv.receiver.name,
@@ -467,9 +486,9 @@ const getMyTeams = async (userId) => {
                     skills: inv.receiver.skills?.map((s) => s.skill.name) || [],
                     githubUrl: inv.receiver.githubUrl || null,
                     linkedinUrl: inv.receiver.linkedinUrl || null,
-                    invitationId: inv.id,
-                    status: inv.status,
+                    status: "PENDING",
                     isOwner: false,
+                    invitationId: inv.id,
                 });
             }
         });
@@ -481,15 +500,16 @@ const getMyTeams = async (userId) => {
             status: team.status,
             maxMembers: team.size,
             ownerId: team.ownerId,
-            hackathonName: team.hackathon.title, 
+            hackathon: team.hackathon.title,
             project: team.project || null,
             requiredSkills: team.skills.map((s) => s.skill.name),
             members: Array.from(memberMap.values()),
+            buttonDisplayed: isOwner,
         };
     });
 };
 
-// "Get Enough" — finalize team with current accepted members
+// "Get Enough"
 const finalizeTeam = async (teamId, founderId) => {
     const team = await prisma.team.findUnique({
         where: { id: teamId },

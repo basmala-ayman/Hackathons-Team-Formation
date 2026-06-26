@@ -1,4 +1,5 @@
 // src/modules/team/team.repository.js
+const { truncateSync } = require("node:fs");
 const prisma = require("../../config/prisma");
 
 
@@ -88,18 +89,29 @@ const findUserTeamForHackathon = async (userId, hackathonId) => {
 
 const findMyTeamsWithMembers = async (userId) => {
   return prisma.team.findMany({
-    where: { ownerId: userId },
+    where: {
+      OR: [
+        { ownerId: userId },
+        { members: { some: { userId } } }
+      ]
+    },
     orderBy: { createdAt: "desc" },
     include: {
-      hackathon: {
-        select: { id: true, title: true, status: true },
+      owner: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profilePicture: true,
+          techRoles: true,
+          githubUrl: true,
+          linkedinUrl: true,
+          skills: { include: { skill: { select: { name: true } } } },
+        },
       },
-      project: {
-        select: { id: true, title: true },
-      },
-      skills: {
-        include: { skill: { select: { name: true } } },
-      },
+      hackathon: { select: {  title: truncateSync } },
+      project: { select: { id: true, title: true } },
+      skills: { include: { skill: { select: { name: true } } } },
       members: {
         include: {
           user: {
@@ -111,9 +123,7 @@ const findMyTeamsWithMembers = async (userId) => {
               techRoles: true,
               githubUrl: true,
               linkedinUrl: true,
-              skills: {
-                include: { skill: { select: { name: true } } },
-              },
+              skills: { include: { skill: { select: { name: true } } } },
             },
           },
         },
@@ -129,9 +139,7 @@ const findMyTeamsWithMembers = async (userId) => {
               techRoles: true,
               githubUrl: true,
               linkedinUrl: true,
-              skills: {
-                    include: { skill: { select: { name: true } } },
-                },
+              skills: { include: { skill: { select: { name: true } } } },
             },
           },
         },
@@ -139,6 +147,7 @@ const findMyTeamsWithMembers = async (userId) => {
     },
   });
 };
+
 
 module.exports = {
   upsertSkill,

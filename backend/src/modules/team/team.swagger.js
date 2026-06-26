@@ -206,13 +206,20 @@
  * @swagger
  * /teams/my-teams:
  *   get:
- *     summary: Get all teams owned by the logged-in user
+ *     summary: Get all teams where the user is owner or member
+ *     description: |
+ *       Returns all teams that the current user owns OR has joined (via accepted invitation).
+ *       
+ *       **Member visibility rules**:
+ *       - If the user is the **owner**, the `members` list **excludes** the owner (they don't see themselves).
+ *       - If the user is a **member** (not owner), the `members` list **includes** the owner.
+ *       - The `buttonDisplayed` flag indicates whether the user can finalize the team (true only for owners).
  *     tags: [Teams]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of teams with all members and their statuses
+ *         description: List of teams with members and statuses
  *         content:
  *           application/json:
  *             schema:
@@ -220,70 +227,65 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: array
  *                   items:
  *                     type: object
  *                     properties:
- *                       teamId:        { type: string }
- *                       teamName:      { type: string }
- *                       description:   { type: string }
- *                       status:        { type: string, enum: [FORMING, COMPLETE] }
- *                       maxMembers:    { type: integer }
- *                       ownerId:       { type: string }
- *                       hackathon:     { type: object }
- *                       project:       { type: object, nullable: true }
+ *                       teamId:
+ *                         type: string
+ *                         format: uuid
+ *                       teamName:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                         nullable: true
+ *                       status:
+ *                         type: string
+ *                         enum: [FORMING, COMPLETE]
+ *                       maxMembers:
+ *                         type: integer
+ *                       ownerId:
+ *                         type: string
+ *                       hackathon:
+ *                         type: string
+ *                         description: "Title of the hackathon (not full object)"
+ *                       project:
+ *                         type: object
+ *                         nullable: true
+ *                         properties:
+ *                           id: { type: string }
+ *                           title: { type: string }
  *                       requiredSkills:
  *                         type: array
- *                         items: { type: string }
+ *                         items:
+ *                           type: string
  *                       members:
  *                         type: array
  *                         items:
  *                           type: object
  *                           properties:
- *                             userId:         { type: string }
- *                             name:           { type: string }
- *                             email:          { type: string }
+ *                             userId: { type: string }
+ *                             name: { type: string }
+ *                             email: { type: string }
  *                             profilePicture: { type: string, nullable: true }
- *                             techRoles:
- *                               type: array
- *                               items: { type: string }
- *                             skills:
- *                               type: array
- *                               items: { type: string }
- *                             githubUrl:      { type: string, nullable: true }
- *                             linkedinUrl:    { type: string, nullable: true }
- *                             invitationId:   { type: string, nullable: true }
+ *                             techRoles: { type: array, items: { type: string } }
+ *                             skills: { type: array, items: { type: string } }
+ *                             githubUrl: { type: string, nullable: true }
+ *                             linkedinUrl: { type: string, nullable: true }
+ *                             invitationId: { type: string, nullable: true }
  *                             status:
  *                               type: string
  *                               enum: [ACCEPTED, PENDING, REJECTED, EXPIRED, CANCELLED]
- *                             isOwner:        { type: boolean }
- *
- * /teams/{id}/finalize:
- *   patch:
- *     summary: Finalize team with current accepted members (Get Enough button)
- *     tags: [Teams]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema: { type: string }
- *     responses:
- *       200:
- *         description: Team finalized, pending invitations cancelled
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:  { type: boolean }
- *                 message:  { type: string }
- *       400:
- *         description: Team already complete
- *       403:
- *         description: Not the team owner
- *       404:
- *         description: Team not found
+ *                             isOwner:
+ *                               type: boolean
+ *                               description: "True if this member is the team owner"
+ *                       buttonDisplayed:
+ *                         type: boolean
+ *                         description: "True if the current user is the owner (can finalize the team)"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
