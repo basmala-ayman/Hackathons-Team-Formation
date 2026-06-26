@@ -102,7 +102,7 @@ export default function ProfileHeaderCard({ user: detailedUser, onEditClick, set
             )}
           </div>
           <p className={styles.profileBio}>{user.bio}</p>
-          <div className={styles.infoGrid}>
+          <div className={styles.infoList}>
             <div className={styles.infoItem}>
               <Mail size={16} className={styles.infoIcon} />
               <span>{user.email}</span>
