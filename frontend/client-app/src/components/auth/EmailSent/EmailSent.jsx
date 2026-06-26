@@ -1,5 +1,8 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+// import { Link, useLocation } from "react-router-dom";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import { useAuth } from "../../../context/AuthContext/useAuth";
+import { popUp } from "../../../utils/popUp";
 import { Mail } from "lucide-react";
 import styles from "./EmailSent.module.css";
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
@@ -7,14 +10,21 @@ import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../shared/CustomButton/CustomButton";
 
 export default function EmailSent() {
-  const location = useLocation();
+  // const location = useLocation();
+  // // Email will come later from backend
+  // const email = location.state?.email || "example@gmail.com";
   const navigate = useNavigate();
-  // Email will come later from backend
-  const email = location.state?.email || "example@gmail.com";
+  const [email] = useLocalStorage("resetEmail", "");
+  const { forgotPassword, isSubmitting } = useAuth();
 
-  const handleTryAgain = () => {
-    // Later I will call backend to resend API here
-    console.log("Resend reset password email");
+
+  const handleTryAgain = async () => {
+    try {
+      await forgotPassword(email);
+      popUp.success("Reset link sent successfully!");
+    } catch (err) {
+      popUp.error(err.message);
+    }
   };
 
   return (
@@ -48,8 +58,9 @@ export default function EmailSent() {
             type="button"
             className={styles.tryAgainBtn}
             onClick={handleTryAgain}
+            disabled={isSubmitting}
           >
-            Try Again
+            {isSubmitting ? "Sending..." : "Try Again"}
           </button>
         </p>
       </div>
