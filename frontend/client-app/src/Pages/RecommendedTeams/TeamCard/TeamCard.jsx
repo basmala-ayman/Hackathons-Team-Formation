@@ -13,6 +13,7 @@ function TeamCard({
   onReject,
   acceptLabel = "Accept",
 }) {
+
   const formatRole = (role) => {
     const text = role.replace(/_/g, " ").toLowerCase();
     return text.charAt(0).toUpperCase() + text.slice(1);
