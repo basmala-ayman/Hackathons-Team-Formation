@@ -18,6 +18,12 @@ export default function NotificationFilter({ activeFilter, onFilterChange, count
       count: safeCounts.requests || 0
     },
     {
+      id: "updates",
+      label: "Team Updates",
+      icon: <Users size={18} />,
+      count: safeCounts.updates || 0,
+    },
+    {
       id: "accepted",
       label: "Accepted",
       icon: <CheckCircle size={18} />,

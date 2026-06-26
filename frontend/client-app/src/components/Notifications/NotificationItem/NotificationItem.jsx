@@ -89,10 +89,8 @@ export default function NotificationItem({ data, onRead, onRemove }) {
       console.error(err);
     }
   };
+  
 
-  console.log("Notification:", data);
-  console.log("Metadata:", metadata);
-  console.log("InvitationId:", metadata.invitationId);
 
   const handleNotificationClick = async () => {
     console.log("CARD CLICKED");
@@ -107,6 +105,11 @@ export default function NotificationItem({ data, onRead, onRemove }) {
       console.error("Failed to handle notification click", error);
     }
   };
+
+  const notificationBadge =
+  data.title === "Team is now complete"
+    ? "TEAM UPDATE"
+    : data.type.replace("_", " ");
 
 
   return (
@@ -126,9 +129,9 @@ export default function NotificationItem({ data, onRead, onRemove }) {
           <div className={styles.topRow}>
             <div>
               <h3 className={styles.notTitle}>{data.title}</h3>
-              <span className={styles.typeBadge}>
-                {data.type.replace("_", " ")}
-              </span>
+             <span className={styles.typeBadge}>
+  {notificationBadge}
+</span>
             </div>
           </div>
           <p className={styles.message}>{data.message}</p>
@@ -148,18 +151,20 @@ export default function NotificationItem({ data, onRead, onRemove }) {
             </span>
           </div>
 
-          {(data.type === "TEAM_INVITE" || data.type == "TEAM_REQUEST") && (
-            <div className={styles.actions}>
-              <button className={styles.btnAccept} onClick={handleAccept}>
-                <Check size={16} strokeWidth={3} />
-                <span>Accept</span>
-              </button>
-              <button className={styles.btnDecline} onClick={handleReject}>
-                <X size={16} strokeWidth={3} />
-                <span>Reject</span>
-              </button>
-            </div>
-          )}
+          {data.type === "TEAM_INVITE" &&
+            data.title !== "Team is now complete" && (
+              <div className={styles.actions}>
+                <button className={styles.btnAccept} onClick={handleAccept}>
+                  <Check size={16} strokeWidth={3} />
+                  <span>Accept</span>
+                </button>
+
+                <button className={styles.btnDecline} onClick={handleReject}>
+                  <X size={16} strokeWidth={3} />
+                  <span>Reject</span>
+                </button>
+              </div>
+            )}
 
           {data.type === "MATCH_FOUND" && (
             <CustomButton
@@ -185,7 +190,7 @@ export default function NotificationItem({ data, onRead, onRemove }) {
                 {data.type === "ROUND2_AVAILABLE"
                   ? "View Round 2 Teams"
                   : "View Recommended Teams"}
-              </CustomButton>
+              </CustomButton> 
             )}
         </div>
       </div>

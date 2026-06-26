@@ -18,3 +18,17 @@ export function getAvatarUrl(path) {
 
   return `${BACKEND_URL}${path}`;
 }
+
+export function getFileUrl(path) {
+  if (!path) return "";
+
+  if (
+    path.startsWith("http") ||
+    path.startsWith("https") ||
+    path.startsWith("blob:")
+  ) {
+    return path;
+  }
+
+  return `${BACKEND_URL}${path}`;
+}
