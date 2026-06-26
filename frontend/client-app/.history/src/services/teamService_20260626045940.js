@@ -53,7 +53,7 @@ export const requestNewMatches = async (teamId) => {
     const response = await api.post(`/api/v1/matching/round2/${teamId}`);
     return response.data;
   }catch(error){
-    throw error.response?.data || "Error in new team request";
+    throw error.response?.data || "Error in new team team";
 
   }
 };

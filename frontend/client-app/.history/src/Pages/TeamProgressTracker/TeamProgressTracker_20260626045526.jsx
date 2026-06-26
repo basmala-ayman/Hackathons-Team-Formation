@@ -9,7 +9,7 @@ import CustomButton from "../../shared/CustomButton/CustomButton";
 import { RaiseUpIcon, ElectricIcon, TeamMeetIcon } from "../../assets/Icons";
 import { LoadingState, EmptyState } from "../../shared/States";
 import { useMyTeams } from "./hooks/useMyTeams";
-import { finalizeTeam, requestNewMatches } from "../../services/teamService";
+import { finalizeTeam } from "../../services/teamService";
 
 function TeamProgressTracker() {
   const { teams, loading, error, refetch } = useMyTeams();
@@ -46,16 +46,12 @@ function TeamProgressTracker() {
         await finalizeTeam(modalConfig.teamId);
         toast.success(`${modalConfig.teamName} finalized successfully!`);
       } else if (modalConfig.actionType === "remake") {
-        const response = await requestNewMatches(modalConfig.teamId);
-        toast.success(
-          response.message ||
-            "Round 2 is being processed. You will be notified when recommendations are ready.",
-        );
+        // e.g., await requestNewMatches(modalConfig.teamId);
+        toast.success(`Looking for new members for ${modalConfig.teamName}...`);
       }
       await refetch();
     } catch (error) {
-      const message = error.response?.data?.message || "Something went wrong.";
-      toast.error(message);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       closeModal();
     }

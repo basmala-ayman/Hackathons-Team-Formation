@@ -51,6 +51,7 @@ function TeamProgressTracker() {
           response.message ||
             "Round 2 is being processed. You will be notified when recommendations are ready.",
         );
+        await refetch();
       }
       await refetch();
     } catch (error) {

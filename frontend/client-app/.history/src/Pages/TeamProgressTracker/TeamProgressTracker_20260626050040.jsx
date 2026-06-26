@@ -47,10 +47,7 @@ function TeamProgressTracker() {
         toast.success(`${modalConfig.teamName} finalized successfully!`);
       } else if (modalConfig.actionType === "remake") {
         const response = await requestNewMatches(modalConfig.teamId);
-        toast.success(
-          response.message ||
-            "Round 2 is being processed. You will be notified when recommendations are ready.",
-        );
+        toast.success(`Looking for new members for ${modalConfig.teamName}...`);
       }
       await refetch();
     } catch (error) {

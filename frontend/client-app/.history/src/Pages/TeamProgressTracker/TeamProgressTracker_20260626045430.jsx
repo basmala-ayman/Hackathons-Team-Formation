@@ -1,19 +1,18 @@
-import { useState } from "react";
-import styles from "./TeamProgressTracker.module.css";
-import toast from "react-hot-toast";
 import StatusBadge from "./Components/StatusBadge";
-import TeamProgressCard from "./Components/TeamProgressCard";
+import toast from "react-hot-toast";
+import CustomButton from "../../shared/CustomButton/CustomButton";
 import ConfirmationModal from "./Components/ConfirmationModal";
 import MemberProgressCard from "./Components/MemberProgressCard";
-import CustomButton from "../../shared/CustomButton/CustomButton";
+import { useState } from "react";
+import styles from "./TeamProgressTracker.module.css";
 import { RaiseUpIcon, ElectricIcon, TeamMeetIcon } from "../../assets/Icons";
-import { LoadingState, EmptyState } from "../../shared/States";
+import TeamProgressCard from "./Components/TeamProgressCard";
+import { LoadingState , EmptyState } from "../../shared/States";
 import { useMyTeams } from "./hooks/useMyTeams";
-import { finalizeTeam, requestNewMatches } from "../../services/teamService";
-
+import {}
 function TeamProgressTracker() {
   const { teams, loading, error, refetch } = useMyTeams();
-  console.log("teams in track:", teams);
+  console.log("teams in track:",teams)
 
   const [modalConfig, setModalConfig] = useState({
     isOpen: false,
@@ -21,6 +20,7 @@ function TeamProgressTracker() {
     teamId: null,
     teamName: "",
   });
+
 
   const openModal = (type, team) => {
     setModalConfig({
@@ -43,25 +43,21 @@ function TeamProgressTracker() {
   const handleConfirmAction = async () => {
     try {
       if (modalConfig.actionType === "satisfied") {
-        await finalizeTeam(modalConfig.teamId);
+        // e.g., await finalizeTeam(modalConfig.teamId);
         toast.success(`${modalConfig.teamName} finalized successfully!`);
       } else if (modalConfig.actionType === "remake") {
-        const response = await requestNewMatches(modalConfig.teamId);
-        toast.success(
-          response.message ||
-            "Round 2 is being processed. You will be notified when recommendations are ready.",
-        );
+        // e.g., await requestNewMatches(modalConfig.teamId);
+        toast.success(`Looking for new members for ${modalConfig.teamName}...`);
       }
       await refetch();
     } catch (error) {
-      const message = error.response?.data?.message || "Something went wrong.";
-      toast.error(message);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       closeModal();
     }
   };
 
-  if (loading) {
+   if (loading) {
     return <LoadingState message="Loading your teams..." />;
   }
 
@@ -88,21 +84,21 @@ function TeamProgressTracker() {
               fontSize: "var(--fs-regular)",
             }}
           >
-            Track your team members' invitation status and finalize your teams.
+           Track your team members' invitation status and finalize your teams.
           </p>
         </div>
 
         {teams.length > 0 ? (
           teams.map((team) => (
-            <TeamProgressCard
-              key={team.teamId}
-              team={{ ...team, hackathonName: team.hackathonName }}
-              onOpenModal={openModal}
+          <TeamProgressCard 
+              key={team.teamId} 
+              team={{...team , hackathonName: team.hackathonName}}
+              onOpenModal={openModal} 
             />
           ))
         ) : (
           <div>
-            <EmptyState message="No Teams yet" />
+           <EmptyState message="No Teams yet"/>
           </div>
         )}
       </div>

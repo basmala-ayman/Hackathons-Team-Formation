@@ -40,20 +40,10 @@ export const getMyTeams = async () => {
 export const finalizeTeam = async (teamId) => {
   try{
     const response = await api.patch(`/teams/${teamId}/finalize`);
-    return response.data;
+    return response.data.data;
 
   }catch(error){
     throw error.response?.data || "Error in finalize team";
-
-  }
-};
-
-export const requestNewMatches = async (teamId) => {
-  try{
-    const response = await api.post(`/api/v1/matching/round2/${teamId}`);
-    return response.data;
-  }catch(error){
-    throw error.response?.data || "Error in new team request";
 
   }
 };
