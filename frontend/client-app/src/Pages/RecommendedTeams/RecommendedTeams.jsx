@@ -15,7 +15,6 @@ import { RaiseUpIcon } from "../../assets/Icons";
 import { LoadingState, EmptyState } from "../../shared/States";
 
 function RecommendedTeams() {
-  // const navigate = useNavigate();
   const location = useLocation();
   const initialTab = location.state?.initialTab || "myTeams";
 
@@ -124,8 +123,8 @@ function RecommendedTeams() {
           <button
             type="button"
             className={`px-5 py-2 fs-3 ${styles.rightTab} ${activeTab === "invitations"
-                ? styles.activeTab
-                : styles.inactiveTab
+              ? styles.activeTab
+              : styles.inactiveTab
               }`}
             onClick={() => setActiveTab("invitations")}
           >
@@ -133,10 +132,10 @@ function RecommendedTeams() {
           </button>
         </div>
 
-        {displayedTeams.length > 0 ?(
+        {displayedTeams.length > 0 ? (
           activeTab === "myTeams" ? (
-            <MyTeamsList 
-              teams={displayedTeams} 
+            <MyTeamsList
+              teams={displayedTeams}
               acceptingId={acceptingId}
               rejectingId={rejectingId}
               onAccept={handleAccept}
@@ -144,7 +143,7 @@ function RecommendedTeams() {
               styles={styles}
             />
           ) : (
-            <InvitationsList 
+            <InvitationsList
               invitations={displayedTeams}
               acceptingId={acceptingId}
               rejectingId={rejectingId}

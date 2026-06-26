@@ -9,6 +9,7 @@ import {
 } from "../../../services/notificationService";
 
 import { useNotifications } from "../../../context/NotificationContext";
+import { LoadingState } from "../../../shared/States";
 
 export default function NotificationList({ filter }) {
   const [allNotifications, setAllNotifications] = useState([]);
@@ -115,17 +116,7 @@ export default function NotificationList({ filter }) {
   };
 
   if (loading) return (
-    <div
-      className="text-center mt-4"
-      style={{
-        color: "var(--color-primary-dark)",
-        padding: "40px",
-        fontSize: "var(--fs-regular)",
-        fontWeight: "600"
-      }}
-    >
-      Loading notifications...
-    </div>
+    <LoadingState  message="Loading Notifications..."/>
   );
 
   return (

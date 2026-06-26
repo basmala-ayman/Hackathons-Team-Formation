@@ -10,6 +10,7 @@ import MyProjectIdeasCard from "../../components/UserProfile/MyProjectIdeasCard/
 import { getUserProfile, updateUserProfile } from "../../services/userService";
 import { useAuth } from "../../context/AuthContext/useAuth";
 import { getAvatarUrl } from "../../utils/getAvatarUrl";
+import { LoadingState } from "../../shared/States";
 
 const BACKEND_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -220,10 +221,7 @@ export default function UserProfile({ isOwner = true }) {
   // When Loading
   if (isLoading) {
     return (
-      <Container className="py-5 text-center">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-2 text-muted">Loading profile...</p>
-      </Container>
+      <LoadingState message="Loading Profile..." />
     );
   }
 
