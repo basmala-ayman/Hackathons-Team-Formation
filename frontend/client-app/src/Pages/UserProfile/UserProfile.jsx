@@ -69,8 +69,6 @@ export default function UserProfile({ isOwner = true }) {
             setCompletionPercentage(profileData.profileCompletionPercentage);
           }
           let rawAvatar = getAvatarUrl(coreProfile.profilePicture);
-
-
           let parsedInterests = [];
 
           if (Array.isArray(profileData.intrestes)) {

@@ -74,14 +74,24 @@ const generatePayload = (
   appendIfChanged("skills", currentValues.skills);
   appendIfChanged("bio", currentValues.bio);
   appendIfChanged("techRoles", cleanRoles);
+
   cleanInterests.forEach((interest) => {
     payload.append("intrestes[]", interest);
   });
+
+  // if (cleanInterests.length === 0) {
+  //   payload.append("intrestes[]", "__EMPTY__");
+  // } else {
+  //   cleanInterests.forEach((interest) => {
+  //     payload.append("intrestes[]", interest);
+  //   });
+  // }
 
   if (currentValues.resumeFile instanceof File) payload.append("resume", currentValues.resumeFile);
 
   return payload;
 };
+
 
 export default React.memo(function ProfileWizardModal({ show, handleClose, values: externalValues, setValues: setExternalValues, errors, setErrors, onSave, mode = "full" }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -144,7 +154,9 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
       );
 
       await onSave(finalPayload, true);
-      await refreshUser();
+      if (localValues.avatarFile instanceof File) {
+        await refreshUser();
+      }
 
       setExternalValues(prev => ({
         ...prev,
@@ -157,7 +169,7 @@ export default React.memo(function ProfileWizardModal({ show, handleClose, value
         name: localValues.name,
         avatarFile: null,
       }));
-      
+
       handleModalClose();
 
       setTimeout(() => {
