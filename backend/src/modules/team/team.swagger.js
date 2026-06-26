@@ -202,7 +202,6 @@
  *       404:
  *         description: Invitation not found
  */
-
 /**
  * @swagger
  * /teams/my-teams:
@@ -242,16 +241,23 @@
  *                         items:
  *                           type: object
  *                           properties:
- *                             userId:       { type: string }
- *                             name:         { type: string }
- *                             email:        { type: string }
+ *                             userId:         { type: string }
+ *                             name:           { type: string }
+ *                             email:          { type: string }
  *                             profilePicture: { type: string, nullable: true }
- *                             techRoles:    { type: array, items: { type: string } }
- *                             githubUrl:    { type: string, nullable: true }
- *                             linkedinUrl:  { type: string, nullable: true }
- *                             invitationId: { type: string, nullable: true }
- *                             status:       { type: string, enum: [ACCEPTED, PENDING, REJECTED, EXPIRED, CANCELLED] }
- *                             isOwner:      { type: boolean }
+ *                             techRoles:
+ *                               type: array
+ *                               items: { type: string }
+ *                             skills:
+ *                               type: array
+ *                               items: { type: string }
+ *                             githubUrl:      { type: string, nullable: true }
+ *                             linkedinUrl:    { type: string, nullable: true }
+ *                             invitationId:   { type: string, nullable: true }
+ *                             status:
+ *                               type: string
+ *                               enum: [ACCEPTED, PENDING, REJECTED, EXPIRED, CANCELLED]
+ *                             isOwner:        { type: boolean }
  *
  * /teams/{id}/finalize:
  *   patch:
@@ -267,4 +273,17 @@
  *     responses:
  *       200:
  *         description: Team finalized, pending invitations cancelled
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:  { type: boolean }
+ *                 message:  { type: string }
+ *       400:
+ *         description: Team already complete
+ *       403:
+ *         description: Not the team owner
+ *       404:
+ *         description: Team not found
  */

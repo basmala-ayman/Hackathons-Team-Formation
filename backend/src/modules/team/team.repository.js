@@ -87,51 +87,57 @@ const findUserTeamForHackathon = async (userId, hackathonId) => {
 
 
 const findMyTeamsWithMembers = async (userId) => {
-    return prisma.team.findMany({
-        where: { ownerId: userId },
-        orderBy: { createdAt: "desc" },
+  return prisma.team.findMany({
+    where: { ownerId: userId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      hackathon: {
+        select: { id: true, title: true, status: true },
+      },
+      project: {
+        select: { id: true, title: true },
+      },
+      skills: {
+        include: { skill: { select: { name: true } } },
+      },
+      members: {
         include: {
-            hackathon: {
-                select: { id: true, title: true, status: true },
-            },
-            project: {
-                select: { id: true, title: true },
-            },
-            skills: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profilePicture: true,
+              techRoles: true,
+              githubUrl: true,
+              linkedinUrl: true,
+              skills: {
                 include: { skill: { select: { name: true } } },
+              },
             },
-            members: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            email: true,
-                            profilePicture: true,
-                            techRoles: true,
-                            githubUrl: true,
-                            linkedinUrl: true,
-                        },
-                    },
-                },
-            },
-            invitations: {
-                include: {
-                    receiver: {
-                        select: {
-                            id: true,
-                            name: true,
-                            email: true,
-                            profilePicture: true,
-                            techRoles: true,
-                            githubUrl: true,
-                            linkedinUrl: true,
-                        },
-                    },
-                },
-            },
+          },
         },
-    });
+      },
+      invitations: {
+        include: {
+          receiver: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              profilePicture: true,
+              techRoles: true,
+              githubUrl: true,
+              linkedinUrl: true,
+              skills: {
+                    include: { skill: { select: { name: true } } },
+                },
+            },
+          },
+        },
+      },
+    },
+  });
 };
 
 module.exports = {
