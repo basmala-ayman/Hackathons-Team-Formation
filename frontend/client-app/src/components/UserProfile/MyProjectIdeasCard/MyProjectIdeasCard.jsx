@@ -5,6 +5,8 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import styles from "./MyProjectIdeasCard.module.css";
 import { useAuth } from "../../../context/AuthContext/useAuth";
@@ -12,12 +14,10 @@ import { getAvatarUrl, ANONYMOUS_AVATAR } from "../../../utils/getAvatarUrl";
 
 function MyProjectIdeasCard({ projects = [], userAvatar }) {
   const { user: authUser } = useAuth();
-
-  // Pagination State
+  const [expandedProject, setExpandedProject] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2;
 
-  // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProjects = projects.slice(indexOfFirstItem, indexOfLastItem);
@@ -69,12 +69,12 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
 
       <div className={styles.ideasGrid}>
         {currentProjects.map((idea) => {
-          console.log("Project idea", idea)
           const projectId = idea.id;
+          const isExpanded = expandedProject === projectId;
+
           const title = idea.title;
-          const description = idea.description;
-          const skills = idea.requiredSkillsOrRoles
-            || [];
+          const description = idea.description || "";
+          const skills = idea.requiredSkillsOrRoles || [];
           const teamSize = idea.totalTeamMembersCount;
           const interestedCount = idea.totalInterestsCount;
 
@@ -88,6 +88,7 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
                     className={styles.creatorImg}
                   />
                 </div>
+
                 <div className={styles.creatorMeta}>
                   <span className={styles.creatorName}>
                     {authUser?.name || "User"}
@@ -106,35 +107,76 @@ function MyProjectIdeasCard({ projects = [], userAvatar }) {
               </div>
 
               <h5 className={styles.ideaTitle}>{title}</h5>
-              <p className={styles.ideaDesc}>{description}</p>
 
-              {skills.length > 0 && (
-                <div className={styles.skillsSection}>
-                  <h6 className={styles.skillsTitle}>Required Skills/Roles</h6>
-                  <div className={styles.skillsWrapper}>
-                    {skills.map((skill, index) => (
-                      <span key={index} className={styles.skillTag}>
-                        #{skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+              <p className={styles.ideaDesc}>
+                {isExpanded
+                  ? description
+                  : description.length > 120
+                    ? description.slice(0, 120) + "..."
+                    : description}
+              </p>
+
+              {(description.length > 120 || skills.length > 0) && (
+                <button
+                  type="button"
+                  className={styles.showMoreBtn}
+                  onClick={() =>
+                    setExpandedProject(isExpanded ? null : projectId)
+                  }
+                >
+                  <span>
+                    {isExpanded
+                      ? "Show Less"
+                      : "Show Full Project Details"}
+                  </span>
+
+                  {isExpanded ? (
+                    <ChevronUp size={18} strokeWidth={2.5} />
+                  ) : (
+                    <ChevronDown size={18} strokeWidth={2.5} />
+                  )}
+                </button>
               )}
 
-              <div className={styles.cardFooter}>
-                <div className={styles.footerInfo}>
-                  <div className={styles.infoBadge}>
-                    <Users size={14} />{" "}
-                    <span>
-                      {teamSize} {teamSize > 1 ? "Members" : "Member"}
-                    </span>
+              {isExpanded && (
+                <>
+                  {skills.length > 0 && (
+                    <div className={styles.skillsSection}>
+                      <h6 className={styles.skillsTitle}>
+                        Required Skills/Roles
+                      </h6>
+
+                      <div className={styles.skillsWrapper}>
+                        {skills.map((skill, index) => (
+                          <span key={index} className={styles.skillTag}>
+                            #{skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className={styles.cardFooter}>
+                    <div className={styles.footerInfo}>
+                      <div className={styles.infoBadge}>
+                        <Users size={14} />
+                        <span>
+                          {teamSize}{" "}
+                          {teamSize > 1 ? "Members" : "Member"}
+                        </span>
+                      </div>
+
+                      <div className={styles.infoBadge}>
+                        <Heart
+                          size={14}
+                          className={styles.heartIcon}
+                        />
+                        <span>{interestedCount} Interested</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className={styles.infoBadge}>
-                    <Heart size={14} className={styles.heartIcon} />
-                    <span>{interestedCount} Interested</span>
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           );
         })}

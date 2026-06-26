@@ -33,7 +33,7 @@ export default function ForgetPassword() {
     try {
       await forgotPassword(email);
       popUp.success("Reset link sent successfully!");
-      navigate("/emailsent");
+      navigate("/email-sent");
     } catch (err) {
       popUp.error(err.message);
     }
