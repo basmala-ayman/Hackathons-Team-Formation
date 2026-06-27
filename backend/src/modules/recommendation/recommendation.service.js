@@ -153,6 +153,28 @@ const acceptRecommendation = async (recommendationId, founderId) => {
     const deadline = new Date();
     deadline.setHours(deadline.getHours() + 24);
 
+
+    //before i will first need to cancel all pending invitations that not belong to this new recommendation 
+    const pendingInvitations = await prisma.teamInvitation.findMany({
+        where: {
+            teamId: team.id,
+            status: "PENDING",
+        },
+    });
+
+    const toCancel = pendingInvitations.filter(
+        (inv) => !memberIds.includes(inv.receiverId)
+    );
+
+    if (toCancel.length > 0) {
+        await prisma.teamInvitation.updateMany({
+            where: { id: { in: toCancel.map((inv) => inv.id) } },
+            data: { status: "CANCELLED" },
+        });
+
+      
+    }
+
     await recommendationRepository.updateRecommendationStatus(recommendationId, "ACCEPTED", deadline);
     await recommendationRepository.rejectOtherRecommendations(recommendation.matchingRequestId, recommendationId);
 
