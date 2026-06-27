@@ -26,6 +26,7 @@ const findTeamsQueueByHackathon = (hackathonId) => {
         where: {
             hackathonId,
             status: "FORMING",
+            project: null,   
             matchingRequests: {
                 none: {
                     status: { in: ["COMPLETED", "PROCESSING"] },

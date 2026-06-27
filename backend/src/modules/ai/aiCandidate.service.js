@@ -261,7 +261,6 @@ const generateProjectRecommendations = async ({
     pinnedMemberIds = [],
     excludeUserIds = [],
 }) => {
-    // check AI memory before every recommendation call
     await rehydrateIfNeeded();
 
     const candidates = await prepareProjectCandidates(projectId);
