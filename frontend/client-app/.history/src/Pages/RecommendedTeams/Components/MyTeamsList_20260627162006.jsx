@@ -38,7 +38,7 @@ function MyTeamsList({ teams, acceptingId, rejectingId, onAccept, onReject, styl
             <div className="d-flex flex-column gap-4">
               {recs.map((rec, index) => (
                 <div key={rec.id}>
-                  <h6 className="text-secondary mb-2 fw-bold">
+                  <h6 className="text-secondary mb-2 fw-bold d-flex align-items-center gap-2">
                     <span className="bg-light text-dark px-2 py-1 rounded fs-4">
                       Option {index + 1}
                     </span>
