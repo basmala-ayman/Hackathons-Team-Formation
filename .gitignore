@@ -6,3 +6,14 @@ node_modules
 *.tgz
 *.zip
 *.tar.gz
+
+
+/generated/prisma
+
+logs/
+
+*.tgz
+*.zip
+*.tar.gz
+
+.vscode/
