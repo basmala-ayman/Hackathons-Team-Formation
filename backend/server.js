@@ -4,7 +4,6 @@ const app = require("./src/app");
 const prisma = require("./src/config/prisma");
 const config = require("./src/config/env");
 const logger = require("./src/config/logger");
-// const cronJobs = require("./src/jobs/hackathon.cron");
 // for scheduling the cron jobs
 const { initCronJobs } = require("./src/utils/cron");
 const { collectDevpostHackathons } = require("./src/modules/hackathons/devpost.service");
