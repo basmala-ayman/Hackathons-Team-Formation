@@ -1,7 +1,0 @@
-.checkbox{
-    transform: translate(1.2);
-}
-.checkbox:focus {
-  outline: none;
-  box-shadow: none;
-}

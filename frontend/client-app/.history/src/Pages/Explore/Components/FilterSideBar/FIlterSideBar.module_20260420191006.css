@@ -1,6 +1,0 @@
-=
-/* remove Bootstrap focus ring */
-.checkbox:focus {
-  outline: none;
-  box-shadow: none;
-}

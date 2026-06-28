@@ -1,7 +1,0 @@
-.inputSearch:focus {
-  outline: none;
-}
-input::placeholder{
-    font-size: var(--fs-regular);
-    
-}

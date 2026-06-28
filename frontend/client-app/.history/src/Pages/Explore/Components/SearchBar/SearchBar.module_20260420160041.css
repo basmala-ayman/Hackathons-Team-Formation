@@ -1,7 +1,0 @@
-.inputSearch{
-    line-height:40px; 
-    height: 40px;
-}
-input::placeholder{
-    font-size: var(--fs-regular);
-}

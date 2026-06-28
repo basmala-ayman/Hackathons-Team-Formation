@@ -1,5 +1,0 @@
-ctaBox {
-  /* Using your defined primary gradient */
-  background: var(--gradient-primary);
-  border-radius: 1.5rem; /* Matches the soft rounded corners in the image */
-}

@@ -1,9 +1,0 @@
-.checkbox {
-  border: 2px solid #7c3aed; /* custom border color */
-}
-
-/* remove Bootstrap focus ring */
-.checkbox:focus {
-  outline: none;
-  box-shadow: none;
-}
