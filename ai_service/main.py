@@ -56,13 +56,13 @@ class RecommendResponse(BaseModel):
 async def lifespan(app: FastAPI):
     print(f"🚀 Initializing Dynamic AI Service on {device}...")
 
-    with open("models/word2id.json", "r") as f:
+    with open("model-weights/word2id.json", "r") as f:
         state["word2id"] = json.load(f)
-    with open("models/label2id.json", "r") as f:
+    with open("model-weights/label2id.json", "r") as f:
         state["label2id"] = json.load(f)
 
     # Load One-Hop Baseline checkpoint
-    weights_path = "models/trained_onehop_weights.pt"
+    weights_path = "model-weights/trained_onehop_weights.pt"
     state_dict = torch.load(weights_path, map_location=device)
 
     # EXTRACT DYNAMIC MATRIX DIMENSIONS FROM CHEKPOINT
@@ -100,7 +100,7 @@ async def lifespan(app: FastAPI):
     state["live_member_ids"] = []  
 
     # Load Two-Hop Baseline Checkpoint
-    two_hop_weights_path = "models/trained_twohop_weights.pt"
+    two_hop_weights_path = "model-weights/trained_twohop_weights.pt"
     two_hop_state = torch.load(two_hop_weights_path, map_location=device)
 
     with torch.no_grad():
