@@ -5,14 +5,14 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-df = pd.read_csv("Devpost-Datasets/all-hackathons.csv").dropna(subset=["Projects Gallery"])
+df = pd.read_csv("devpost-datasets/all-hackathons.csv").dropna(subset=["Projects Gallery"])
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-OUTPUT_FILE = "Devpost-Datasets/hackathon_projects.csv"
+OUTPUT_FILE = "devpost-datasets/hackathon_projects.csv"
 
 session = requests.Session()
 session.headers.update(HEADERS)
