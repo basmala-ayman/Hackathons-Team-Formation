@@ -1,0 +1,341 @@
+//here the generator its goal is to generate the prisma client that we will use it 
+//later in dealing with the database and there is cases where you may need more than one provider like when dealing with graphicql
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  //cause prisma can be dealed in many databases like mysql and even mongodb so you need to metnion 
+  provider = "postgresql"
+}
+
+// lets first start define the ENUMS we will need
+//-----------------------------------------------------
+
+enum Role {
+  PARTICIPANT
+  ADMIN
+}
+
+//describe the team status itself the current to see if he still need persons so it is forming or it is complete and can apply now to the hackathon
+enum TeamStatus {
+  FORMING
+  COMPLETE
+}
+
+//this is when the human invite another person to join to my team
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+//the matching request the user make it in the website what is its current state now?
+enum MatchingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+//and this is the recommended teams that ai recommend them 
+//this is the answer for each recommended team that ai recommends it and this value deponds on the user action
+enum RecommendationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum HackathonStatus {
+  UPCOMING
+  ONGOING
+  ENDED
+}
+
+enum NotificationType {
+  TEAM_INVITE
+  MATCH_FOUND
+  INVITE_ACCEPTED
+  INVITE_REJECTED
+  HACKATHON_REMINDER
+}
+
+//--------------------------------------------------
+//USERS
+//--------------------------------------------------
+
+/**
+ * there is some notes here now why we will make the password string?
+ * cause this meaning string? it can be null but how? and that cause we planned to make oAUTH
+ * so to can support this 2 ways we need to make the passowrd can be null and that cause the normal traditional way
+ * need password and the second way is can not be success if user required to enter password
+ * we will not put the indexes now until we load all the dataset into the database and then measure
+ * each query how much time it takes to can define which ones need to be increased and need to have index
+ @id made prisma understand that this attribute need to be converted to the primary key of this table
+ after each edit in the schema we need to migerate it again to can see the updates  and to make that and to enabel the prisma client to see the new updates we just need to use the command
+ npm prisma generate 
+ now after this command the prisma client can see the updates that happened in the schema easily but 
+ is it added into the database and in the migeration file? NO 
+ if you make changes in schema and added attributes and then you try to migrate it it will give you error if there is exised data in the database in the old schema
+ npm prisma migrate dev
+ so it will give you prisma validation error tells you that you can not migerate and the solution in this case is to delete the old schema data and then migrate again based on the new schema
+one of the best practise things and well known that to make the id is string and using uuid which make to each user id randomly string as id 
+rather than making it as sequential incremental number id which is predictable
+
+ */
+
+//done
+model User {
+  id             String       @id @default(uuid())
+  email          String    @unique
+  password       String?
+  name           String
+  bio            String?
+  role           Role      @default(PARTICIPANT)
+  isVerified     Boolean   @default(false)
+  profilePicture String?
+  resumeUrl      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime? //that means can be null
+
+  // Relations
+  //here the [] meaning one to many relationship so here meaning the user can have many of this thing as relationship
+  skills              UserSkill[]//each user can have many skills 
+  ownedTeams          Team[]               @relation("TeamOwner") //and can create more than one team 
+  teamMemberships     TeamMember[]
+  sentInvitations     TeamInvitation[]     @relation("InvitationSender")//can send many  invitation to ask persons to join
+  receivedInvitations TeamInvitation[]     @relation("InvitationReceiver")//can get many invitations to join their teams
+  notifications       Notification[] //can have many notifications
+  matchingRequests    MatchingRequest[]//can make more than mathcing requests
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+
+  //this one its goal is to define the name of the table in teh database to be called users
+  @@map("users")
+}
+
+// ─────────────────────────────────────────
+// SKILLS DONE
+// ─────────────────────────────────────────
+
+model Skill {
+  id        String      @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  // Relations
+  users UserSkill[]//and it is array too cause the relation is many to many which will make us to make new table
+
+  @@map("skills")
+}
+
+model UserSkill {
+  //there is no need for this id too the primary key for this table will be composite key too
+  userId    String //the forien key this is their names
+  skillId   String//the same for here
+  createdAt DateTime @default(now())
+
+  // Relations
+  //cascade here meaning if the skill is deleted so any record with it deleted
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@map("user_skills")
+  @@unique([userId,skillId])
+}
+
+// ─────────────────────────────────────────
+// HACKATHONS DONE
+// ─────────────────────────────────────────
+
+//done 
+model Hackathon {
+  id           String             @id @default(uuid())
+  title        String
+  description  String?
+  applyLink    String
+  startDate    DateTime?
+  endDate      DateTime?
+  status       HackathonStatus @default(UPCOMING)
+  source       String          @default("devpost")
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  // Relations
+  tags             HackathonTag[]
+  teams            Team[]
+  matchingRequests MatchingRequest[]
+
+  @@map("hackathons")
+}
+
+//and we will make it entity rather than making it just enum and that for making the things more dynamic 
+//and cause if we make it enum so in each change in the tags we will need to change the code and redeploy it again which is not good thing
+
+//done
+model Tag {
+  id          String      @id @default(uuid())
+  name         String     @unique
+  createdAt   DateTime @default(now())
+
+  // Relations
+  hackathons HackathonTag[]
+  @@map("tags")
+}
+
+//and cause this is many to many relationship so we need its composite table to be followed the normalization things
+model HackathonTag {
+  //there is no need for making for this table specific id cause its id will be composite key 
+  hackathonId String
+  tagId       String
+
+  hackathon Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([hackathonId, tagId]) // and this to ensure that this composite part togather will not be duplicated 
+  @@map("hackathon_tags")
+}
+
+
+// ─────────────────────────────────────────
+// TEAMS
+// ─────────────────────────────────────────
+
+model Team {
+  id          String        @id @default(uuid())
+  name        String
+  hackathonId String //foriegn key
+  ownerId     String //foriegn key
+  status      TeamStatus @default(FORMING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  hackathon   Hackathon        @relation(fields: [hackathonId], references: [id])//cause the relation is 1:m
+  owner       User             @relation("TeamOwner", fields: [ownerId], references: [id])
+  members     TeamMember[]
+  invitations TeamInvitation[]
+
+  @@map("teams")
+}
+
+//cause there is many to many (belongs to) relationship between the user and the team so we will need this new table
+model TeamMember {
+  teamId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  // Relations
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("team_members")
+  //just for extra check to ensure that there is duplication can happened and there is no putted the same user duplicated in the same team 
+  @@unique([teamId,userId])
+}
+
+model TeamInvitation {
+  id         String              @id @default(uuid())
+  teamId     String
+  senderId   String
+  receiverId String
+  status     InvitationStatus @default(PENDING)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  deadline  DateTime
+
+  // Relations
+  team     Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sender   User @relation("InvitationSender", fields: [senderId], references: [id])
+  receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id])
+
+  @@map("team_invitations")
+}
+
+// ─────────────────────────────────────────
+// AI MATCHING
+// ─────────────────────────────────────────
+
+model MatchingRequest {
+  id          String            @id @default(uuid())
+  userId      String
+  hackathonId String
+  status      MatchingStatus @default(PENDING)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  user            User               @relation(fields: [userId], references: [id])
+  hackathon       Hackathon          @relation(fields: [hackathonId], references: [id])
+  recommendations AIRecommendation[]
+
+  @@map("matching_requests")
+}
+
+model AIRecommendation {
+  id                 String                  @id @default(uuid())
+  matchingRequestId  String
+  teamData           Json
+  compatibilityScore Float
+  status             RecommendationStatus @default(PENDING)
+  createdAt          DateTime             @default(now())
+
+  // Relations
+  matchingRequest MatchingRequest @relation(fields: [matchingRequestId], references: [id], onDelete: Cascade)
+
+  @@map("ai_recommendations")
+}
+
+// ─────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────
+
+model Notification {
+  id        String              @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// ─────────────────────────────────────────
+// AUTH TOKENS
+// ─────────────────────────────────────────
+
+model RefreshToken {
+  id        String      @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String      @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
