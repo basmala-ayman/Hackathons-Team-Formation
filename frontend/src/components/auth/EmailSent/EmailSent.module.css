@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding: 2rem;
+}
+
+.smallFormContainer {
+  height: 52rem;
+}
+
+.immgIllustration {
+  height: 52rem;
+  box-shadow: 0 0.4rem 0.4rem 0 var(--color-primary-light-2);
+}
+
+.iconCircle {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, var(--color-primary-dark), #8945ff);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  color: var(--color-very-dark-purple);
+  margin-top: 1rem;
+}
+
+.description {
+  color: var(--color-dark-gray);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  /* margin: 1.6rem 0 3rem; */
+}
+
+.description strong {
+  display: inline-block;
+  margin: 0.8rem 0;
+  color: var(--color-very-dark-purple);
+  font-weight: 700;
+}
+
+.footerText {
+  margin-top: 1.5rem;
+  font-size: var(--fs-small);
+  color: var(--color-gray);
+}
+
+.tryAgainBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-very-dark-purple);
+  font-weight: 700;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tryAgainBtn:hover {
+  color: var(--color-primary-dark);
+}

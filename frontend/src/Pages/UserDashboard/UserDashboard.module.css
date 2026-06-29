@@ -1,0 +1,221 @@
+.dashboardWrapper {
+  background-color: var(--color-white);
+  min-height: 100vh;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.welcomeTitle {
+  color: var(--color-very-dark-purple);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.subTitle {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-v-small);
+  margin-bottom: 3rem;
+}
+
+.mainContent {
+  margin-top: 3rem;
+}
+
+.sectionHeading {
+  font-weight: 700;
+  color: var(--color-very-dark-purple);
+}
+
+.joinBtn {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  padding: 0.8rem 2rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  border: none;
+}
+
+.joinBtn:hover {
+  background-color: #5a45d1;
+  color: var(--color-white);
+}
+
+.sidebarCard {
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.sidebarTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.primaryAction {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  padding: 1.2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.secondaryAction {
+  background-color: transparent;
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-dark);
+  padding: 1.2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+}
+
+.secondaryAction:hover {
+  background-color: #f0f0ff;
+  color: var(--color-primary-dark);
+}
+
+aside h3 {
+  font-size: var(--fs-regular);
+  font-weight: 700px;
+  color: var(--color-text);
+}
+
+.sidebarCard {
+  border: 1.5px solid var(--color-primary-dark);
+  border-radius: 1rem;
+  padding: 2.4rem;
+  background-color: #fff;
+  box-shadow: none;
+}
+
+.sidebarTitle {
+  font-size: var(--fs-regular);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 2.4rem;
+}
+
+/* Recent Activiites */
+.activityList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activityItem {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-light-gray);
+  transition: background-color 0.2s ease;
+  cursor: default;
+}
+
+.activityItem:hover {
+  background-color: #fcfcfc;
+}
+
+.activityItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activityItem:first-child {
+  padding-top: 0;
+}
+
+.activityItem p {
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.activityItem small {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-v-small);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.green {
+  background-color: #38a169;
+}
+.blue {
+  background-color: #4299e1;
+}
+.purple {
+  background-color: #9f7aea;
+}
+.orange {
+  background-color: #ed8936;
+}
+
+.activityItem p {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.activityItem small {
+  color: var(--color-dark-gray);
+  font-size: var(--fs-v-small);
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.paginationControls button {
+  width: 3.8rem;
+  height: 3.8rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0.8rem;
+  border: 1px solid var(--color-primary-light-2);
+
+  background: white;
+  color: var(--color-primary-dark);
+
+  font-weight: 600;
+  font-size: 1.4rem;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationControls button:hover:not(:disabled) {
+  background: var(--color-primary-light-3);
+  transform: translateY(-2px);
+}
+
+.paginationControls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background: var(--color-primary-dark) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-primary-dark) !important;
+}

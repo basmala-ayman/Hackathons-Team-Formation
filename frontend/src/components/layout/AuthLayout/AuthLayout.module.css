@@ -1,0 +1,37 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  background:
+    radial-gradient(
+      circle at top right,
+      var(--color-primary-light-3),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      var(--color-primary-light-2),
+      transparent 30%
+    ),
+    var(--gradient-website-bg);
+}
+
+.authCard {
+  width: 100%;
+  max-width: 54rem;
+  padding: 5rem 4.5rem;
+  border-radius: 2.4rem;
+  background: #fff;
+  border: 1px solid rgba(126, 87, 255, 0.12);
+  box-shadow:
+    0 20px 60px rgba(79, 70, 229, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.04);
+  transition: 0.3s ease;
+}
+
+.authCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2rem 5rem rgba(107, 70, 193, 0.12);
+}
