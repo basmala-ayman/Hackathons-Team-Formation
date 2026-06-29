@@ -22,35 +22,6 @@
 
 ---
 
-## Backend Structure
-
-```
-backend/
-├── src/
-│   ├── config/          # env, prisma client, cloudinary, logger
-│   ├── middlewares/     # auth, upload, validation
-│   ├── modules/
-│   │   ├── auth/
-│   │   ├── user/
-│   │   ├── hackathons/
-│   │   ├── team/
-│   │   ├── interests/
-│   │   ├── matching/
-│   │   ├── recommendations/
-│   │   ├── notifications/
-│   │   ├── project/
-│   │   ├── dashboard/
-│   │   └── ai/          # AI mapper, candidate service, sync
-│   ├── utils/           # AppError, cron jobs, uploadToCloudinary
-│   └── routes/          # index router
-├── prisma/
-│   └── schema.prisma
-├── uploads/
-│   └── resumes/         # local CV storage
-├── server.js
-└── .env                 # never commit this
-```
-
 ---
 
 ## Prerequisites
@@ -291,6 +262,25 @@ Founder creates team
 | GET | `/api/v1/notifications` | Get user notifications |
 
 Full interactive docs at `/api-docs` when server is running.
+
+---
+
+## AI Service (FastAPI)
+
+The AI matching service is deployed on HuggingFace Spaces and handles skill-based team recommendations.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/status` | Check AI memory pool status (rehydration trigger) |
+| `POST` | `/sync/member` | Sync user data (skills, bio, history) into AI memory |
+| `POST` | `/sync/project` | Sync project/hackathon tags into AI memory |
+| `POST` | `/recommend` | Generate 3 recommended teams from candidate pool |
+
+**Interactive API Docs:**  
+https://teamcatalyst-ai-team-recommendation.hf.space/docs
+
+**Base URL:**  
+https://teamcatalyst-ai-team-recommendation.hf.space
 
 ---
 
