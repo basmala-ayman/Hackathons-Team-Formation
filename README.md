@@ -1,8 +1,10 @@
-# Team Catalyst
+# Team Catalyst: Smart Skill-Based Team Formation Platform for Hackathons
 
 > AI-powered hackathon team formation platform. Smart skill-based matching that connects the right people for the right projects.
 
 ---
+
+## Instruction for set-up TeamCatalyst Platform (server-side & client-side)
 
 ## Tech Stack
 
@@ -20,7 +22,7 @@
 
 ---
 
-## Project Structure
+## Backend Structure
 
 ```
 backend/
@@ -86,33 +88,32 @@ NODE_ENV=development
 PORT=3000
 
 # Neon PostgreSQL
-DATABASE_URL="postgresql://<user>:<password>@<host>/neondb?sslmode=require&channel_binding=require"
+DATABASE_URL="postgresql://neondb_owner:npg_6ONhfLYs7QST@ep-dawn-wildflower-a4ifrp40-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 
 # Email (Gmail app password)
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_gmail_app_password
+EMAIL_USER=team.catalyst26@gmail.com
+EMAIL_PASS=kjikpgfcsjnnlsug
 
 # Server URLs
 BASE_URL=http://localhost:3000
 FRONTEND_URL=http://localhost:5173
 
 # JWT
-JWT_SECRET=your_strong_secret_here
+JWT_SECRET=omayIsTheTop_and_AllOtherIsCantalob
 JWT_EXPIRES_IN=1d
 
 # Google OAuth
-GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_ID=653043614391-gnmnai9c6bot17euu4kfndj7pn7uegcc.apps.googleusercontent.com
 
 # AI Model (HuggingFace Spaces)
 AI_BASE_URL=https://teamcatalyst-ai-team-recommendation.hf.space
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+CLOUDINARY_CLOUD_NAME=doehwqejq
+CLOUDINARY_API_KEY=267989441961393
+CLOUDINARY_API_SECRET=rcjGwA7oqmd9CICBuE5d8iQUeI0
 ```
-
-> Ask the team lead for the actual values. Never commit `.env` to GitHub.
+<!-- > Ask the team lead for the actual values. Never commit `.env` to GitHub. -->
 
 ### 4. Generate Prisma client
 
@@ -168,8 +169,8 @@ npm install
 Create a `.env` file inside `frontend/`:
 
 ```env
-VITE_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
-VITE_API_BASE_URL=http://localhost:3000/api/v1
+VITE_GOOGLE_CLIENT_ID=653043614391-gnmnai9c6bot17euu4kfndj7pn7uegcc.apps.googleusercontent.com
+VITE_API_BASE_URL=http://localhost:3030/api/v1
 ```
 
 ### 4. Start the development server
