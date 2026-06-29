@@ -1,2 +1,1 @@
-## Documentation
-Full system documentation is available in the [docs/](./docs) folder.
+# Smart Skill-Based Team Formation Platform for Hackathons - Team Catalyst
