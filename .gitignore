@@ -5,3 +5,12 @@ node_modules
 .env
 __pycache__
 .vscode/
+
+
+*.tgz
+*.zip
+*.tar.gz
+
+/generated/prisma
+
+logs/
