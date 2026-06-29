@@ -22,8 +22,6 @@
 
 ---
 
----
-
 ## Prerequisites
 
 - Node.js v22+
@@ -32,6 +30,25 @@
 - A [Neon](https://neon.tech) PostgreSQL database
 - A [Cloudinary](https://cloudinary.com) account (free tier)
 - Google OAuth Client ID
+
+---
+
+## AI Service (FastAPI)
+
+The AI matching service is deployed on HuggingFace Spaces and handles skill-based team recommendations.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/status` | Check AI memory pool status (rehydration trigger) |
+| `POST` | `/sync/member` | Sync user data (skills, bio, history) into AI memory |
+| `POST` | `/sync/project` | Sync project/hackathon tags into AI memory |
+| `POST` | `/recommend` | Generate 3 recommended teams from candidate pool |
+
+**Interactive API Docs:**  
+https://teamcatalyst-ai-team-recommendation.hf.space/docs
+
+**Base URL:**  
+https://teamcatalyst-ai-team-recommendation.hf.space
 
 ---
 
@@ -262,25 +279,6 @@ Founder creates team
 | GET | `/api/v1/notifications` | Get user notifications |
 
 Full interactive docs at `/api-docs` when server is running.
-
----
-
-## AI Service (FastAPI)
-
-The AI matching service is deployed on HuggingFace Spaces and handles skill-based team recommendations.
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/status` | Check AI memory pool status (rehydration trigger) |
-| `POST` | `/sync/member` | Sync user data (skills, bio, history) into AI memory |
-| `POST` | `/sync/project` | Sync project/hackathon tags into AI memory |
-| `POST` | `/recommend` | Generate 3 recommended teams from candidate pool |
-
-**Interactive API Docs:**  
-https://teamcatalyst-ai-team-recommendation.hf.space/docs
-
-**Base URL:**  
-https://teamcatalyst-ai-team-recommendation.hf.space
 
 ---
 
