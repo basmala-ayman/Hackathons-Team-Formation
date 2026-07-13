@@ -317,4 +317,22 @@ Copy the generated HTTPS URL and update `VITE_API_BASE_URL` in the frontend `.en
 
 ## Team
 
-Built with 🤍 as a graduation project at Ain Shams University, Faculty of Computer and Information Sciences.
+**Team Catalyst** was developed as a graduation project at **Ain Shams University, Faculty of Computer and Information Sciences**.
+
+### Team Members
+
+| Name | GitHub | LinkedIn |
+|------|--------|----------|
+| Zeina Wady | [GitHub](https://github.com/zeinawady) | [LinkedIn](https://www.linkedin.com/in/zeina-wady/) |
+| Basmala Ayman | [GitHub](https://github.com/basmala-ayman) | [LinkedIn](https://www.linkedin.com/in/basmala-ayman/) |
+| Hafsa Tarek | [GitHub](https://github.com/HafsaTarek) | [LinkedIn](https://www.linkedin.com/in/hafsa-hikal/) |
+| Ruba Abdelsalam | [GitHub](https://github.com/Rrr3rrr2004) | [LinkedIn](https://www.linkedin.com/in/ruba-abdelsalam/) |
+| Habiba Adel | [GitHub](https://github.com/Habiba-Adel) | [LinkedIn](https://www.linkedin.com/in/habibaabdelgowad/) |
+| Esraa Ahmed | [GitHub](https://github.com/2004esra) | [LinkedIn](https://www.linkedin.com/in/esraa-ahmed-005656294/) |
+
+
+### Repository
+
+If you find this project useful, feel free to ⭐ the repository.
+
+---
